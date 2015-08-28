@@ -1,0 +1,9 @@
+{
+  "name": "webapp",
+  "version": "0.0.1-pre",
+  "private": true,
+  "dependencies": {
+    "express": "4.3.1",
+    "lodash": "2.4.1"
+  }
+}
