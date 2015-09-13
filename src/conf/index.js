@@ -1,5 +1,5 @@
-var conf = module.exports = {
-  port: 8266
-}
+var conf = module.exports = {}
 
+conf.port = 80
 conf.morgan = require('./morgan')
+conf.proxyHosts = require('./proxyhosts')
