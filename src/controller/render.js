@@ -1,21 +1,11 @@
 var fs = require('fs')
 var path = require('fs')
 var _ = require('lodash')
+var conf = require('../conf')
 
 var render = module.exports = {}
-var indexfile = {
-  "localhost": {
-    "/": '<!doctype html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, user-scalable=no"> <title>Heineiuo Admin</title> <link rel="stylesheet" href="http://cdn1.heineiuo.com/748217591/index.css"/> <script src="http://cdn1.heineiuo.com/748217591/vendor.js"></script> <script src="http://cdn1.heineiuo.com/748217591/template.js"></script> <script src="http://cdn1.heineiuo.com/748217591/index.js"></script> </head> <body> <div id="view-scope"></div> </body> </html>'
-  },
-  "i.heineiuo.com": {
-    "/": '<!doctype html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, user-scalable=no"> <title>Heineiuo Admin</title> <link rel="stylesheet" href="http://cdn1.heineiuo.com/748217591/index.css"/> <script src="http://cdn1.heineiuo.com/748217591/vendor.js"></script> <script src="http://cdn1.heineiuo.com/748217591/template.js"></script> <script src="http://cdn1.heineiuo.com/748217591/index.js"></script> </head> <body> <div id="view-scope"></div> </body> </html>'
-  },
-  "www.youkuohao.com": {
-    "/": '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, user-scalable=no"> <title>右括号工作室</title></head><body> 右括号工作室正在建设中，敬请期待！</body> </html>'
-  }
 
-
-}
+var indexfile = conf.indexfile
 
 render.renderApp = function(req, res){
 

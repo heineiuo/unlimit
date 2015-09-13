@@ -1,7 +1,6 @@
 var proxyHosts = module.exports = {
 
   "api.heineiuo.com": "http://127.0.0.1:8888",
-
   /**
    * static, just storage files,
    * the source server for cdn.

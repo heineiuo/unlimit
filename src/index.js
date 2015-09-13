@@ -12,9 +12,8 @@ var server = module.exports = function(options){
 
   var app = express()
   app.set('x-powered-by', false)
-
-  app.use(controller.proxy.check)
   app.use(morgan(conf.morgan.format, conf.morgan.options))
+  app.use(controller.proxy.check)
   app.use(controller.update.check)
   app.use(controller.render.renderApp)
   app.use(route)
@@ -22,7 +21,8 @@ var server = module.exports = function(options){
   app.use(controller.error.err404)
 
   app.listen(conf.port, function(){
-    console.log('Listening on port: '+conf.port)
+    console.log('Start listening on port: '+conf.port)
+    console.log('Start listening on time: '+new Date())
   })
 
 }
