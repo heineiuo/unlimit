@@ -1,22 +1,16 @@
+var controller = controller  || purple.Controller()
 
 
-var error = module.exports = {}
 
-error.err500 = function (err, req, res, next) {
-  if (!err) {
-    return next()
-  }
-  return res.json({
-    error: "ERR_UNEXCEPTION",
+controller('error.err500', function (err, req, res, next) {
+  if (!err) return next()
+  console.log({
+    error: "EXCEPTION_ERROR",
     stack: err.stack
   })
-}
+  res.send(500)
+})
 
-
-error.err404 = function (req, res) {
-  //res.status(404).json({
-  res.json({
-    error: 'ERR_NOT_FOUND',
-    url: req.originalUrl
-  })
-}
+controller('error.err404', function (req, res) {
+  res.send(403)
+})

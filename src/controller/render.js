@@ -1,45 +1,50 @@
-var fs = require('fs')
-var path = require('fs')
-var _ = require('lodash')
-var conf = require('../conf')
+var controller = controller  || purple.Controller()
 
-var render = module.exports = {}
+controller('render.renderApp', function(req, res, next){
 
-var indexfile = conf.indexfile
+  // 获取地址
+  var url = parse(req.headers.host + req.url , true)
+  // 自动补上'/'
+  if(url.pathname =='') url.pathname = '/'
 
-render.renderApp = function(req, res){
+  // 查找路由
+  var result = {}
+  _.map(conf.cname.list, function(val, key){
+    if (val.hostname != url.host) return true
+    var reg = new RegExp(_.trim(val.pathname, '/').replace('\\\\','\\'))
+    var match = url.pathname.match(reg)
+    if (match && match[0] == url.pathname) {
+      result = val
+      return false
+    }
+  })
 
-  var appfile = indexfile[req.host] || ''
+  if (!_.has(result,'type')) return next()
+  if (result.type == 'redirect') return res.redirect(result.content)
+  if (result.type == 'html') return res.send(ent.decode(result.content))
+  if (result.type == 'api') {
 
-  if (appfile == ''){
-    res.status(404)
-    res.end()
-  } else if (typeof appfile != 'object') {
-    res.end(appfile)
-  } else {
-
-    var anwser_arr = _.without(req.url.split('/'), '')
-
-    _.find(appfile, function(val, key){
-
-      if (testPathname(key, anwser_arr)){
-        return res.end(val)
-      }
-
-    })
-
-    res.status(404)
-    res.end()
-
-    function testPathname(ask, anwser_arr){
-      var ask_arr = _.without(ask.split('/'), '')
-      var anwser_arr_change = _.take(anwser_arr, ask_arr.length)
-      if (_.difference(ask_arr, anwser_arr_change).length > 0) {
-        return false
-      }
-      return true
+    var options = {
+      method: 'POST',
+      url: conf.API_HOST + result.content,
+      qs: req.query,
+      form: _.extend(req.body, req.query, {
+        appId: conf.appId,
+        appSecret: conf.appSecret,
+        proxyAppId: result.appId
+      })
     }
 
+    request(options, function(err, response, body){
+      if (err) return res.send(500)
+      try {
+        res.json(JSON.parse(body))
+      } catch(e){
+        console.log(body)
+        res.send(502)
+      }
+    })
+  } else {
+    next()
   }
-
-}
+})

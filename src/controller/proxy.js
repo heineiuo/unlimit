@@ -1,18 +1,21 @@
-var httpProxy = require('http-proxy')
-var path = require('path')
-var conf = require(path.join('../conf'))
+var controller = controller  || purple.Controller()
 
-var proxy = module.exports = {}
+controller('proxy.check', function(req, res, next){
 
+  if (_.has(conf.proxy, req.headers.host)) {
 
-proxy.check = function(req, res, next){
+    // todo handle ssl cert to options
+    var options = {
+      //protocolRewrite: 'http'
+    }
 
+    var target = conf.proxy[req.headers.host]
 
-  if (req.headers.host in conf.proxyHosts) {
-    httpProxy.createProxy().web(req, res, {
-      target: conf.proxyHosts[req.headers.host]
+    httpProxy.createProxyServer(options).web(req, res, {
+      target: target
     }, function(err){
       if (err) {
+        console.log(err)
         res.status(502)
       }
       res.end()
@@ -21,4 +24,4 @@ proxy.check = function(req, res, next){
     next()
   }
 
-}
+})
