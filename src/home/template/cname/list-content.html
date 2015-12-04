@@ -1,0 +1,34 @@
+<table class="table">
+
+  <thead>
+  <tr>
+    <th>origin</th>
+    <th>pathname</th>
+    <th>类型</th>
+    <th>创建时间</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  {% _.map(list, function(item, index){ %}
+
+  <tr>
+    <td><code>{{item.protocol}}//{{item.hostname}}</code></td>
+    <td><code>{{item.pathname}}</code></td>
+    <td><code>{{item.type}}</code></td>
+    <td>{{item.createTime}}</td>
+    <td>
+      <div class="btn-group">
+        <a href="{{conf.hrefPrefix}}/cname/edit/{{item._id}}" class="btn btn-xs  btn-primary">编辑</a>
+        <a href="{{conf.hrefPrefix}}/cname/detail/{{item._id}}" class="btn btn-xs  btn-primary">详情</a>
+      </div>
+    </td>
+  </tr>
+
+  {% }) %}
+
+  </tbody>
+
+</table>

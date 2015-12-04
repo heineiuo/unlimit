@@ -35,7 +35,8 @@ var conf =  {
 
 if (!conf.isStarted) {
 
-  var app = express()
+  var app = require('express')()
+  var http = require('http').Server(app)
   app.set('x-powered-by', false)
 
   app.use(morgan(conf.morgan.format, conf.morgan.options))
@@ -53,9 +54,10 @@ if (!conf.isStarted) {
   app.use(controller('error.err500'))
   app.use(controller('error.err404'))
 
-  http.createServer(app).listen(80)
-  console.log('Listening on port 80')
-  //
+  http.listen(80, function(){
+    console.log('Listening on port 80')
+  })
+
   //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
   //  https.createServer({
   //    key: keys.serviceKey,

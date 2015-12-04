@@ -1,5 +1,3 @@
-var controller = controller  || purple.Controller()
-
 controller('update.check',  function(req, res, next){
 
   next()

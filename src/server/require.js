@@ -1,7 +1,5 @@
 var path = require('path')
 var crypto = require('crypto')
-var http = require('http')
-var https = require('https')
 var fs = require('fs')
 var tls = require('tls')
 var net = require('net')

@@ -1,0 +1,50 @@
+<!--一个cname的详情-->
+<div class="container-fluid" style="padding-top: 20px;">
+
+
+  <div class="paper">
+
+    <div class="title">
+
+      <h4>Page详情</h4>
+    </div>
+
+    <div class="hide" data-name="cnameId" data-value="{{cname._id}}"></div>
+    <div class="hide" data-name="_id" data-value="{{cname._id}}"></div>
+    <div class="hide" data-name="host" data-value="{{cname.host}}"></div>
+
+
+    <div class="form-group">
+      <div class="col-sm-2">pathname</div>
+      <div data-name="pathname" data-value="{{cname.pathname}}">{{cname.pathname}}</div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2">redirect</div>
+      <div class="col-sm-4" data-name="redirect" data-value="{{cname.redirect}}">{{cname.redirect}}</div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-sm-2">content</div>
+      <div class="col-sm-4" data-name="content" data-value="{{cname.content}}">
+        <pre class="lang-html">{{cname.content}}</pre>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-error"></div>
+    </div>
+
+    <div class="form-group">
+
+      <div class="btn-group">
+        <button class="btn btn-primary btn-cname-edit">编辑</button>
+        <button class="btn btn-danger btn-cname-delete">删除</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+

@@ -1,8 +1,9 @@
 node_modules
-.idea
 tmp
-.DS_Store
 npm-debug.log
 Thumb.db
+.idea
+.zip
+.DS_Store
 .svn
-appdata
+.psd

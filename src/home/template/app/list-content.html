@@ -1,0 +1,40 @@
+<table class="table">
+
+  <thead>
+  <tr>
+    <th>名称</th>
+    <th>appId</th>
+    <th>密钥</th>
+    <th>类型</th>
+    <th>创建时间</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  {% _.map(applist, function(item, index){ %}
+
+  <tr>
+    <td>{{item.appName}}</td>
+    <td>
+      <code>{{item.appId}}</code>
+    </td>
+    <td data-appSecret="{{item.appId}}">
+      <button class="btn btn-xs btn-primary">显示</button>
+    </td>
+    <td><code>{{item.type}}</code></td>
+    <td>{{item.createTime}}</td>
+    <td>
+      <div class="btn-group">
+        <a href="{{conf.hrefPrefix}}/app/edit/{{item.appId}}" class="btn btn-xs btn-primary">编辑</a>
+        <a href="{{conf.hrefPrefix}}/app/detail/{{item.appId}}" class="btn btn-xs btn-primary">详情</a>
+      </div>
+    </td>
+  </tr>
+
+  {% }) %}
+
+  </tbody>
+
+</table>
