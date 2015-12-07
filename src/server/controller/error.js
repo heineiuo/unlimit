@@ -1,7 +1,5 @@
 var controller = controller  || purple.Controller()
 
-
-
 controller('error.err500', function (err, req, res, next) {
   if (!err) return next()
   console.log({
