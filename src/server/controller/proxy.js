@@ -1,6 +1,4 @@
-var controller = controller  || purple.Controller()
-
-controller('proxy.check', function(req, res, next){
+controller.proxyCheck = function(req, res, next){
 
   if (_.has(conf.proxy, req.headers.host)) {
 
@@ -24,4 +22,4 @@ controller('proxy.check', function(req, res, next){
     next()
   }
 
-})
+}

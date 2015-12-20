@@ -22,20 +22,18 @@ module.exports = {
 
   'server': {
     options: {
-      separator: ';',
+      separator: ';\n',
       banner: '/*! server/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
     },
     files: {
       '.grunt-cache/server/index.js': [
-        "src/server/require.js",
-        "src/server/conf.js",
+        "src/server/index.js",
+        "src/server/conf/**/*.js",
         "src/server/lib/**/*.js",
         "src/server/model/**/*.js",
-        "src/server/controller/index.js",
         "src/server/controller/**/*.js",
-        "src/server/router/index.js",
         "src/server/router/**/*.js",
-        "src/server/index.js"
+        "src/server/start.js"
       ]
     }
   }

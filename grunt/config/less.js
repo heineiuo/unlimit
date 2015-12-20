@@ -7,7 +7,7 @@ module.exports = {
       //sourceMap: true,
       //outputSourceFiles: true,
       //sourceMapURL: '<%= pkg.name %>.css.map',
-      //sourceMapFilename: 'dist/css/<%= pkg.name %>.css.map'
+      //sourceMapFilename: 'build/css/<%= pkg.name %>.css.map'
     },
     src: 'src/home/style/index.less',
     dest: '.grunt-cache/home/index.css'

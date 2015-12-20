@@ -1,4 +1,11 @@
-controller('update.check',  function(req, res, next){
+/**
+ * 检查是否需要更新html文件
+ * @param req
+ * @param res
+ * @param next
+ * @returns {boolean}
+ */
+controller.updateCheck = function(req, res, next){
 
   next()
 
@@ -52,4 +59,4 @@ controller('update.check',  function(req, res, next){
 
   })
 
-})
+}

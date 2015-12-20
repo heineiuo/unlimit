@@ -1,72 +1,57 @@
-var conf =  {
-  appId: '621b898e-7f9e-4b44-8981-c971998a60ef',
-  appSecret: '250af5fa7f6a86a245b161a83c1e0e17',
-  appName: "cname-ecs6",
-  API_HOST: 'http://127.0.0.1:8888',
-  proxy: {
-    "api.heineiuo.com": "http://127.0.0.1:8888",
-    "api.youkuohao.com": "http://127.0.0.1:8888",
-    "static1.heineiuo.com": "http://127.0.0.1:8001"
-  },
-  //block_host: ['lanmaotv.com', 'www.lanmaotv.com']
-  block_host: [],
+var path = require('path')
+var crypto = require('crypto')
+var fs = require('fs')
+var tls = require('tls')
+var net = require('net')
 
-  ssl: {},
-  isStarted: false,
+// node_modules
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var httpProxy = require('http-proxy')
+var request = require('request')
+var express = require('express')
+var parse = require('url-parse')
+var morgan = require('morgan')
+var ent = require('ent')
+var pem = require('pem')
+var _ = require('lodash')
 
-  morgan: {
-    format: ':method :status :req[host] :url',
-    options: {}
-  },
+// database
+var Datastore = require('nedb')
+var db = {}
+db.cname = new Datastore({
+  filename: path.join(__dirname, './data/cname.db'),
+  autoload: true
+})
+db.host = new Datastore({
+  filename: path.join(__dirname, './data/host.db'),
+  autoload: true
+})
 
-  cnameUpdating: false,
-  timeout: 1000*30,
-  cnameExpire: Date.now(),
-  cname: {list: []},
-  isInstalled: false,
+var doc = { hello: 'world'
+  , n: 5
+  , today: new Date()
+  , nedbIsAwesome: true
+  , notthere: null
+  , notToBeSaved: undefined  // Will not be saved
+  , fruits: [ 'apple', 'orange', 'pear' ]
+  , infos: { name: 'nedb' }
+};
 
-  appdata: path.join(__dirname, './appdata'),
+db.host.insert(doc, function (err, newDoc) {   // Callback is optional
+  // newDoc is the newly inserted document, including its _id
+  // newDoc has no key called notToBeSaved since its value was undefined
 
-  md5: function (tobeHash) {
-    return crypto.createHash('md5').update(tobeHash).digest('hex')
-  }
+});
 
-}
 
-if (!conf.isStarted) {
+db.host.insert(doc, function (err, newDoc) {   // Callback is optional
+  // newDoc is the newly inserted document, including its _id
+  // newDoc has no key called notToBeSaved since its value was undefined
+});
 
-  var app = require('express')()
-  var http = require('http').Server(app)
-  app.set('x-powered-by', false)
-
-  app.use(morgan(conf.morgan.format, conf.morgan.options))
-
-  app.use(controller('block.check'))
-  app.use(controller('proxy.check'))
-  app.use(controller('update.check'))
-
-  app.use(bodyParser.json())
-  app.use(bodyParser.json({type: 'application/*+json'}))
-  app.use(bodyParser.json({type: 'text/html'}))
-  app.use(bodyParser.urlencoded({extended: false}))
-
-  app.use(controller('render.renderApp'))
-  app.use(controller('error.err500'))
-  app.use(controller('error.err404'))
-
-  http.listen(80, function(){
-    console.log('Listening on port 80')
-  })
-
-  //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
-  //  https.createServer({
-  //    key: keys.serviceKey,
-  //    cert: keys.certificate
-  //  }, app).listen(443)
-  //})
-
-  console.log('Listening on port 443')
-}
-
-module.exports = app
+var controller = {}
+var conf = {}
+var app = require('express')()
+var http = require('http').Server(app)
 

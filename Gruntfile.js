@@ -3,65 +3,30 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
+
     pkg: grunt.file.readJSON('package.json'),
-
-    concat: {
-      main_app_js: {
-        options: {
-          separator: ';',
-          banner: '/*! app.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-        },
-        files: {
-          '.grunt-cache/app.js': [
-            "src/require.js",
-            "src/lib/**/*.js",
-            "src/controller/**/*.js",
-            "src/index.js"
-          ]
-        }
-      }
-
-    },
-
-    uglify: {
-      appjs: {
-        options: {
-          mangle: true,
-          banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %> */\n'
-        },
-        files: {
-          '.grunt-cache/app.min.js': ['.grunt-cache/app.js']
-        }
-      }
-    },
-
-    copy: {
-      //options: {},
-      main: {
-        files: {
-          './dist/index.js': ['.grunt-cache/app.min.js']
-        }
-      }
-    },
-
-    clean: {
-      all: ['.grunt-cache']
-    },
-
-    watch: {
-      files: ['Gruntfile.js', 'src/**/*.js'],
-      tasks: ['concat', 'uglify','copy', 'clean']
-    }
+    concat: require('./grunt/config/concat'),
+    jst: require('./grunt/config/jst'),
+    uglify: require('./grunt/config/uglify'),
+    less: require('./grunt/config/less'),
+    sass: require('./grunt/config/sass'),
+    cssmin: require('./grunt/config/cssmin'),
+    copy: require('./grunt/config/copy'),
+    clean: require('./grunt/config/clean'),
+    watch: require('./grunt/config/watch')
 
   });
 
-  grunt.registerTask('start', ['concat', 'uglify',  'copy', 'clean', 'watch'])
-  grunt.registerTask('build', ['concat', 'uglify',  'copy', 'clean'])
+  require('./grunt/tasks')(grunt)
 
+  grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-jst');
 
 };

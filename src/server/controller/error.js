@@ -1,14 +1,13 @@
-var controller = controller  || purple.Controller()
 
-controller('error.err500', function (err, req, res, next) {
+controller.error500 = function(err, req, res, next){
   if (!err) return next()
   console.log({
     error: "EXCEPTION_ERROR",
     stack: err.stack
   })
-  res.send(500)
-})
+  res.sendStatus(500)
+}
 
-controller('error.err404', function (req, res) {
-  res.send(403)
-})
+controller.error404 = function (req, res) {
+  res.sendStatus(403)
+}

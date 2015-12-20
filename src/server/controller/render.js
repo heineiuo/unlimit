@@ -1,6 +1,4 @@
-var controller = controller  || purple.Controller()
-
-controller('render.renderApp', function(req, res, next){
+controller.renderApp = function(req, res, next){
 
   // 获取地址
   var url = parse(req.headers.host + req.url , true)
@@ -47,4 +45,5 @@ controller('render.renderApp', function(req, res, next){
   } else {
     next()
   }
-})
+
+}
