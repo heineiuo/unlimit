@@ -1,57 +1,38 @@
-var path = require('path')
-var crypto = require('crypto')
-var fs = require('fs')
-var tls = require('tls')
-var net = require('net')
+// set
+app.set('x-powered-by', false)
+// middleware
+app.use(morgan(conf.morgan.format, conf.morgan.options))
+app.use(checkInstall)
+app.use(hostParser)
+app.use(bodyParser.json())
+app.use(bodyParser.json({type: 'application/*+json'}))
+app.use(bodyParser.json({type: 'text/html'}))
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(router)
+app.use(errHandle.status500)
+app.use(errHandle.status404)
 
-// node_modules
-var cookieParser = require('cookie-parser')
-var bodyParser = require('body-parser')
-var httpProxy = require('http-proxy')
-var request = require('request')
-var express = require('express')
-var parse = require('url-parse')
-var morgan = require('morgan')
-var ent = require('ent')
-var pem = require('pem')
-var _ = require('lodash')
+// 检查是否登录
+db.config.findOne({}, function(err, doc){
+  if (err) return console.log(err)
+  if (doc) {
+    conf = doc
+    conf.isInstalled = true
+  }
 
-// database
-var Datastore = require('nedb')
-var db = {}
-db.cname = new Datastore({
-  filename: path.join(__dirname, './data/cname.db'),
-  autoload: true
+  // listen http
+  http.listen(80, function(){
+    console.log('Listening on port 80')
+  })
+
+  // listen https
+  //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
+  //  https.createServer({
+  //    key: keys.serviceKey,
+  //    cert: keys.certificate
+  //  }, app).listen(443, function(){
+  //    console.log('Listening on port 443')
+  // })
+  //})
+
 })
-db.host = new Datastore({
-  filename: path.join(__dirname, './data/host.db'),
-  autoload: true
-})
-
-var doc = { hello: 'world'
-  , n: 5
-  , today: new Date()
-  , nedbIsAwesome: true
-  , notthere: null
-  , notToBeSaved: undefined  // Will not be saved
-  , fruits: [ 'apple', 'orange', 'pear' ]
-  , infos: { name: 'nedb' }
-};
-
-db.host.insert(doc, function (err, newDoc) {   // Callback is optional
-  // newDoc is the newly inserted document, including its _id
-  // newDoc has no key called notToBeSaved since its value was undefined
-
-});
-
-
-db.host.insert(doc, function (err, newDoc) {   // Callback is optional
-  // newDoc is the newly inserted document, including its _id
-  // newDoc has no key called notToBeSaved since its value was undefined
-});
-
-var controller = {}
-var conf = {}
-var app = require('express')()
-var http = require('http').Server(app)
-

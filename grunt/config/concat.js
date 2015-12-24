@@ -27,13 +27,13 @@ module.exports = {
     },
     files: {
       '.grunt-cache/server/index.js': [
-        "src/server/index.js",
+        "src/server/require.js",
         "src/server/conf/**/*.js",
         "src/server/lib/**/*.js",
         "src/server/model/**/*.js",
         "src/server/controller/**/*.js",
         "src/server/router/**/*.js",
-        "src/server/start.js"
+        "src/server/index.js"
       ]
     }
   }

@@ -8,4 +8,7 @@ Thumb.db
 .svn
 .psd
 
+.grunt-cache
+
+
 build
