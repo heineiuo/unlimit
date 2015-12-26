@@ -1,3 +1,10 @@
+/**
+ * 检查程序是否安装成功
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
 var checkInstall = function(req, res, next){
 
   if (conf.isChecked) return next()

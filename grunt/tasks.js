@@ -9,8 +9,8 @@ module.exports = function(grunt){
 
   // home
   grunt.registerTask('home/js', [
-    'concat:home/index',
     'jst:home/template',
+    'concat:home/index',
     'uglify:home/index',
     'copy:home'])
 
@@ -21,8 +21,8 @@ module.exports = function(grunt){
 
   // default
   grunt.registerTask('default', [
-    'concat',
     'jst',
+    'concat',
     'uglify',
     'sass',
     'cssmin',

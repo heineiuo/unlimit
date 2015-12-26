@@ -27,6 +27,7 @@ module.exports = {
     },
     files: {
       '.grunt-cache/server/index.js': [
+        ".grunt-cache/server/view/**/*.js",
         "src/server/require.js",
         "src/server/conf/**/*.js",
         "src/server/lib/**/*.js",

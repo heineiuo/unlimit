@@ -12,6 +12,8 @@ cnameApp.requireInstall = function(req, res, next) {
  * 需要和安装后的名称一致
  */
 cnameApp.requireEqualHost = function(req, res, next) {
+  return next()
+
   // 未安装的,直接通过
   if (!conf.isInstalled) return next()
   // 已安装的,检查是否一致
@@ -23,14 +25,14 @@ cnameApp.requireEqualHost = function(req, res, next) {
  * 需要登录
  */
 cnameApp.requireAdmin = function(req, res, next) {
-  if (!_.has(req.locals, 'admin')) return res.json({error: 'PERMISSION_DENIED'})
+  if (!_.has(req.query, 'token')) return res.json({error: 'PERMISSION_DENIED'})
   next()
 }
 
 
 
 /**
- * 获取状
+ * 获取状态
  */
 cnameApp.status = function(req, res, next) {
   res.json(conf)
@@ -42,8 +44,12 @@ cnameApp.status = function(req, res, next) {
 cnameApp.install = function(req, res, next) {
   if (conf.isInstalled) return res.sendStatus(403)
 
-  // TODO install
-  res.sendStatus(500)
+  db.config.insert(req.query, function(err, doc){
+    if (err) return res.sendStatus(500)
+    conf = _.extend(conf, doc)
+    conf.isInstalled = true
+    res.json({})
+  })
 
 }
 
@@ -57,11 +63,14 @@ cnameApp.login = function(req, res, next) {
 }
 
 
-
-
-
+/**
+ * 返回app
+ * @param req
+ * @param res
+ * @param next
+ */
 cnameApp.renderApp = function(req, res, next){
 
-  res.end('cname app')
+  res.end(JST['home/app']())
 
 }
