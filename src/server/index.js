@@ -9,8 +9,10 @@ app.use(bodyParser.json({type: 'application/*+json'}))
 app.use(bodyParser.json({type: 'text/html'}))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(router)
+app.use('/assets', express.static(path.join(__dirname, './public/assets')))
 app.use(errHandle.status500)
 app.use(errHandle.status404)
+
 
 // 检查是否登录
 db.config.findOne({}, function(err, doc){

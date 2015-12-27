@@ -1,6 +1,5 @@
 
-var mData = this.mData || {}
-mData['applist'] = function () {
+mData.applist = function () {
 
   return {
     list: [

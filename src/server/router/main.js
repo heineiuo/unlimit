@@ -1,7 +1,8 @@
 /**
  * 统一返回客户端, 路由交给客户端处理
  */
-router.route(['/', '/install', '/host']).get(
+router.route(['/', '/install', '/host',
+  '/login', '/cname']).get(
   cnameApp.requireEqualHost,
   cnameApp.renderApp
 )
@@ -9,7 +10,7 @@ router.route(['/', '/install', '/host']).get(
 /**
  * 客户端获取app状态(已安装/未安装)
  */
-router.route('/api/status').get(
+router.route('/api/status').all(
   cnameApp.requireEqualHost,
   cnameApp.status
 )

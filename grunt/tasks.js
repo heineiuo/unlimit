@@ -2,6 +2,7 @@ module.exports = function(grunt){
 
   // server
   grunt.registerTask('server', [
+    'jst:home/app',
     'concat:server',
     'uglify:server',
     'copy:server'])
@@ -15,7 +16,7 @@ module.exports = function(grunt){
     'copy:home'])
 
   grunt.registerTask('home/css', [
-    'less:home/index',
+    'sass:home/index',
     'cssmin:home/index',
     'copy:home'])
 

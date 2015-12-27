@@ -1,27 +1,120 @@
 var mainRouter = mainRouter ||  pansy.Router()
 
-mainRouter.route('/')
-  .get(
-    controller('layout'),
-    controller('user.requireLogin'),
-    controller('home')
-  )
-
-mainRouter.route(['/docs', '/doc'])
-  .get(
-    controller('layout'),
-    controller('user.requireLogin')
-  )
-
-mainRouter.route('/login')
-  .get(
-    controller('layout'),
-    controller('login')
-  )
-
-
-mainRouter.route('/test')
-  .get(
-  require('http://static1.heineiuo.com/dev/open/test.js'),
-  controller('test')
+mainRouter.route('/install').get(
+  controller('layout'),
+  controller('renderInstall')
 )
+
+mainRouter.route('/').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('home')
+)
+
+mainRouter.route(['/docs', '/doc']).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin')
+)
+
+mainRouter.route('/login').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('login')
+)
+
+
+mainRouter.route('/host').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('host.list')
+)
+
+mainRouter.route('/host/new').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('host.new')
+)
+
+
+mainRouter.route(/^\/host\/detail\/[0-9a-zA-Z-]+$/).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('host.detail')
+)
+
+
+mainRouter.route(/^\/host\/edit\/[0-9a-zA-Z-]+$/).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('host.edit')
+)
+
+
+mainRouter.route('/app').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('app.list')
+)
+
+mainRouter.route('/app/new').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('app.new')
+)
+
+mainRouter.route(/^\/app\/detail\/[0-9a-zA-Z-]+$/).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('app.detail')
+)
+
+mainRouter.route(/^\/app\/edit\/[0-9a-zA-Z-]+$/).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('app.edit')
+)
+
+
+
+mainRouter.route('/cname').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('cname.list')
+)
+
+
+mainRouter.route('/cname/new').get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('cname.new')
+)
+
+mainRouter.route(/^\/cname\/detail\/[0-9a-zA-Z-]+$/).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('cname.detail')
+)
+
+
+mainRouter.route(/^\/cname\/edit\/[0-9a-zA-Z-]+$/).get(
+  controller('requireInstalled'),
+  controller('layout'),
+  controller('user.requireLogin'),
+  controller('cname.edit')
+)
+
+
+

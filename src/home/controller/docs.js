@@ -6,7 +6,7 @@ controller('docs.render', function(req, res, next){
     active: "docs"
   }
 
-  $("#view-scope").html(JST['layout/docs'](req.locals))
+  $("#container").html(JST['layout/docs'](req.locals))
   next()
 
 })

@@ -1,0 +1,1 @@
+mData.install = [1, 'POST', conf.apibase+'/install']

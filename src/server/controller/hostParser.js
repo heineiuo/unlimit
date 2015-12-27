@@ -13,12 +13,19 @@ var hostParser = function(req, res, next) {
   // 是否存在host
   db.host.findOne({hostname: req.headers.host}, function (err, doc) {
     if (err) return res.sendStatus(500)
-    if (!doc) return res.sendStatus(404)
+    if (!doc) {
+      //console.log('DOMAIN NOT FOUND')
+      //return res.sendStatus(404)
+      return next()
+    }
 
     // 查找cname
     db.cname.find({hostId: doc.hostId}, function(err, docs) {
       if (err) return res.sendStatus(500)
-      if (docs.length == 0) return res.sendStatus(502)
+      if (docs.length == 0) {
+        console.log('CNAME LOG LOST')
+        return res.sendStatus(502)
+      }
 
       // 获取地址
       var url = parse(req.headers.host + req.url , true)
@@ -27,12 +34,12 @@ var hostParser = function(req, res, next) {
 
       // 查找路由
       var result = {}
-      _.map(docs, function(val, key){
-        if (val.hostname != url.host) return true
+      _.map(docs, function(doc, index){
+        if (doc.hostname != url.host) return true
         var reg = new RegExp(_.trim(val.pathname, '/').replace('\\\\','\\'))
         var match = url.pathname.match(reg)
         if (match && match[0] == url.pathname) {
-          result = val
+          result = doc
           return false
         }
       })
@@ -41,7 +48,7 @@ var hostParser = function(req, res, next) {
       if (result.type == 'proxy') {
         // todo handle ssl cert to options
         var options = {
-          //protocolRewrite: 'http'
+          // protocolRewrite: 'http'
         }
         var target = conf.proxy[req.headers.host]
         httpProxy.createProxyServer(options).web(req, res, {
@@ -49,7 +56,7 @@ var hostParser = function(req, res, next) {
         }, function (err) {
           if (err) {
             console.log(err)
-            res.sendStatus(502)
+            return res.sendStatus(502)
           }
           res.end()
         })
@@ -58,12 +65,12 @@ var hostParser = function(req, res, next) {
 
       if (result.type == 'block') return res.redirect('http://www.google.com')
       if (result.type == 'redirect') return res.redirect(doc.content)
-      if (doc.type = 'html') return res.end(doc.content)
+      if (result.type == 'html') return res.end(doc.content)
       if (result.type == 'api') {
 
         var apiOptions = {
           method: 'POST',
-          url: conf.API_HOST + result.content,
+          url: result.content,
           qs: req.query,
           form: _.extend(req.body, req.query, {
             appId: conf.appId,
@@ -78,7 +85,7 @@ var hostParser = function(req, res, next) {
             res.json(JSON.parse(body))
           } catch(e){
             console.log(body)
-            res.send(502)
+            res.sendStatus(502)
           }
         })
       }

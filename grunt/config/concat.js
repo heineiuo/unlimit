@@ -4,7 +4,7 @@ module.exports = {
   'home/index': {
     options: {
       separator: ';',
-      banner: '/*! home/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd HH:MM:SS") %> */\n'
+      banner: '/*! home/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
       '.grunt-cache/home/index.js': [
@@ -23,12 +23,12 @@ module.exports = {
   'server': {
     options: {
       separator: ';\n',
-      banner: '/*! server/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      banner: '/*! server/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
       '.grunt-cache/server/index.js': [
         ".grunt-cache/server/view/**/*.js",
-        "src/server/require.js",
+        "src/server/conf/require.js",
         "src/server/conf/**/*.js",
         "src/server/lib/**/*.js",
         "src/server/model/**/*.js",

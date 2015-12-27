@@ -3,7 +3,7 @@ var controller = controller || pansy.Controller()
 controller('layout', function(req, res, next){
 
   if ($("#page-container").length ==0){
-    $("#view-scope").html(JST['layout']())
+    $("#container").html(JST['layout']())
   }
 
   if (_.has(conf, 'access_token') ) {

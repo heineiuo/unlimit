@@ -8,11 +8,21 @@ var app = pansy()
 
 app.config('spa', true)
 
+app.use(function(req, res, next){
+  ajax('serverStatus').exec(function(err, result){
+    if (err) {
+      return alert(err)
+    }
+    req.serverStatus = result
+    next()
+  })
+})
+
 app.use(mainRouter)
 
 app.use(function(req, res){
   console.log('404')
-  $("#view-scope").html('404 not found')
+  $("#container").html('404 not found')
   res.end()
 })
 

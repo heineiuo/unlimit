@@ -15,6 +15,7 @@ var conf = {
    * 是否安装
    */
   isInstalled: false
+  //isInstalled: true
 
   //proxy: {
   //  "api.heineiuo.com": "http://127.0.0.1:8888",

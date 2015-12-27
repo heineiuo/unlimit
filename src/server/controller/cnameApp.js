@@ -35,7 +35,11 @@ cnameApp.requireAdmin = function(req, res, next) {
  * 获取状态
  */
 cnameApp.status = function(req, res, next) {
-  res.json(conf)
+  var result = _.omit(conf, 'password', '_id')
+  result = _.extend(result, {
+    logged: false
+  })
+  res.json(result)
 }
 
 /**
@@ -43,8 +47,7 @@ cnameApp.status = function(req, res, next) {
  */
 cnameApp.install = function(req, res, next) {
   if (conf.isInstalled) return res.sendStatus(403)
-
-  db.config.insert(req.query, function(err, doc){
+  db.config.insert(req.body, function(err, doc){
     if (err) return res.sendStatus(500)
     conf = _.extend(conf, doc)
     conf.isInstalled = true
