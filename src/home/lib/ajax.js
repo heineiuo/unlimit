@@ -9,7 +9,6 @@ function ajax(name, data, callback){
     return console.warn('ajax方法未找到: '+name)
   }
 
-
   if (arguments.length == 1){
     return assemAjax(name)
   } else {
@@ -26,7 +25,7 @@ function ajax(name, data, callback){
 
       data: function(data){
         this._data = _.extend(this._data, data)
-        //this._data.form_submit = 'ok'
+        this._data.form_submit = 'ok'
         return this
       },
 
@@ -68,11 +67,11 @@ function ajax(name, data, callback){
           })
           .done(function(body){
             if (dataType == 'json' && typeof body.state != 'undefined') {
-              if (typeof body.error == 'undefined'){
+              if (body.state){
                 callback(null, body)
               } else {
                 console.info('返回数据(真实): 名称',name,'数据', body)
-                callback(body.error, body)
+                callback(body.msg, body)
               }
             } else {
               // 返回非json数据

@@ -6,7 +6,7 @@
 
 var app = pansy()
 
-app.config('spa', true)
+//app.config('spa', true)
 
 app.use(function(req, res, next){
   ajax('serverStatus').exec(function(err, result){

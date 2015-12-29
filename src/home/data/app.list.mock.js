@@ -1,5 +1,5 @@
 
-mData.applist = function () {
+mData['app.list'].mock = function () {
 
   return {
     list: [
