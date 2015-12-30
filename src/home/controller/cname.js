@@ -24,12 +24,10 @@ controller('cname.list', function(req, res){
 
 controller('cname.new', function(req, res){
 
-  $("#page-container").html(JST['cname/new']())
-
-  ajax('host.list').exec(function(err, data){
-
-    if (err) return $(".cname-wrap").html('获取域名列表失败')
-    $(".cname-wrap").html(JST['cname/new-inner'](data))
+  ajax('hostDetail').data({hostId: req.pathname[1]}).exec(function(err, result) {
+    if (err) return $('#page-container').html(err)
+    $("#page-container").html(JST['cname/new']({host: result}))
+    $(".cname-wrap").html(JST['cname/new-inner']())
 
     $('.btn-submit').on('click', function(){
       var formdata = {}
@@ -42,8 +40,8 @@ controller('cname.new', function(req, res){
       })
     })
 
-  })
 
+  })
 
   res.end()
 
@@ -62,7 +60,7 @@ controller('cname.detail', function(req, res){
 
   ajax('cname.detail').data(formdata).exec(function(err, data){
 
-    if (err)  return $('#page-container').html('获取详情失败')
+    if (err) return $('#page-container').html('获取详情失败')
     $(".cname-detail-inner").html(JST['cname/detail']({cname: data}))
 
   })

@@ -5,7 +5,9 @@
  * @param next
  * @returns {*}
  */
-var hostParser = function(req, res, next) {
+var hostParser = {}
+
+hostParser.parse = function(req, res, next) {
 
   if (!conf.isInstalled) return next()
   if (req.headers.host == conf.hostname) return next()
@@ -94,5 +96,30 @@ var hostParser = function(req, res, next) {
 
   })
 
+
+}
+
+
+
+/**
+ * 检查程序是否安装成功
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
+hostParser.checkInstall = function(req, res, next){
+
+  if (conf.isChecked) return next()
+
+  db.config.findOne({}, function(err, doc){
+    conf.isChecked = true
+    if (err) return res.sendStatus(500)
+    if (doc) {
+      conf.isInstalled = true
+      conf = _.extend(conf, doc)
+    }
+    next()
+  })
 
 }

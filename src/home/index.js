@@ -10,10 +10,8 @@ var app = pansy()
 
 app.use(function(req, res, next){
   ajax('serverStatus').exec(function(err, result){
-    if (err) {
-      return alert(err)
-    }
-    req.serverStatus = result
+    if (err) return $('#container').html(err)
+    req.serverStatus = _.extend(conf, result)
     next()
   })
 })
@@ -30,12 +28,12 @@ app.use(function(req, res){
  * 配置启动项
  */
 $(document).ready(function(){
-  if (location.protocol == 'file:') {
-    app.config('routeByQuery', true)
-    conf.hrefPrefix = '?route='
-    conf.access_token = 'fadfafsadffdafsf'
-    conf.user = {username: 'test'}
-  }
+  //if (location.protocol == 'file:') {
+  //  app.config('routeByQuery', true)
+  //  conf.hrefPrefix = '?route='
+  //  conf.access_token = 'fadfafsadffdafsf'
+  //  conf.user = {username: 'test'}
+  //}
   $("#onloading").remove()
   app.go()
 })

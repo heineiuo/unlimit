@@ -6,14 +6,15 @@ controller('layout', function(req, res, next){
     $("#container").html(JST['layout']())
   }
 
-  if (_.has(conf, 'access_token') ) {
-
-    $('#userbar').html(JST['_userbar']({user: conf.user}))
-    $(".sidebar").html(JST['_sidebar']({pathname: req.pathname})).removeClass('hide')
-    return next()
+  if (req.serverStatus.logged)  {
+    $('#userbar').html(JST['_userbar']())
+    $('#userbar .btn-logout').on('click', function(){
+      cookie('password').delete()
+      location.href = conf.hrefPrefix + '/login'
+    })
+    //$(".sidebar").html(JST['_sidebar']({pathname: req.pathname})).removeClass('hide')
   }
 
   next()
-
 
 })

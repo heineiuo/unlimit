@@ -25,7 +25,6 @@ function ajax(name, data, callback){
 
       data: function(data){
         this._data = _.extend(this._data, data)
-        this._data.form_submit = 'ok'
         return this
       },
 
@@ -39,7 +38,7 @@ function ajax(name, data, callback){
             return callback(name+'不存在')
           }
           if (!_.has(mData[name], 'mock')) {
-            return console.log(name, 'mock数据未定义')
+            return console.info(name, 'mock数据未定义')
           }
           var data = mData[name].mock(this._data)
           console.info("返回数据(模拟): 名称",name,'数据', data)
@@ -57,8 +56,6 @@ function ajax(name, data, callback){
             url += '/'+this._param
           }
 
-          console.log(this._data)
-
           $.ajax({
             url: url,
             type: mData[name][1],
@@ -66,17 +63,10 @@ function ajax(name, data, callback){
             dataType: dataType
           })
           .done(function(body){
-            if (dataType == 'json' && typeof body.state != 'undefined') {
-              if (body.state){
-                callback(null, body)
-              } else {
-                console.info('返回数据(真实): 名称',name,'数据', body)
-                callback(body.msg, body)
-              }
-            } else {
-              // 返回非json数据
-              callback(null, body)
-            }
+            if (dataType != 'json') return callback(null, body)
+            if (typeof body.error == 'undefined') return callback(null, body)
+            console.info('真实接口提示错误: 名称',name,'数据', body)
+            callback(body.error, body)
           })
           .fail(function (a, b, c) {
             callback('接口异常')
@@ -89,7 +79,10 @@ function ajax(name, data, callback){
 
       },
 
-      _data: {},
+      _data: {
+        password: cookie('password').val()
+      },
+
       _param: null
 
     }

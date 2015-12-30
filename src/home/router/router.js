@@ -21,7 +21,7 @@ mainRouter.route(['/docs', '/doc']).get(
 mainRouter.route('/login').get(
   controller('requireInstalled'),
   controller('layout'),
-  controller('login')
+  controller('renderLogin')
 )
 
 
@@ -40,7 +40,7 @@ mainRouter.route('/host/new').get(
 )
 
 
-mainRouter.route(/^\/host\/detail\/[0-9a-zA-Z-]+$/).get(
+mainRouter.route(/^\/host\/[0-9a-zA-Z-]+\/detail$/).get(
   controller('requireInstalled'),
   controller('layout'),
   controller('user.requireLogin'),
@@ -48,7 +48,7 @@ mainRouter.route(/^\/host\/detail\/[0-9a-zA-Z-]+$/).get(
 )
 
 
-mainRouter.route(/^\/host\/edit\/[0-9a-zA-Z-]+$/).get(
+mainRouter.route(/^\/host\/[0-9a-zA-Z-]+\/edit$/).get(
   controller('requireInstalled'),
   controller('layout'),
   controller('user.requireLogin'),

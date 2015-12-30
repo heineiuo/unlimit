@@ -2,16 +2,21 @@
 app.set('x-powered-by', false)
 // middleware
 app.use(morgan(conf.morgan.format, conf.morgan.options))
-app.use(checkInstall)
-app.use(hostParser)
+app.use(hostParser.checkInstall)
+app.use(hostParser.parse)
 app.use(bodyParser.json())
 app.use(bodyParser.json({type: 'application/*+json'}))
 app.use(bodyParser.json({type: 'text/html'}))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(router)
 app.use('/assets', express.static(path.join(__dirname, './public/assets')))
-app.use(errHandle.status500)
-app.use(errHandle.status404)
+app.use(function(err, req, res, next){
+  if (!err) return next()
+  res.sendStatus(500)
+})
+app.use(function(req, res){
+  res.sendStatus(404)
+})
 
 
 // 检查是否登录
