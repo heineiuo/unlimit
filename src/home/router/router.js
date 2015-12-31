@@ -84,24 +84,14 @@ mainRouter.route(/^\/app\/edit\/[0-9a-zA-Z-]+$/).get(
   controller('app.edit')
 )
 
-
-
-mainRouter.route('/cname').get(
-  controller('requireInstalled'),
-  controller('layout'),
-  controller('user.requireLogin'),
-  controller('cname.list')
-)
-
-
-mainRouter.route('/cname/new').get(
+mainRouter.route(/^\/host\/[0-9a-zA-Z-]+\/cname\/new$/).get(
   controller('requireInstalled'),
   controller('layout'),
   controller('user.requireLogin'),
   controller('cname.new')
 )
 
-mainRouter.route(/^\/cname\/detail\/[0-9a-zA-Z-]+$/).get(
+mainRouter.route(/^\/host\/[0-9a-zA-Z-]+\/cname\/[0-9a-zA-Z-]+\/detail$/).get(
   controller('requireInstalled'),
   controller('layout'),
   controller('user.requireLogin'),
@@ -109,7 +99,7 @@ mainRouter.route(/^\/cname\/detail\/[0-9a-zA-Z-]+$/).get(
 )
 
 
-mainRouter.route(/^\/cname\/edit\/[0-9a-zA-Z-]+$/).get(
+mainRouter.route(/^\/host\/[0-9a-zA-Z-]+\/cname\/[0-9a-zA-Z-]+\/edit$/).get(
   controller('requireInstalled'),
   controller('layout'),
   controller('user.requireLogin'),

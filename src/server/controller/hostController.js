@@ -3,32 +3,28 @@ var hostController = {}
 
 /** 创建一条host记录 **/
 hostController.new = function(req, res, next) {
-  var App = model('App')
-  var Host = model('Host')
 
-  if (!_.has(req.body, 'appId', 'hostname')) {
+
+  if (!_.has(req.body, 'hostname')) {
     return res.json({error: "LOST_PARAM"})
   }
 
-  Host.findOne({hostname: req.body.hostname}, function(err, item){
+  if (_.trim(req.body.hostname) == '') {
+    return res.json({error: "ILLEGAL_PARAM"})
+  }
+
+  db.host.findOne({hostname: req.body.hostname}, function(err, item){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
-    if (item) return res.json({error: "PERMISSION_DENID", message: "域名已存在"})
+    if (item) return res.json({error: "PERMISSION_DENIED", message: "域名已存在"})
 
-    App.findOne({appId: req.body.appId, userId: req.user.userId}, function(err, appItem){
+    db.host.insert({
+      hostname: req.body.hostname
+    }, function(err, item){
       if (err) return res.json({error: "EXCEPTION_ERROR"})
-      if (!appItem) return res.json({error: "NOT_FOUND", message: "app不存在"})
-
-      Host.create({
-        hostId: uuid(),
-        userId: req.user.userId,
-        appId: req.body.appId,
-        hostname: req.body.hostname
-      }, function(err, item){
-        if (err) return res.json({error: "EXCEPTION_ERROR"})
-        res.json(_.omit(item.toObject(),'__v', '_id'))
-      })
-
+      res.json(item)
     })
+
+
   })
 
 }
@@ -40,20 +36,24 @@ hostController.new = function(req, res, next) {
  * 获取域名详
  */
 hostController.detail = function(req, res, next) {
-  var Host = model('Host')
 
   if (!_.has(req.body, 'hostId')) {
-    return res.json({error: "LOST_PARAM", error_msg: 404})
+    return res.json({error: "LOST_PARAM"})
   }
 
-  Host.findOne({
-    hostId: req.body.hostId,
-    userId: req.user.userId
-  }, function(err, item){
+  var result = {}
+
+  db.host.findOne({_id: req.body.hostId}, function(err, item){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
     if (!item) return res.json({error: "NOT_FOUND"})
-    if (item.userId != req.user.userId) return res.json({error: "PERMISSION_DENIED"})
-    res.json(item)
+    result.host = item
+
+    db.cname.find({hostId: req.body.hostId}, function(err, docs){
+      if (err) return res.json({error: 'EXCEPTION_ERROR'})
+      result.list = docs
+      res.json(result)
+    })
+
   })
 
 }
@@ -64,10 +64,18 @@ hostController.detail = function(req, res, next) {
  * 删除某个域名
  */
 hostController.delete = function(req, res, next) {
-  var Host = model('Host')
-  Host.findOneAndRemove({hostId: hostId}, function(err){
-    if (err) return res.json({error: "EXCEPTION"})
-    res.json({})
+
+  if (!_.has(req.body, 'hostId')) return res.json({error: "PERMISSION_DENIED"})
+
+  async.parallel([
+    function(callback){
+      return db.host.remove({_id: req.body.hostId}, {}, callback)
+    }, function(callback){
+      return db.cname.remove({hostId: req.body.hostId}, {multi: true}, callback)
+    }
+  ], function(err, result){
+    if (err) return res.json({error: "EXCEPTION_ERROR"})
+    return res.json({result: result})
   })
 
 }

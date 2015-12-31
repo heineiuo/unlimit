@@ -1,42 +1,51 @@
 var controller = controller || pansy.Controller()
 
-
-controller('cname.list', function(req, res){
-
-  $("#page-container").html(JST['cname/list']())
-
-  var formdata = {
-    appId: conf.appId,
-    userId: conf.userId,
-    access_token: conf.access_token
-  }
-
-  ajax('cname.list').data(formdata).exec(function(err, data){
-    if (err) return $(".cname-list").html('获取列表失败')
-
-    $(".cname-list").html(JST['cname/list-content'](data))
-
-  })
-
-  res.end()
-
-})
+//
+//controller('cname.list', function(req, res){
+//
+//  $("#page-container").html(JST['host/location/list']())
+//
+//  var formdata = {
+//    appId: conf.appId,
+//    userId: conf.userId,
+//    access_token: conf.access_token
+//  }
+//
+//  ajax('cname.list').data(formdata).exec(function(err, data){
+//    if (err) return $(".cname-list").html('获取列表失败')
+//
+//    $(".cname-list").html(JST['host/location/list-content'](data))
+//
+//  })
+//
+//  res.end()
+//
+//})
 
 controller('cname.new', function(req, res){
 
-  ajax('hostDetail').data({hostId: req.pathname[1]}).exec(function(err, result) {
+  ajax('hostDetail').data({hostId: req.params[1]}).exec(function(err, result) {
     if (err) return $('#page-container').html(err)
-    $("#page-container").html(JST['cname/new']({host: result}))
-    $(".cname-wrap").html(JST['cname/new-inner']())
+    $("#page-container").html(JST['host/location/new'](result))
+
+
+    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+      $(e.target).find('input').prop('checked', true)
+    }).on('hide.bs.tab', function(e){
+      $(e.target).find('input').prop('checked', false)
+    })
+
 
     $('.btn-submit').on('click', function(){
-      var formdata = {}
-      $(this).closest('.form').find('[name]').each(function(index, item){
-        formdata[$(item).attr('name')] = $(item).val()
+      var formData = {}
+      formData.hostId = req.params[1]
+      formData.pathname = $('#pathnameInput').val()
+      $('.tab-pane.active').find('[name]').each(function(index, item){
+        formData[$(item).attr('name')] = $(item).val()
       })
-      ajax('cname.new').data(formdata).exec(function(err, data){
+      ajax('cname.new').data(formData).exec(function(err, data){
         if (err) return $(".form-error").html(err)
-        $('.cname-wrap').html(JST['cname/new-success']())
+        $('.cname-wrap').html(JST['host/location/new-success']())
       })
     })
 
@@ -50,18 +59,13 @@ controller('cname.new', function(req, res){
 
 
 controller('cname.detail', function(req, res){
-  $("#page-container").html(JST['cname/detail-wrapper']())
 
-  var formdata = {
-    userId: conf.userId,
-    access_token: conf.access_token,
-    id: req.params[2]
-  }
-
-  ajax('cname.detail').data(formdata).exec(function(err, data){
-
+  ajax('cname.detail').data({
+    hostId: req.params[1],
+    cnameId: req.params[3]
+  }).exec(function(err, data){
     if (err) return $('#page-container').html('获取详情失败')
-    $(".cname-detail-inner").html(JST['cname/detail']({cname: data}))
+    $("#page-container").html(JST['host/location/detail']({cname: data}))
 
   })
 
@@ -73,17 +77,14 @@ controller('cname.detail', function(req, res){
 
 controller('cname.edit', function(req, res){
 
-  $("#page-container").html(JST['cname/edit-wrapper']())
 
-  var formdata = {
-    id: req.params[2],
-    userId: conf.userId,
-    access_token: conf.access_token
-  }
-  ajax('cname.detail').data(formdata).exec(function(err, data){
+  ajax('cname.detail').data({
+    hostId: req.params[1],
+    cnameId: req.params[3]
+  }).exec(function(err, data){
 
-    if (err) return $(".cname-inner").html('获取详情失败')
-    $(".cname-inner").html(JST['cname/edit-form']({cname: data}))
+    if (err) return $("#page-container").html('获取详情失败')
+    $("#page-container").html(JST['host/location/edit'](data))
 
     $(".btn-cname-edit-save").on('click', function(event){
       var $cnameEdit = $(event.target).closest('.form')
@@ -96,7 +97,6 @@ controller('cname.edit', function(req, res){
       ajax('cname.edit').data(formdata).exec(function(err, data){
         if (err) return $('.form-error').html(err)
         app.go(conf.hrefPrefix+'/cname')
-
       })
     })
 

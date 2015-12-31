@@ -1,1 +1,1 @@
-mData.hostDetail =   [0, 'POST' , conf.api_base_url+'/host/detail']
+mData.hostDetail =   [1, 'POST' , conf.api_base_url+'/host/detail']

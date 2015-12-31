@@ -31,9 +31,9 @@ controller('host.new', function(req, res){
     $(this).closest('.form').find('[name]').each(function(index, item){
       formdata[$(item).attr('name')] = $(item).val()
     })
-    ajax('host.new').data(formdata).exec(function(err, data){
+    ajax('host.new').data(formdata).exec(function(err, result){
       if (err) return $('.form-error').html(err)
-      $(".host-new-wrap").html(JST['host/new-success']())
+      location.href = conf.hrefPrefix + '/host/'+result._id + '/detail'
     })
 
   })
@@ -55,23 +55,18 @@ controller('host.edit', function(req, res){
 
 controller('host.detail', function(req, res){
 
-  ajax('hostDetail').data({hostId: req.pathname[1]}).exec(function(err, result){
+  ajax('hostDetail').data({hostId: req.params[1]}).exec(function(err, result){
     if (err) return $('#page-container').html(err)
-    $("#page-container").html(JST['host/detail']({host: result}))
+    $("#page-container").html(JST['host/detail'](result))
 
-    var formdata = {
-      appId: conf.appId,
-      userId: conf.userId,
-      access_token: conf.access_token
-    }
-
-    ajax('cname.list').data(formdata).exec(function(err, data){
-      if (err) return $(".cname-list").html('获取列表失败')
-
-      $(".cname-list").html(JST['cname/list-content'](data))
-
+    $("#deleteHost").on('click', function(){
+      if (window.confirm('确认删除?')){
+        ajax('hostDelete').data({hostId: req.params[1]}).exec(function(err, result){
+          if (err) return alert(err)
+          location.href = conf.hrefPrefix + '/'
+        })
+      }
     })
-
   })
 
   res.end()

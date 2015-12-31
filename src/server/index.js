@@ -19,7 +19,7 @@ app.use(function(req, res){
 })
 
 
-// 检查是否登录
+// 检查是否已安装
 db.config.findOne({}, function(err, doc){
   if (err) return console.log(err)
   if (doc) {

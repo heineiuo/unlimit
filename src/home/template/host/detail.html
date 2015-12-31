@@ -3,8 +3,14 @@
 
   <div class="paper">
 
-    <div class="title">
-      <h4><a href="{{conf.hrefPrefix}}/host/{{host._id}}/detail">{{host.hostname}}</a></h4>
+    <div class="title clearfix">
+      <h4>
+        <a href="{{conf.hrefPrefix}}/host/{{host._id}}/detail">{{host.hostname}}</a>
+        <small class="pull-right">
+          <a href="#" class="btn btn-xs btn-danger" id="deleteHost">删除</a>
+        </small>
+      </h4>
+
     </div>
 
     <div>
@@ -13,11 +19,42 @@
     <h5 class="">
       location列表
       <small>
-        <a href="{{conf.hrefPrefix}}/cname/new" class="btn btn-xs btn-primary">新建</a>
+        <a href="{{conf.hrefPrefix}}/host/{{host._id}}/cname/new" class="btn btn-xs btn-primary">新建</a>
       </small>
     </h5>
 
-    <div class="cname-list"></div>
+    <div class="cname-list">
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>pathname</th>
+          <th>类型</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% _.map(list, function(item, index){ %}
+
+        <tr>
+          <td><code>{{item.pathname}}</code></td>
+          <td><code>{{item.type}}</code></td>
+          <td>
+            <div class="btn-group">
+              <a href="{{conf.hrefPrefix}}/host/{{host._id}}/cname/{{item._id}}/edit" class="btn btn-xs  btn-primary">编辑</a>
+              <a href="{{conf.hrefPrefix}}/host/{{host._id}}/cname/{{item._id}}/detail" class="btn btn-xs  btn-primary">详情</a>
+            </div>
+          </td>
+        </tr>
+
+        {% }) %}
+
+        </tbody>
+
+      </table>
+    </div>
 
   </div>
 

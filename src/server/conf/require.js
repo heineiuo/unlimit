@@ -7,6 +7,7 @@ var tls = require('tls')
 var net = require('net')
 
 // node_modules
+var async = require('async')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var httpProxy = require('http-proxy')

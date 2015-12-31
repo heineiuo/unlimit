@@ -94,7 +94,7 @@ router.route('/api/cname/detail').post(
   cnameController.requireInstall,
   cnameController.requireEqualHost,
   cnameController.requireAdmin,
-  cnameController.cnameReadByUrl
+  cnameController.detail
 )
 
 router.route('/api/cname/new').post(
@@ -150,6 +150,15 @@ router.route('/api/host/edit').post(
   cnameController.requireEqualHost,
   cnameController.requireAdmin,
   hostController.edit
+)
+
+
+// 删除app
+router.route('/api/host/delete').post(
+  cnameController.requireInstall,
+  cnameController.requireEqualHost,
+  cnameController.requireAdmin,
+  hostController.delete
 )
 
 

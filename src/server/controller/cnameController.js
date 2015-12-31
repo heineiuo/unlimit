@@ -91,28 +91,21 @@ cnameController.renderApp = function(req, res, next){
 
 /** 创建一条cname记录 **/
 cnameController.cnameCreate = function(req, res) {
-  var App = model('App')
-  var User = model('User')
-  var Host = model('Host')
-  var Cname = model('Cname')
 
-  if (!_.has(req.body, 'hostId', 'hostname', 'content')) {
+
+  if (!_.has(req.body, 'hostId', 'type', 'content')) {
     return res.json({error: "LOST_PARAM"})
   }
 
-  Host.findOne({hostId: req.body.hostId}, function(err, host){
+  db.host.findOne({_id: req.body.hostId}, function(err, host){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
     if (!host) return res.json({error: "NOT_FOUND"})
-    req.body.appId = host.appId
     req.body.type = req.body.type || 'html'
-    req.body.userId = req.user.userId
-    if (req.body.type = 'html') req.body.content = ent.encode(req.body.content)
+    if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
 
-    Cname.create(req.body, function(err, cname){
-
+    db.cname.insert(req.body, function(err, doc){
       if (err) return res.send({error: "EXCEPTION_ERROR"})
-      res.json(_.omit(cname.toObject(), ['_id', '__v']))
-
+      res.json(doc)
     })
   })
 
@@ -120,50 +113,25 @@ cnameController.cnameCreate = function(req, res) {
 
 
 
-
 /** 获取详情 **/
-cnameController.cnameReadByUrl = function(req, res, next) {
-  var App = model('App')
-  var User = model('User')
-  var Cname = model('Cname')
+cnameController.detail = function(req, res, next) {
 
-  if (!_.has(req.query, 'url')) {
-    return res.json({error: "LOST_PARAM", error_msg: 404})
-  }
+  if (!_.has(req.body, 'hostId', 'cnameId')) return res.json({error: "LOST_PARAM"})
 
-  var url = parse(req.query.url , true)
-
-  if(url.pathname =='') {
-    url.pathname = '/'
-  }
-
-  Cname.find({host: url.host}, function(err, list){
-
-    if (err) {
-      return res.json(500)
+  async.parallel([
+    function(callback){
+      db.host.findOne({_id: req.body.hostId}, callback)
+    }, function(callback){
+      db.cname.findOne({_id: req.body.cnameId}, callback)
     }
-
-    var result = {error: 'NOT_FOUND', error_msg: 404, url: url}
-
-    _.each(list, function(val, key){
-
-      var reg = new RegExp(_.trim(val.pathname, '/').replace('\\\\','\\'))
-      var match = url.pathname.match(reg)
-      if (match && match[0] == url.pathname) {
-        result = _.pick(val, ['redirect', 'content'])
-
-        if (!result.redirect) {
-          result.content = ent.decode(result.content)
-        }
-
-        return false
-      }
+  ], function(err, results){
+    if (err) return res.json({error: "EXCEPTION_ERROR"})
+    return res.json({
+      host: results[0],
+      cname: results[1]
     })
 
-    res.json(result)
-
   })
-
 }
 
 
