@@ -22,37 +22,34 @@ hostParser.parse = function(req, res, next) {
     }
 
     // 查找cname
-    db.cname.find({hostId: doc.hostId}, function(err, docs) {
+    db.cname.find({hostId: doc._id}, function(err, docs) {
       if (err) return res.sendStatus(500)
       if (docs.length == 0) {
         console.log('CNAME LOG LOST')
         return res.sendStatus(502)
       }
 
-      // 获取地址
+      // 获取url, 自动补上'/'
       var url = parse(req.headers.host + req.url , true)
-      // 自动补上'/'
-      if(url.pathname =='') url.pathname = '/'
+      if (url.pathname =='') url.pathname = '/'
 
-      // 查找路由
+      // 通过比对pathname, 找到路由
       var result = {}
       _.map(docs, function(doc, index){
-        if (doc.hostname != url.host) return true
-        var reg = new RegExp(_.trim(val.pathname, '/').replace('\\\\','\\'))
-        var match = url.pathname.match(reg)
-        if (match && match[0] == url.pathname) {
+        var reg = new RegExp(_.trim(doc.pathname, '/').replace('\\\\','\\'))
+        var matches = url.pathname.match(reg)
+        if (matches && matches[0] == url.pathname) {
           result = doc
           return false
         }
       })
-
 
       if (result.type == 'proxy') {
         // todo handle ssl cert to options
         var options = {
           // protocolRewrite: 'http'
         }
-        var target = conf.proxy[req.headers.host]
+        var target = result.content
         httpProxy.createProxyServer(options).web(req, res, {
           target: target
         }, function (err) {
@@ -90,7 +87,12 @@ hostParser.parse = function(req, res, next) {
             res.sendStatus(502)
           }
         })
+
+        return false
       }
+
+      return res.sendStatus(500)
+
 
     })
 

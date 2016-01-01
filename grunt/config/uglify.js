@@ -18,8 +18,8 @@ module.exports = {
         comparisons:true,
         dead_code: true,
         properties: true,
-        drop_debugger: true,
-        drop_console: true
+        drop_debugger: true
+        //drop_console: true
       },
       mangle: {
         sort: true,
