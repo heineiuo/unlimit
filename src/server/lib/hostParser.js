@@ -26,7 +26,7 @@ hostParser.parse = function(req, res, next) {
       if (err) return res.sendStatus(500)
       if (docs.length == 0) {
         console.log('CNAME LOG LOST')
-        return res.sendStatus(502)
+        return res.sendStatus(404)
       }
 
       // 获取url, 自动补上'/'
@@ -63,8 +63,8 @@ hostParser.parse = function(req, res, next) {
       }
 
       if (result.type == 'block') return res.redirect('http://www.google.com')
-      if (result.type == 'redirect') return res.redirect(doc.content)
-      if (result.type == 'html') return res.end(doc.content)
+      if (result.type == 'redirect') return res.redirect(result.content)
+      if (result.type == 'html') return res.end(ent.decode(result.content))
       if (result.type == 'api') {
 
         var apiOptions = {
@@ -79,7 +79,7 @@ hostParser.parse = function(req, res, next) {
         }
 
         request(apiOptions, function(err, response, body){
-          if (err) return res.send(500)
+          if (err) return res.sendStatus(500)
           try {
             res.json(JSON.parse(body))
           } catch(e){
@@ -91,7 +91,7 @@ hostParser.parse = function(req, res, next) {
         return false
       }
 
-      return res.sendStatus(500)
+      return res.sendStatus(404)
 
 
     })
