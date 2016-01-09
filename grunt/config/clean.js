@@ -1,4 +1,4 @@
 
 module.exports ={
-  all: ['.grunt-cache']
+  all: ['.grunt']
 }

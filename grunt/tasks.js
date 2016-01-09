@@ -6,7 +6,6 @@ module.exports = function(grunt){
     concat: require('./config/concat'),
     jst: require('./config/jst'),
     uglify: require('./config/uglify'),
-    less: require('./config/less'),
     sass: require('./config/sass'),
     cssmin: require('./config/cssmin'),
     copy: require('./config/copy'),
@@ -18,22 +17,27 @@ module.exports = function(grunt){
 
   // server
   grunt.registerTask('server', [
-    'webpack:server',
-    'uglify:server'
+    'copy:server'
   ])
 
 
   // home
-  grunt.registerTask('home/js', [
+  grunt.registerTask('homejs', [
     'jst:home/template',
     'concat:home/index',
     'uglify:home/index',
     'copy:home'])
 
-  grunt.registerTask('home/css', [
+  grunt.registerTask('homecss', [
     'sass:home/index',
     'cssmin:home/index',
     'copy:home'])
+
+  grunt.registerTask('r', [
+    'webpack:server',
+    'uglify:server',
+    'copy:r'
+  ])
 
   // default
   grunt.registerTask('default', [
@@ -45,9 +49,8 @@ module.exports = function(grunt){
     'copy',
     'clean'])
 
-
   grunt.loadNpmTasks('grunt-sass');
-  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -55,7 +58,6 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jst');
-  grunt.loadNpmTasks('grunt-webpack');
 
 
 }

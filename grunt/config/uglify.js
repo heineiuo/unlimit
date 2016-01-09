@@ -6,7 +6,7 @@ module.exports = {
       banner: '/*! home/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
-      '.grunt-cache/home/index.min.js': ['.grunt-cache/home/index.js']
+      '.grunt/home/index.min.js': ['.grunt/home/index.js']
     }
   },
 
@@ -18,8 +18,8 @@ module.exports = {
         comparisons:true,
         dead_code: true,
         properties: true,
-        drop_debugger: true
-        //drop_console: true
+        drop_debugger: true,
+        drop_console: true
       },
       mangle: {
         sort: true,
@@ -29,7 +29,7 @@ module.exports = {
       banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
-      'build/Debug/index.js': ['.grunt/server/index.js']
+      'build/Release/index.js': ['.grunt/server/index.js']
     }
   }
 

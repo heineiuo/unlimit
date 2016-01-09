@@ -2,7 +2,7 @@
 module.exports = {
   'home/index': {
     files: {
-      ".grunt-cache/home/index.min.css": [".grunt-cache/home/index.css"]
+      ".grunt/home/index.min.css": [".grunt/home/index.css"]
     }
   }
 }

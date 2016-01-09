@@ -7,7 +7,7 @@ module.exports = {
       banner: '/*! home/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
-      '.grunt-cache/home/index.js': [
+      '.grunt/home/index.js': [
         "src/common/lib/**/*.js",
         "src/common/data/**/*.js",
         "src/home/lib/**/*.js",
@@ -26,8 +26,8 @@ module.exports = {
       banner: '/*! server/index.js v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
-      '.grunt-cache/server/index.js': [
-        ".grunt-cache/server/view/**/*.js",
+      '.grunt/server/index.js': [
+        ".grunt/server/view/**/*.js",
         "src/server/conf/require.js",
         "src/server/conf/**/*.js",
         "src/server/lib/**/*.js",

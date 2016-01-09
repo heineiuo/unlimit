@@ -2,7 +2,7 @@ var hostController = module.exports = {}
 var conf = require('../conf')
 var db = require('../model/db')
 var _ = require('lodash')
-
+var async = require('async')
 
 /** 创建一条host记录 **/
 hostController.new = function(req, res, next) {

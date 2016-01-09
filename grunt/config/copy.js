@@ -2,20 +2,46 @@ module.exports = {
 
   'home': {
     files: {
-      './build/public/assets/home/css/index.min.css': ['.grunt-cache/home/index.min.css'],
-      './build/public/assets/home/css/index.css': ['.grunt-cache/home/index.css'],
-      './build/public/assets/home/js/index.min.js': ['.grunt-cache/home/index.min.js'],
-      './build/public/assets/home/js/index.js': ['.grunt-cache/home/index.js'],
-      './build/public/assets/home/js/template.min.js': ['.grunt-cache/home/template.min.js'],
-      './build/public/assets/home/js/template.js': ['.grunt-cache/home/template.js']
+      './build/public/assets/home/css/index.min.css': ['.grunt/home/index.min.css'],
+      './build/public/assets/home/css/index.css': ['.grunt/home/index.css'],
+      './build/public/assets/home/js/index.min.js': ['.grunt/home/index.min.js'],
+      './build/public/assets/home/js/index.js': ['.grunt/home/index.js'],
+      './build/public/assets/home/js/template.min.js': ['.grunt/home/template.min.js'],
+      './build/public/assets/home/js/template.js': ['.grunt/home/template.js']
     }
   },
 
   'server': {
-    files: {
-      './build/index.js': ['.grunt-cache/server/index.js'],
-      './build/index.min.js': ['.grunt-cache/server/index.min.js'],
-      './build/package.json': ['package.json']
-    }
+    files: [
+      {
+        expand: true,
+        cwd: './src/server',
+        src: ['**/*.js'],
+        dest: './build/Debug'
+      },
+      {
+        expand: true,
+        cwd: './src',
+        src: ['**/*.html', '!**/template/**/*.html'],
+        dest: './build/Debug/public/assets'
+      }
+    ]
+  },
+
+  'r': {
+    files: [
+      {
+        './build/Release/public/assets/home/css/index.css': ['.grunt/home/index.min.css'],
+        './build/Release/public/assets/home/js/index.js': ['.grunt/home/index.min.js'],
+        './build/Release/public/assets/home/js/template.js': ['.grunt/home/template.min.js'],
+        './build/Release/package.json': ['package.json']
+      },
+      {
+        expand: true,
+        cwd: './src',
+        src: ['**/*.html', '!**/template/**/*.html'],
+        dest: './build/Release/public/assets'
+      }
+    ]
   }
 }

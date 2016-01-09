@@ -24,7 +24,6 @@
     "grunt-contrib-copy": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-jst": "latest",
-    "grunt-contrib-less": "^1.1.0",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
     "grunt-sass": "latest",

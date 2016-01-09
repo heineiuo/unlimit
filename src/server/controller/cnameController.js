@@ -91,7 +91,11 @@ cnameController.login = function(req, res, next) {
  */
 cnameController.renderApp = function(req, res, next){
 
-  res.sendFile(process.cwd() + '/public/index.html')
+  res.sendFile(appEntry('home'))
+
+  function appEntry(name){
+    return process.cwd() + './public/assets/'+name+'/index.html'
+  }
 }
 
 

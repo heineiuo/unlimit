@@ -21,7 +21,7 @@ module.exports = {
       processName: replaceTemplateName('home')
     },
     files: {
-      ".grunt-cache/home/template.js": ["src/home/template/**/*.html"]
+      ".grunt/home/template.js": ["src/home/template/**/*.html"]
     }
   },
 
@@ -33,7 +33,7 @@ module.exports = {
       }
     },
     files: {
-      ".grunt-cache/server/view/homeapp.js": ["src/home/index.html"]
+      ".grunt/server/view/homeapp.js": ["src/home/index.html"]
     }
   }
 
