@@ -12,4 +12,5 @@ Thumb.db
 .grunt
 
 
-build
+build/Release
+build/Debug
