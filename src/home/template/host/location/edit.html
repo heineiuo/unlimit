@@ -9,65 +9,113 @@
     </div>
 
     <div class="cname-inner">
+
+
       <div class="form form-horizontal">
 
-        <input type="hidden" value="{{cname._id}}" name="cnameId">
 
-        <div class="form-group">
-
-          <label for="" class="col-sm-2 control-label">hostname</label>
-          <div class="col-sm-4">
-            <input type="hidden" name="hostId" value="{{cname.hostId}}">
-            <input type="text" disabled class="form-control" value="{{host.hostname}}" name="hostname">
-          </div>
-
-        </div>
-
-        <div class="form-group">
-
-          <label for="" class="col-sm-2 control-label">pathname</label>
-          <div class="col-sm-4">
-            <input type="text" class="form-control" value="{{cname.pathname}}" name="pathname">
-          </div>
-
-        </div>
-
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="typeSelect">类型</label>
-          <div class="col-sm-4">
-            <select class="form-control" name="type" id="typeSelect">
-              <option value="html" {{cname.type=='html'?'selected':''}}>html</option>
-              <option value="json" {{cname.type=='json'?'selected':''}}>json</option>
-              <option value="api" {{cname.type=='api'?'selected':''}}>api</option>
-              <option value="redirect" {{cname.type=='redirect'?'selected':''}}>redirect</option>
-            </select>
+        <div class="form-group row">
+          <div class="col-xs-12">
+            <label class="pull-left">/</label>
+            <div class="pull-left">
+              <input class="form-control" name="pathname" id="pathnameInput" type="text" placeholder="请输入正则表达式" >
+            </div>
           </div>
         </div>
 
         <div class="form-group">
+          <label>类型</label>
 
-          <label for="" class="col-sm-2 control-label">content</label>
-          <div class="col-sm-4">
-            <textarea type="text" name="content" class="form-control">{{cname.content}}</textarea>
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#cnameContentHTML" aria-controls="cnameContentHTML" data-toggle="tab">
+                <input type="radio">HTML
+              </a>
+            </li>
+            <li>
+              <a href="#cnameContentAPI" aria-controls="cnameContentAPI" data-toggle="tab">
+                <input type="radio">API
+              </a>
+            </li>
+            <li>
+              <a href="#cnameContentJSON" aria-controls="cnameContentJSON" data-toggle="tab">
+                <input type="radio">JSON
+              </a>
+            </li>
+            <li>
+              <a href="#cnameContentRedirect" aria-controls="cnameContentRedirect" data-toggle="tab">
+                <input type="radio">Redirect
+              </a>
+            </li>
+            <li>
+              <a href="#cnameContentProxy" aria-controls="cnameContentProxy" data-toggle="tab">
+                <input type="radio">Proxy
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane active" id="cnameContentHTML">
+              <input type="hidden" name="type" value="html">
+              <label>HTML</label>
+              <div>
+                <textarea class="form-control" name="content" placeholder="直接输入HTML代码"></textarea>
+              </div>
+            </div>
+
+            <div  class="tab-pane" id="cnameContentAPI">
+              <input type="hidden" name="type" value="api">
+              <label>API url</label>
+              <div>
+                <input type="text" class="form-control" name="content">
+              </div>
+            </div>
+            <div class="tab-pane" id="cnameContentJSON">
+              <input type="hidden" name="type" value="json">
+              <label>json</label>
+              <div>
+                <textarea class="form-control" name="content" placeholder="直接输入JSON代码"></textarea>
+              </div>
+            </div>
+            <div class="tab-pane" id="cnameContentRedirect">
+              <input type="hidden" name="type" value="redirect">
+              <label>url</label>
+              <div>
+                <input class="form-control" type="text" name="content">
+              </div>
+            </div>
+            <div class="tab-pane" id="cnameContentProxy">
+              <input type="hidden" name="type" value="proxy">
+              <label>反向代理</label>
+              <div>
+                <input class="form-control" type="text" name="content">
+              </div>
+            </div>
           </div>
 
         </div>
 
-        <div class="form-group">
-          <div class="form-error"></div>
+
+        <div class="form-group row">
+          <div class="col-sm-offset-2 col-sm-4 form-error"></div>
         </div>
 
-        <div class="form-group clearfix">
+        <div class="form-group row">
+          <div class="col-sm-offset-2 col-sm-4" style="border-top: 1px solid #eee;"></div>
+        </div>
+
+        <div class="form-group row">
 
           <div class="col-sm-offset-2 col-sm-4 btn-group">
-            <button class="btn btn-primary btn-cname-edit-save">保存</button>
-            <button class="btn btn-default btn-cname-edit-cancel">取消</button>
+            <button class="btn btn-danger btn-cname-delete">删除这个location</button>
           </div>
 
         </div>
       </div>
-
       <!-- end form-->
+
+
+
     </div>
 
 

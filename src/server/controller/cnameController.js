@@ -1,4 +1,7 @@
-var cnameController = {}
+var cnameController = module.exports = {}
+var conf = require('../conf')
+var db = require('../model/db')
+var _ = require('lodash')
 
 /**
  * 需要安装
@@ -52,7 +55,11 @@ cnameController.status = function(req, res, next) {
 cnameController.install = function(req, res, next) {
   if (conf.isInstalled) return res.sendStatus(403)
   db.config.insert(req.body, function(err, doc){
-    if (err) return res.sendStatus(500)
+    if (err) {
+      console.log('安装失败')
+      console.log(err)
+      return res.sendStatus(500)
+    }
     conf = _.extend(conf, doc)
     conf.isInstalled = true
     res.json({})
@@ -84,8 +91,7 @@ cnameController.login = function(req, res, next) {
  */
 cnameController.renderApp = function(req, res, next){
 
-  res.end(JST['home/app']())
-
+  res.sendFile(process.cwd() + '/public/index.html')
 }
 
 

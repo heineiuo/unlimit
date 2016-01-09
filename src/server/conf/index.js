@@ -1,5 +1,5 @@
 
-var conf = {
+var conf = module.exports = {
   /**
    * 日志输出格式
    */

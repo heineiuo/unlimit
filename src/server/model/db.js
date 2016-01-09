@@ -1,21 +1,20 @@
 
 // global variables
-var db = {}
-
+var db = module.exports = {}
+var Datastore = require('nedb')
 
 db.cname = new Datastore({
-  filename: path.join(__dirname, './data/cname.db'),
+  filename: './data/cname.db',
   autoload: true
 })
 db.host = new Datastore({
-  filename: path.join(__dirname, './data/host.db'),
+  filename: './data/host.db',
   autoload: true
 })
 db.config = new Datastore({
-  filename: path.join(__dirname, './data/config.db'),
+  filename: './data/config.db',
   autoload: true
 })
-
 
 /**
  * doc insert demo

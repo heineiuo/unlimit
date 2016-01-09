@@ -1,3 +1,9 @@
+var router = module.exports = require('express').Router()
+
+
+var cnameController = require('../controller/cnameController')
+var hostController = require('../controller/hostController')
+
 /**
  * 统一返回客户端, 路由交给客户端处理
  */

@@ -1,4 +1,7 @@
-var hostController = {}
+var hostController = module.exports = {}
+var conf = require('../conf')
+var db = require('../model/db')
+var _ = require('lodash')
 
 
 /** 创建一条host记录 **/

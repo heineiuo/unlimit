@@ -5,7 +5,14 @@
  * @param next
  * @returns {*}
  */
-var hostParser = {}
+var hostParser = module.exports = {}
+var httpProxy = require('http-proxy')
+var _ = require('lodash')
+var request = require('request')
+var conf = require('../conf')
+var db = require('../model/db')
+var parse = require('url-parse')
+var ent = require('ent')
 
 hostParser.parse = function(req, res, next) {
 
@@ -14,7 +21,12 @@ hostParser.parse = function(req, res, next) {
 
   // 是否存在host
   db.host.findOne({hostname: req.headers.host}, function (err, doc) {
-    if (err) return res.sendStatus(500)
+
+    if (err) {
+      console.log('查询是否存在host失败')
+      console.log(err)
+      return res.sendStatus(500)
+    }
     if (!doc) {
       //console.log('DOMAIN NOT FOUND')
       //return res.sendStatus(404)
@@ -23,7 +35,13 @@ hostParser.parse = function(req, res, next) {
 
     // 查找cname
     db.cname.find({hostId: doc._id}, function(err, docs) {
-      if (err) return res.sendStatus(500)
+
+      if (err) {
+        console.log('查找cname失败')
+        console.log(err)
+        return res.sendStatus(500)
+      }
+
       if (docs.length == 0) {
         console.log('CNAME LOG LOST')
         return res.sendStatus(404)
@@ -79,7 +97,11 @@ hostParser.parse = function(req, res, next) {
         }
 
         request(apiOptions, function(err, response, body){
-          if (err) return res.sendStatus(500)
+          if (err) {
+            console.log('请求外部接口失败')
+            console.log(err)
+            return res.sendStatus(500)
+          }
           try {
             res.json(JSON.parse(body))
           } catch(e){
@@ -116,7 +138,11 @@ hostParser.checkInstall = function(req, res, next){
 
   db.config.findOne({}, function(err, doc){
     conf.isChecked = true
-    if (err) return res.sendStatus(500)
+    if (err) {
+      console.log('检查是否安装失败')
+      console.log(err)
+      return res.sendStatus(500)
+    }
     if (doc) {
       conf.isInstalled = true
       conf = _.extend(conf, doc)

@@ -26,10 +26,10 @@ module.exports = {
         toplevel: true,
         eval: true
       },
-      banner: '/*! CNAME SERVICE v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
+      banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd hh:MM:ss") %> */\n'
     },
     files: {
-      '.grunt-cache/server/index.min.js': ['.grunt-cache/server/index.js']
+      'build/Debug/index.js': ['.grunt/server/index.js']
     }
   }
 
