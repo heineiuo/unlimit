@@ -94,7 +94,7 @@ cnameController.renderApp = function(req, res, next){
   res.sendFile(appEntry('home'))
 
   function appEntry(name){
-    return process.cwd() + './public/assets/'+name+'/index.html'
+    return process.cwd() + '/public/assets/'+name+'/index.html'
   }
 }
 

@@ -19,7 +19,7 @@ module.exports = {
         dead_code: true,
         properties: true,
         drop_debugger: true,
-        drop_console: true
+        //drop_console: true
       },
       mangle: {
         sort: true,
