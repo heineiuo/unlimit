@@ -30,5 +30,7 @@ var conf = module.exports = {
       error: "ERR_EXCEPTION",
       'zh-CN': '未知错误'
     }
-  }
+  },
+
+  hostnames: ['es8.youkuohao.com', 'cdn.youkuohao.com']
 }

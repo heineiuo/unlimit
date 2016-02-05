@@ -4,7 +4,7 @@
  */
 
 var conf = require('./conf')
-var app = require('./lib/pansy').Main()
+var app = require('pansy').Main()
 
 
 //app.config('spa', true)

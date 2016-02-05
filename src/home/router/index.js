@@ -1,4 +1,4 @@
-var mainRouter = module.exports = require('../lib/pansy').Router()
+var mainRouter = module.exports = require('pansy').Router()
 
 var layout = require('../controller/layout')
 var home = require('../controller/home')

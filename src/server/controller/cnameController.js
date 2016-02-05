@@ -19,12 +19,13 @@ cnameController.requireInstall = function(req, res, next) {
  * 需要和安装后的名称一致
  */
 cnameController.requireEqualHost = function(req, res, next) {
-  return next()
 
   // 未安装的,直接通过
   if (!conf.isInstalled) return next()
   // 已安装的,检查是否一致
-  if (req.hostname !== conf.hostname) return res.json({error: 'UNEQUAL_HOSTNAME'})
+  if (_.indexOf(conf.hostnames, req.hostname) < 0) {
+    return res.sendStatus(404)
+  }
   next()
 }
 

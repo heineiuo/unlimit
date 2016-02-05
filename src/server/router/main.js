@@ -55,38 +55,6 @@ router.route('/api/login').post(
   cnameController.login
 )
 
-//
-//// 获取app列表
-//router.route('/api/app/list').post(
-//  cnameController.requireInstall,
-//  cnameController.requireEqualHost,
-//  cnameController.requireAdmin
-//
-//)
-//
-//// 获取app详情
-//router.route('/api/app/detail').post(
-//  cnameController.requireInstall,
-//  cnameController.requireEqualHost,
-//  cnameController.requireAdmin
-//)
-//
-//// 创建新的app
-//router.route('/api/app/new').post(
-//  cnameController.requireInstall,
-//  cnameController.requireEqualHost,
-//  cnameController.requireAdmin
-//)
-//
-//// 编辑app
-//router.route('/api/app/edit').post(
-//  cnameController.requireInstall,
-//  cnameController.requireEqualHost,
-//  cnameController.requireAdmin
-//)
-
-
-
 // 获取cname列表
 router.route('/api/cname/list').post(
   cnameController.requireInstall,

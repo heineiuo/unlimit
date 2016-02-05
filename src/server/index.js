@@ -35,7 +35,12 @@ app.use(bodyParser.json({type: 'application/*+json'}))
 app.use(bodyParser.json({type: 'text/html'}))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(require('./router/main'))
-app.use(express.static('./public'))
+app.use(express.static('./public', {
+  maxAge: 8640000000000,
+  setHeaders: function(res, path, stat){
+    res.set("Access-Control-Allow-Origin", "*")
+  }
+}))
 app.use(function(err, req, res, next){
   if (!err) return next()
   console.log(err)
