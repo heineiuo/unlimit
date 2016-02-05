@@ -5,7 +5,7 @@
 
     <div class="title clearfix">
       <h4>
-        <a href="{{conf.hrefPrefix}}/host/{{host._id}}/detail">{{host.hostname}}</a>
+        <a href="{{conf.hrefPrefix}}/host/{{host._id}}">{{host.hostname}}</a>
         <small class="pull-right">
           <a href="#" class="btn btn-xs btn-danger" id="deleteHost">删除</a>
         </small>
@@ -43,8 +43,7 @@
           <td><code>{{item.type}}</code></td>
           <td>
             <div class="btn-group">
-              <a href="{{conf.hrefPrefix}}/host/{{host._id}}/cname/{{item._id}}/edit" class="btn btn-xs  btn-primary">编辑</a>
-              <a href="{{conf.hrefPrefix}}/host/{{host._id}}/cname/{{item._id}}/detail" class="btn btn-xs  btn-primary">详情</a>
+              <a href="{{conf.hrefPrefix}}/host/{{host._id}}/cname/{{item._id}}" class="btn btn-xs  btn-primary">详情</a>
             </div>
           </td>
         </tr>

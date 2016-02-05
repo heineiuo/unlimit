@@ -1,9 +1,10 @@
-var controller = controller || pansy.Controller()
+var conf = require('../conf')
+var ajax = require('../lib/ajax')(require('../conf/api'))
+
+var home = module.exports = {}
 
 
-controller('home',  function(req, res) {
-
-
+home.renderHome = function(req, res) {
   $("#page-container").html(JST['host/list']())
 
   ajax('host.list').exec(function(err, data){
@@ -13,6 +14,5 @@ controller('home',  function(req, res) {
 
 
   res.end()
-})
-
+}
 

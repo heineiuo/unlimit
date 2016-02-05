@@ -82,6 +82,7 @@ hostParser.parse = function(req, res, next) {
 
       if (result.type == 'block') return res.redirect('http://www.google.com')
       if (result.type == 'redirect') return res.redirect(result.content)
+      if (result.type == 'json') return res.json(JSON.parse(result.content))
       if (result.type == 'html') return res.end(ent.decode(result.content))
       if (result.type == 'api') {
 

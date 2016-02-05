@@ -38,8 +38,10 @@ app.use(require('./router/main'))
 app.use(express.static('./public'))
 app.use(function(err, req, res, next){
   if (!err) return next()
-  console.log('错误中间件处理结果:')
   console.log(err)
+  if (typeof err === 'string' && _.has(conf.errorData, err)) {
+    return res.json(conf.errorData[err])
+  }
   res.sendStatus(500)
 })
 app.use(function(req, res){
@@ -50,7 +52,6 @@ app.use(function(req, res){
 db.config.findOne({}, function(err, doc){
   if (err) return console.log(err)
   if (doc) {
-    conf = doc
     conf.isInstalled = true
   }
 

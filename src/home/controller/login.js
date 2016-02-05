@@ -1,6 +1,10 @@
-var controller = controller || pansy.Controller()
+var conf = require('../conf')
+var ajax = require('../lib/ajax')(require('../conf/api'))
+var cookie = require('../lib/cookie')
 
-controller('renderLogin', function(req, res, next){
+var login = module.exports = {}
+
+login.renderLogin = function(req, res, next){
 
   $("#page-container").html(JST['auth']())
 
@@ -32,4 +36,4 @@ controller('renderLogin', function(req, res, next){
   //  res.redirect('/')
   //})
 
-})
+}

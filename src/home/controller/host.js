@@ -1,7 +1,10 @@
-var controller = controller || pansy.Controller()
+var conf = require('../conf')
+var ajax = require('../lib/ajax')(require('../conf/api'))
+
+var host = module.exports = {}
 
 /**渲染我的app列表**/
-controller('host.list', function(req, res){
+host.list = function(req, res){
   $("#page-container").html(JST['host/list']())
 
   ajax('host.list').exec(function(err, data){
@@ -11,11 +14,11 @@ controller('host.list', function(req, res){
 
   res.end()
 
-})
+}
 
 
 /** 添加host  **/
-controller('host.new', function(req, res){
+host.new = function(req, res){
 
   $("#page-container").html(JST['host/new']())
 
@@ -33,7 +36,7 @@ controller('host.new', function(req, res){
     })
     ajax('host.new').data(formdata).exec(function(err, result){
       if (err) return $('.form-error').html(err)
-      location.href = conf.hrefPrefix + '/host/'+result._id + '/detail'
+      $("#page-container").html(JST['host/new-success']({host: result}))
     })
 
   })
@@ -41,19 +44,10 @@ controller('host.new', function(req, res){
 
   res.end()
 
-})
+}
 
 
-
-
-controller('host.edit', function(req, res){
-
-
-  res.end()
-
-})
-
-controller('host.detail', function(req, res){
+host.detail = function(req, res){
 
   ajax('hostDetail').data({hostId: req.params[1]}).exec(function(err, result){
     if (err) return $('#page-container').html(err)
@@ -71,4 +65,4 @@ controller('host.detail', function(req, res){
 
   res.end()
 
-})
+}

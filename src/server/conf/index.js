@@ -14,7 +14,7 @@ var conf = module.exports = {
   /**
    * 是否安装
    */
-  isInstalled: false
+  isInstalled: false,
   //isInstalled: true
 
   //proxy: {
@@ -25,4 +25,10 @@ var conf = module.exports = {
   //
   //block_host: [],
 
+  errorData: {
+    ERR_EXCEPTION: {
+      error: "ERR_EXCEPTION",
+      'zh-CN': '未知错误'
+    }
+  }
 }

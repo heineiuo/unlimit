@@ -3,20 +3,15 @@
  * 项目配置
  */
 
+var conf = require('./conf')
+var app = require('./lib/pansy').Main()
 
-var app = pansy()
 
 //app.config('spa', true)
 
-app.use(function(req, res, next){
-  ajax('serverStatus').exec(function(err, result){
-    if (err) return $('#container').html(err)
-    req.serverStatus = _.extend(conf, result)
-    next()
-  })
-})
+app.set('routeScope', conf.routeScope)
 
-app.use(mainRouter)
+app.use(require('./router'))
 
 app.use(function(req, res){
   console.log('404')
@@ -27,13 +22,11 @@ app.use(function(req, res){
 /**
  * 配置启动项
  */
-$(document).ready(function(){
-  //if (location.protocol == 'file:') {
-  //  app.config('routeByQuery', true)
-  //  conf.hrefPrefix = '?route='
-  //  conf.access_token = 'fadfafsadffdafsf'
-  //  conf.user = {username: 'test'}
-  //}
-  $("#onloading").remove()
-  app.go()
-})
+//if (location.protocol == 'file:') {
+//  app.config('routeByQuery', true)
+//  conf.hrefPrefix = '?route='
+//  conf.access_token = 'fadfafsadffdafsf'
+//  conf.user = {username: 'test'}
+//}
+$("#onloading").remove()
+app.go()

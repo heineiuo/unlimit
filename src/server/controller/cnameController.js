@@ -1,7 +1,11 @@
-var cnameController = module.exports = {}
+var _ = require('lodash')
+var ent = require('ent')
+var async = require('async')
+
 var conf = require('../conf')
 var db = require('../model/db')
-var _ = require('lodash')
+
+var cnameController = module.exports = {}
 
 /**
  * 需要安装
@@ -154,21 +158,20 @@ cnameController.detail = function(req, res, next) {
  * @param res
  */
 cnameController.cnameUpdate = function(req, res) {
-  var App = model('App')
-  var User = model('User')
-  var Cname = model('Cname')
+
+  var Cname = db.cname
 
   if (!_.has(req.body, 'hostId', 'type', 'content', 'pathname')) return res.json({error: "PARAMS_LOST"})
 
   if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
   req.body.pathname = req.body.pathname.toString()
 
-  Cname.findOneAndUpdate({hostId: req.body.hostId}, req.body, function(err, cname){
+  Cname.update({hostId: req.body.hostId}, req.body, function(err, cname){
 
     if (err) return res.send({error: 'EXCEPTION_ERROR'})
     if (!cname) return res.json({error: "NOT_FOUND"})
 
-    res.json(_.omit(cname.toObject(), ['_id', '__v']))
+    res.json(_.omit(cname, ['_id', '__v']))
 
   })
 
@@ -197,7 +200,7 @@ cnameController.cnameListRead = function(req, res, next) {
 
 cnameController.delete = function(req, res, next) {
 
-  db.cname.remove({cnameId: req.body.cnameId}, function(err){
+  db.cname.remove({_id: req.body.cnameId}, {}, function(err){
     if (err) return res.json({error: 'EXCEPTION_ERROR'})
     res.json({})
   })

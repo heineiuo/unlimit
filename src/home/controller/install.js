@@ -1,6 +1,9 @@
-var controller = controller || pansy.Controller()
+var conf = require('../conf')
+var ajax = require('../lib/ajax')(require('../conf/api'))
 
-controller('renderInstall', function(req, res, next){
+var install = module.exports = {}
+
+install.renderInstall = function(req, res, next){
 
   if (req.serverStatus.isInstalled) {
     return res.redirect('/')
@@ -25,10 +28,10 @@ controller('renderInstall', function(req, res, next){
   })
 
   res.end()
-})
+}
 
 
-controller('requireInstalled', function(req, res, next){
+install.requireInstall = function(req, res, next){
   if (req.serverStatus.isInstalled) return next()
   res.redirect('/install')
-})
+}

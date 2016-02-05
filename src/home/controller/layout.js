@@ -1,6 +1,10 @@
-var controller = controller || pansy.Controller()
+var conf = require('../conf')
+var ajax = require('../lib/ajax')(require('../conf/api'))
+var cookie = require('../lib/cookie')
 
-controller('layout', function(req, res, next){
+var layout = module.exports = {}
+
+layout.renderLayout =  function(req, res, next){
 
   if ($("#page-container").length ==0){
     $("#container").html(JST['layout']())
@@ -17,4 +21,4 @@ controller('layout', function(req, res, next){
 
   next()
 
-})
+}

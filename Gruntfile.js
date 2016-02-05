@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./grunt/tasks');
+module.exports = require('./tasks/grunt')
