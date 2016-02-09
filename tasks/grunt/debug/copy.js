@@ -14,12 +14,12 @@ module.exports = {
         src: ['**/images/**/*'],
         dest: './build/Debug/public/assets'
       },
-      //{
-      //  expand: true,
-      //  cwd: './libs',
-      //  src: ['**/*'],
-      //  dest: './build/Debug/public/libs'
-      //},
+      {
+        expand: true,
+        cwd: './libs',
+        src: ['**/*'],
+        dest: './build/Debug/public/libs'
+      },
       {
         expand: true,
         cwd: './src/server',

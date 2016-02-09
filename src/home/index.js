@@ -22,11 +22,6 @@ app.use(function(req, res){
 /**
  * 配置启动项
  */
-//if (location.protocol == 'file:') {
-//  app.config('routeByQuery', true)
-//  conf.hrefPrefix = '?route='
-//  conf.access_token = 'fadfafsadffdafsf'
-//  conf.user = {username: 'test'}
-//}
+
 $("#onloading").remove()
 app.go()

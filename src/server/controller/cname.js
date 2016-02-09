@@ -4,6 +4,7 @@ var async = require('async')
 
 var conf = require('../conf')
 var db = require('../model/db')
+var md5  = require('../lib/md5')
 
 var cnameController = module.exports = {}
 
@@ -23,6 +24,9 @@ cnameController.requireEqualHost = function(req, res, next) {
   // 未安装的,直接通过
   if (!conf.isInstalled) return next()
   // 已安装的,检查是否一致
+  if (/^(([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])(\.(?!$)|$)){4}$/.test(req.hostname)) {
+    return next()
+  }
   if (_.indexOf(conf.hostnames, req.hostname) < 0) {
     return res.sendStatus(404)
   }
@@ -33,8 +37,9 @@ cnameController.requireEqualHost = function(req, res, next) {
  * 需要登录
  */
 cnameController.requireAdmin = function(req, res, next) {
-  if (!_.has(req.body, 'password')) return res.json({error: 'PERMISSION_DENIED'})
-  if (conf.password != req.body.password) return res.json({error: 'PERMISSION_DENIED'})
+  var cname_token = req.query.cname_token || req.body.cname_token
+  if (!cname_token) return res.json({error: 'PERMISSION_DENIED'})
+  if (conf.cname_token != cname_token) return res.json({error: 'PERMISSION_DENIED'})
   next()
 }
 
@@ -44,9 +49,9 @@ cnameController.requireAdmin = function(req, res, next) {
  * 获取状态
  */
 cnameController.status = function(req, res, next) {
-  var result = _.omit(conf, 'password', '_id')
+  var result = _.omit(conf, ['password', '_id'])
   result.logged = false
-  if (req.body.password == conf.password) {
+  if (req.body.cname_token == conf.cname_token) {
     result = _.extend(result, {
       logged: true
     })
@@ -59,13 +64,16 @@ cnameController.status = function(req, res, next) {
  */
 cnameController.install = function(req, res, next) {
   if (conf.isInstalled) return res.sendStatus(403)
-  db.config.insert(req.body, function(err, doc){
+  var options = _.omit(req.body, ['cname_token', 'debug'])
+  options.cname_token = md5('cname'+Date.now())
+  db.config.insert(options, function(err, doc){
     if (err) {
       console.log('安装失败')
       console.log(err)
       return res.sendStatus(500)
     }
     conf = _.extend(conf, doc)
+    conf.cname_token = doc.cname_token
     conf.isInstalled = true
     res.json({})
   })
@@ -82,7 +90,7 @@ cnameController.login = function(req, res, next) {
   if (!_.has(req.body, 'password')) return res.json({error: 'PERMISSION_DENIED'})
   if (req.body.password != conf.password) return res.json({error: 'PERMISSION_DENIED'})
 
-  var result = _.omit(conf, 'password', '_id')
+  var result = _.omit(conf, 'password')
   res.json(result)
 
 }

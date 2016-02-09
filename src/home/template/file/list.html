@@ -1,0 +1,34 @@
+{% if (isFile) { %}
+
+<div>这是一个文件</div>
+<div>
+  <a target="_blank" href="{{path}}">查看文件</a>
+</div>
+
+{% } else if (!files.length) { %}
+
+<div>目录为空</div>
+
+{% } else { %}
+
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <th>file</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% _.map(files, function(item, index){ %}
+  <tr>
+    <td>
+      <a style="display: block;" href="{{conf.hrefPrefix}}/file?path={{parentPath}}{{item}}">{{item}}</a>
+    </td>
+  </tr>
+  {% })%}
+  </tbody>
+
+</table>
+
+
+{% }%}

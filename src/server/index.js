@@ -34,7 +34,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.json({type: 'application/*+json'}))
 app.use(bodyParser.json({type: 'text/html'}))
 app.use(bodyParser.urlencoded({extended: false}))
-app.use(require('./router/main'))
+app.use(require('./router'))
 app.use(express.static('./public', {
   maxAge: 8640000000000,
   setHeaders: function(res, path, stat){
@@ -58,11 +58,14 @@ db.config.findOne({}, function(err, doc){
   if (err) return console.log(err)
   if (doc) {
     conf.isInstalled = true
+    _.forEach(_.omit(doc, ['_id']), function (val, key) {
+      conf[key] = val
+    })
   }
 
   // listen http
-  http.listen(80, function(){
-    console.log('Listening on port 80')
+  http.listen(conf.port, function(){
+    console.log('Listening on port '+conf.port)
   })
 
   // listen https
@@ -76,3 +79,4 @@ db.config.findOne({}, function(err, doc){
   //})
 
 })
+

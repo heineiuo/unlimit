@@ -5,12 +5,7 @@ var home = module.exports = {}
 
 
 home.renderHome = function(req, res) {
-  $("#page-container").html(JST['host/list']())
-
-  ajax('host.list').exec(function(err, data){
-    if (err) return $("#page-container .host-list").html('获取数据失败')
-    $("#page-container .host-list").html(JST['host/list-content'](data))
-  })
+  $("#page-container").html(JST['home/index']())
 
 
   res.end()

@@ -5,9 +5,8 @@ var api = module.exports = {};
 api.__base = '/api'
 api.__autoData = function(){
   return {
-    password: cookie('password').val(),
-    debug: 'stack',
-    access_token: cookie('access_token').val()
+    cname_token: cookie('cname_token').val(),
+    debug: 'stack'
   }
 }
 
@@ -74,6 +73,15 @@ api.login = [1, 'POST', api.__base+'/login']
 api['profile'] = [1, 'POST', api.__base+'/user/profile']
 
 api.serverStatus = [1, 'POST', api.__base+'/status']
+
+
+/***********************
+ *
+ * 文件资源相关
+ *
+ **********************/
+api.uploadImage = [1, 'POST', api.__base+'/upload']
+api.readdir = [1, 'POST', api.__base+'/file/readdir']
 
 
 

@@ -1,5 +1,6 @@
 var conf = require('../conf')
 var ajax = require('../lib/ajax')(require('../conf/api'))
+var cookie = require('../lib/cookie')
 
 var install = module.exports = {}
 
@@ -22,6 +23,7 @@ install.renderInstall = function(req, res, next){
     })
     ajax('install').data(formdata).exec(function(err, result){
       if (err) return $form.html('接口错误:'+err)
+      cookie('__session').remove()
       location.href = conf.hrefPrefix+'/'
     })
 
