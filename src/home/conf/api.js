@@ -82,6 +82,8 @@ api.serverStatus = [1, 'POST', api.__base+'/status']
  **********************/
 api.uploadImage = [1, 'POST', api.__base+'/upload']
 api.readdir = [1, 'POST', api.__base+'/file/readdir']
+api.deleteFile = [1, 'POST', api.__base+'/file/delete']
+api.renameFile = [1, 'POST', api.__base+'/file/rename']
 
 
 

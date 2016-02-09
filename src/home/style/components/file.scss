@@ -25,3 +25,18 @@
     height: 100%;
   }
 }
+
+
+.pathbar {
+  padding-left: 5px;
+
+  li {
+    float: left;
+    list-style:none;
+  }
+  li:not(:last-child):after {
+    content: ">";
+    text-align: center;
+    margin: 0 5px;
+  }
+}

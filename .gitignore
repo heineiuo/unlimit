@@ -11,6 +11,6 @@ Thumb.db
 .grunt-cache
 .grunt
 
-
+data
 build/Release
 build/Debug

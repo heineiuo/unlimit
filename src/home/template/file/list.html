@@ -14,15 +14,24 @@
 <table class="table table-bordered table-hover">
   <thead>
   <tr>
-    <th>file</th>
+    <th>序号</th>
+    <th>名称</th>
+    <th>操作</th>
   </tr>
   </thead>
 
   <tbody>
   {% _.map(files, function(item, index){ %}
   <tr>
+    <td>{{index+1}}</td>
     <td>
       <a style="display: block;" href="{{conf.hrefPrefix}}/file?path={{parentPath}}{{item}}">{{item}}</a>
+    </td>
+    <td>
+      <div class="btn-group">
+        <span class="btn btn-sm btn-danger" data-onclick="delete" data-path="{{parentPath}}{{item}}">删除</span>
+        <span class="btn btn-sm btn-primary" data-onclick="rename" data-path="{{parentPath}}{{item}}">重命名</span>
+      </div>
     </td>
   </tr>
   {% })%}

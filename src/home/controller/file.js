@@ -15,6 +15,27 @@ file.renderMedia = function (req, res, next) {
     if (err) return next(err)
     result.parentPath = path + ( path =='/'?'':'/')
     $("#files-container").html(JST['file/list'](result))
+
+    $("[data-onclick='delete']").on('click', function () {
+      if(window.confirm('确定删除该文件吗')){
+        ajax('deleteFile').data({
+          path: $(this).attr('data-path')
+        }).exec(function (err, result) {
+          if (err) return next(err)
+          location.reload()
+        })
+      }
+    })
+
+    $("[data-onclick='rename']").on('click', function () {
+      ajax('renameFile').data({
+        path: $(this).prop('data-path')
+      }).exec(function (err, result) {
+        if (err) return next(err)
+        location.reload()
+      })
+    })
+
   })
 
   lazyload.js([

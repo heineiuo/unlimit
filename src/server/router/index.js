@@ -154,3 +154,11 @@ router.route('/api/file/readdir').post(
   file.readdir
 )
 
+// 删除文件
+router.route('/api/file/delete').post(
+  cname.requireInstall,
+  cname.requireEqualHost,
+  cname.requireAdmin,
+  file.deleteFile
+)
+

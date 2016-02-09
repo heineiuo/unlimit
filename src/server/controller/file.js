@@ -1,12 +1,10 @@
-var fs = require('fs')
+var fs = require('fs-extra')
 var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var path = require('path')
 var formidable = require('formidable')
 var async = require('async')
 var util = require('util')
-
-var Upload = require('../lib/upload')
 
 var file = module.exports = {}
 
@@ -64,8 +62,6 @@ file.readdir = function (req, res, next) {
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
 
   var rawPath = decodeURI(req.body.path)
-  console.log(req.body.path)
-  console.log(rawPath)
 
   var result = {path: rawPath}
   var truePath = process.cwd()+'/public'+ rawPath
@@ -87,3 +83,22 @@ file.readdir = function (req, res, next) {
 
 }
 
+file.deleteFile = function (req, res, next) {
+
+  if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
+
+  var rawPath = decodeURI(req.body.path)
+
+  var result = {path: rawPath}
+  var truePath = process.cwd()+'/public'+ rawPath
+
+  fs.lstat(truePath, function (err, stats) {
+    if (err) throw 'FILE_NOT_EXIST'
+    fs.remove(truePath, function (err) {
+      if (err) return next(err)
+      result.deleteFail = false
+      res.json(result)
+    })
+  })
+
+}
