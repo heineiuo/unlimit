@@ -56,6 +56,11 @@
                 <input type="radio">Proxy
               </a>
             </li>
+            <li>
+              <a href="#cnameContentFile" aria-controls="cnameContentFile" data-toggle="tab">
+                <input type="radio">File
+              </a>
+            </li>
           </ul>
 
           <div class="tab-content">
@@ -93,6 +98,13 @@
               <label>反向代理</label>
               <div>
                 <input class="form-control" type="text" name="content">
+              </div>
+            </div>
+            <div class="tab-pane" id="cnameContentFile">
+              <input type="hidden" name="type" value="file">
+              <label>文件代理</label>
+              <div>
+                <input class="form-control" type="text" name="content" placeholder="请输入服务器真实路径">
               </div>
             </div>
           </div>

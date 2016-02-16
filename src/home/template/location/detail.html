@@ -62,6 +62,11 @@
                 <input type="radio">Proxy
               </a>
             </li>
+            <li class="{{cname.type=='file'?'active':''}}">
+              <a href="#cnameContentFile" aria-controls="cnameContentFile" data-toggle="tab">
+                <input type="radio">File
+              </a>
+            </li>
           </ul>
 
           <div class="tab-content">
@@ -103,6 +108,13 @@
               <label>反向代理</label>
               <div>
                 <input class="form-control" type="text" name="content"  value="{{cname.type=='proxy'?cname.content:''}}">
+              </div>
+            </div>
+            <div class="tab-pane {{cname.type=='file'?'active':''}}" id="cnameContentFile">
+              <input type="hidden" name="type" value="file">
+              <label>文件代理</label>
+              <div>
+                <input class="form-control" type="text" name="content"  value="{{cname.type=='file'?cname.content:''}}">
               </div>
             </div>
           </div>

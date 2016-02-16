@@ -37,5 +37,5 @@ var conf = module.exports = {
     return 80
   })(),
 
-  hostnames: ['es8.youkuohao.com', 'cdn.youkuohao.com']
+  hostnames: ['es8.youkuohao.com']
 }
