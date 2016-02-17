@@ -64,7 +64,8 @@ file.readdir = function (req, res, next) {
   var rawPath = decodeURI(req.body.path)
 
   var result = {path: rawPath}
-  var truePath = process.cwd()+'/public'+ rawPath
+  //var truePath = process.cwd()+'/public'+ rawPath
+  var truePath = rawPath
 
   fs.lstat(truePath, function (err, stats) {
     if (err) return next(err)
@@ -90,7 +91,8 @@ file.deleteFile = function (req, res, next) {
   var rawPath = decodeURI(req.body.path)
 
   var result = {path: rawPath}
-  var truePath = process.cwd()+'/public'+ rawPath
+  //var truePath = process.cwd()+'/public'+ rawPath
+  var truePath = rawPath
 
   fs.lstat(truePath, function (err, stats) {
     if (err) throw 'FILE_NOT_EXIST'

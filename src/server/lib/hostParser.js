@@ -68,23 +68,31 @@ hostParser.middleware = function () {
         })
 
         if (result.type == 'file') {
-          var staticOptions = {
-            cache: 315360000,
-              gzip: true,
-              indexFile: "index.html",
-              serverInfo: 'nginx',
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Expires': new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) // 一年
+          //var staticOptions = {
+          //  cache: 315360000,
+          //    gzip: true,
+          //    indexFile: "index.html",
+          //    serverInfo: 'nginx',
+          //    headers: {
+          //      'Access-Control-Allow-Origin': '*',
+          //      'Expires': new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) // 一年
+          //  }
+          //}
+          //
+          //var fileServer = new nodeStatic.Server(result.content, staticOptions)
+          //
+          //req.addListener('end', function () {
+          //  fileServer.serve(req, res)
+          //}).resume()
+
+          var filePath = path.join(result.content, url.pathname)
+          res.sendFile(filePath, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Expires': new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) // 一年
             }
-          }
+          })
 
-          var fileServer = new nodeStatic
-            .Server(path.join(result.content), staticOptions)
-
-          req.addListener('end', function () {
-            fileServer.serve(req, res)
-          }).resume()
           return false
         }
 
