@@ -12,6 +12,13 @@ var createAjax = module.exports = function(api){
       return console.warn('ajax方法未找到: '+name)
     }
 
+    //api[name] = [
+    // 0: Number, 是否调用真实接口
+    // 1: String, 'POST', 'GET'等
+    // 2: String, url,接口地址
+    // 3: String, dataType, 'json', 'jsonp'
+    // ]
+
     if (arguments.length == 1){
       return assemAjax(name)
     } else {
@@ -21,8 +28,19 @@ var createAjax = module.exports = function(api){
     function assemAjax(name){
 
       return {
+        _url: api[name][2],
+        _data: {},
+        _param: null,
+
         param: function(param){
-          this._param = param;
+          this._url += '/'
+          this._url += param
+          return this
+        },
+
+        query: function (json) {
+          this._url += this._url.indexOf('?')>0?'&':'?'
+          this._url += encodeQuery(json)
           return this
         },
 
@@ -33,15 +51,21 @@ var createAjax = module.exports = function(api){
 
         exec: function (callback){
 
-          if (typeof api.__autoData === 'function') {
-            this.data(api.__autoData())
-          }
-
-          console.info("请求数据: 名称",name,'数据', this._data)
-
           if (!_.has(api, name)){
             return callback(name+'不存在')
           }
+
+          if (typeof api.__autoData === 'function') {
+            if (api[name][1]=='GET') {
+              this.query(api.__autoData())
+            } else {
+              this.data(api.__autoData())
+            }
+          }
+
+          this.query({'_timestamp=': new Date().getTime()})
+
+          console.info("请求数据: 名称",name,'数据', this._data)
 
           if (api.__development || api[name][0] == 0) {
 
@@ -56,25 +80,19 @@ var createAjax = module.exports = function(api){
             return callback(null, data)
           }
 
-          var url  = api[name][2];
-          url += url.match(/\?/)?'&':'?'
-          url += '_timestamp=' + new Date().getTime()
-          url += '&debug=stack'
 
           var dataType = api[name][3] || 'json'
 
-          if (this._param != null) {
-            url += '/'+this._param
+          var options = {
+            url: this._url,
+            type: api[name][1],
+            data: this._data,
+            dataType: dataType
           }
 
-          console.log(this._data)
+          if (dataType=='jsonp') options.jsonp = 'callback'
 
-          $.ajax({
-              url: url,
-              type: api[name][1],
-              data: this._data,
-              dataType: dataType
-            })
+          $.ajax(options)
             .done(function(body){
               if (dataType == 'json') {
                 if (body.error){
@@ -99,11 +117,7 @@ var createAjax = module.exports = function(api){
           this._data = {}
 
 
-        },
-
-        _data: {},
-        _param: null
-
+        }
       }
 
     }
@@ -111,5 +125,12 @@ var createAjax = module.exports = function(api){
   }
 
 
+}
+
+function encodeQuery(data) {
+  var ret = [];
+  for (var d in data)
+    ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+  return ret.join("&");
 }
 

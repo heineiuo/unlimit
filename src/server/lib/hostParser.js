@@ -83,10 +83,7 @@ hostParser.middleware = function () {
             .Server(path.join(result.content), staticOptions)
 
           req.addListener('end', function () {
-            fileServer.serve(req, res, function (err, result) {
-              if (err) return res.sendStatus(404)
-              res.end()
-            });
+            fileServer.serve(req, res)
           }).resume()
           return false
         }
