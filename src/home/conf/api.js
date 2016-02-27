@@ -84,6 +84,7 @@ api.uploadImage = [1, 'POST', api.__base+'/upload']
 api.readdir = [1, 'POST', api.__base+'/file/readdir']
 api.deleteFile = [1, 'POST', api.__base+'/file/delete']
 api.renameFile = [1, 'POST', api.__base+'/file/rename']
+api.downloadFile = [1, 'GET', api.__base+'/file/download']
 
 
 

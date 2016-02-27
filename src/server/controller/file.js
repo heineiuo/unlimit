@@ -19,7 +19,8 @@ file.upload = function (req, res, next) {
   form.parse(req, function (err, fields, files) {
     if (err) return next(err)
     var rootPath = process.cwd() + '/public'
-    var uploadPath = rootPath + req.query.uploadDir
+    //var uploadPath = rootPath + req.query.uploadDir
+    var uploadPath = req.query.uploadDir
     mkdirp.sync(uploadPath)
     var tmpFileName = files.file.path
     var fileName = files.file.name
@@ -86,6 +87,7 @@ file.readdir = function (req, res, next) {
 
 file.deleteFile = function (req, res, next) {
 
+
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
 
   var rawPath = decodeURI(req.body.path)
@@ -102,5 +104,20 @@ file.deleteFile = function (req, res, next) {
       res.json(result)
     })
   })
+
+}
+
+file.downloadFile = function (req, res, next) {
+
+
+  if (!_.has(req.query, 'path')) throw 'PARAMS_LOST'
+
+  var rawPath = decodeURI(req.query.path)
+
+  var result = {path: rawPath}
+  //var truePath = process.cwd()+'/public'+ rawPath
+  var truePath = rawPath
+
+  res.download(truePath)
 
 }

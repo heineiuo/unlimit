@@ -1,8 +1,10 @@
 {% if (isFile) { %}
 
 <div>这是一个文件</div>
-<div>
-  <a target="_blank" href="{{path}}">查看文件</a>
+<div class="btn-group">
+  <span class="btn btn-sm btn-danger" data-onclick="delete" data-path="{{parentPath}}">删除</span>
+  <span class="btn btn-sm btn-primary" data-onclick="rename" data-path="{{parentPath}}">重命名</span>
+  <span class="btn btn-sm btn-primary" data-onclick="download" data-path="{{parentPath}}">下载</span>
 </div>
 
 {% } else if (!files.length) { %}
@@ -31,6 +33,7 @@
       <div class="btn-group">
         <span class="btn btn-sm btn-danger" data-onclick="delete" data-path="{{parentPath}}{{item}}">删除</span>
         <span class="btn btn-sm btn-primary" data-onclick="rename" data-path="{{parentPath}}{{item}}">重命名</span>
+        <span class="btn btn-sm btn-primary" data-onclick="download" data-path="{{parentPath}}{{item}}">下载</span>
       </div>
     </td>
   </tr>

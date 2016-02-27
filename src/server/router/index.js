@@ -162,3 +162,11 @@ router.route('/api/file/delete').post(
   file.deleteFile
 )
 
+// 下载文件
+router.route('/api/file/download').get(
+  cname.requireInstall,
+  cname.requireEqualHost,
+  cname.requireAdmin,
+  file.downloadFile
+)
+

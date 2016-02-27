@@ -36,6 +36,17 @@ file.renderMedia = function (req, res, next) {
       })
     })
 
+    $("[data-onclick='download']").on('click', function () {
+      var path = $(this).attr('data-path')
+      var url = api.downloadFile[2]+'?'+encodeQuery({
+          path: path,
+          cname_token: cookie('cname_token').val()
+        })
+
+      window.open(url)
+
+    })
+
   })
 
   lazyload.js([
