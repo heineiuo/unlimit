@@ -1,6 +1,0 @@
-@mixin icon($img: '/abc.jpg') {
-  display: block;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url($assets+$img);
-}

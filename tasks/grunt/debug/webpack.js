@@ -50,3 +50,21 @@ module.exports.debug_homeIndexJS = {
   }
 
 }
+
+module.exports.debug_adminIndexJS = {
+  cache: false,
+
+  entry: {
+    index: "./src/admin/index"
+  },
+
+  target: 'web',
+
+  output: {
+    path: './.grunt/admin/',
+    //publicPath: "dist/",
+    filename: "[name].js",
+    //chunkFilename: "[chunkhash].js"
+  }
+
+}
