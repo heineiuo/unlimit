@@ -24,7 +24,8 @@
     "node-static": "^0.7.7",
     "pem": "^1.8.1",
     "request": "^2.67.0",
-    "url-parse": "^1.0.5"
+    "url-parse": "^1.0.5",
+    "ykhclient-cnamehome": "latest"
   },
   "devDependencies": {
     "grunt": "latest",
