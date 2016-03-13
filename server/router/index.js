@@ -4,11 +4,6 @@ var cname = require('../controller/cname')
 var host = require('../controller/host')
 var file = require('../controller/file')
 
-// 客户端路由, 返回客户端处理
-router.route(/^(?!\/api\/)[a-zA-Z0-9\_\-\/]*$/).get(
-  cname.requireEqualHost,
-  cname.renderApp
-)
 
 // 获取状态(已安装/未安装)
 router.route('/api/status').all(
