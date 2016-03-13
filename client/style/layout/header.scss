@@ -1,0 +1,52 @@
+html, body {
+  height: 100%;
+}
+
+#container {
+  position: relative;
+  height: 100%;
+}
+
+.navbar {
+  min-height: 46px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 46px;
+  margin-bottom: 0;
+  z-index: 9999;
+  background-color: #2A9BE0;
+}
+
+
+.navbar-inverse {
+  border: 0;
+  line-height: 46px;
+  height: 46px;
+
+
+  .navbar-brand {
+    color: #fff;
+    height: 46px;
+    line-height: 16px;
+  }
+
+  .navbar-nav>li>a {
+    color: #fff;
+  }
+
+}
+
+.footer {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+}
+

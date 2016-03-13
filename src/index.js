@@ -70,10 +70,12 @@ db.config.findOne({}, function(err, doc){
 
   // listen https
   //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
-  //  https.createServer({
+  //  var keyAndCert = {
   //    key: keys.serviceKey,
   //    cert: keys.certificate
-  //  }, app).listen(443, function(){
+  //  }
+  //
+  //  https.createServer(keyAndCert, app).listen(443, function(){
   //    console.log('Listening on port 443')
   // })
   //})
