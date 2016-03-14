@@ -15,6 +15,7 @@ var filter = require('gulp-filter')
 var htmlmin = require('gulp-htmlmin')
 var concat = require('gulp-concat')
 var jst = require('gulp-jst3')
+var zip = require('gulp-zip')
 
 
 gulp.task('server', function() {
@@ -31,7 +32,7 @@ gulp.task('server', function() {
       }
     }))
     .pipe(uglify())
-    .pipe(insert.prepend('/*!\n * YKH CMS \n */\n'))
+    .pipe(insert.prepend('/*!\n * YKH HTTP Server \n */\n'))
     .pipe(gulp.dest('dist'))
 })
 
@@ -59,7 +60,7 @@ gulp.task('client-www-js', function () {
       }
     }))
     .pipe(uglify())
-    .pipe(insert.prepend('/*!\n * YKH CMS \n */\n'))
+    .pipe(insert.prepend('/*!\n * YKH HTTP Server \n */\n'))
     .pipe(gulp.dest('dist/client/www/js'))
 })
 
@@ -137,3 +138,11 @@ gulp.task('build', [
   'client-libs',
   'client-index-js'
 ])
+
+
+gulp.task('release', ['build'], function () {
+  var pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
+  return gulp.src('dist/**/*')
+    .pipe(zip(pkg.name+'-'+pkg.version+'.zip'))
+    .pipe(gulp.dest('release'))
+})

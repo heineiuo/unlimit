@@ -40,14 +40,15 @@
     "gulp-jst3": "file:///Users/Hansel/repo/ykhtools/gulp-jst3",
     "gulp-sass": "^2.2.0",
     "gulp-uglify": "^1.5.3",
+    "gulp-zip": "^3.2.0",
     "imagemin-pngquant": "^4.2.2",
     "lib-ajax": "^0.1.0",
     "lib-session": "^0.1.1",
+    "lib-upload": "^0.1.0",
+    "pansy": "^0.7.15",
     "webpack": "^1.12.10",
     "webpack-dev-server": "^1.14.0",
     "webpack-node-externals": "^1.0.0",
-    "webpack-stream": "^3.1.0",
-    "lib-upload": "^0.1.0",
-    "pansy": "^0.7.15"
+    "webpack-stream": "^3.1.0"
   }
 }
