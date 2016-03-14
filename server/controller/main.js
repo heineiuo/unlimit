@@ -5,7 +5,6 @@ var async = require('async')
 var conf = require('../conf')
 var md5  = require('../lib/md5')
 
-var Location = require('../model/Location')
 var Config = require('../model/Config')
 var Host = require('../model/Host')
 

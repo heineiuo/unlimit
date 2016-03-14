@@ -1,34 +1,30 @@
 <div class="container width-max" style="padding-top: 20px;">
 
-
   <div class="paper">
 
     <div class="title clearfix">
-      <h4>
+      <div class="h4">
         <a href="{{conf.hrefPrefix}}/host/{{host._id}}">{{host.hostname}}</a>
         <small class="pull-right">
           <a href="#" class="btn btn-xs btn-danger" id="deleteHost">删除</a>
         </small>
-      </h4>
-
+      </div>
     </div>
 
-    <div>
-    </div>
-
-    <h5 class="">
+    <div class="h5">
       location列表
       <small>
         <a href="{{conf.hrefPrefix}}/host/{{host._id}}/location/new" class="btn btn-xs btn-primary">新建</a>
       </small>
-    </h5>
+    </div>
 
     <div class="location-list">
-      <table class="table">
+      <table class="table table-hoverd">
 
         <thead>
         <tr>
           <th>pathname</th>
+          <th>顺序</th>
           <th>类型</th>
           <th>操作</th>
         </tr>
@@ -40,6 +36,7 @@
 
         <tr>
           <td><code>{{item.pathname}}</code></td>
+          <td><code>{{item.sort}}</code></td>
           <td><code>{{item.type}}</code></td>
           <td>
             <div class="btn-group">

@@ -37,27 +37,17 @@ api['location.detail'] = [1, 'POST', api.__base+'/location/detail']
 api['location.edit'] = [1, 'POST', api.__base+'/location/edit']
 // location列表
 api['location.list'] =   [1, 'POST' , api.__base+'/location/list']
-
 // 新建location
 api['location.new'] = [1, 'POST', api.__base+'/location/new']
-
 // 删除
 api['host.delete'] = [1, 'POST', api.__base+'/host/delete']
-
 // host
 // 列表
 api['host.list'] =   [1, 'POST' , api.__base+'/host/list']
-
 // 新建
 api['host.new'] = [1, 'POST', api.__base+'/host/new']
-
-
 api.hostDelete =   [1, 'POST' , api.__base+'/host/delete']
-
-
 api.hostDetail =   [1, 'POST' , api.__base+'/host/detail']
-
-
 api.install = [1, 'POST', api.__base+'/install']
 
 
