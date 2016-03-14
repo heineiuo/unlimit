@@ -1,14 +1,14 @@
 var path = require('path')
 var express = require('express')
 var router = module.exports = express.Router()
-var Location = require('../controller/Location')
+var main = require('../controller/main')
 
-var clientPath = path.join(__dirname, process.env.DEBUG?'client':'../../dist/client')
+var clientPath = path.join(process.cwd(), process.env.DEBUG?'../../dist/client':'./client')
 
 // 客户端路由, 返回客户端处理
 router.route(/^(?!\/api\/)[a-zA-Z0-9\_\-\/]*$/).get(
-  Location.requireEqualHost,
-  function(req, res){
+  main.requireEqualHost,
+  function(req, res, next){
     res.sendFile('www/index.html', {
       root: clientPath
     })

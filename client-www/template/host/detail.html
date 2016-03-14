@@ -24,7 +24,7 @@
         <thead>
         <tr>
           <th>pathname</th>
-          <th>顺序</th>
+          <th>优先级</th>
           <th>类型</th>
           <th>操作</th>
         </tr>
@@ -34,9 +34,19 @@
 
         {% _.map(list, function(item, index){ %}
 
-        <tr>
+        <tr data-hostId="{{item.hostId}}" data-locationId="{{item._id}}">
           <td><code>{{item.pathname}}</code></td>
-          <td><code>{{item.sort}}</code></td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-default btn-xs" data-updatesort="up" data-sort="{{item.sort}}">
+                <i class="glyphicon glyphicon-menu-up"></i>
+              </button>
+              <button class="btn btn-default btn-xs">{{item.sort}}</button>
+              <button class="btn btn-default btn-xs" data-updatesort="down" data-sort="{{item.sort}}">
+                <i class="glyphicon glyphicon-menu-down"></i>
+              </button>
+            </div>
+          </td>
           <td><code>{{item.type}}</code></td>
           <td>
             <div class="btn-group">

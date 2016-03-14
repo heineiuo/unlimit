@@ -1,3 +1,7 @@
+var _ = require('lodash')
+var conf = require('../conf')
+
+
 module.exports.err500 = function(err, req, res, next){
   if (!err) return next()
   console.log(err)

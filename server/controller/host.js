@@ -46,7 +46,7 @@ hostController.detail = function(req, res, next) {
     if (!item) return res.json({error: "NOT_FOUND"})
     result.host = item
 
-    Location.find({hostId: req.body.hostId}, function(err, docs){
+    Location.find({hostId: req.body.hostId}).sort({sort: 1}).exec(function(err, docs){
       if (err) return res.json({error: 'EXCEPTION_ERROR'})
       result.list = docs
       res.json(result)

@@ -30,11 +30,10 @@ var http = require('http').Server(app)
 
 // self modules
 var conf = require('./conf')
-var db = require('./model/db')
 
 app.set('x-powered-by', false)
 app.use(require('morgan')(conf.morgan.format, conf.morgan.options))
-app.use(require('./controller/location').checkInstall)
+app.use(require('./controller/main').checkInstall)
 app.use(require('./lib/hostParser').middleware())
 app.use(bodyParser.json())
 app.use(bodyParser.json({type: 'application/*+json'}))

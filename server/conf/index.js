@@ -32,10 +32,7 @@ var conf = module.exports = {
     }
   },
 
-  port: (function () {
-    if (process.env.NODE_DEBUG) return 8080
-    return 80
-  })(),
+  port: 80,
 
   hostnames: ['es8.youkuohao.com']
 }

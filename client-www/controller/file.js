@@ -40,7 +40,7 @@ file.renderMedia = function (req, res, next) {
       var path = $(this).attr('data-path')
       var url = api.downloadFile[2]+'?'+encodeQuery({
           path: path,
-          location_token: cookie('location_token').val()
+          access_token: cookie('access_token').val()
         })
 
       window.open(url)
@@ -57,7 +57,7 @@ file.renderMedia = function (req, res, next) {
 
     var formData = {
       uploadDir: path,
-      location_token: cookie('location_token').val()
+      access_token: cookie('access_token').val()
     }
     $('#imageupload').fileupload({
       formData: formData,

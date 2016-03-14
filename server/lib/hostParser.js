@@ -57,7 +57,7 @@ hostParser.middleware = function () {
         // todo
         // 需要根据排序执行
         var result = {}
-        _.map(docs, function(doc, index){
+        _.forEach(docs, function(doc, index){
           var reg = new RegExp(_.trim(doc.pathname, '/').replace('\\\\','\\'))
           var matches = url.pathname.match(reg)
           if (matches && matches[0] == url.pathname) {

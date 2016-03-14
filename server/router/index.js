@@ -103,6 +103,14 @@ router.route('/api/location/edit').post(
 )
 
 
+router.route('/api/location/update-sort').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.locationUpdateSort
+)
+
+
 router.route('/api/location/delete').post(
   main.requireInstall,
   main.requireEqualHost,

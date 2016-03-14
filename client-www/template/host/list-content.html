@@ -3,23 +3,18 @@
   <tr>
     <th>hostname</th>
     <th>操作</th>
-    <th>hostname</th>
-    <th>操作</th>
   </tr>
   </thead>
 
   <tbody>
-  {% var chunked = _.chunk(list,2);
-  _.map(chunked, function(chunk, index){ %}
+  {% _.map(list, function(item, index){ %}
   <tr>
-    {% _.map(chunk, function(item, index){ %}
     <td><code>{{item.hostname}}</code></td>
     <td>
       <div class="btn-group">
         <a href="{{conf.hrefPrefix}}/host/{{item._id}}" class="btn btn-xs  btn-primary">详情</a>
       </div>
     </td>
-    {% }) %}
   </tr>
   {% }) %}
   </tbody>

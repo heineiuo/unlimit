@@ -35,6 +35,7 @@ api['location.detail'] = [1, 'POST', api.__base+'/location/detail']
 
 // 更新location
 api['location.edit'] = [1, 'POST', api.__base+'/location/edit']
+api.locationUpdateSort = [1, 'POST', api.__base+'/location/update-sort']
 // location列表
 api['location.list'] =   [1, 'POST' , api.__base+'/location/list']
 // 新建location
