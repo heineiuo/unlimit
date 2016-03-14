@@ -13,7 +13,7 @@ layout.renderLayout =  function(req, res, next){
   if (req.serverStatus.logged)  {
     $('#userbar').html(JST['_userbar']())
     $('#userbar .btn-logout').on('click', function(){
-      cookie('cname_token').delete()
+      cookie('location_token').delete()
       cookie('__session').delete()
       location.href = conf.hrefPrefix + '/login'
     })

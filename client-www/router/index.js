@@ -2,7 +2,7 @@ var router = module.exports = require('pansy').Router()
 
 var layout = require('../controller/layout')
 var home = require('../controller/home')
-var cname = require('../controller/cname')
+var location = require('../controller/location')
 var host = require('../controller/host')
 var install = require('../controller/install')
 var login = require('../controller/login')
@@ -57,20 +57,20 @@ router.route(/^\/host\/[0-9a-zA-Z-]{16}$/).get(
 )
 
 
-router.route(/^\/host\/[0-9a-zA-Z-]{16}\/cname\/new$/).get(
+router.route(/^\/host\/[0-9a-zA-Z-]{16}\/location\/new$/).get(
   user.getStatus,
   install.requireInstall,
   layout.renderLayout,
   user.requireLogin,
-  cname.new
+  location.new
 )
 
-router.route(/^\/host\/[0-9a-zA-Z-]{16}\/cname\/[0-9a-zA-Z-]{16}$/).get(
+router.route(/^\/host\/[0-9a-zA-Z-]{16}\/location\/[0-9a-zA-Z-]{16}$/).get(
   user.getStatus,
   install.requireInstall,
   layout.renderLayout,
   user.requireLogin,
-  cname.edit
+  location.edit
 )
 
 router.route('/file').get(

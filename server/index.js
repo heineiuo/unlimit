@@ -17,6 +17,7 @@ var pem = require('pem')
 var _ = require('lodash')
 var Datastore = require('nedb')
 
+
 //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
 //  var keyAndCert = {
 //    key: keys.serviceKey,
@@ -33,7 +34,7 @@ var db = require('./model/db')
 
 app.set('x-powered-by', false)
 app.use(require('morgan')(conf.morgan.format, conf.morgan.options))
-app.use(require('./controller/cname').checkInstall)
+app.use(require('./controller/location').checkInstall)
 app.use(require('./lib/hostParser').middleware())
 app.use(bodyParser.json())
 app.use(bodyParser.json({type: 'application/*+json'}))

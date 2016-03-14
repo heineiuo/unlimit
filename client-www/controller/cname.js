@@ -1,10 +1,10 @@
 var conf = require('../conf')
 var ajax = require('../lib/ajax')(require('../conf/api'))
 
-var cname = module.exports = {}
+var location = module.exports = {}
 
 
-cname.new = function(req, res){
+location.new = function(req, res){
 
   ajax('hostDetail').data({hostId: req.params[1]}).exec(function(err, result) {
     if (err) return $('#page-container').html(err)
@@ -25,9 +25,9 @@ cname.new = function(req, res){
       $('.tab-pane.active').find('[name]').each(function(index, item){
         formData[$(item).attr('name')] = $(item).val()
       })
-      ajax('cname.new').data(formData).exec(function(err, data){
+      ajax('location.new').data(formData).exec(function(err, data){
         if (err) return $(".form-error").html(err)
-        $('#page-container').html(JST['location/new-success']({cname: data}))
+        $('#page-container').html(JST['location/new-success']({location: data}))
       })
     })
 
@@ -40,23 +40,23 @@ cname.new = function(req, res){
 
 
 
-cname.edit = function(req, res){
+location.edit = function(req, res){
 
   var hostId = req.params[1]
-  var cnameId = req.params[3]
+  var locationId = req.params[3]
 
-  ajax('cname.detail').data({
+  ajax('location.detail').data({
     hostId: hostId,
-    cnameId: cnameId
+    locationId: locationId
   }).exec(function(err, data){
 
     if (err) return $("#page-container").html('获取详情失败')
     $("#page-container").html(JST['location/detail'](data))
 
-    $("#btnDeleteCname").on('click', function () {
+    $("#btnDeletelocation").on('click', function () {
 
       if (window.confirm('确认删除?')){
-        ajax('cname.delete').data({cnameId: cnameId}).exec(function (err, result) {
+        ajax('location.delete').data({locationId: locationId}).exec(function (err, result) {
           if (err) return alert('删除失败, 错误代码: '+err)
           res.redirect('/host/'+hostId)
         })
@@ -64,17 +64,17 @@ cname.edit = function(req, res){
 
     })
 
-    $(".btn-cname-update").on('click', function(event){
-      var $cnameEdit = $(event.target).closest('.form')
+    $(".btn-location-update").on('click', function(event){
+      var $locationEdit = $(event.target).closest('.form')
       var formdata = {}
-      $cnameEdit.find('.active [name]').each(function(index, item){
+      $locationEdit.find('.active [name]').each(function(index, item){
         var $item = $(item)
         formdata[$item.attr('name')] = $item.val()
       })
 
-      ajax('cname.edit').data(formdata).exec(function(err, data){
+      ajax('location.edit').data(formdata).exec(function(err, data){
         if (err) return $('.form-error').html(err)
-        res.redirect('/host/'+hostId+'/cname/'+cnameId)
+        res.redirect('/host/'+hostId+'/location/'+locationId)
       })
     })
 

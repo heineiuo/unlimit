@@ -1,4 +1,4 @@
-<!--一个cname的编辑状态-->
+<!--一个location的编辑状态-->
 <div class="container width-max" style="padding-top: 20px;">
 
 
@@ -14,11 +14,11 @@
       </div>
 
       <div class="pull-right">
-        <button class="btn btn-danger btn-sm" id="btnDeleteCname">删除这个location</button>
+        <button class="btn btn-danger btn-sm" id="btnDeletelocation">删除这个location</button>
       </div>
     </div>
 
-    <div class="cname-inner">
+    <div class="location-inner">
 
 
       <div class="form form-horizontal">
@@ -27,8 +27,8 @@
           <div class="col-xs-12">
             <label class="pull-left">/</label>
             <div class="pull-left active">
-              <input type="hidden" name="hostId" value="{{cname.hostId}}">
-              <input class="form-control" name="pathname" id="pathnameInput" type="text" value="{{cname.pathname}}" placeholder="请输入正则表达式" >
+              <input type="hidden" name="hostId" value="{{location.hostId}}">
+              <input class="form-control" name="pathname" id="pathnameInput" type="text" value="{{location.pathname}}" placeholder="请输入正则表达式" >
             </div>
           </div>
         </div>
@@ -37,84 +37,84 @@
           <label>类型</label>
 
           <ul class="nav nav-tabs">
-            <li class="{{cname.type=='html'?'active':''}}">
-              <a href="#cnameContentHTML" aria-controls="cnameContentHTML" data-toggle="tab">
+            <li class="{{location.type=='html'?'active':''}}">
+              <a href="#locationContentHTML" aria-controls="locationContentHTML" data-toggle="tab">
                 <input type="radio">HTML
               </a>
             </li>
-            <li class="{{cname.type=='api'?'active':''}}">
-              <a href="#cnameContentAPI" aria-controls="cnameContentAPI" data-toggle="tab">
+            <li class="{{location.type=='api'?'active':''}}">
+              <a href="#locationContentAPI" aria-controls="locationContentAPI" data-toggle="tab">
                 <input type="radio">API
               </a>
             </li>
-            <li class="{{cname.type=='json'?'active':''}}">
-              <a href="#cnameContentJSON" aria-controls="cnameContentJSON" data-toggle="tab">
+            <li class="{{location.type=='json'?'active':''}}">
+              <a href="#locationContentJSON" aria-controls="locationContentJSON" data-toggle="tab">
                 <input type="radio">JSON
               </a>
             </li>
-            <li class="{{cname.type=='redirect'?'active':''}}">
-              <a href="#cnameContentRedirect" aria-controls="cnameContentRedirect" data-toggle="tab">
+            <li class="{{location.type=='redirect'?'active':''}}">
+              <a href="#locationContentRedirect" aria-controls="locationContentRedirect" data-toggle="tab">
                 <input type="radio">Redirect
               </a>
             </li>
-            <li class="{{cname.type=='proxy'?'active':''}}">
-              <a href="#cnameContentProxy" aria-controls="cnameContentProxy" data-toggle="tab">
+            <li class="{{location.type=='proxy'?'active':''}}">
+              <a href="#locationContentProxy" aria-controls="locationContentProxy" data-toggle="tab">
                 <input type="radio">Proxy
               </a>
             </li>
-            <li class="{{cname.type=='file'?'active':''}}">
-              <a href="#cnameContentFile" aria-controls="cnameContentFile" data-toggle="tab">
+            <li class="{{location.type=='file'?'active':''}}">
+              <a href="#locationContentFile" aria-controls="locationContentFile" data-toggle="tab">
                 <input type="radio">File
               </a>
             </li>
           </ul>
 
           <div class="tab-content">
-            <div class="tab-pane {{cname.type=='html'?'active':''}}" id="cnameContentHTML">
+            <div class="tab-pane {{location.type=='html'?'active':''}}" id="locationContentHTML">
               <input type="hidden" name="type" value="html">
               <label>HTML</label>
               <div>
                 <textarea class="form-control" name="content" placeholder="直接输入HTML代码">
-                  {{cname.type=='html'?cname.content:''}}
+                  {{location.type=='html'?location.content:''}}
                 </textarea>
               </div>
             </div>
 
-            <div class="tab-pane {{cname.type=='api'?'active':''}}" id="cnameContentAPI">
+            <div class="tab-pane {{location.type=='api'?'active':''}}" id="locationContentAPI">
               <input type="hidden" name="type" value="api">
               <label>API url</label>
               <div>
-                <input type="text" class="form-control" name="content" value="{{cname.type=='api'?cname.content:''}}">
+                <input type="text" class="form-control" name="content" value="{{location.type=='api'?location.content:''}}">
               </div>
             </div>
-            <div class="tab-pane {{cname.type=='json'?'active':''}}" id="cnameContentJSON">
+            <div class="tab-pane {{location.type=='json'?'active':''}}" id="locationContentJSON">
               <input type="hidden" name="type" value="json">
               <label>json</label>
               <div>
                 <textarea class="form-control" name="content" placeholder="直接输入JSON代码">
-                   {{cname.type=='json'?cname.content:''}}
+                   {{location.type=='json'?location.content:''}}
                 </textarea>
               </div>
             </div>
-            <div class="tab-pane {{cname.type=='redirect'?'active':''}}" id="cnameContentRedirect">
+            <div class="tab-pane {{location.type=='redirect'?'active':''}}" id="locationContentRedirect">
               <input type="hidden" name="type" value="redirect">
               <label>url</label>
               <div>
-                <input class="form-control" type="text" name="content"  value="{{cname.type=='redirect'?cname.content:''}}">
+                <input class="form-control" type="text" name="content"  value="{{location.type=='redirect'?location.content:''}}">
               </div>
             </div>
-            <div class="tab-pane {{cname.type=='proxy'?'active':''}}" id="cnameContentProxy">
+            <div class="tab-pane {{location.type=='proxy'?'active':''}}" id="locationContentProxy">
               <input type="hidden" name="type" value="proxy">
               <label>反向代理</label>
               <div>
-                <input class="form-control" type="text" name="content"  value="{{cname.type=='proxy'?cname.content:''}}">
+                <input class="form-control" type="text" name="content"  value="{{location.type=='proxy'?location.content:''}}">
               </div>
             </div>
-            <div class="tab-pane {{cname.type=='file'?'active':''}}" id="cnameContentFile">
+            <div class="tab-pane {{location.type=='file'?'active':''}}" id="locationContentFile">
               <input type="hidden" name="type" value="file">
               <label>文件代理</label>
               <div>
-                <input class="form-control" type="text" name="content"  value="{{cname.type=='file'?cname.content:''}}">
+                <input class="form-control" type="text" name="content"  value="{{location.type=='file'?location.content:''}}">
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@
 
         <div class="form-group row" style="border-top: 1px solid #eee;">
           <div class="col-sm-4">
-            <button class="btn btn-success btn-cname-update">保存修改</button>
+            <button class="btn btn-success btn-location-update">保存修改</button>
           </div>
         </div>
 

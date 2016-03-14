@@ -5,7 +5,7 @@ var api = module.exports = {};
 api.__base = '/api'
 api.__autoData = function(){
   return {
-    cname_token: cookie('cname_token').val(),
+    access_token: cookie('access_token').val(),
     debug: 'stack'
   }
 }
@@ -28,18 +28,18 @@ api['app.list'] = [1, 'POST', api.__base+'/app/list']
 /**----------------OPEN API----------------------**/
 // 新建APP
 api['app.new'] = [1, 'POST', api.__base+'/app/new']
-// 删除Cname
-api['cname.delete'] = [1, 'POST', api.__base+'/cname/delete']
-// cname 详情
-api['cname.detail'] = [1, 'POST', api.__base+'/cname/detail']
+// 删除location
+api['location.delete'] = [1, 'POST', api.__base+'/location/delete']
+// location 详情
+api['location.detail'] = [1, 'POST', api.__base+'/location/detail']
 
-// 更新cname
-api['cname.edit'] = [1, 'POST', api.__base+'/cname/edit']
-// cname列表
-api['cname.list'] =   [1, 'POST' , api.__base+'/cname/list']
+// 更新location
+api['location.edit'] = [1, 'POST', api.__base+'/location/edit']
+// location列表
+api['location.list'] =   [1, 'POST' , api.__base+'/location/list']
 
-// 新建CName
-api['cname.new'] = [1, 'POST', api.__base+'/cname/new']
+// 新建location
+api['location.new'] = [1, 'POST', api.__base+'/location/new']
 
 // 删除
 api['host.delete'] = [1, 'POST', api.__base+'/host/delete']

@@ -17,7 +17,7 @@ login.renderLogin = function(req, res, next){
     ajax('login').data(formData).exec(function(err, result){
       if (err) return $form.html(err)
       cookie('__session').remove()
-      cookie('cname_token').val(result.cname_token)
+      cookie('location_token').val(result.location_token)
       location.href = conf.hrefPrefix + '/'
     })
   })

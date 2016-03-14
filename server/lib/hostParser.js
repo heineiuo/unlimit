@@ -13,7 +13,7 @@ var ent = require('ent')
 var path = require('path')
 
 var conf = require('../conf')
-var Cname = require('../model/Cname')
+var Location = require('../model/Location')
 var Host = require('../model/Host')
 
 var hostParser = module.exports = {}
@@ -35,17 +35,17 @@ hostParser.middleware = function () {
       }
       if (!doc) return next()
 
-      // 查找cname
-      Cname.find({hostId: doc._id}, function(err, docs) {
+      // 查找Location
+      Location.find({hostId: doc._id}).sort({sort: 1}).exec(function(err, docs) {
 
         if (err) {
-          console.log('查找cname失败')
+          console.log('查找Location失败')
           console.log(err)
           return res.sendStatus(500)
         }
 
         if (docs.length == 0) {
-          console.log('CNAME LOG LOST')
+          console.log('Location LOG LOST')
           return res.sendStatus(404)
         }
 

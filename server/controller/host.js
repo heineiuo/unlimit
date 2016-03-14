@@ -4,7 +4,7 @@ var async = require('async')
 
 var conf = require('../conf')
 var Host = require('../model/Host')
-var Cname = require('../model/Cname')
+var Location = require('../model/Location')
 var Config = require('../model/Config')
 
 
@@ -46,7 +46,7 @@ hostController.detail = function(req, res, next) {
     if (!item) return res.json({error: "NOT_FOUND"})
     result.host = item
 
-    Cname.find({hostId: req.body.hostId}, function(err, docs){
+    Location.find({hostId: req.body.hostId}, function(err, docs){
       if (err) return res.json({error: 'EXCEPTION_ERROR'})
       result.list = docs
       res.json(result)
@@ -69,7 +69,7 @@ hostController.delete = function(req, res, next) {
     function(callback){
       return Host.remove({_id: req.body.hostId}, {}, callback)
     }, function(callback){
-      return Cname.remove({hostId: req.body.hostId}, {multi: true}, callback)
+      return Location.remove({hostId: req.body.hostId}, {multi: true}, callback)
     }
   ], function(err, result){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
