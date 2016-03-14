@@ -3,8 +3,12 @@ var ent = require('ent')
 var async = require('async')
 
 var conf = require('../conf')
-var db = require('../model/db')
 var md5  = require('../lib/md5')
+
+var Cname = require('../model/Cname')
+var Config = require('../model/Config')
+var Host = require('../model/Host')
+
 
 var cnameController = module.exports = {}
 
@@ -72,7 +76,7 @@ cnameController.checkInstall = function(req, res, next){
 
   if (conf.isChecked) return next()
 
-  db.config.findOne({}, function(err, doc){
+  Config.findOne({}, function(err, doc){
     conf.isChecked = true
     if (err) {
       console.log('检查是否安装失败')
@@ -95,7 +99,7 @@ cnameController.install = function(req, res, next) {
   if (conf.isInstalled) return res.sendStatus(403)
   var options = _.omit(req.body, ['cname_token', 'debug'])
   options.cname_token = md5('cname'+Date.now())
-  db.config.insert(options, function(err, doc){
+  Config.insert(options, function(err, doc){
     if (err) {
       console.log('安装失败')
       console.log(err)
@@ -125,37 +129,20 @@ cnameController.login = function(req, res, next) {
 }
 
 
-/**
- * 返回app
- * @param req
- * @param res
- * @param next
- */
-cnameController.renderApp = function(req, res, next){
-
-  res.sendFile(appEntry('home'))
-
-  function appEntry(name){
-    return process.cwd() + '/public/assets/'+name+'/index.html'
-  }
-}
 
 
 /** 创建一条cname记录 **/
 cnameController.cnameCreate = function(req, res) {
 
+  if (!_.has(req.body, 'hostId', 'type', 'content')) return res.json({error: "LOST_PARAM"})
 
-  if (!_.has(req.body, 'hostId', 'type', 'content')) {
-    return res.json({error: "LOST_PARAM"})
-  }
-
-  db.host.findOne({_id: req.body.hostId}, function(err, host){
+  Host.findOne({_id: req.body.hostId}, function(err, host){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
     if (!host) return res.json({error: "NOT_FOUND"})
     req.body.type = req.body.type || 'html'
     if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
 
-    db.cname.insert(req.body, function(err, doc){
+    Cname.insert(req.body, function(err, doc){
       if (err) return res.send({error: "EXCEPTION_ERROR"})
       res.json(doc)
     })
@@ -172,9 +159,9 @@ cnameController.detail = function(req, res, next) {
 
   async.parallel([
     function(callback){
-      db.host.findOne({_id: req.body.hostId}, callback)
+      Host.findOne({_id: req.body.hostId}, callback)
     }, function(callback){
-      db.cname.findOne({_id: req.body.cnameId}, callback)
+      Cname.findOne({_id: req.body.cnameId}, callback)
     }
   ], function(err, results){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
@@ -197,7 +184,6 @@ cnameController.detail = function(req, res, next) {
  */
 cnameController.cnameUpdate = function(req, res) {
 
-  var Cname = db.cname
 
   if (!_.has(req.body, 'hostId', 'type', 'content', 'pathname')) return res.json({error: "PARAMS_LOST"})
 
@@ -235,7 +221,6 @@ cnameController.cnameListRead = function(req, res, next) {
 /**
  * 删除一个cname
  */
-
 cnameController.delete = function(req, res, next) {
 
   db.cname.remove({_id: req.body.cnameId}, {}, function(err){

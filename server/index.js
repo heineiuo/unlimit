@@ -1,4 +1,3 @@
-
 // built-in modules
 var path = require('path')
 var crypto = require('crypto')
@@ -16,41 +15,38 @@ var morgan = require('morgan')
 var ent = require('ent')
 var pem = require('pem')
 var _ = require('lodash')
+var Datastore = require('nedb')
+
+//pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
+//  var keyAndCert = {
+//    key: keys.serviceKey,
+//    cert: keys.certificate
+//  }
+//})
 var app = require('express')()
 var http = require('http').Server(app)
+//var https = require('https').Server(keyAndCert, app)
 
 // self modules
 var conf = require('./conf')
 var db = require('./model/db')
-var hostParser = require('./lib/hostParser')
 
-// set
 app.set('x-powered-by', false)
-// middleware
 app.use(require('morgan')(conf.morgan.format, conf.morgan.options))
 app.use(require('./controller/cname').checkInstall)
-app.use(hostParser.middleware())
+app.use(require('./lib/hostParser').middleware())
 app.use(bodyParser.json())
 app.use(bodyParser.json({type: 'application/*+json'}))
 app.use(bodyParser.json({type: 'text/html'}))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(require('./router'))
 app.use(require('./router/client'))
-
-app.use(function(err, req, res, next){
-  if (!err) return next()
-  console.log(err)
-  if (typeof err === 'string' && _.has(conf.errorData, err)) {
-    return res.json(conf.errorData[err])
-  }
-  res.sendStatus(500)
-})
-app.use(function(req, res){
-  res.sendStatus(404)
-})
+app.use(require('./controller/error').err500)
+app.use(require('./controller/error').err404)
 
 // 检查是否已安装
-db.config.findOne({}, function(err, doc){
+var Config = require('./model/Config')
+Config.findOne({}, function(err, doc){
   if (err) return console.log(err)
   if (doc) {
     conf.isInstalled = true
@@ -65,16 +61,9 @@ db.config.findOne({}, function(err, doc){
   })
 
   // listen https
-  //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
-  //  var keyAndCert = {
-  //    key: keys.serviceKey,
-  //    cert: keys.certificate
-  //  }
-  //
-  //  https.createServer(keyAndCert, app).listen(443, function(){
+  //  https.listen(443, function(){
   //    console.log('Listening on port 443')
   // })
-  //})
 
 })
 

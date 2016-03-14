@@ -121,3 +121,9 @@ file.downloadFile = function (req, res, next) {
   res.download(truePath)
 
 }
+
+
+file.downladDir = function (req, res, next) {
+
+  throw 'UNRADY'
+}

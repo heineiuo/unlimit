@@ -1,12 +1,6 @@
-var mongoose = require('mongoose')
-var uuid = require('uuid')
+var Datastore = require('nedb')
 
-
-module.exports = mongoose.model('Host', new mongoose.Schema({
-  hostId:  {type: String, default: uuid.v4},
-  appId:  String,
-  userId:  String,
-  hostname:  String,
-  sub:  String,  // 二级域名
-  protocol: { type: String, default: 'http:'}
-}))
+var Host = module.exports = new Datastore({
+  filename: './data/Host.db',
+  autoload: true
+})

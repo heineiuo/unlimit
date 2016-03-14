@@ -1,1 +1,1 @@
-module.exports.template = require('js/template')
+module.exports.template = require('./js/template')

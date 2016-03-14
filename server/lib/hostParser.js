@@ -8,12 +8,13 @@
 var httpProxy = require('http-proxy')
 var _ = require('lodash')
 var request = require('request')
-var conf = require('../conf')
-var db = require('../model/db')
 var parse = require('url-parse')
 var ent = require('ent')
 var path = require('path')
-var nodeStatic = require('node-static')
+
+var conf = require('../conf')
+var Cname = require('../model/Cname')
+var Host = require('../model/Host')
 
 var hostParser = module.exports = {}
 
@@ -25,21 +26,17 @@ hostParser.middleware = function () {
     if (req.headers.host == conf.hostname) return next()
 
     // 是否存在host
-    db.host.findOne({hostname: req.headers.host}, function (err, doc) {
+    Host.findOne({hostname: req.headers.host}, function (err, doc) {
 
       if (err) {
         console.log('查询是否存在host失败')
         console.log(err)
         return res.sendStatus(500)
       }
-      if (!doc) {
-        //console.log('DOMAIN NOT FOUND')
-        //return res.sendStatus(404)
-        return next()
-      }
+      if (!doc) return next()
 
       // 查找cname
-      db.cname.find({hostId: doc._id}, function(err, docs) {
+      Cname.find({hostId: doc._id}, function(err, docs) {
 
         if (err) {
           console.log('查找cname失败')
@@ -57,6 +54,8 @@ hostParser.middleware = function () {
         if (url.pathname =='') url.pathname = '/'
 
         // 通过比对pathname, 找到路由
+        // todo
+        // 需要根据排序执行
         var result = {}
         _.map(docs, function(doc, index){
           var reg = new RegExp(_.trim(doc.pathname, '/').replace('\\\\','\\'))
@@ -67,23 +66,10 @@ hostParser.middleware = function () {
           }
         })
 
+
+        // 获取到匹配的path
+
         if (result.type == 'file') {
-          //var staticOptions = {
-          //  cache: 315360000,
-          //    gzip: true,
-          //    indexFile: "index.html",
-          //    serverInfo: 'nginx',
-          //    headers: {
-          //      'Access-Control-Allow-Origin': '*',
-          //      'Expires': new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) // 一年
-          //  }
-          //}
-          //
-          //var fileServer = new nodeStatic.Server(result.content, staticOptions)
-          //
-          //req.addListener('end', function () {
-          //  fileServer.serve(req, res)
-          //}).resume()
 
           var filePath = path.join(result.content, url.pathname)
           res.sendFile(filePath, {
