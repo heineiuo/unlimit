@@ -28,7 +28,7 @@ locationController.locationCreate = function(req, res, next) {
     req.body.type = req.body.type || 'html'
     if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
 
-    Location.findOne({}).sort({sort: -1}).exec(function (err, doc) {
+    Location.findOne({hostId: req.body.hostId}).sort({sort: -1}).exec(function (err, doc) {
       if (err) next(err)
       doc.sort = Number(doc.sort)
       req.body.sort = doc!=null?doc.sort+1:1

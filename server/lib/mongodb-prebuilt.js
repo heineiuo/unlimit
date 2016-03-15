@@ -2,10 +2,12 @@ var mongodb_prebuilt = require('mongodb-prebuilt')
 
 var conf = {
   version: "3.2.1",
-  fork: true,
-  logpath: process.cwd()+'/mongod.log',
-  dbpath: process.cwd()+'/data',
-  port: '27017'
+  args: {
+    fork: true,
+    logpath: process.cwd()+'/mongod.log',
+    dbpath: process.cwd()+'/data',
+    port: '27017'
+  }
 }
 
 mongodb_prebuilt.start_server(conf, function(err) {

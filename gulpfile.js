@@ -16,6 +16,7 @@ var htmlmin = require('gulp-htmlmin')
 var concat = require('gulp-concat')
 var jst = require('gulp-jst3')
 var zip = require('gulp-zip')
+var pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 
 
 gulp.task('server', function() {
@@ -141,7 +142,6 @@ gulp.task('build', [
 
 
 gulp.task('release', ['build'], function () {
-  var pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
   return gulp.src('dist/**/*')
     .pipe(zip(pkg.name+'-'+pkg.version+'.zip'))
     .pipe(gulp.dest('release'))

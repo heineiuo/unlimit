@@ -44,6 +44,7 @@ app.use(require('./router/client'))
 app.use(require('./controller/error').err500)
 app.use(require('./controller/error').err404)
 
+
 // 检查是否已安装
 var Config = require('./model/Config')
 Config.findOne({}, function(err, doc){
