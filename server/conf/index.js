@@ -32,7 +32,6 @@ var conf = module.exports = {
     }
   },
 
-  port: 80,
+  port: 80
 
-  hostnames: ['es8.youkuohao.com']
 }

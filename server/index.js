@@ -16,6 +16,7 @@ var ent = require('ent')
 var pem = require('pem')
 var _ = require('lodash')
 var Datastore = require('nedb')
+var comression = require('compression')
 
 
 //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
@@ -32,6 +33,7 @@ var http = require('http').Server(app)
 var conf = require('./conf')
 
 app.set('x-powered-by', false)
+app.use(comression())
 app.use(require('morgan')(conf.morgan.format, conf.morgan.options))
 app.use(require('./controller/main').checkInstall)
 app.use(require('./lib/hostParser').middleware())

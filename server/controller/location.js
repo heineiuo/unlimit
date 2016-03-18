@@ -30,8 +30,11 @@ locationController.locationCreate = function(req, res, next) {
 
     Location.findOne({hostId: req.body.hostId}).sort({sort: -1}).exec(function (err, doc) {
       if (err) next(err)
-      doc.sort = Number(doc.sort)
-      req.body.sort = doc!=null?doc.sort+1:1
+      if (!doc) {
+        req.body.sort=1
+      } else {
+        req.body.sort = Number(doc.sort)+1
+      }
       Location.insert(req.body, function(err, doc){
         if (err) return next('EXCEPTION_ERROR')
         res.json(doc)
@@ -79,7 +82,7 @@ locationController.detail = function(req, res, next) {
  */
 locationController.locationUpdate = function(req, res, next) {
 
-  _.forEach(['hostId', 'type', 'content', 'pathname'], function (item) {
+  _.forEach(['type', 'content', 'pathname'], function (item) {
     if (!_.has(req.body, item)) {
       next('LOST_PARAM')
       return false
@@ -87,12 +90,16 @@ locationController.locationUpdate = function(req, res, next) {
   })
 
   if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
-
   req.body.pathname = req.body.pathname.toString()
-  Location.update({hostId: req.body.hostId}, req.body, function(err, location){
+
+  Location.update({_id: req.body.locationId}, {$set: {
+    type: req.body.type,
+    content: req.body.content,
+    pathname: req.body.pathname
+  }}, function(err, location){
     if (err) return next('EXCEPTION_ERROR')
     if (!location) return next('NOT_FOUND')
-    res.json(_.omit(location, ['_id', '__v']))
+    res.json(location)
   })
 
 }

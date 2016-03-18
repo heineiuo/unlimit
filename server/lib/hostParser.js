@@ -23,7 +23,6 @@ hostParser.middleware = function () {
   return function (req, res, next) {
 
     if (!conf.isInstalled) return next()
-    if (req.headers.host == conf.hostname) return next()
 
     // 是否存在host
     Host.findOne({hostname: req.headers.host}, function (err, doc) {
