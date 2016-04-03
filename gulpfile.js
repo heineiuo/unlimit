@@ -108,7 +108,6 @@ gulp.task('client-www-template-concat', ['client-www-template'], function () {
 })
 
 gulp.task('client-www', [
-  'client-index-js',
   'client-www-style',
   'client-www-js',
   'client-www-html',
@@ -122,22 +121,16 @@ gulp.task('client-www', [
 })
 
 
-
-gulp.task('client-index-js', function () {
-  return gulp.src('client/index.js')
-    .pipe(gulp.dest('build/debug/client/www'))
-})
-gulp.task('client-libs', function () {
-  return gulp.src('client/libs/**/*')
-    .pipe(gulp.dest('build/debug/client/libs'))
+gulp.task('client-fonts', function () {
+  return gulp.src('client-www/fonts/**/*')
+    .pipe(gulp.dest('build/debug/client/www/fonts'))
 })
 
 gulp.task('build', [
   'server',
   'server-copy',
   'client-www',
-  'client-libs',
-  'client-index-js'
+  'client-fonts',
 ])
 
 
