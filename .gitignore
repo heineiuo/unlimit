@@ -15,4 +15,10 @@ data/*
 build/Release
 build/Debug
 dist/*
+!dist/client/libs/
 release/*
+
+
+build/
+!build/debug/client/libs
+

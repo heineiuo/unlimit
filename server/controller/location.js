@@ -96,9 +96,9 @@ locationController.locationUpdate = function(req, res, next) {
     type: req.body.type,
     content: req.body.content,
     pathname: req.body.pathname
-  }}, function(err, location){
+  }}, {}, function(err, numReplaced){
     if (err) return next('EXCEPTION_ERROR')
-    if (!location) return next('NOT_FOUND')
+    if (numReplaced==0) return next('LOCATION_NOT_FOUND')
     res.json(location)
   })
 
