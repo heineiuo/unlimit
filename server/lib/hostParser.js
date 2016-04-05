@@ -11,6 +11,7 @@ var request = require('request')
 var parse = require('url-parse')
 var ent = require('ent')
 var path = require('path')
+var fs = require('fs')
 
 var conf = require('../conf')
 var Location = require('../model/Location')
@@ -111,7 +112,18 @@ hostParser.middleware = function () {
           return res.json(JSON.parse(result.content))
         }
         if (result.type == 'html') {
-          return res.end(ent.decode(result.content))
+          if (result.contentType=='file'){
+            res.sendFile(result.content, {
+              headers: {
+                'Expires': new Date(Date.now() + 1000 * 10) // 10s
+              }
+            }, function (err) {
+              if (err && !res.headersSent) res.sendStatus(404)
+            })
+          } else {
+            res.end(ent.decode(result.content))
+          }
+          return false
         }
         if (result.type == 'api') {
           var apiOptions = {

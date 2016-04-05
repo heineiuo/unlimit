@@ -1,3 +1,4 @@
+
 <!--一个location的编辑状态-->
 <div class="container width-max" style="padding-top: 20px;">
 
@@ -78,9 +79,15 @@
               <input type="hidden" name="type" value="html">
               <label>HTML</label>
               <div>
-                <textarea class="form-control" name="content" placeholder="直接输入HTML代码">
-                  {{location.type=='html'?location.content:''}}
-                </textarea>
+                <label for="contentType">文本类型:</label>
+                <input type="text" id="contentType" name="contentType" value="{{location.contentType}}">
+              </div>
+              <div>
+                <textarea
+                  class="form-control"
+                  name="content"
+                  placeholder="直接输入HTML代码"
+                >{{location.type=='html'?location.content:''}}</textarea>
               </div>
             </div>
 
@@ -95,9 +102,11 @@
               <input type="hidden" name="type" value="json">
               <label>json</label>
               <div>
-                <textarea class="form-control" name="content" placeholder="直接输入JSON代码">
-                   {{location.type=='json'?location.content:''}}
-                </textarea>
+                <textarea
+                  class="form-control"
+                  name="content"
+                  placeholder="直接输入JSON代码"
+                >{{location.type=='json'?location.content:''}}</textarea>
               </div>
             </div>
             <div class="tab-pane {{location.type=='redirect'?'active':''}}" id="locationContentRedirect">

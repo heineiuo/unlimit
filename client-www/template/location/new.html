@@ -68,6 +68,12 @@
               <input type="hidden" name="type" value="html">
               <label>HTML</label>
               <div>
+                <select name="contentType">
+                  <option value="text">text</option>
+                  <option value="file">file</option>
+                </select>
+              </div>
+              <div>
                 <textarea class="form-control" name="content" placeholder="直接输入HTML代码"></textarea>
               </div>
             </div>
@@ -83,7 +89,11 @@
               <input type="hidden" name="type" value="json">
               <label>json</label>
               <div>
-                <textarea class="form-control" name="content" placeholder="直接输入JSON代码"></textarea>
+                <textarea
+                  class="form-control"
+                  name="content"
+                  placeholder="直接输入JSON代码"
+                ></textarea>
               </div>
             </div>
             <div class="tab-pane" id="locationContentRedirect">

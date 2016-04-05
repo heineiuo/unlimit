@@ -89,17 +89,20 @@ locationController.locationUpdate = function(req, res, next) {
     }
   })
 
-  if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
+  if (req.body.type == 'html' && req.body.contentType == 'text') {
+    req.body.content = ent.encode(req.body.content)
+  }
   req.body.pathname = req.body.pathname.toString()
 
   Location.update({_id: req.body.locationId}, {$set: {
     type: req.body.type,
+    contentType: req.body.contentType,
     content: req.body.content,
     pathname: req.body.pathname
   }}, {}, function(err, numReplaced){
     if (err) return next('EXCEPTION_ERROR')
     if (numReplaced==0) return next('LOCATION_NOT_FOUND')
-    res.json(location)
+    res.json({success:1})
   })
 
 }

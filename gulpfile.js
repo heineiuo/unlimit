@@ -75,7 +75,9 @@ gulp.task('client-www-img', function () {
 
 gulp.task('client-www-html', function () {
   return gulp.src('client-www/index.html')
-    .pipe(htmlmin({collapseWhitespace: true}))
+    .pipe(htmlmin({
+      collapseWhitespace: true
+    }))
     .pipe(gulp.dest('build/debug/client/www'))
 })
 
@@ -130,11 +132,11 @@ gulp.task('build', [
   'server',
   'server-copy',
   'client-www',
-  'client-fonts',
+  'client-fonts'
 ])
 
 
-gulp.task('release', ['build'], function () {
+gulp.task('default', ['build'], function () {
   return gulp.src('build/debug/**/*')
     .pipe(zip(pkg.name+'-'+pkg.version+'.zip'))
     .pipe(gulp.dest('build/release'))

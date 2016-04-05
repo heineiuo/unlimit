@@ -3,9 +3,10 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "deploy": "grunt release; npm run deploy-indexjs; npm run deploy-package; ssh root@es8.youkuohao.com",
-    "deploy-indexjs": "scp -r dist/index.js root@es8.youkuohao.com:/root/webapps/cname",
-    "deploy-package": "scp -r dist/package.json root@es8.youkuohao.com:/root/webapps/cname"
+    "deploy": "npm run deploy-client; npm run deploy-indexjs; npm run deploy-package",
+    "deploy-client": "scp -r build/debug/client root@es8.youkuohao.com:/root/HTTP_Server",
+    "deploy-indexjs": "scp -r build/debug/index.js root@es8.youkuohao.com:/root/HTTP_Server",
+    "deploy-package": "scp -r build/debug/package.json root@es8.youkuohao.com:/root/HTTP_Server"
   },
   "dependencies": {
     "async": "^1.5.0",
