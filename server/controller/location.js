@@ -96,6 +96,7 @@ locationController.locationUpdate = function(req, res, next) {
 
   Location.update({_id: req.body.locationId}, {$set: {
     type: req.body.type,
+    cors: req.body.cors,
     contentType: req.body.contentType,
     content: req.body.content,
     pathname: req.body.pathname

@@ -69,7 +69,11 @@ location.edit = function(req, res){
       var formdata = {}
       $locationEdit.find('.active [name]').each(function(index, item){
         var $item = $(item)
-        formdata[$item.attr('name')] = $item.val()
+        if ($item.attr('type') == 'checkbox'){
+          formdata[$item.attr('name')] = $item.prop('checked')
+        } else {
+          formdata[$item.attr('name')] = $item.val()
+        }
       })
 
       ajax('location.edit').data(formdata).exec(function(err, data){

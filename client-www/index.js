@@ -3,8 +3,10 @@
  * 项目配置
  */
 
-window.$ = require('./lib/jquery.min')
+window.$ = window.jQuery = require('./lib/jquery.min')
 window._ = require('./lib/lodash.min')
+require('./lib/bootstrap.min')
+
 var conf = require('./conf')
 var app = require('pansy').Main()
 

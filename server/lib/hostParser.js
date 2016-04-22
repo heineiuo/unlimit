@@ -69,6 +69,10 @@ hostParser.middleware = function () {
 
         // 获取到匹配的path
 
+        if (result.cors == 'true'){
+          res.set('Access-Control-Allow-Origin', '*')
+        }
+
         if (result.type == 'file') {
 
           var filePath = path.join(result.content, url.pathname)
