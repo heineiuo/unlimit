@@ -76,17 +76,25 @@ hostParser.middleware = function () {
         if (result.type == 'file') {
 
           var filePath = path.join(result.content, url.pathname)
-          res.sendFile(filePath, {
+
+          return res.sendFile(filePath, {
             headers: {
               'Access-Control-Allow-Origin': '*',
               'Expires': new Date(Date.now() + 1000 * 60 * 60 * 24 * 365) // 一年
             }
           }, function (err) {
-            if (err && !res.headersSent) res.sendStatus(404)
+            if (err && !res.headersSent) {
+              var lastParam = url.pathname.split('/').pop()
+              if (lastParam.length && !/\./.test(lastParam)) {
+                res.redirect(req.path+'/')
+              } else {
+                res.sendStatus(404)
+              }
+            }
           })
 
-          return false
         }
+
 
         if (result.type == 'proxy') {
           // todo handle ssl cert to options
