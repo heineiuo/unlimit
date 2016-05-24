@@ -5,6 +5,7 @@ var morgan = require('morgan')
 var pem = require('pem')
 var _ = require('lodash')
 var comression = require('compression')
+var fs = require('fs')
 
 
 //pem.createCertificate({days:365, selfSigned:true}, function(err, keys){
@@ -14,8 +15,8 @@ var comression = require('compression')
 //  }
 //})
 var app = require('express')()
-var http = require('http').Server(app)
-//var https = require('https').Server(keyAndCert, app)
+var http = require('http')
+var https = require('https')
 
 // self modules
 var conf = require('./conf')
@@ -35,6 +36,22 @@ app.use(require('./controller/error').err500)
 app.use(require('./controller/error').err404)
 
 
+
+const SNIContexts = {
+  'git.youkuohao.com': {
+    key: fs.readFileSync('/etc/letsencrypt/live/git.youkuohao.com/privkey.pem', 'utf8'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/git.youkuohao.com/cert.pem', 'utf8')
+  },
+
+  'www.youkuohao.com': {
+    key: fs.readFileSync('/etc/letsencrypt/live/www.youkuohao.com/privkey.pem', 'utf8'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/www.youkuohao.com/cert.pem', 'utf8')
+  }
+}
+
+
+
+
 // 检查是否已安装
 var Config = require('./model/Config')
 Config.findOne({}, function(err, doc){
@@ -46,15 +63,20 @@ Config.findOne({}, function(err, doc){
     })
   }
 
+
   // listen http
-  http.listen(conf.port, function(){
-    console.log('Listening on port '+conf.port)
+  http.createServer(app).listen(80, function(){
+    console.log('Listening on port 80')
   })
 
   // listen https
-  //  https.listen(443, function(){
-  //    console.log('Listening on port 443')
-  // })
+  const https_server = https.createServer(SNIContexts['www.youkuohao.com'], app)
+
+  https_server.addContext('git.youkuohao.com', SNIContexts['git.youkuohao.com'])
+
+  https_server.listen(443, function(){
+    console.log('Listening on port 443')
+  })
 
 })
 

@@ -110,7 +110,7 @@ file.deleteFile = function (req, res, next) {
 file.downloadFile = function (req, res, next) {
 
 
-  if (!_.has(req.query, 'path')) throw 'PARAMS_LOST'
+  if (!_.has(req.query, 'path')) return next('PARAMS_LOST')
 
   var rawPath = decodeURI(req.query.path)
 
@@ -125,5 +125,5 @@ file.downloadFile = function (req, res, next) {
 
 file.downladDir = function (req, res, next) {
 
-  throw 'UNRADY'
+  return next('UNRADY')
 }

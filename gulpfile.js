@@ -21,7 +21,7 @@ var pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 
 gulp.task('server', function() {
 
-  return gulp.src('server/index.js')
+  return gulp.src('src/index.js')
     .pipe(webpack({
       cache: false,
       target: 'node',
@@ -34,7 +34,7 @@ gulp.task('server', function() {
     }))
     .pipe(uglify())
     .pipe(insert.prepend('/*!\n * YKH HTTP Server \n */\n'))
-    .pipe(gulp.dest('build/debug'))
+    .pipe(gulp.dest('build/server'))
 })
 
 gulp.task('server-copy', function () {
@@ -44,15 +44,15 @@ gulp.task('server-copy', function () {
 })
 
 
-gulp.task('client-www-style', function () {
-  return gulp.src('client-www/style/index.scss')
+gulp.task('client-style', function () {
+  return gulp.src('client/style/index.scss')
     .pipe(sass())
     .pipe(cssmin())
     .pipe(gulp.dest('build/debug/client/www/css'))
 })
 
-gulp.task('client-www-js', function () {
-  return gulp.src('client-www/index.js')
+gulp.task('client-js', function () {
+  return gulp.src('client/index.js')
     .pipe(webpack({
       cache: false,
       target: 'web',
@@ -65,16 +65,16 @@ gulp.task('client-www-js', function () {
     .pipe(gulp.dest('build/debug/client/www/js'))
 })
 
-gulp.task('client-www-img', function () {
-  return gulp.src('client-www/images/**/*')
+gulp.task('client-img', function () {
+  return gulp.src('client/images/**/*')
     .pipe(imagemin())
     .pipe(gulp.dest('build/debug/client/www/images'))
     .pipe(filter('**/*.png', {restore: true}))
     .pipe(imageminPngquant({quality: '65-80', speed: 4})())
 })
 
-gulp.task('client-www-html', function () {
-  return gulp.src('client-www/index.html')
+gulp.task('client-html', function () {
+  return gulp.src('client/index.html')
     .pipe(htmlmin({
       collapseWhitespace: true
     }))
@@ -82,19 +82,19 @@ gulp.task('client-www-html', function () {
 })
 
 
-gulp.task('client-www-template', function () {
-  return gulp.src('client-www/template/**/*.html')
+gulp.task('client-template', function () {
+  return gulp.src('client/template/**/*.html')
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(jst({
       interpolate : /\{\{(.+?)\}\}/g,
       evaluate: /\{\%(.+?)\%\}/g,
-      ignorePath: process.cwd()+'/client-www/template'
+      ignorePath: process.cwd()+'/client/template'
     }))
     .pipe(concat('template.js'))
     .pipe(gulp.dest('build/debug/client/www/js/'))
 })
 
-gulp.task('client-www-template-concat', ['client-www-template'], function () {
+gulp.task('client-template-concat', ['client-template'], function () {
   return gulp.src('build/debug/client/www/js/template.js')
     .pipe(webpack({
       cache: false,
@@ -109,13 +109,13 @@ gulp.task('client-www-template-concat', ['client-www-template'], function () {
     .pipe(gulp.dest('build/debug/client/www/js'))
 })
 
-gulp.task('client-www', [
-  'client-www-style',
-  'client-www-js',
-  'client-www-html',
-  'client-www-template-concat',
-  'client-www-img'], function () {
-  return gulp.src('client-www/images/**/*')
+gulp.task('client', [
+  'client-style',
+  'client-js',
+  'client-html',
+  'client-template-concat',
+  'client-img'], function () {
+  return gulp.src('client/images/**/*')
     .pipe(imagemin())
     .pipe(gulp.dest('build/debug/client/www/images'))
     .pipe(filter('**/*.png', {restore: true}))
@@ -124,20 +124,23 @@ gulp.task('client-www', [
 
 
 gulp.task('client-fonts', function () {
-  return gulp.src('client-www/fonts/**/*')
+  return gulp.src('client/fonts/**/*')
     .pipe(gulp.dest('build/debug/client/www/fonts'))
 })
 
 gulp.task('build', [
   'server',
   'server-copy',
-  'client-www',
+  'client',
   'client-fonts'
 ])
 
 
-gulp.task('default', ['build'], function () {
-  return gulp.src('build/debug/**/*')
+gulp.task('zip', ['build'], function () {
+
+  return gulp.src(['build/debug/**/*', '!build/debug/data/**/*'])
     .pipe(zip(pkg.name+'-'+pkg.version+'.zip'))
     .pipe(gulp.dest('build/release'))
 })
+
+gulp.task('default', ['zip'])

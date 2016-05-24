@@ -103,7 +103,11 @@ hostParser.middleware = function () {
           }
           var target = result.content
           httpProxy.createProxyServer(options).web(req, res, {
-            target: target
+            target: target,
+            ssl: {
+              key: fs.readFileSync('/etc/letsencrypt/live/'+req.headers.host+'/privkey.pem', 'utf8'),
+              cert: fs.readFileSync('/etc/letsencrypt/live/'+req.headers.host+'/cert.pem', 'utf8')
+            }
           }, function (err) {
             if (err) {
               console.log(err)

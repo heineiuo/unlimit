@@ -1,11 +1,11 @@
 {
-  "name": "HTTP_Server",
+  "name": "http-server",
   "version": "0.1.1",
   "private": true,
   "scripts": {
     "build": "gulp",
     "start": "gulp;",
-    "deploy-doc": "scp -r docs/html/* root@es8.youkuohao.com:/root/client/http_server",
+    "deploy-doc": "scp -r docs/html/* root@es8.youkuohao.com:/root/client/http-server",
     "deploy": "npm run deploy-client; npm run deploy-indexjs; npm run deploy-package",
     "deploy-client": "scp -r build/debug/client root@es8.youkuohao.com:/root/HTTP_Server",
     "deploy-indexjs": "scp -r build/debug/index.js root@es8.youkuohao.com:/root/HTTP_Server",
