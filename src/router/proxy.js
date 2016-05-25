@@ -1,6 +1,4 @@
 import {Router} from 'express'
-import Host from '../model/host'
-import Location from '../model/Location'
 import parse from 'url-parse'
 import httpProxy from 'http-proxy'
 import _  from 'lodash'
@@ -9,14 +7,17 @@ import ent from 'ent'
 import path from 'path'
 import fs from 'fs-promise'
 
-var conf = require('../conf')
+import Host from '../model/host'
+import Location from '../model/location'
 
 const router = module.exports = Router()
 
+/**
+ * 查询host
+ */
 router.use(async (req, res, next)=>{
 
   try {
-
     const host = await Host.findOne({hostname: req.headers.host})
     if (!host) return next('HOST_NOT_FOUND')
     res.locals.host = host
@@ -28,34 +29,42 @@ router.use(async (req, res, next)=>{
 
 })
 
+/**
+ * 查询location
+ */
 router.use(async (req, res, next)=>{
 
   try {
 
-    const locations = await Location.find({hostId: doc._id}).sort({sort: 1})
-    if (locations.length==0) return next('LOCATION_NOT_FOUND')
+    const {host} = res.locals
+    Location.find({hostId: host._id}).sort({sort: 1}).exec((err, locations)=>{
+      if (err) return next(err)
+      
+      if (locations.length==0) return next('LOCATION_NOT_FOUND')
 
-    // 获取url, 自动补上'/'
-    var url = res.locals.url = parse(req.headers.host + req.url , true)
-    if (url.pathname =='') url.pathname = '/'
+      // 获取url, 自动补上'/'
+      var url = res.locals.url = parse(req.headers.host + req.url , true)
+      if (url.pathname =='') url.pathname = '/'
 
-    // 通过比对pathname, 找到路由
-    // todo
-    // 需要根据排序执行
-    var found = false
-    _.forEach(locations, (item, index)=> {
-      var reg = new RegExp(_.trim(item.pathname, '/').replace('\\\\','\\'))
-      var matches = url.pathname.match(reg)
-      if (matches && matches[0] == url.pathname) {
-        res.locals.location = item
-        found = true
-        return false
-      }
+      // 通过比对pathname, 找到路由
+      // todo
+      // 需要根据排序执行
+      var found = false
+      _.forEach(locations, (item, index)=> {
+        var reg = new RegExp(_.trim(item.pathname, '/').replace('\\\\','\\'))
+        var matches = url.pathname.match(reg)
+        if (matches && matches[0] == url.pathname) {
+          res.locals.location = item
+          found = true
+          return false
+        }
+      })
+
+
+      if (!found) return next('LOCATION_NOT_FOUND')
+      next()
     })
-
-
-    if (!found) return next('LOCATION_NOT_FOUND')
-    next()
+    
 
   } catch(e){
     next(e)
@@ -63,6 +72,9 @@ router.use(async (req, res, next)=>{
 
 })
 
+/**
+ * 允许跨域
+ */
 router.use(async (req, res, next)=>{
   try {
     if (res.locals.location.cors == 'true'){
@@ -74,6 +86,9 @@ router.use(async (req, res, next)=>{
   }
 })
 
+/**
+ * 文件代理
+ */
 router.use(async (req, res, next)=>{
 
   try {
@@ -106,7 +121,9 @@ router.use(async (req, res, next)=>{
 
 })
 
-
+/**
+ * 反向代理
+ */
 router.use(async (req, res, next)=>{
 
   try {
@@ -128,7 +145,7 @@ router.use(async (req, res, next)=>{
     }, function (err) {
       if (err) {
         console.log(err)
-        return res.sendStatus(502)
+        return next(err)
       }
       res.end()
     })
@@ -141,7 +158,9 @@ router.use(async (req, res, next)=>{
 })
 
 
-
+/**
+ * 黑名单域名
+ */
 router.use(async (req, res, next)=>{
 
   try {
@@ -157,7 +176,9 @@ router.use(async (req, res, next)=>{
 })
 
 
-
+/**
+ * 重定向
+ */
 router.use(async (req, res, next)=>{
 
   try {
@@ -173,7 +194,9 @@ router.use(async (req, res, next)=>{
 })
 
 
-
+/**
+ * 返回json
+ */
 router.use(async (req, res, next)=>{
 
   try {
@@ -189,7 +212,9 @@ router.use(async (req, res, next)=>{
 })
 
 
-
+/**
+ * 返回html
+ */
 router.use(async (req, res, next)=>{
 
   try {
@@ -216,22 +241,19 @@ router.use(async (req, res, next)=>{
 })
 
 
-
+/**
+ * 接口代理
+ */
 router.use(async (req, res, next)=>{
 
   try {
 
-    const {location, url} = res.locals
+    const {location} = res.locals
     if (location.type != 'api') return next()
     var apiOptions = {
       method: 'POST',
       url: location.content,
-      qs: req.query,
-      form: _.extend(req.body, req.query, {
-        appId: conf.appId,
-        appSecret: conf.appSecret,
-        proxyAppId: location.appId
-      })
+      qs: req.query
     }
     request(apiOptions, function(err, response, body){
       if (err) {
@@ -255,18 +277,35 @@ router.use(async (req, res, next)=>{
 })
 
 
+
 /**
  * 未定义的type类型
  */
-router.use(async (req, res, next)=>{
+router.use((req, res, next)=>{
+  next('UNDEFINED_TYPE')
+})
 
-  try {
+/**
+ * 处理proxy内遇到的异常和错误
+ * `HOST_NOT_FOUND` 即没有错误, 交给http_server
+ * `LOCATION_NOT_FOUND` 即404
+ * `UNDEFINED_TYPE` 用户非法请求
+ *
+ * 其他 err交给全局err处理器
+ */
+router.use(async (err, req, res, next)=>{
 
-    const {location, url} = res.locals
-    next('UNDEFINED_TYPE')
-
-  } catch(e){
-    next(e)
+  if(err=='HOST_NOT_FOUND'){
+    return next()
+  }
+  if (err=='LOCATION_NOT_FOUND'){
+    return res.sendStatus(404)
+  }
+  if(err=='UNDEFINED_TYPE'){
+    return res.sendStatus(402)
   }
 
+  console.log(err)
+
+  return res.sendStatus(502)
 })

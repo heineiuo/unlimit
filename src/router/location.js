@@ -5,9 +5,9 @@ var async = require('async')
 var conf = require('../conf')
 var md5  = require('../lib/md5')
 
-var Location = require('../model/Location')
-var Config = require('../model/Config')
-var Host = require('../model/Host')
+var Location = require('../model/location')
+var Config = require('../model/config')
+var Host = require('../model/host')
 
 var locationController = module.exports = {}
 

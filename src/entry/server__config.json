@@ -1,0 +1,11 @@
+{
+  "host": "cloud.youkuohao.com",
+  "https": [
+    "www.youkuohao.com",
+    "git.youkuohao.com",
+    "cloud.youkuohao.com",
+    "account.youkuohao.com",
+    "neo4j.youkuohao.com",
+    "www.lh0519.com"
+  ]
+}

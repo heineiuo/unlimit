@@ -1,16 +1,17 @@
 var _ = require('lodash')
 var async = require('async')
 
-var conf = require('../conf')
-var Host = require('../model/Host')
-var Location = require('../model/Location')
-var Config = require('../model/Config')
+var Host = require('../model/host')
+var Location = require('../model/location')
+var Config = require('../model/config')
+
+var express = require('express')
+var router = module.exports = express.Router()
 
 
-
-router.use(main.requireInstall)
-router.use(main.requireEqualHost)
-router.use(main.requireAdmin)
+// router.use(main.requireInstall)
+// router.use(main.requireEqualHost)
+// router.use(main.requireAdmin)
 
 /************************
  *

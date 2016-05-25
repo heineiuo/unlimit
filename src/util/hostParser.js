@@ -14,8 +14,8 @@ var path = require('path')
 var fs = require('fs')
 
 var conf = require('../conf')
-var Location = require('../model/Location')
-var Host = require('../model/Host')
+var Location = require('../model/location')
+var Host = require('../model/host')
 
 var hostParser = module.exports = {}
 
