@@ -1,3 +1,4 @@
+
 var fs = require('fs-extra')
 var _ = require('lodash')
 var mkdirp = require('mkdirp')
@@ -127,3 +128,40 @@ file.downladDir = function (req, res, next) {
 
   return next('UNRADY')
 }
+
+/*****************************
+ *
+ * 文件管理相关接口
+ *
+ *****************************/
+// 上传
+router.route('/api/upload').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  file.upload
+)
+
+// 读取目录
+router.route('/api/file/readdir').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  file.readdir
+)
+
+// 删除文件
+router.route('/api/file/delete').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  file.deleteFile
+)
+
+// 下载文件
+router.route('/api/file/download').get(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  file.downloadFile
+)

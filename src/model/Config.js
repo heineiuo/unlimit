@@ -1,4 +1,4 @@
-var Datastore = require('nedb')
+var Datastore = require('nedb-promise')
 
 var Config = module.exports = new Datastore({
   filename: './data/Config.db',

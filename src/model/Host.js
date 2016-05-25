@@ -1,6 +1,6 @@
-var Datastore = require('nedb')
+const Datastore = require('nedb-promise')
 
-var Host = module.exports = new Datastore({
-  filename: './data/Host.db',
+const Host = module.exports = new Datastore({
+  filename: `${process.cwd()}/data/Host.db`,
   autoload: true
 })

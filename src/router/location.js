@@ -200,3 +200,49 @@ locationController.delete = function(req, res, next) {
     res.json({})
   })
 }
+
+// 获取location列表
+router.route('/api/location/list').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.locationListRead
+)
+
+// 获取location详情
+router.route('/api/location/detail').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.detail
+)
+
+router.route('/api/location/new').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.locationCreate
+)
+
+router.route('/api/location/edit').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.locationUpdate
+)
+
+
+router.route('/api/location/update-sort').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.locationUpdateSort
+)
+
+
+router.route('/api/location/delete').post(
+  main.requireInstall,
+  main.requireEqualHost,
+  main.requireAdmin,
+  location.delete
+)
