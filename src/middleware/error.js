@@ -10,5 +10,5 @@ module.exports.err500 = function(err, req, res, next){
 }
 
 module.exports.err404 = function(req, res){
-  res.sendStatus(404)
+  res.end('NOT FOUND')
 }

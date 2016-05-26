@@ -299,13 +299,11 @@ router.use(async (err, req, res, next)=>{
     return next()
   }
   if (err=='LOCATION_NOT_FOUND'){
-    return res.sendStatus(404)
+    return res.end(`${req.headers.host}: LOCATION NOT FOUND`)
   }
   if(err=='UNDEFINED_TYPE'){
-    return res.sendStatus(402)
+    return res.end(`${req.headers.host}: CONFIGURE ERROR`)
   }
 
-  console.log(err)
-
-  return res.sendStatus(502)
+  return res.end(`${req.headers.host}: EXCEPTION ERROR`)
 })

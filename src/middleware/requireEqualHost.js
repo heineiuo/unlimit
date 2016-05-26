@@ -16,8 +16,8 @@
 
 const requireEqualHost =  (conf)=>{
   return (req, res, next)=>{
-    if (req.protocol == 'https' && req.headers.host == conf.host) return next()
-    res.sendStatus(403)
+    if (req.headers.host == conf.host) return next()
+    res.end(`NOT FOUND`)
   }
 }
 
