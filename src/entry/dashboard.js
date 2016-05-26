@@ -17,7 +17,11 @@ import configure from '../dataflow/store'
 // containers
 import Master from '../containers/Master'
 import Home from '../containers/Home'
-import Host from '../containers/Host'
+import HostList from '../containers/HostList'
+import HostDetail from '../containers/HostDetail'
+import HostNew from '../containers/HostNew'
+import LocationDetail from '../containers/LocationDetail'
+import LocationNew from '../containers/LocationNew'
 import File from '../containers/File'
 import Cli from '../containers/Cli'
 
@@ -32,12 +36,12 @@ window.onload = function(){
         <Route component={Master}>
           <Route path="/" component={Home}/>
           <Route path="/host">
-            <IndexRoute component={Host} />
-            <Route path="new" component={Host} />
+            <IndexRoute component={HostList} />
+            <Route path="new" component={HostNew} />
             <Route path=":host_id">
-              <IndexRoute component={FamilyTree}/>
-              <Route path="location/new" component={FamilyTree}/>
-              <Route path="location/:location_id" component={FamilyTree}/>
+              <IndexRoute component={HostDetail}/>
+              <Route path="location/new" component={LocationNew}/>
+              <Route path="location/:location_id" component={LocationDetail}/>
             </Route>
           </Route>
           <Route path="/file" component={File}/>

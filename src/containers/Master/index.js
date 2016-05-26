@@ -1,10 +1,14 @@
+import React, {Component} from 'react'
+import {Link} from 'react-router'
+
+
 class Master extends Component {
 
   render(){
     return (
       <div>
-        <div class="sidebar hide"></div>
-        <div class="sidebar-next" id="page-container"></div>
+        <div className="sidebar hide"></div>
+        <div className="sidebar-next" id="page-container"></div>
       </div>
     )
   }

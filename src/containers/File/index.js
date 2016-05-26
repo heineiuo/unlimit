@@ -1,17 +1,18 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router'
 
 class File extends Component {
 
   render (){
 
     return (
-      <div class="container width-max" style="padding-top: 20px">
+      <div className="container width-max" style="padding-top: 20px">
 
-        <div class="paper">
+        <div className="paper">
 
-          <div class="title clearfix">
-            <div class="pull-left">路径:</div>
-            <ul class="pathbar pull-left clearfix">
+          <div className="title clearfix">
+            <div className="pull-left">路径:</div>
+            <ul className="pathbar pull-left clearfix">
               {/*
           var result  = path.split('/');
           console.log(result);
@@ -32,18 +33,18 @@ class File extends Component {
           })
           */}
             </ul>
-            <div class="pull-right">
+            <div className="pull-right">
 
-              <button class="btn btn-sm btn-primary fileinput-button"  id="imageupload" style="overflow: hidden;position: relative">
+              <button className="btn btn-sm btn-primary fileinput-button"  id="imageupload" style="overflow: hidden;position: relative">
                 <span>上传文件</span>
-                <input type="file" name="file" class="input-file" />
+                <input type="file" name="file" className="input-file" />
               </button>
 
-              <div class="upload-bar">
+              <div className="upload-bar">
 
-                <div class="upload-fail"></div>
-                <div class="upload-progress">
-                  <div class="progress-bar"></div>
+                <div className="upload-fail"></div>
+                <div className="upload-progress">
+                  <div className="progress-bar"></div>
                 </div>
               </div>
 

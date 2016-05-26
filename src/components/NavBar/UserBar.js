@@ -4,8 +4,8 @@ class UserBar extends Component {
 
 
       <li>
-        <a href="#" class="btn-logout">
-          <i class="glyphicon glyphicon-off"></i>
+        <a href="#" className="btn-logout">
+          <i className="glyphicon glyphicon-off"></i>
         </a>
       </li>
 
