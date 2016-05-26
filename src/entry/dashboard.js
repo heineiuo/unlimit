@@ -15,7 +15,11 @@ import 'whatwg-fetch'
 // store
 import configure from '../dataflow/store'
 // containers
-import FamilyTree from '../containers/FamilyTree'
+import Master from '../containers/Master'
+import Home from '../containers/Home'
+import Host from '../containers/Host'
+import File from '../containers/File'
+import Cli from '../containers/Cli'
 
 const store = configure()
 
@@ -25,7 +29,20 @@ window.onload = function(){
   ReactDOM.render((
     <Provider store={store}>
       <Router history={hashHistory} location="hashHistory">
-        <Route path="/" component={FamilyTree}/>
+        <Route component={Master}>
+          <Route path="/" component={Home}/>
+          <Route path="/host">
+            <IndexRoute component={Host} />
+            <Route path="new" component={Host} />
+            <Route path=":host_id">
+              <IndexRoute component={FamilyTree}/>
+              <Route path="location/new" component={FamilyTree}/>
+              <Route path="location/:location_id" component={FamilyTree}/>
+            </Route>
+          </Route>
+          <Route path="/file" component={File}/>
+          <Route path="/cli" component={Cli}/>
+        </Route>
       </Router>
     </Provider>
 
