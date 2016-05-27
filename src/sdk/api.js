@@ -80,10 +80,11 @@ api.downloadFile = [1, 'GET', api.__base+'/file/download']
 
 
 
-
-
-
-
+export const readDir = (path)=>{
+  const url = `${APIHOST}/file/readdir`
+  const params = {path: path}
+  return PostUrlEncodeJson(url, params)
+}
 
 
 
