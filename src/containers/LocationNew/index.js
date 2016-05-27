@@ -4,9 +4,9 @@ import {Link} from 'react-router'
 class Location extends Component {
   render (){
 
+
     return (
 
-      <!--新建一个location-->
       <div className="container width-max" style="padding-top: 20px;">
 
         <div className="paper">
@@ -213,7 +213,6 @@ class Location extends Component {
               </div>
 
             </div>
-            <!--end form-->
 
           </div>
 

@@ -1,3 +1,5 @@
+'use strict';
+
 const webpack = require('webpack')
 const path = require('path')
 const express = require('express')
@@ -10,7 +12,7 @@ const port = 8080
 const app = express()
 
 const webpackConfigs = {
-  dashboard: webpackClientConfigCreator('dashboard')
+  dashboard: webpackClientConfigCreator('dashboard', {notCompress: true})
 }
 
 const startServer = ()=>{
@@ -20,6 +22,7 @@ const startServer = ()=>{
     const compiler = webpack(config)
     app.use(require('webpack-dev-middleware')(compiler, {
       publicPath: config.output.publicPath,
+      hot: true,
       stats: {
         colors: true
       }

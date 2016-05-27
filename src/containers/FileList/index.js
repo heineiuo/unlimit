@@ -6,6 +6,9 @@ class FileList extends Component {
 
   render(){
 
+    const isFile = true
+    const parentPath = ''
+
     if (isFile) {
       return (
         <div>
@@ -39,18 +42,18 @@ class FileList extends Component {
             <tbody>
             {
 
-              files.forEach((file, index) => {
+              [].forEach((file, index) => {
                 return (
                   <tr key={index}>
                     <td>{index+1}</td>
                     <td>
-                      <a style="display: block;" href={`${conf.hrefPrefix}/file?path=${parentPath}${item}`}>{item}</a>
+                      <Link to={`/file?path=${parentPath}${item}`}>{item}</Link>
                     </td>
                     <td>
                       <div className="btn-group">
-                        <span className="btn btn-sm btn-danger" data-onclick="delete" data-path={parentPath}{item}>删除</span>
-                        <span className="btn btn-sm btn-primary" data-onclick="rename" data-path={parentPath}{item}>重命名</span>
-                        <span className="btn btn-sm btn-primary" data-onclick="download" data-path={parentPath}{item}>下载</span>
+                        <span className="btn btn-sm btn-danger" data-onclick="delete" data-path={`${parentPath}${item}`}>删除</span>
+                        <span className="btn btn-sm btn-primary" data-onclick="rename" data-path={`${parentPath}${item}`}>重命名</span>
+                        <span className="btn btn-sm btn-primary" data-onclick="download" data-path={`${parentPath}${item}`}>下载</span>
                       </div>
                     </td>
                   </tr>
@@ -64,3 +67,5 @@ class FileList extends Component {
       }
   }
 }
+
+export default FileList

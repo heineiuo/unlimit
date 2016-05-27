@@ -11,7 +11,7 @@ class Home extends Component {
           <div className="col-sm-6">
 
             <div className="paper" style={{marginBottom: 20}}>
-              <a href="{{conf.hrefPrefix}}/host">域名管理</a>
+              <Link to={'/host'}>域名管理</Link>
             </div>
 
           </div>
@@ -19,21 +19,21 @@ class Home extends Component {
           <div className="col-sm-6">
 
             <div className="paper" style={{marginBottom: 20}}>
-              <a href="{{conf.hrefPrefix}}/file">文件管理</a>
+              <Link to="/file">文件管理</Link>
             </div>
           </div>
 
           <div className="col-sm-6">
 
             <div className="paper" style={{marginBottom: 20}}>
-              <a href="{{conf.hrefPrefix}}/process">进程管理</a>
+              <Link to="/process">进程管理</Link>
             </div>
           </div>
 
-          <div className="col-sm-6" style="margin-bottom: 20px;">
+          <div className="col-sm-6" style={{marginBottom: 20}}>
 
             <div className="paper">
-              <a href="{{conf.hrefPrefix}}/cli">命令行工具</a>
+              <Link to="/cli">命令行工具</Link>
             </div>
           </div>
         </div>

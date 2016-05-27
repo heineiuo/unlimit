@@ -6,8 +6,8 @@ class HostNew extends Component {
     return (
       <div>
 
-        <!--新建一个location-->
-        <div className="container width-max" style="padding-top: 20px;">
+        {/*<!--新建一个location-->*/}
+        <div className="container width-max">
 
           <div className="paper">
 
@@ -42,6 +42,7 @@ class HostNew extends Component {
 
               </div>
             </div>
+            
 
           </div>
 

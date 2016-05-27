@@ -4,9 +4,9 @@ import {Link} from 'react-router'
 class Location extends Component {
   render (){
 
+    // <!--一个location的编辑状态-->
     return (
 
-      <!--一个location的编辑状态-->
       <div className="container width-max" style="padding-top: 20px;">
 
 
@@ -180,9 +180,6 @@ class Location extends Component {
               </div>
 
             </div>
-            <!-- end form-->
-
-
 
           </div>
 

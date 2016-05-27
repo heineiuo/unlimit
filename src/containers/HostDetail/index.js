@@ -46,11 +46,11 @@ class HostDetail extends Component {
                         <td>
                           <div className="btn-group">
                             <button className="btn btn-default btn-xs" data-updatesort="up" data-sort="{item.sort}">
-                              <i className="glyphicon glyphicon-menu-up"></i>
+                              <i className="glyphicon glyphicon-menu-up"> </i>
                             </button>
                             <button className="btn btn-default btn-xs">{item.sort}</button>
                             <button className="btn btn-default btn-xs" data-updatesort="down" data-sort="{item.sort}">
-                              <i className="glyphicon glyphicon-menu-down"></i>
+                              <i className="glyphicon glyphicon-menu-down"> </i>
                             </button>
                           </div>
                         </td>

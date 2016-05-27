@@ -13,7 +13,7 @@ import 'whatwg-fetch'
 
 
 // store
-import configure from '../dataflow/store'
+import configure from '../dataflow/store/store__dashboard'
 // containers
 import Master from '../containers/Master'
 import Home from '../containers/Home'
@@ -23,10 +23,10 @@ import HostNew from '../containers/HostNew'
 import LocationDetail from '../containers/LocationDetail'
 import LocationNew from '../containers/LocationNew'
 import File from '../containers/File'
+import FileList from '../containers/FileList'
 import Cli from '../containers/Cli'
 
-const store = configure()
-
+const store = configure(hashHistory)
 
 window.onload = function(){
 
@@ -44,7 +44,10 @@ window.onload = function(){
               <Route path="location/:location_id" component={LocationDetail}/>
             </Route>
           </Route>
-          <Route path="/file" component={File}/>
+          <Route path="/file">
+            <IndexRoute component={FileList} />
+            <Route path=":file_id" component={File} />
+          </Route>
           <Route path="/cli" component={Cli}/>
         </Route>
       </Router>
