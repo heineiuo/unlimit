@@ -5,9 +5,15 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as HostActions from '../../dataflow/actions/host'
 
+import Card from '../../components/Card'
+import Button from '../../components/Button'
+
+import Style from './style.scss'
+
+
 class HostList extends Component {
 
-  state={
+  state = {
     page: 1
   }
 
@@ -20,16 +26,20 @@ class HostList extends Component {
 
     const {hostList} = this.props.hostState
 
+    console.log(hostList)
+
     const list = hostList.map((item, index)=>{
       return (
-        <tr key={index}>
-          <td><code>{item.hostname}</code></td>
-          <td>
+        <Card key={index}>
+          <div>{item.hostname}</div>
+          <div>
             <div className="btn-group">
-              <a href="{{conf.hrefPrefix}}/host/{{item._id}}" className="btn btn-xs  btn-primary">详情</a>
+              <Link to={`/host/${item._id}`}>
+                <Button>详情</Button>
+              </Link>
             </div>
-          </td>
-        </tr>
+          </div>
+        </Card>
       )
     })
 
@@ -41,39 +51,25 @@ class HostList extends Component {
 
     return (
       <div className="container width-max">
-        <div className="paper">
-          <div className="title">
-            <h4 className="">
-              域名列表
-              <small style={{marginLeft: 20}}>
-                <Link
-                  to="/host/new"
-                  className="btn btn-xs btn-primary"
-                >
-                  添加
-                </Link>
-              </small>
-            </h4>
-          </div>
-          <div className="host-list">
 
-            <table className="table">
-              <thead>
-              <tr>
-                <th>hostname</th>
-                <th>操作</th>
-              </tr>
-              </thead>
-
-              <tbody>
-
-                {this.renderHostList()}
-              </tbody>
-
-            </table>
-
-          </div>
+        <div className="title">
+          <h4 className="">
+            域名列表
+            <small style={{marginLeft: 20}}>
+              <Link
+                to="/host/new"
+                className="btn btn-xs btn-primary"
+              >
+                添加
+              </Link>
+            </small>
+          </h4>
         </div>
+
+        <div className={Style.hostList}>
+          {this.renderHostList()}
+        </div>
+
       </div>
     )
 

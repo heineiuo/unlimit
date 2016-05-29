@@ -1,9 +1,8 @@
-'use strict';
-
 const webpack = require('webpack')
 const path = require('path')
 const express = require('express')
 const fs = require('fs')
+const request = require('request')
 const rucksack = require('rucksack-css')
 const webpackClientConfigCreator = require('webpack-config').webpackClientConfigCreator
 const argv = require('../src/util/argv')
@@ -31,12 +30,38 @@ const startServer = ()=>{
   })
 
   app.use('/', express.static(path.join(__dirname, '../build/public')))
+  app.use('/api', (req, res, next)=>{
 
-  app.listen(port, '0.0.0.0', (err) => {
+
+    var apiOptions = {
+      method: req.method,
+      url: `http://127.0.0.1${req.originalUrl}`,
+      qs: req.query,
+      body: req.body
+    }
+    request(apiOptions, function(err, response, body){
+      if (err) {
+        console.log('请求外部接口失败')
+        console.log(err)
+        return res.sendStatus(500)
+      }
+      try {
+        res.json(JSON.parse(body))
+      } catch(e){
+        console.log(body)
+        res.sendStatus(502)
+      }
+    })
+
+
+  })
+
+  app.listen(port, '127.0.0.1', (err) => {
     if (err) return console.log(err)
     console.log(`Listening at http://0.0.0.0:${port}`)
   })
 }
+
 
 
 

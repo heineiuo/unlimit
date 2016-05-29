@@ -3,7 +3,6 @@ var async = require('async')
 
 var Host = require('../model/host')
 var Location = require('../model/location')
-var Config = require('../model/config')
 
 var express = require('express')
 var router = module.exports = express.Router()
@@ -20,17 +19,22 @@ var router = module.exports = express.Router()
  ************************/
 
 // 获取域名列表
-router.route('/api/host/list').post((req, res, next)=> {
+router.route('/list').get( async(req, res, next)=> {
 
-  Host.find({}, function(err, docs){
-    if(err) return res.json({error: 'EXCEPTION_ERROR'})
-    res.json({list: docs})
-  })
+  try {
+    Host.find({}, function(err, docs){
+      if(err) throw err
+      res.json({list: docs})
+    })
+  } catch(e){
+    next(e)
+  }
+
 
 })
 
 // 获取域名详情
-router.route('/api/host/detail').post((req, res, next) => {
+router.route('/detail').get((req, res, next) => {
 
   if (!_.has(req.body, 'hostId')) return res.json({error: "LOST_PARAM"})
 
@@ -40,19 +44,14 @@ router.route('/api/host/detail').post((req, res, next) => {
     if (err) return res.json({error: "EXCEPTION_ERROR"})
     if (!item) return res.json({error: "NOT_FOUND"})
     result.host = item
-
-    Location.find({hostId: req.body.hostId}).sort({sort: 1}).exec(function(err, docs){
-      if (err) return res.json({error: 'EXCEPTION_ERROR'})
-      result.list = docs
-      res.json(result)
-    })
+    res.json(result)
 
   })
 
 })
 
 // 创建新的域名
-router.route('/api/host/new').post((req, res, next) => {
+router.route('/new').post((req, res, next) => {
 
   if (!_.has(req.body, 'hostname')) return res.json({error: "LOST_PARAM"})
   if (_.trim(req.body.hostname) == '') return res.json({error: "ILLEGAL_PARAM"})
@@ -73,13 +72,13 @@ router.route('/api/host/new').post((req, res, next) => {
 })
 
 // 编辑域名
-router.route('/api/host/edit').post(function (req, res, next) {
+router.route('/edit').post(function (req, res, next) {
   next('API_BUILDING')
 })
 
 
 // 删除域名
-router.route('/api/host/delete').post(function(req, res, next) {
+router.route('/delete').post(function(req, res, next) {
 
   if (!_.has(req.body, 'hostId')) return res.json({error: "PERMISSION_DENIED"})
 

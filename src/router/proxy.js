@@ -18,10 +18,13 @@ const router = module.exports = Router()
 router.use(async (req, res, next)=>{
 
   try {
-    const host = await Host.findOne({hostname: req.headers.host})
-    if (!host) return next('HOST_NOT_FOUND')
-    res.locals.host = host
-    next()
+    Host.findOne({hostname: req.headers.host}, (err, doc)=>{
+      if (err) throw err
+      if (!doc) return next('HOST_NOT_FOUND')
+      res.locals.host = doc
+      next()
+
+    })
 
   } catch(e){
     next(e)

@@ -34,9 +34,8 @@ window.onload = function(){
     <Provider store={store}>
       <Router history={hashHistory} location="hashHistory">
         <Route component={Master}>
-          <Route path="/" component={Home}/>
+          <Route path="/" component={HostList}/>
           <Route path="/host">
-            <IndexRoute component={HostList} />
             <Route path="new" component={HostNew} />
             <Route path=":host_id">
               <IndexRoute component={HostDetail}/>

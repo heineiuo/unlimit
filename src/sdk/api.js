@@ -1,99 +1,161 @@
-// var cookie = require('../lib/cookie')
-//
-var api = module.exports = {};
-//
-api.__base = '/api'
-api.__autoData = function(){
-  return {
-    access_token: cookie('access_token').val(),
-    debug: 'stack'
-  }
+import {
+  Urlencode,
+  GETJSON,
+  PUTJSON,
+  POSTRawJSON,
+  DELETEJSON,
+  POSTUrlencodeJSON
+} from '../util/fetch'
+
+
+// const APIHOST = 'https://cloud.youkuohao.com/api'
+const APIHOST = '/api'
+
+
+/**--------------PRIVATE API------------------------**/
+
+// 获取accessToken
+export const accessToken = ()=> {
+  const url = `${APIHOST}/access-token`
+  return POSTUrlencodeJSON(url, {})
 }
 
-//
-// api.__development = false
-// if (api.__development) api.__mock = require('./apiMock')
-//
-// /**--------------PRIVATE API------------------------**/
-// // 获取accessToken
-// api['accessToken'] = [1, 'POST', api.__base+'/access-token']
-// // 删除APP
-// api['app.delete'] = [1, 'POST', api.__base+'/app/delete']
-// // app信息
-// api['app.detail'] = [1, 'POST', api.__base+'/app/detail']
-// // 更新APP
-// api['app.edit'] = [1, 'POST', api.__base + '/app/edit']
-// // 获取app列表
-// api['app.list'] = [1, 'POST', api.__base+'/app/list']
-//
-// /**----------------OPEN API----------------------**/
-// // 新建APP
-// api['app.new'] = [1, 'POST', api.__base+'/app/new']
-// // 删除location
-// api['location.delete'] = [1, 'POST', api.__base+'/location/delete']
-// // location 详情
-// api['location.detail'] = [1, 'POST', api.__base+'/location/detail']
-//
-// // 更新location
-// api['location.edit'] = [1, 'POST', api.__base+'/location/edit']
-// api.locationUpdateSort = [1, 'POST', api.__base+'/location/update-sort']
-// // location列表
-// api['location.list'] =   [1, 'POST' , api.__base+'/location/list']
-// // 新建location
-// api['location.new'] = [1, 'POST', api.__base+'/location/new']
-// // 删除
-// api['host.delete'] = [1, 'POST', api.__base+'/host/delete']
-// // host
-// // 列表
-// api['host.list'] =   [1, 'POST' , api.__base+'/host/list']
-// // 新建
-// api['host.new'] = [1, 'POST', api.__base+'/host/new']
-// api.hostDelete =   [1, 'POST' , api.__base+'/host/delete']
-// api.hostDetail =   [1, 'POST' , api.__base+'/host/detail']
-// api.install = [1, 'POST', api.__base+'/install']
-//
-//
-//
-// /**
-//  *
-//  */
-// api.login = [1, 'POST', api.__base+'/login']
-//
-//
-//
-// // 获取个人信息
-// api['profile'] = [1, 'POST', api.__base+'/user/profile']
-//
-// api.serverStatus = [1, 'POST', api.__base+'/status']
-//
-//
-// /***********************
-//  *
-//  * 文件资源相关
-//  *
-//  **********************/
-// api.uploadImage = [1, 'POST', api.__base+'/upload']
-// api.readdir = [1, 'POST', api.__base+'/file/readdir']
-// api.deleteFile = [1, 'POST', api.__base+'/file/delete']
-// api.renameFile = [1, 'POST', api.__base+'/file/rename']
-// api.downloadFile = [1, 'GET', api.__base+'/file/download']
-//
-//
-//
-//
-// export const readDir = (path)=>{
-//   const url = `${APIHOST}/file/readdir`
-//   const params = {path: path}
-//   return PostUrlEncodeJson(url, params)
-// }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+// 删除APP
+export const appDelete =(app_id)=>{
+  return POSTUrlencodeJSON(`${APIHOST}/app/delete`, {app_id: app_id})
+}
+
+// app信息
+export const appDetail = (app_id)=>{
+  return POSTUrlencodeJSON(`${APIHOST}/app/detail`)
+}
+
+// 更新APP
+export const appEdit = (app_id)=> {
+  return POSTUrlencodeJSON(`${APIHOST}/app/edit`)
+}
+
+// 获取app列表
+export const appList = ()=> {
+  return POSTUrlencodeJSON(`${APIHOST}/app/list`)
+}
+
+// 新建APP
+export const createApp = ()=>{
+  const url = `${APIHOST}/app/new`
+}
+// 删除location
+export const deleteLocation = ()=>{
+  const url = `${APIHOST}/location/delete`
+}
+
+// location 详情 GET
+export const getLocationDetail = ()=>{
+  const url = `${APIHOST}/location/detail`
+}
+
+// 更新location POST
+export const editLocation = ()=>{
+  const url = `${APIHOST}/location/edit`
+}
+
+// 更新location排序
+export const editLocationSort = ()=>{
+  const url = `${APIHOST}/location/update-sort`
+}
+
+// location列表
+export const getLocationList = (host_id)=>{
+  const url = `${APIHOST}/location/list`
+  const query = {
+    host_id: host_id
+  }
+  console.log(query)
+  return GETJSON(url, query)
+}
+
+// 新建location
+export const createLocation = ()=> {
+  const url = `${APIHOST}/location/new`
+
+}
+// 删除host
+export const deleteHost = ()=>{
+  const url = `${APIHOST}/host/delete`
+
+}
+// host列表
+export const getHostList = ()=> {
+  const url = `${APIHOST}/host/list`
+  return GETJSON(url)
+}
+// 新建 host
+export const createHost = ()=> {
+  const url = `${APIHOST}/host/new`
+}
+
+// 查看host详情
+export const getHostDetail =()=>{
+  const url = `${APIHOST}/host/detail`
+
+}
+
+
+/**
+ * 登录
+ */
+export const loginByPassword = ()=> {
+  const url = `${APIHOST}/login`
+
+}
+
+// 获取个人信息
+// POST
+export const getProfile =()=> {
+
+  const url = `${APIHOST}/user/profile`
+}
+
+// POST
+export const serverStatus =()=> {
+  const url = `${APIHOST}/status`
+}
+
+/***********************
+ *
+ * 文件资源相关
+ *
+ **********************/
+
+export const uploadImage = (body={}) => {
+  const url = `${APIHOST}/upload`
+  return POSTUrlencodeJSON(url, body)
+}
+
+export const deleteFile = (body) => {
+  const url = `${APIHOST}/file/delete`
+  return POSTUrlencodeJSON(url, body)
+}
+
+
+export const renameFile = (body)=> {
+  const url = `${APIHOST}/file/rename`
+  return POSTUrlencodeJSON(url, body)
+}
+
+
+export const getDownloadFileUrl = (path)=> {
+  const url = `${APIHOST}/file/download?${Urlencode({path})}`
+  return url
+}
+
+/**
+ * 读取目录
+ * @param path
+ * @returns {*}
+ */
+export const readDir = (path)=>{
+  const url = `${APIHOST}/file/readdir`
+  const params = {path: path}
+  return POSTUrlencodeJSON(url, params)
+}

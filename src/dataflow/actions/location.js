@@ -1,7 +1,7 @@
-var conf = require('../conf')
-var ajax = require('../lib/ajax')(require('../conf/api'))
+// var conf = require('../conf')
+// var ajax = require('../lib/ajax')(require('../conf/api'))
 
-var location = module.exports = {}
+var location = {}
 
 
 location.new = function(req, res){

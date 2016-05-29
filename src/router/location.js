@@ -1,34 +1,31 @@
-var _ = require('lodash')
-var ent = require('ent')
-var async = require('async')
+import {Router} from 'express'
 
-var conf = require('../conf')
-var md5  = require('../lib/md5')
+const _ = require('lodash')
+const ent = require('ent')
+const async = require('async')
+const Location = require('../model/location')
+const Host = require('../model/host')
 
-var Location = require('../model/location')
-var Config = require('../model/config')
-var Host = require('../model/host')
-
-var locationController = module.exports = {}
+const router = module.exports = Router()
 
 
 /** 创建一条location记录 **/
-locationController.locationCreate = function(req, res, next) {
+router.route('/new').post(function(req, res, next) {
 
-  _.forEach(['hostId', 'type', 'content'], function (item) {
+  _.forEach(['host_id', 'type', 'content'], function (item) {
     if (!_.has(req.body, item)) {
       next('LOST_PARAM')
       return false
     }
   })
 
-  Host.findOne({_id: req.body.hostId}, function(err, host){
+  Host.findOne({_id: req.body.host_id}, function(err, host){
     if (err) return next('EXCEPTION_ERROR')
     if (!host) return next('NOT_FOUND')
     req.body.type = req.body.type || 'html'
     if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
 
-    Location.findOne({hostId: req.body.hostId}).sort({sort: -1}).exec(function (err, doc) {
+    Location.findOne({host_id: req.body.host_id}).sort({sort: -1}).exec(function (err, doc) {
       if (err) next(err)
       if (!doc) {
         req.body.sort=1
@@ -41,15 +38,15 @@ locationController.locationCreate = function(req, res, next) {
       })
     })
   })
-}
+})
 
 
 
 /** 获取详情 **/
-locationController.detail = function(req, res, next) {
+router.route('/detail').get(function(req, res, next) {
 
-  _.forEach(['hostId', 'locationId'], function (item) {
-    if (!_.has(req.body, item)) {
+  _.forEach(['host_id', 'locationId'], function (item) {
+    if (!_.has(req.query, item)) {
       next('LOST_PARAM')
       return false
     }
@@ -57,9 +54,9 @@ locationController.detail = function(req, res, next) {
 
   async.parallel([
     function(callback){
-      Host.findOne({_id: req.body.hostId}, callback)
+      Host.findOne({_id: req.query.host_id}, callback)
     }, function(callback){
-      Location.findOne({_id: req.body.locationId}, callback)
+      Location.findOne({_id: req.query.locationId}, callback)
     }
   ], function(err, results){
     if (err) return next('EXCEPTION_ERROR')
@@ -69,7 +66,7 @@ locationController.detail = function(req, res, next) {
     })
 
   })
-}
+})
 
 
 
@@ -80,7 +77,7 @@ locationController.detail = function(req, res, next) {
  * @param req
  * @param res
  */
-locationController.locationUpdate = function(req, res, next) {
+router.route('/edit').post(function(req, res, next) {
 
   _.forEach(['type', 'content', 'pathname'], function (item) {
     if (!_.has(req.body, item)) {
@@ -106,7 +103,7 @@ locationController.locationUpdate = function(req, res, next) {
     res.json({success:1})
   })
 
-}
+})
 
 
 /**
@@ -115,8 +112,8 @@ locationController.locationUpdate = function(req, res, next) {
  * @param res
  * @param next
  */
-locationController.locationUpdateSort = function(req, res, next) {
-  _.forEach(['hostId', 'locationId', 'targetSort'], function (item, index) {
+router.route('/update-sort').post(function(req, res, next) {
+  _.forEach(['host_id', 'locationId', 'targetSort'], function (item, index) {
     if (!_.has(req.body, item)) {
       next("PARAMS_LOST")
       return false
@@ -136,7 +133,7 @@ locationController.locationUpdateSort = function(req, res, next) {
     })
   }
 
-  Location.find({hostId: req.body.hostId}).exec(function (err, docs) {
+  Location.find({host_id: req.body.host_id}).exec(function (err, docs) {
     if (err) return next(err)
 
     Location.findOne({_id: req.body.locationId}).exec(function (err, doc) {
@@ -148,7 +145,7 @@ locationController.locationUpdateSort = function(req, res, next) {
       doc.sort = Number(doc.sort)
       // sort调小,那么在目标sort和当前sort内的记录都要+1, 再把当前sort调到目标sort
       if (targetSort<doc.sort) {
-        Location.find({hostId: req.body.hostId, sort: {
+        Location.find({host_id: req.body.host_id, sort: {
           $gte: targetSort,
           $lt: doc.sort
         }}).exec(function (err, docs) {
@@ -161,7 +158,7 @@ locationController.locationUpdateSort = function(req, res, next) {
         })
       } else {
         // 调大, 那么在目标sort和当前sort内的记录都要-1, 再把当前sort调到目标sort
-        Location.find({hostId: req.body.hostId, sort: {
+        Location.find({host_id: req.body.host_id, sort: {
           $lte: targetSort,
           $gt: doc.sort
         }}).exec(function (err, docs) {
@@ -178,71 +175,41 @@ locationController.locationUpdateSort = function(req, res, next) {
 
   })
 
-}
+})
 
 
 /**
  * 获取location列表
  */
-locationController.locationListRead = function(req, res, next) {
-  Location.find({userId: req.user.userId}, function(err, list){
-    if (err) return next('EXCEPTION_ERROR')
-    res.json({list: list})
+router.route('/list').get((req, res, next) => {
+
+  if (!_.has(req.query, 'host_id')) return res.json({error: "LOST_PARAM"})
+
+  var result = {}
+
+  req.query.host_id = decodeURIComponent(req.query.host_id)
+  console.log(req.query.host_id)
+
+  Host.findOne({_id: req.query.host_id}, function(err, item){
+    if (err) return res.json({error: "EXCEPTION_ERROR"})
+    if (!item) return res.json({error: "NOT_FOUND"})
+    result.host = item
+
+    Location.find({host_id: req.query.host_id}).sort({sort: 1}).exec(function(err, docs){
+      if (err) return res.json({error: 'EXCEPTION_ERROR'})
+      result.list = docs
+      res.json(result)
+    })
+
   })
-}
+})
 
 /**
  * 删除一个location
  */
-locationController.delete = function(req, res, next) {
+router.route('/delete').post(function(req, res, next) {
   Location.remove({_id: req.body.locationId}, {}, function(err){
     if (err) return next('EXCEPTION_ERROR')
     res.json({})
   })
-}
-
-// 获取location列表
-router.route('/api/location/list').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  location.locationListRead
-)
-
-// 获取location详情
-router.route('/api/location/detail').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  location.detail
-)
-
-router.route('/api/location/new').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  location.locationCreate
-)
-
-router.route('/api/location/edit').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  location.locationUpdate
-)
-
-
-router.route('/api/location/update-sort').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  location.locationUpdateSort
-)
-
-
-router.route('/api/location/delete').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  location.delete
-)
+})

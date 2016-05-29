@@ -1,8 +1,14 @@
+$sidebarWidth: 200px;
+
+.container  {
+  padding-top: 50px;
+}
+
 .sidebar {
 
   background-color: #fff;
   box-shadow: 0 1px 2px #ccc;
-  width: 200px;
+  width: $sidebarWidth;
   position: fixed;
   top: 0;
   left: 0;
@@ -38,3 +44,9 @@
   }
 
 }
+
+.sidebar__next {
+  padding: 20px;
+  padding-left: $sidebarWidth;
+}
+

@@ -1,20 +1,26 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 
+import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as HostActions from '../../dataflow/actions/host'
+
 class Location extends Component {
   render (){
+
+    const {currentHost} = this.props.hostState
 
     // <!--一个location的编辑状态-->
     return (
 
-      <div className="container width-max" style="padding-top: 20px;">
+      <div className="container width-max">
 
 
         <div className="paper">
 
           <div className="title">
             <h4>
-              <Link href={`${conf.hrefPrefix}/host/${host._id}`}>{host.hostname}</Link>
+              <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
             </h4>
           </div>
 
@@ -75,32 +81,32 @@ class Location extends Component {
 
                 <ul className="nav nav-tabs">
                   <li className="{location.type=='html'?'active':''}">
-                    <a href="#locationContentHTML" aria-controls="locationContentHTML" data-toggle="tab">
+                    <a to="#locationContentHTML" aria-controls="locationContentHTML" data-toggle="tab">
                       <input type="radio" />HTML
                     </a>
                   </li>
                   <li className="{location.type=='api'?'active':''}">
-                    <a href="#locationContentAPI" aria-controls="locationContentAPI" data-toggle="tab">
+                    <a to="#locationContentAPI" aria-controls="locationContentAPI" data-toggle="tab">
                       <input type="radio" />API
                     </a>
                   </li>
                   <li className="{location.type=='json'?'active':''}">
-                    <a href="#locationContentJSON" aria-controls="locationContentJSON" data-toggle="tab">
+                    <a to="#locationContentJSON" aria-controls="locationContentJSON" data-toggle="tab">
                       <input type="radio" />JSON
                     </a>
                   </li>
                   <li className="{location.type=='redirect'?'active':''}">
-                    <a href="#locationContentRedirect" aria-controls="locationContentRedirect" data-toggle="tab">
+                    <a to="#locationContentRedirect" aria-controls="locationContentRedirect" data-toggle="tab">
                       <input type="radio" />Redirect
                     </a>
                   </li>
                   <li className="{location.type=='proxy'?'active':''}">
-                    <a href="#locationContentProxy" aria-controls="locationContentProxy" data-toggle="tab">
+                    <a to="#locationContentProxy" aria-controls="locationContentProxy" data-toggle="tab">
                       <input type="radio" />Proxy
                     </a>
                   </li>
                   <li className="{location.type=='file'?'active':''}">
-                    <a href="#locationContentFile" aria-controls="locationContentFile" data-toggle="tab">
+                    <a to="#locationContentFile" aria-controls="locationContentFile" data-toggle="tab">
                       <input type="radio" />File
                     </a>
                   </li>
@@ -173,7 +179,7 @@ class Location extends Component {
                 <div className="col-sm-offset-2 col-sm-4 form-error"></div>
               </div>
 
-              <div className="form-group row" style="border-top: 1px solid #eee;">
+              <div className="form-group row">
                 <div className="col-sm-4">
                   <button className="btn btn-success btn-location-update">保存修改</button>
                 </div>
@@ -192,4 +198,20 @@ class Location extends Component {
   }
 }
 
-export default Location
+
+function mapStateToProps(state) {
+  return {
+    hostState: state.host
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    hostActions: bindActionCreators(HostActions, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Location)

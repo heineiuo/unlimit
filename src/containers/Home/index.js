@@ -16,12 +16,15 @@ class Home extends Component {
 
           </div>
 
-          <div className="col-sm-6">
+          {/*
+
+           <div className="col-sm-6">
 
             <div className="paper" style={{marginBottom: 20}}>
               <Link to="/file">文件管理</Link>
             </div>
           </div>
+
 
           <div className="col-sm-6">
 
@@ -36,6 +39,9 @@ class Home extends Component {
               <Link to="/cli">命令行工具</Link>
             </div>
           </div>
+
+           */}
+
         </div>
 
 

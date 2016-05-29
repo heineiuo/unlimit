@@ -5,6 +5,15 @@ import Style from './style.scss'
 
 const cx = classnames.bind(Style)
 
+const style = {
+  navbar__brand: {
+    paddingLeft: 20,
+    color: '#fff',
+    height: '46px',
+    lineHeight: '46px'
+  }
+}
+
 class NavBar extends Component {
 
   render () {
@@ -12,11 +21,14 @@ class NavBar extends Component {
     return  (
       <nav className={cx("navbar","navbar-inverse", "reset-radius", "header")}>
         <div className="container width-max">
-          <div className="navbar-header">
-            <Link className="navbar-brand" to="/">右括号云平台</Link>
+          <div className={cx("navbar-header")}>
+            <Link style={style.navbar__brand}
+                  to="/">右括号云平台</Link>
           </div>
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav navbar-right" id="userbar"></ul>
+          <div className={cx("collapse", "navbar-collapse")}>
+            <ul className={cx("nav","navbar-nav","navbar-right")}>
+
+            </ul>
           </div>
         </div>
       </nav>

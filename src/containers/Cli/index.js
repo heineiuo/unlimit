@@ -1,12 +1,16 @@
 import React, {Component} from 'react'
 
+import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as HostActions from '../../dataflow/actions/host'
+
 class Cli extends Component {
 
 
   render (){
 
     return (
-      <div className="container width-max" style="padding-top: 20px">
+      <div className="container width-max">
 
         <div className="paper">
 

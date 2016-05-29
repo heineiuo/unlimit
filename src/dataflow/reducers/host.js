@@ -1,16 +1,33 @@
-
 import { handleActions } from 'redux-actions'
+import defaultsDeep from 'lodash.defaultsdeep'
 
 const initialState = {
-  hostList: []
+  hostList: [],
+  locationList: [],
+
+  currentHostId: '',
+  currentHost: {},
+
+  // 正在加载详情
+  loadingHostDetail: true,
+
+  loadingLocationList: true
 }
 
 export default handleActions({
-  'add todo' (state, action) {
-    return {
-      id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-      completed: false,
-      text: action.payload
-    }
+  'HOST_LIST_UPDATE' (state, action) {
+    return defaultsDeep({
+      currentHostId: action.currentHostId,
+      hostList: action.hostList
+    }, state)
+  },
+
+  'UPDATE_LOCATION_LIST' (state, action) {
+    return defaultsDeep({
+      loadingLocationList: false,
+      locationList: action.locationList,
+      currentHost: action.currentHost,
+      currentHostId: action.currentHostId
+    }, state)
   }
 }, initialState)

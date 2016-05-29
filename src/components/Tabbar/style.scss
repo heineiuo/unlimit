@@ -1,0 +1,69 @@
+.tabbar {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #f7f7fa;
+
+  &:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 1px;
+    color: #979797;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+  }
+}
+
+.tabpane {
+  float: left;
+  cursor: pointer;
+  width: 33%;
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+  padding-top: 6px;
+  box-sizing: border-box;
+
+  .inner {
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .text {
+    color: #000;
+    font-size: 13px;
+    line-height: 12px;
+  }
+}
+
+.nav-icon {
+  margin-left: -84px;
+  color: #000;
+  font-size: 28px;
+
+  &.active,
+  &:active {
+    color: #b03911;
+  }
+}
+
+
+.iconStyle {
+  width: 32px;
+  height: 32px;
+}
+
+.underline {
+  position: absolute;
+  bottom: 0;
+  border-bottom: 3px solid #c92c2c;
+}

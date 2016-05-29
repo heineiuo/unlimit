@@ -1,8 +1,18 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 
+import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as HostActions from '../../dataflow/actions/host'
+
 class HostNew extends Component {
+
+
   render(){
+
+    const {currentHost} = this.props.hostState
+
+
     return (
       <div>
 
@@ -22,21 +32,25 @@ class HostNew extends Component {
               <div className="form form-horizontal">
 
                 <div className="form-group">
-                  <label className="control-label col-sm-2" for="input-hostname">域名</label>
+                  <label className="control-label col-sm-2"
+                         for="input-hostname">域名</label>
                   <div className="col-sm-4">
-                    <input className="form-control" name="hostname" id="input-hostname" type="text" placeholder="请输入域名"  />
+                    <input className="form-control"
+                           name="hostname"
+                           id="input-hostname"
+                           type="text"
+                           placeholder="请输入域名"  />
                   </div>
                 </div>
-
 
                 <div className="form-group">
                   <div className="col-sm-offset-2 col-sm-4 form-error"></div>
                 </div>
 
-
                 <div className="form-group">
                   <div className="col-sm-offset-2 col-sm-4">
-                    <button className="btn btn-submit btn-primary btn-block">提交</button>
+                    <button
+                      className="btn btn-submit btn-primary btn-block">提交</button>
                   </div>
                 </div>
 
@@ -55,4 +69,20 @@ class HostNew extends Component {
   }
 }
 
-export default HostNew
+
+function mapStateToProps(state) {
+  return {
+    hostState: state.host
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    hostActions: bindActionCreators(HostActions, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HostNew)

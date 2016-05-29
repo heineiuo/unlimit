@@ -1,18 +1,86 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
 
+import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as HostActions from '../../dataflow/actions/host'
+
 class HostDetail extends Component {
+
+  componentDidMount =()=>{
+    const {hostActions, params} = this.props
+    console.log(params.host_id)
+    hostActions.getHostLocationList(params.host_id)
+  }
+
+  renderLocationList = ()=>{
+
+    const {locationList, currentHost} = this.props.hostState
+    if (locationList.length==0) {
+      return (
+        <tr colSpan="4">没有location</tr>
+      )
+    }
+    return locationList.map(location=>{
+      return (
+        <tr key={location._id}
+            data-hostId="{item.hostId}"
+            data-locationId="{item._id}">
+          <td><code>{location.pathname}</code></td>
+          <td>
+            <div className="btn-group">
+              <button className="btn btn-default btn-xs"
+                      data-updatesort="up"
+                      data-sort="{item.sort}">
+                <i className="glyphicon glyphicon-menu-up"> </i>
+              </button>
+              <button className="btn btn-default btn-xs">{location.sort}</button>
+              <button className="btn btn-default btn-xs"
+                      data-updatesort="down"
+                      data-sort="{item.sort}">
+                <i className="glyphicon glyphicon-menu-down"> </i>
+              </button>
+            </div>
+          </td>
+          <td><code>{location.type}</code></td>
+          <td>
+            <div className="btn-group">
+              <Link to={`/host/${currentHost._id}/location/${location._id}`}
+                    className="btn btn-xs  btn-primary">详情</Link>
+            </div>
+          </td>
+        </tr>
+      )
+    })
+
+  }
+
   render(){
+
+    const {
+      loadingLocationList,
+      currentHost
+    } = this.props.hostState
+
+
+    if (loadingLocationList){
+      return (
+        <div>正在加载</div>
+      )
+    }
+
     return (
-      <div className="container width-max" style="padding-top: 20px;">
+      <div className="container width-max" >
 
         <div className="paper">
 
           <div className="title clearfix">
             <div className="h4">
-              <a href="{conf.hrefPrefix}/host/{host._id}">{host.hostname}</a>
+              <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
               <small className="pull-right">
-                <a href="#" className="btn btn-xs btn-danger" id="deleteHost">删除</a>
+                <button
+                  className="btn btn-xs btn-danger"
+                  id="deleteHost">删除</button>
               </small>
             </div>
           </div>
@@ -20,7 +88,8 @@ class HostDetail extends Component {
           <div className="h5">
             location列表
             <small>
-              <a href="{conf.hrefPrefix}/host/{host._id}/location/new" className="btn btn-xs btn-primary">新建</a>
+              <Link to={`/host/${currentHost._id}/location/new`}
+                 className="btn btn-xs btn-primary">新建</Link>
             </small>
           </div>
 
@@ -37,38 +106,7 @@ class HostDetail extends Component {
               </thead>
 
               <tbody>
-
-              { () => {
-                  _.map(list, function(item, index){
-                    return (
-                      <tr data-hostId="{item.hostId}" data-locationId="{item._id}">
-                        <td><code>{item.pathname}</code></td>
-                        <td>
-                          <div className="btn-group">
-                            <button className="btn btn-default btn-xs" data-updatesort="up" data-sort="{item.sort}">
-                              <i className="glyphicon glyphicon-menu-up"> </i>
-                            </button>
-                            <button className="btn btn-default btn-xs">{item.sort}</button>
-                            <button className="btn btn-default btn-xs" data-updatesort="down" data-sort="{item.sort}">
-                              <i className="glyphicon glyphicon-menu-down"> </i>
-                            </button>
-                          </div>
-                        </td>
-                        <td><code>{item.type}</code></td>
-                        <td>
-                          <div className="btn-group">
-                            <a href="{conf.hrefPrefix}/host/{host._id}/location/{item._id}" className="btn btn-xs  btn-primary">详情</a>
-                          </div>
-                        </td>
-                      </tr>
-
-
-                    )
-                  })
-                }
-              }
-
-
+              { this.renderLocationList()}
               </tbody>
 
             </table>
@@ -83,4 +121,19 @@ class HostDetail extends Component {
   }
 }
 
-export default HostDetail
+function mapStateToProps(state) {
+  return {
+    hostState: state.host
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    hostActions: bindActionCreators(HostActions, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HostDetail)
