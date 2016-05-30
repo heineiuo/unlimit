@@ -8,6 +8,7 @@ import * as HostActions from '../../dataflow/actions/host'
 import Tabbar, {TabPane} from '../../components/Tabbar'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
+import Paper from '../../components/Paper'
 
 import classnames from 'classnames/bind'
 import Style from './style.scss'
@@ -20,12 +21,17 @@ class Location extends Component {
     activeKey: 'API'
   }
 
+  saveLocation=()=>{
+    console.log('saving location...')
+    const editLocation = this.props
+    editLocation(this.state.location)
+  }
+
   renderTabber=()=>{
     const that = this
     const bodyType = [
       'HTML',
       'JSON',
-      'TEXT',
       'API',
       'PROXY',
       'REDIRECT',
@@ -54,8 +60,7 @@ class Location extends Component {
   }
 
   renderTabContent=()=>{
-    const {activeKey} = this.props
-    console.log(activeKey)
+    const {activeKey} = this.state
 
     if (activeKey == 'HTML') {
         return (
@@ -113,11 +118,11 @@ class Location extends Component {
         />
         <label>json</label>
         <div>
-                        <textarea
-                          className="form-control"
-                          name="content"
-                          placeholder="直接输入JSON代码"
-                        />
+          <textarea
+            className="form-control"
+            name="content"
+            placeholder="直接输入JSON代码"
+          />
         </div>
       </div>
     }
@@ -183,75 +188,73 @@ class Location extends Component {
 
     return (
 
-      <div className={cx("container", "width-max")}>
-        <div className={cx("paper")}>
-          <div className={cx("title")}>
-            <h4>
-              <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
-            </h4>
-          </div>
+      <Paper>
+        <div className={cx("title")}>
+          <h4>
+            <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
+          </h4>
+        </div>
 
-          <h5>添加一个Page</h5>
+        <h5>添加一个Page</h5>
 
-          <div className="location-wrap">
+        <div className="location-wrap">
 
-            <div className="form">
+          <div className="form">
+
+            <div className="form-group row">
+              <div className="col-xs-12">
+                <Input
+                  label={'/'}
+                  noBorder={true}
+                  inlineGroup={true}
+                  name="pathname"
+                  id="pathnameInput"
+                  type="text"
+                  placeholder="请输入正则表达式"
+                />
+              </div>
 
               <div className="form-group row">
                 <div className="col-xs-12">
-                  <Input
-                    label={'/'}
-                    noBorder={true}
-                    inlineGroup={true}
-                    name="pathname"
-                    id="pathnameInput"
-                    type="text"
-                    placeholder="请输入正则表达式"
-                  />
-                </div>
-
-                <div className="form-group row">
-                  <div className="col-xs-12">
-                    <label className="pull-left">是否跨域</label>
-                    <div className="pull-left active">
-                      <input type="checkbox" name="cors" />
-                    </div>
+                  <label className="pull-left">是否跨域</label>
+                  <div className="pull-left active">
+                    <input type="checkbox" name="cors" />
                   </div>
                 </div>
+              </div>
 
-                <div
-                  className="form-group">
-                  <label>类型</label>
+              <div
+                className="form-group">
+                <label>类型</label>
 
-                  <div style={{width: '100%', height: 50, position: 'relative'}}
+                <div style={{width: '100%', height: 50, position: 'relative'}}
 
-                  >
-                    {this.renderTabber()}
-                  </div>
-
-
-                  <div className="tab-content">
-                    {this.renderTabContent()}
-                  </div>
-
+                >
+                  {this.renderTabber()}
                 </div>
 
 
-                <div className="form-group row">
-                  <div className="col-sm-offset-2 col-sm-4 form-error"></div>
-                </div>
-
-                <div className="form-group row">
-                  <div className="col-sm-4">
-                    <Button>提交</Button>
-                  </div>
+                <div className="tab-content">
+                  {this.renderTabContent()}
                 </div>
 
               </div>
+
+
+              <div className="form-group row">
+                <div className="col-sm-offset-2 col-sm-4 form-error"></div>
+              </div>
+
+              <div className="form-group row">
+                <div className="col-sm-4">
+                  <Button onClick={this.saveLocation}>提交</Button>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
+      </Paper>
     )
   }
 }
