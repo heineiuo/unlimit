@@ -1,9 +1,39 @@
-.inputWrapper {
+$primary: #2A9BE0;
+
+@mixin btn {
+  display: block;
   width: 100%;
-  background-color: #eee;
+  height: 40px;
+  line-height:38px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
 
-  &:hover {
-    background-color: #fff;
-  }
+.btn-secondary {
+  @include btn;
+  color: #444;
+  border-color: #ccc;
+  background-color: #fff;
+}
 
+.btn--primary {
+  @include btn;
+  color: #fff;
+  border-color: $primary;
+  background-color: $primary;
+}
+
+.btn--danger {
+  @include btn;
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.btn--danger--outline {
+  @include btn;
+  color: #d9534f;
+  background-color: transparent;
+  border: 1px solid transparent;
 }

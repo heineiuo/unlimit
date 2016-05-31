@@ -1,24 +1,19 @@
 import React, {Component} from 'react'
-
+import classnames from 'classnames/bind'
 import style from './style.scss'
+
+const cx = classnames.bind(style)
 
 class Button extends Component {
 
-  state = {}
-
   static defaultProps = {
-  }
-
-  static propTypes = {
-  }
-
-  static contextTypes = {
+    type: 'primary'
   }
 
   render (){
-    const {children} = this.props
+    const {children, type} = this.props
     return (
-      <div {...this.props} className={style.inputWrapper}>
+      <div {...this.props} className={cx(`btn--${type}`)}>
         {children}
       </div>
     )

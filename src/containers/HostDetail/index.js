@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
+import Paper from '../../components/Paper'
+import Button from '../../components/Button'
+import Input from '../../components/Input'
 
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -70,7 +73,7 @@ class HostDetail extends Component {
     }
 
     return (
-      <div className="container width-max" >
+      <Paper>
 
         <div className="paper">
 
@@ -78,9 +81,7 @@ class HostDetail extends Component {
             <div className="h4">
               <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
               <small className="pull-right">
-                <button
-                  className="btn btn-xs btn-danger"
-                  id="deleteHost">删除</button>
+                <Button type="danger">删除</Button>
               </small>
             </div>
           </div>
@@ -89,7 +90,9 @@ class HostDetail extends Component {
             location列表
             <small>
               <Link to={`/host/${currentHost._id}/location/new`}
-                 className="btn btn-xs btn-primary">新建</Link>
+                 className="btn btn-xs btn-primary">
+                <Button type="primary">新建</Button>
+              </Link>
             </small>
           </div>
 
@@ -115,7 +118,7 @@ class HostDetail extends Component {
         </div>
 
 
-      </div>
+      </Paper>
 
     )
   }

@@ -27,7 +27,7 @@ class Input extends Component {
   render (){
 
 
-    const {inlineGroup=false, noBorder=flase} = this.props
+    const {inlineGroup=false, noBorder=false} = this.props
 
     return (
       <div {...this.props} className={cx('inputWrapper', {

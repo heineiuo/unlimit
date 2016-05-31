@@ -65,11 +65,6 @@ class Location extends Component {
     if (activeKey == 'HTML') {
         return (
           <div className="tab-pane active" id="locationContentHTML">
-            <input
-              type="hidden"
-              name="type"
-              value="html"
-            />
             <label>HTML</label>
             <div>
               <select name="contentType">
@@ -92,16 +87,10 @@ class Location extends Component {
     if (activeKey=='API'){
       return (
         <div className="tab-pane" id="locationContentAPI">
-          <input
-            type="hidden"
-            name="type"
-            value="api"
-          />
-          <label>API url</label>
           <div>
-            <input
+            <Input
+              label="API url"
               type="text"
-              className="form-control"
               name="content"
             />
           </div>
@@ -111,11 +100,6 @@ class Location extends Component {
 
     if (activeKey=='JSON') {
       return <div className="tab-pane" id="locationContentJSON">
-        <input
-          type="hidden"
-          name="type"
-          value="json"
-        />
         <label>json</label>
         <div>
           <textarea
@@ -130,14 +114,9 @@ class Location extends Component {
     if (activeKey =='REDIRECT') {
       return (
         <div className="tab-pane" id="locationContentRedirect">
-          <input
-            type="hidden"
-            name="type"
-            value="redirect" />
-          <label>url</label>
           <div>
-            <input
-              className="form-control"
+            <Input
+              label="url"
               type="text"
               name="content"
             />
@@ -149,11 +128,9 @@ class Location extends Component {
     if (activeKey=='PROXY') {
       return (
         <div className="tab-pane" id="locationContentProxy">
-          <input type="hidden" name="type" value="proxy"/>
-          <label>反向代理</label>
           <div>
-            <input
-              className="form-control"
+            <Input
+              label="反向代理"
               type="text"
               name="content"
             />
@@ -165,11 +142,9 @@ class Location extends Component {
     if (activeKey =='FILE') {
       return (
         <div className="tab-pane" id="locationContentFile">
-          <input type="hidden" name="type" value="file" />
-          <label>文件代理</label>
           <div>
-            <input
-              className="form-control"
+            <Input
+              label="文件代理"
               type="text"
               name="content"
               placeholder="请输入服务器真实路径"
@@ -187,7 +162,6 @@ class Location extends Component {
     const {currentHost} = this.props.hostState
 
     return (
-
       <Paper>
         <div className={cx("title")}>
           <h4>
@@ -198,9 +172,7 @@ class Location extends Component {
         <h5>添加一个Page</h5>
 
         <div className="location-wrap">
-
           <div className="form">
-
             <div className="form-group row">
               <div className="col-xs-12">
                 <Input
@@ -216,9 +188,10 @@ class Location extends Component {
 
               <div className="form-group row">
                 <div className="col-xs-12">
-                  <label className="pull-left">是否跨域</label>
                   <div className="pull-left active">
-                    <input type="checkbox" name="cors" />
+                    <Input type="checkbox"
+                           label="是否跨域"
+                           name="cors" />
                   </div>
                 </div>
               </div>
@@ -233,7 +206,6 @@ class Location extends Component {
                   {this.renderTabber()}
                 </div>
 
-
                 <div className="tab-content">
                   {this.renderTabContent()}
                 </div>
@@ -247,7 +219,8 @@ class Location extends Component {
 
               <div className="form-group row">
                 <div className="col-sm-4">
-                  <Button onClick={this.saveLocation}>提交</Button>
+                  <Button type="primary"
+                          onClick={this.saveLocation}>提交</Button>
                 </div>
               </div>
 

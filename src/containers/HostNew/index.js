@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
+import Paper from '../../components/Paper'
+import Button from '../../components/Button'
+import Input from '../../components/Input'
 
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -14,7 +17,7 @@ class HostNew extends Component {
 
 
     return (
-      <div>
+      <Paper>
 
         {/*<!--新建一个location-->*/}
         <div className="container width-max">
@@ -32,10 +35,8 @@ class HostNew extends Component {
               <div className="form form-horizontal">
 
                 <div className="form-group">
-                  <label className="control-label col-sm-2"
-                         for="input-hostname">域名</label>
                   <div className="col-sm-4">
-                    <input className="form-control"
+                    <Input label="域名"
                            name="hostname"
                            id="input-hostname"
                            type="text"
@@ -48,9 +49,9 @@ class HostNew extends Component {
                 </div>
 
                 <div className="form-group">
-                  <div className="col-sm-offset-2 col-sm-4">
-                    <button
-                      className="btn btn-submit btn-primary btn-block">提交</button>
+                  <div style={{width: 100}}>
+                    <Button
+                    >提交</Button>
                   </div>
                 </div>
 
@@ -63,7 +64,7 @@ class HostNew extends Component {
         </div>
 
 
-      </div>
+      </Paper>
 
     )
   }

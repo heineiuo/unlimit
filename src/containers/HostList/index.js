@@ -7,9 +7,9 @@ import * as HostActions from '../../dataflow/actions/host'
 
 import Card from '../../components/Card'
 import Button from '../../components/Button'
+import Paper from '../../components/Paper'
 
 import Style from './style.scss'
-
 
 class HostList extends Component {
 
@@ -17,12 +17,12 @@ class HostList extends Component {
     page: 1
   }
 
-  componentDidMount =()=>{
+  componentDidMount = ()=>{
     const {getHostList} = this.props.hostActions
     getHostList(this.state.page)
   }
 
-  renderHostList =()=>{
+  renderHostList = ()=>{
 
     const {hostList} = this.props.hostState
 
@@ -31,13 +31,10 @@ class HostList extends Component {
     const list = hostList.map((item, index)=>{
       return (
         <Card key={index}>
-          <div>{item.hostname}</div>
           <div>
-            <div className="btn-group">
-              <Link to={`/host/${item._id}`}>
-                <Button>详情</Button>
-              </Link>
-            </div>
+            <Link to={`/host/${item._id}`}>
+              <div>{item.hostname}</div>
+            </Link>
           </div>
         </Card>
       )
@@ -50,17 +47,14 @@ class HostList extends Component {
   render(){
 
     return (
-      <div className="container width-max">
+      <div>
 
         <div className="title">
-          <h4 className="">
+          <h4>
             域名列表
             <small style={{marginLeft: 20}}>
-              <Link
-                to="/host/new"
-                className="btn btn-xs btn-primary"
-              >
-                添加
+              <Link to="/host/new">
+                <Button>添加</Button>
               </Link>
             </small>
           </h4>
