@@ -16,17 +16,18 @@ var htmlmin = require('gulp-htmlmin')
 var concat = require('gulp-concat')
 var jst = require('gulp-jst3')
 var zip = require('gulp-zip')
-var pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
+
+var pkg = JSON.parse(fs.readFileSync('../package.json', 'utf-8'))
 
 
 gulp.task('server', function() {
 
-  return gulp.src('src/index.js')
+  return gulp.src('../src/index.js')
     .pipe(webpack({
       cache: false,
       target: 'node',
       externals: nodeExternals({
-        whitelist: _.keys(JSON.parse(fs.readFileSync('package.json')).devDependencies)
+        whitelist: _.keys(JSON.parse(fs.readFileSync('../package.json')).devDependencies)
       }),
       output: {
         filename: "index.js"
@@ -34,27 +35,27 @@ gulp.task('server', function() {
     }))
     .pipe(uglify())
     .pipe(insert.prepend('/*!\n * YKH HTTP Server \n */\n'))
-    .pipe(gulp.dest('build/server'))
+    .pipe(gulp.dest('../build/server'))
 })
 
 gulp.task('server-copy', function () {
-  return gulp.src('package.json')
-    .pipe(jsonomit(['scripts','devDependencies']))
-    .pipe(gulp.dest('build/debug'))
+  return gulp.src('../package.json')
+    .pipe(jsonomit(['../scripts','devDependencies']))
+    .pipe(gulp.dest('../build/debug'))
 })
 
 
 /***********************-********************************************/
 
 gulp.task('client-style', function () {
-  return gulp.src('client/style/index.scss')
+  return gulp.src('../client/style/index.scss')
     .pipe(sass())
     .pipe(cssmin())
-    .pipe(gulp.dest('build/debug/client/www/css'))
+    .pipe(gulp.dest('../build/debug/client/www/css'))
 })
 
 gulp.task('client-js', function () {
-  return gulp.src('client/index.js')
+  return gulp.src('../client/index.js')
     .pipe(webpack({
       cache: false,
       target: 'web',
@@ -64,40 +65,40 @@ gulp.task('client-js', function () {
     }))
     .pipe(uglify())
     .pipe(insert.prepend('/*!\n * YKH HTTP Server \n */\n'))
-    .pipe(gulp.dest('build/debug/client/www/js'))
+    .pipe(gulp.dest('../build/debug/client/www/js'))
 })
 
 gulp.task('client-img', function () {
-  return gulp.src('client/images/**/*')
+  return gulp.src('../client/images/**/*')
     .pipe(imagemin())
-    .pipe(gulp.dest('build/debug/client/www/images'))
+    .pipe(gulp.dest('../build/debug/client/www/images'))
     .pipe(filter('**/*.png', {restore: true}))
     .pipe(imageminPngquant({quality: '65-80', speed: 4})())
 })
 
 gulp.task('client-html', function () {
-  return gulp.src('client/index.html')
+  return gulp.src('../client/index.html')
     .pipe(htmlmin({
       collapseWhitespace: true
     }))
-    .pipe(gulp.dest('build/debug/client/www'))
+    .pipe(gulp.dest('../build/debug/client/www'))
 })
 
 
 gulp.task('client-template', function () {
-  return gulp.src('client/template/**/*.html')
+  return gulp.src('../client/template/**/*.html')
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(jst({
       interpolate : /\{\{(.+?)\}\}/g,
       evaluate: /\{\%(.+?)\%\}/g,
-      ignorePath: process.cwd()+'/client/template'
+      ignorePath: path.join(process.cwd(), '../client/template')
     }))
     .pipe(concat('template.js'))
-    .pipe(gulp.dest('build/debug/client/www/js/'))
+    .pipe(gulp.dest('../build/debug/client/www/js/'))
 })
 
 gulp.task('client-template-concat', ['client-template'], function () {
-  return gulp.src('build/debug/client/www/js/template.js')
+  return gulp.src('../build/debug/client/www/js/template.js')
     .pipe(webpack({
       cache: false,
       target: 'web',
@@ -108,7 +109,7 @@ gulp.task('client-template-concat', ['client-template'], function () {
       }
     }))
     .pipe(uglify())
-    .pipe(gulp.dest('build/debug/client/www/js'))
+    .pipe(gulp.dest('../build/debug/client/www/js'))
 })
 
 gulp.task('client', [
@@ -117,17 +118,17 @@ gulp.task('client', [
   'client-html',
   'client-template-concat',
   'client-img'], function () {
-  return gulp.src('client/images/**/*')
+  return gulp.src('../client/images/**/*')
     .pipe(imagemin())
-    .pipe(gulp.dest('build/debug/client/www/images'))
+    .pipe(gulp.dest('../build/debug/client/www/images'))
     .pipe(filter('**/*.png', {restore: true}))
     .pipe(imageminPngquant({quality: '65-80', speed: 4})())
 })
 
 
 gulp.task('client-fonts', function () {
-  return gulp.src('client/fonts/**/*')
-    .pipe(gulp.dest('build/debug/client/www/fonts'))
+  return gulp.src('../client/fonts/**/*')
+    .pipe(gulp.dest('../build/debug/client/www/fonts'))
 })
 
 gulp.task('build', [
@@ -140,9 +141,9 @@ gulp.task('build', [
 
 gulp.task('zip', ['build'], function () {
 
-  return gulp.src(['build/debug/**/*', '!build/debug/data/**/*'])
+  return gulp.src(['../build/**/*', '!../build/debug/data/**/*'])
     .pipe(zip(pkg.name+'-'+pkg.version+'.zip'))
-    .pipe(gulp.dest('build/release'))
+    .pipe(gulp.dest('../build'))
 })
 
 gulp.task('default', ['zip'])

@@ -3,13 +3,11 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "build": "gulp",
-    "start": "gulp;",
-    "deploy-doc": "scp -r docs/html/* root@es8.youkuohao.com:/root/client/http-server",
-    "deploy": "npm run deploy-client; npm run deploy-indexjs; npm run deploy-package",
-    "deploy-client": "scp -r build/debug/client root@es8.youkuohao.com:/root/HTTP_Server",
-    "deploy-indexjs": "scp -r build/debug/index.js root@es8.youkuohao.com:/root/HTTP_Server",
-    "deploy-package": "scp -r build/debug/package.json root@es8.youkuohao.com:/root/HTTP_Server"
+    "gulp": "cd scripts; gulp",
+    "start": "node scripts/webpack",
+    "start-server": "cd build;sudo node server --nohttps=1",
+    "build-server": "node scripts/webpack --build=server",
+    "build-dashboard": "node scripts/webpack --build=dashboard"
   },
   "dependencies": {
     "express": "^4.13.4",
