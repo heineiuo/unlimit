@@ -19,51 +19,35 @@ class HostNew extends Component {
     return (
       <Paper>
 
-        {/*<!--新建一个location-->*/}
-        <div className="container width-max">
+        <div className="title">添加一个域名</div>
 
-          <div className="paper">
+        <div className="host-new-wrap">
 
-            <div className="title">
-              <h4 className="">
-                添加一个域名
-              </h4>
-            </div>
+          <div className="form form-horizontal">
 
-            <div className="host-new-wrap">
-
-              <div className="form form-horizontal">
-
-                <div className="form-group">
-                  <div className="col-sm-4">
-                    <Input label="域名"
-                           name="hostname"
-                           id="input-hostname"
-                           type="text"
-                           placeholder="请输入域名"  />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <div className="col-sm-offset-2 col-sm-4 form-error"></div>
-                </div>
-
-                <div className="form-group">
-                  <div style={{width: 100}}>
-                    <Button
-                    >提交</Button>
-                  </div>
-                </div>
-
+            <div className="form-group">
+              <div className="col-sm-4">
+                <Input label="域名"
+                       name="hostname"
+                       id="input-hostname"
+                       type="text"
+                       placeholder="请输入域名"  />
               </div>
             </div>
-            
+
+            <div className="form-group">
+              <div className="col-sm-offset-2 col-sm-4 form-error"></div>
+            </div>
+
+            <div className="form-group">
+              <div style={{width: 100}}>
+                <Button
+                >提交</Button>
+              </div>
+            </div>
 
           </div>
-
         </div>
-
-
       </Paper>
 
     )

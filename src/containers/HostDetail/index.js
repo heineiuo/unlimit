@@ -8,6 +8,8 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as HostActions from '../../dataflow/actions/host'
 
+import Style from './style.scss'
+
 class HostDetail extends Component {
 
   componentDidMount =()=>{
@@ -21,10 +23,11 @@ class HostDetail extends Component {
     const {locationList, currentHost} = this.props.hostState
     if (locationList.length==0) {
       return (
-        <tr colSpan="4">没有location</tr>
+        <div>路由列表为空</div>
       )
     }
-    return locationList.map(location=>{
+    
+    const trs = locationList.map(location=>{
       return (
         <tr key={location._id}
             data-hostId="{item.hostId}"
@@ -56,6 +59,23 @@ class HostDetail extends Component {
       )
     })
 
+    return (
+
+      <table className="table table-hoverd">
+        <thead>
+        <tr>
+          <th>路由</th>
+          <th>优先级</th>
+          <th>类型</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          {trs}
+        </tbody>
+      </table>
+    )
+
   }
 
   render(){
@@ -64,7 +84,6 @@ class HostDetail extends Component {
       loadingLocationList,
       currentHost
     } = this.props.hostState
-
 
     if (loadingLocationList){
       return (
@@ -75,48 +94,22 @@ class HostDetail extends Component {
     return (
       <Paper>
 
-        <div className="paper">
-
-          <div className="title clearfix">
-            <div className="h4">
-              <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
-              <small className="pull-right">
-                <Button type="danger">删除</Button>
-              </small>
-            </div>
-          </div>
-
-          <div className="h5">
-            location列表
-            <small>
-              <Link to={`/host/${currentHost._id}/location/new`}
-                 className="btn btn-xs btn-primary">
-                <Button type="primary">新建</Button>
-              </Link>
-            </small>
-          </div>
-
-          <div className="location-list">
-            <table className="table table-hoverd">
-
-              <thead>
-              <tr>
-                <th>pathname</th>
-                <th>优先级</th>
-                <th>类型</th>
-                <th>操作</th>
-              </tr>
-              </thead>
-
-              <tbody>
-              { this.renderLocationList()}
-              </tbody>
-
-            </table>
-          </div>
-
+        <div className={Style.titlebar}>
+          <Link to={`/host/${currentHost._id}`}
+                style={{float: 'left'}}>{currentHost.hostname}</Link>
         </div>
 
+        <div className={Style.titlebar}>
+          <div style={{float: 'left'}}>路由列表</div>
+          <Link to={`/host/${currentHost._id}/location/new`}
+                style={{float: 'left'}}>
+            <Button type="primary" size="small">新建</Button>
+          </Link>
+        </div>
+
+        <div className="location-list">
+          { this.renderLocationList()}
+        </div>
 
       </Paper>
 

@@ -25,7 +25,7 @@ router.route('/new').post(function(req, res, next) {
     req.body.type = req.body.type || 'html'
     if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
 
-    Location.findOne({host_id: req.body.host_id}).sort({sort: -1}).exec(function (err, doc) {
+    Location.findOne({hostId: req.body.host_id}).sort({sort: -1}).exec(function (err, doc) {
       if (err) next(err)
       if (!doc) {
         req.body.sort=1
@@ -133,7 +133,7 @@ router.route('/update-sort').post(function(req, res, next) {
     })
   }
 
-  Location.find({host_id: req.body.host_id}).exec(function (err, docs) {
+  Location.find({hostId: req.body.host_id}).exec(function (err, docs) {
     if (err) return next(err)
 
     Location.findOne({_id: req.body.locationId}).exec(function (err, doc) {
@@ -145,7 +145,7 @@ router.route('/update-sort').post(function(req, res, next) {
       doc.sort = Number(doc.sort)
       // sort调小,那么在目标sort和当前sort内的记录都要+1, 再把当前sort调到目标sort
       if (targetSort<doc.sort) {
-        Location.find({host_id: req.body.host_id, sort: {
+        Location.find({hostId: req.body.host_id, sort: {
           $gte: targetSort,
           $lt: doc.sort
         }}).exec(function (err, docs) {
@@ -158,7 +158,7 @@ router.route('/update-sort').post(function(req, res, next) {
         })
       } else {
         // 调大, 那么在目标sort和当前sort内的记录都要-1, 再把当前sort调到目标sort
-        Location.find({host_id: req.body.host_id, sort: {
+        Location.find({hostId: req.body.host_id, sort: {
           $lte: targetSort,
           $gt: doc.sort
         }}).exec(function (err, docs) {
@@ -195,7 +195,7 @@ router.route('/list').get((req, res, next) => {
     if (!item) return res.json({error: "NOT_FOUND"})
     result.host = item
 
-    Location.find({host_id: req.query.host_id}).sort({sort: 1}).exec(function(err, docs){
+    Location.find({hostId: req.query.host_id}).sort({sort: 1}).exec(function(err, docs){
       if (err) return res.json({error: 'EXCEPTION_ERROR'})
       result.list = docs
       res.json(result)

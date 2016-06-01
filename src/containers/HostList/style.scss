@@ -1,3 +1,16 @@
-.hostList {
-  padding: 20px;
+.titlebar {
+  margin-bottom: 20px;
+  &:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+}
+
+.hostItem {
+  &:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
 }

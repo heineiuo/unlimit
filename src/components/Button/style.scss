@@ -9,6 +9,12 @@ $primary: #2A9BE0;
   text-align: center;
   border-radius: 2px;
   border: 1px solid transparent;
+  transition: all .15s ease;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 2px 2px #BBB;
+  }
 }
 
 .btn-secondary {
@@ -36,4 +42,21 @@ $primary: #2A9BE0;
   color: #d9534f;
   background-color: transparent;
   border: 1px solid transparent;
+}
+
+.btn--size--large {
+  height: 40px;
+  line-height: 38px;
+  padding: 0 20px;
+}
+.btn--size--middle {
+  height: 28px;
+  line-height: 26px;
+  padding: 0 10px;
+}
+.btn--size--small {
+  height: 22px;
+  line-height: 20px;
+  padding: 0 5px;
+  font-size: 12px;
 }

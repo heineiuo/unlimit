@@ -1,0 +1,8 @@
+.titlebar {
+  margin-bottom: 20px;
+  &:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+}

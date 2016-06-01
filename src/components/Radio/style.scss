@@ -1,0 +1,25 @@
+.radio {
+  display: inline-block;
+  line-height: 30px;
+  margin-right: 10px;
+  &:after {
+    content: '';
+    clear: both;
+    display: table;
+  }
+}
+
+.radio__icon {
+  float: left;
+  fill: #00913A;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+  margin-right: 2px;
+}
+
+.radio__label {
+  float: left;
+  line-height: 30px;
+  color: #333;
+}

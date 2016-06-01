@@ -20,7 +20,6 @@ import Home from '../containers/Home'
 import HostList from '../containers/HostList'
 import HostDetail from '../containers/HostDetail'
 import HostNew from '../containers/HostNew'
-import LocationDetail from '../containers/LocationDetail'
 import LocationNew from '../containers/LocationNew'
 import File from '../containers/File'
 import FileList from '../containers/FileList'
@@ -40,7 +39,7 @@ window.onload = function(){
             <Route path=":host_id">
               <IndexRoute component={HostDetail}/>
               <Route path="location/new" component={LocationNew}/>
-              <Route path="location/:location_id" component={LocationDetail}/>
+              <Route path="location/:location_id" component={LocationNew}/>
             </Route>
           </Route>
           <Route path="/file">

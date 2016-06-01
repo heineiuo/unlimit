@@ -7,13 +7,14 @@ const cx = classnames.bind(style)
 class Button extends Component {
 
   static defaultProps = {
-    type: 'primary'
+    type: 'primary',
+    size: 'large'
   }
 
   render (){
-    const {children, type} = this.props
+    const {children, type, size} = this.props
     return (
-      <div {...this.props} className={cx(`btn--${type}`)}>
+      <div {...this.props} className={cx(`btn--${type}`, `btn--size--${size}`)}>
         {children}
       </div>
     )

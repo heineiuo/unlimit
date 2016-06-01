@@ -9,6 +9,7 @@ import Tabbar, {TabPane} from '../../components/Tabbar'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 import Paper from '../../components/Paper'
+import Radio from '../../components/Radio'
 
 import classnames from 'classnames/bind'
 import Style from './style.scss'
@@ -18,13 +19,22 @@ const cx = classnames.bind(Style)
 class Location extends Component {
 
   state = {
-    activeKey: 'API'
+    activeKey: 'API',
+    location: {}
   }
 
   saveLocation=()=>{
     console.log('saving location...')
-    const editLocation = this.props
+    const {editLocation} = this.props.hostActions
     editLocation(this.state.location)
+  }
+
+  componentWillMount = ()=>{
+    console.log(`location_id: ${this.props.params.location_id}`)
+    if(this.props.params.location_id) {
+      const {getHostLocationDetail} = this.props.hostActions
+      getHostLocationDetail(this.props.params.location_id)
+    }
   }
 
   renderTabber=()=>{
@@ -60,22 +70,29 @@ class Location extends Component {
   }
 
   renderTabContent=()=>{
-    const {activeKey} = this.state
+    const {activeKey, location} = this.state
+    const {content, type} = location
+    const checkType = (type)=>{
+
+    }
 
     if (activeKey == 'HTML') {
         return (
           <div className="tab-pane active" id="locationContentHTML">
             <label>HTML</label>
             <div>
-              <select name="contentType">
-                <option value="text">text</option>
-                <option value="file">file</option>
-              </select>
+              <Radio label="text"
+                     checked={type=='text'}
+                     onClick={()=>{checkType('text')}}/>
+              <Radio label="file"
+                     checked={type=='file'}
+                     onClick={()=>{checkType('file')}}/>
             </div>
             <div>
               <textarea
                 className="form-control"
                 name="content"
+                value={content}
                 placeholder="直接输入HTML代码"
               />
             </div>
@@ -91,6 +108,7 @@ class Location extends Component {
             <Input
               label="API url"
               type="text"
+              value={this.state.location.content}
               name="content"
             />
           </div>
@@ -105,6 +123,7 @@ class Location extends Component {
           <textarea
             className="form-control"
             name="content"
+            value={this.state.location.content}
             placeholder="直接输入JSON代码"
           />
         </div>
@@ -118,6 +137,7 @@ class Location extends Component {
             <Input
               label="url"
               type="text"
+              value={this.state.location.content}
               name="content"
             />
           </div>
@@ -132,6 +152,7 @@ class Location extends Component {
             <Input
               label="反向代理"
               type="text"
+              value={this.state.location.content}
               name="content"
             />
           </div>
@@ -147,6 +168,7 @@ class Location extends Component {
               label="文件代理"
               type="text"
               name="content"
+              value={this.state.location.content}
               placeholder="请输入服务器真实路径"
             />
           </div>
@@ -157,6 +179,7 @@ class Location extends Component {
 
   }
 
+  
   render (){
 
     const {currentHost} = this.props.hostState
@@ -164,12 +187,10 @@ class Location extends Component {
     return (
       <Paper>
         <div className={cx("title")}>
-          <h4>
-            <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
-          </h4>
+          <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
         </div>
 
-        <h5>添加一个Page</h5>
+        <h5>添加一个路由</h5>
 
         <div className="location-wrap">
           <div className="form">

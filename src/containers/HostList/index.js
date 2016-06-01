@@ -31,10 +31,14 @@ class HostList extends Component {
     const list = hostList.map((item, index)=>{
       return (
         <Card key={index}>
-          <div>
-            <Link to={`/host/${item._id}`}>
-              <div>{item.hostname}</div>
+          <div className={Style.hostItem}>
+            <Link to={`/host/${item._id}`}
+                  style={{float: 'left'}}
+            ><div>{item.hostname}</div>
             </Link>
+            <div style={{float: 'left'}}>
+              <Button type="danger" size="small">删除</Button>
+            </div>
           </div>
         </Card>
       )
@@ -49,15 +53,13 @@ class HostList extends Component {
     return (
       <div>
 
-        <div className="title">
-          <h4>
+        <div className={Style.titlebar}>
+          <div style={{float: 'left'}}>
             域名列表
-            <small style={{marginLeft: 20}}>
-              <Link to="/host/new">
-                <Button>添加</Button>
-              </Link>
-            </small>
-          </h4>
+          </div>
+          <Link to="/host/new" style={{float: 'left'}}>
+            <Button size="small">添加</Button>
+          </Link>
         </div>
 
         <div className={Style.hostList}>

@@ -122,13 +122,34 @@ const serverConfig = {
   ]
 }
 
+const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
+  compress: {
+    warnings: false
+  },
+  mangle: {
+    except: ['$super', '$', 'exports', 'require']
+  }
+})
+
+const DefinePluginProduction = new webpack.DefinePlugin({
+  'process.env.NODE_ENV': JSON.stringify('production')
+})
+const DefinePluginDevelopment = new webpack.DefinePlugin({
+  'process.env.NODE_ENV': JSON.stringify('development')
+})
 
 
 console.log(`argv: ${JSON.stringify(argv)}`)
 
 if (argv.build){
-  const compiler = argv.build == 'server'? webpack(serverConfig)
-    : webpack(webpackConfigs[argv.build])
+  const config = argv.build == 'server'? serverConfig
+    : webpackConfigs[argv.build]
+
+  config.plugins.push(uglifyJsPlugin)
+  config.plugins.push(DefinePluginProduction)
+
+  const compiler = webpack(config)
+
 
   compiler.run((err, stats)=>{
     if (err) return console.error(err)
