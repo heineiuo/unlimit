@@ -5,9 +5,9 @@
   "scripts": {
     "gulp": "cd scripts; gulp",
     "start": "node scripts/webpack",
-    "start-server": "cd build;sudo node server --nohttps=1",
-    "build-server": "node scripts/webpack --build=server",
-    "build-dashboard": "node scripts/webpack --build=dashboard"
+    "start-server": "node scripts/webpack --build=server ; cd build; sudo node server --nohttps=1",
+    "build-server": "node scripts/webpack --build=server --compress",
+    "build-dashboard": "node scripts/webpack --build=dashboard --compress"
   },
   "dependencies": {
     "express": "^4.13.4",
@@ -48,6 +48,7 @@
     "gulp-zip": "^3.2.0",
     "http-proxy": "^1.12.0",
     "imagemin-pngquant": "^4.2.2",
+    "joi": "~8.4.0",
     "jquery": "~2.1.4",
     "lib-ajax": "^0.1.0",
     "lib-session": "^0.1.1",
@@ -74,6 +75,7 @@
     "redux-thunk": "~2.1.0",
     "request": "^2.67.0",
     "rucksack-css": "~0.8.6",
+    "thunkify": "~2.1.2",
     "ua-parser-js": "~0.7.10",
     "url-parse": "^1.0.5",
     "webpack": "^1.12.10",

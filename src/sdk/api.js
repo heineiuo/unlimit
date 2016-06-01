@@ -8,9 +8,10 @@ import {
 } from '../util/fetch'
 
 
+// const APIHOST = window.__APIHOST
 // const APIHOST = 'https://cloud.youkuohao.com/api'
-const APIHOST = '/api'
-
+const APIHOST = 'http://127.0.0.1:80/api'
+// const APIHOST = '/api'
 
 // 获取accessToken
 export const accessToken = ()=> {
@@ -51,16 +52,18 @@ export const deleteLocation = ()=>{
 }
 
 // location 详情 GET
-export const getLocationDetail = ()=>{
+export const getLocationDetail = (host_id, location_id)=>{
   const url = `${APIHOST}/location/detail`
+  return GETJSON(url, {
+    host_id: host_id,
+    location_id: location_id
+  })
 }
 
 // 更新location POST
 export const editLocation = (nextLocation)=>{
   const url = `${APIHOST}/location/edit`
-  return POSTUrlencodeJSON(url, {
-    location: nextLocation
-  })
+  return POSTUrlencodeJSON(url,nextLocation)
 }
 
 // 更新location排序

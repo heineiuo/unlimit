@@ -13,7 +13,7 @@ class HostNew extends Component {
 
   render(){
 
-    const {currentHost} = this.props.hostState
+    const {host} = this.props.hostState
 
 
     return (

@@ -254,9 +254,10 @@ router.use(async (req, res, next)=>{
     const {location} = res.locals
     if (location.type != 'api') return next()
     var apiOptions = {
-      method: 'POST',
+      method: req.method,
       url: location.content,
-      qs: req.query
+      qs: req.query,
+      body: req.body
     }
     request(apiOptions, function(err, response, body){
       if (err) {
@@ -264,12 +265,9 @@ router.use(async (req, res, next)=>{
         console.log(err)
         return res.sendStatus(500)
       }
-      try {
-        res.json(JSON.parse(body))
-      } catch(e){
-        console.log(body)
-        res.sendStatus(502)
-      }
+      console.log('请求外部接口成功')
+      res.json(JSON.parse(body))
+
     })
 
 

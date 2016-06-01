@@ -1,4 +1,6 @@
 import {Router} from 'express'
+import Joi from 'joi'
+import awaitify from '../util/awaitify'
 
 const _ = require('lodash')
 const ent = require('ent')
@@ -45,18 +47,18 @@ router.route('/new').post(function(req, res, next) {
 /** 获取详情 **/
 router.route('/detail').get(function(req, res, next) {
 
-  _.forEach(['host_id', 'locationId'], function (item) {
-    if (!_.has(req.query, item)) {
-      next('LOST_PARAM')
-      return false
-    }
-  })
+  // _.forEach(['host_id', 'location_id'], function (item) {
+  //   if (!_.has(req.query, item)) {
+  //     next('LOST_PARAM')
+  //     return false
+  //   }
+  // })
 
   async.parallel([
     function(callback){
       Host.findOne({_id: req.query.host_id}, callback)
     }, function(callback){
-      Location.findOne({_id: req.query.locationId}, callback)
+      Location.findOne({_id: req.query.location_id}, callback)
     }
   ], function(err, results){
     if (err) return next('EXCEPTION_ERROR')
@@ -77,31 +79,43 @@ router.route('/detail').get(function(req, res, next) {
  * @param req
  * @param res
  */
-router.route('/edit').post(function(req, res, next) {
+router.route('/edit').post(async function(req, res, next) {
+  //
+  // _.forEach(['type', 'content', 'pathname'], function (item) {
+  //   if (!_.has(req.body, item)) {
+  //     next('LOST_PARAM')
+  //     return false
+  //   }
+  // })
 
-  _.forEach(['type', 'content', 'pathname'], function (item) {
-    if (!_.has(req.body, item)) {
-      next('LOST_PARAM')
-      return false
+  try {
+
+    const valid = await awaitify(Joi.validate)(req.body, Joi.object().keys({
+      type: Joi.string().required(),
+      content: Joi.string().required(),
+      pathname: Joi.string().required()
+    }), {allowUnknown: true})
+
+    if (req.body.type == 'html' && req.body.contentType == 'text') {
+      req.body.content = ent.encode(req.body.content)
     }
-  })
+    req.body.pathname = req.body.pathname.toString()
 
-  if (req.body.type == 'html' && req.body.contentType == 'text') {
-    req.body.content = ent.encode(req.body.content)
+    Location.update({_id: req.body._id}, {$set: {
+      type: req.body.type,
+      cors: Boolean(req.body.cors),
+      contentType: req.body.contentType,
+      content: req.body.content,
+      pathname: req.body.pathname
+    }}, {}, function(err, numReplaced){
+      if (err) return next('EXCEPTION_ERROR')
+      if (numReplaced==0) return next('LOCATION_NOT_FOUND')
+      res.json({success:1})
+    })
+  } catch(e){
+    next(e)
   }
-  req.body.pathname = req.body.pathname.toString()
 
-  Location.update({_id: req.body.locationId}, {$set: {
-    type: req.body.type,
-    cors: req.body.cors,
-    contentType: req.body.contentType,
-    content: req.body.content,
-    pathname: req.body.pathname
-  }}, {}, function(err, numReplaced){
-    if (err) return next('EXCEPTION_ERROR')
-    if (numReplaced==0) return next('LOCATION_NOT_FOUND')
-    res.json({success:1})
-  })
 
 })
 

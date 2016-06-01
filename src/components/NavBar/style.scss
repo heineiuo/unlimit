@@ -1,5 +1,7 @@
+$paddingTop: 50px;
+
 .navbar {
-  min-height: 46px;
+  min-height: $paddingTop;
 }
 
 .header {
@@ -7,9 +9,9 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 46px;
+  height: $paddingTop;
   margin-bottom: 0;
   z-index: 9999;
-  background-color: #2A9BE0;
+  background-color: #282828;
   box-shadow: 0 1px 2px #CCC;
 }

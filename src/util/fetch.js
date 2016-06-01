@@ -53,7 +53,6 @@ const POSTRawJSON = function(url='/', params={}){
 const GETJSON = function(url='/', query={}){
   return new Promise(async function(resolve, reject){
     try {
-
       console.log(query)
       const res = await fetch(`${url}?${Urlencode(query)}`)
       const json = await res.json()

@@ -8,9 +8,10 @@ const cx = classnames.bind(Style)
 const style = {
   navbar__brand: {
     paddingLeft: 20,
-    color: '#fff',
-    height: '46px',
-    lineHeight: '46px'
+    color: 'rgb(0, 216, 255)',
+    fontWeight: 'bold',
+    height: '50px',
+    lineHeight: '50px'
   }
 }
 

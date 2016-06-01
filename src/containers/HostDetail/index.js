@@ -20,7 +20,7 @@ class HostDetail extends Component {
 
   renderLocationList = ()=>{
 
-    const {locationList, currentHost} = this.props.hostState
+    const {locationList, host} = this.props.hostState
     if (locationList.length==0) {
       return (
         <div>路由列表为空</div>
@@ -51,7 +51,7 @@ class HostDetail extends Component {
           <td><code>{location.type}</code></td>
           <td>
             <div className="btn-group">
-              <Link to={`/host/${currentHost._id}/location/${location._id}`}
+              <Link to={`/host/${host._id}/location/${location._id}`}
                     className="btn btn-xs  btn-primary">详情</Link>
             </div>
           </td>
@@ -82,7 +82,7 @@ class HostDetail extends Component {
 
     const {
       loadingLocationList,
-      currentHost
+      host
     } = this.props.hostState
 
     if (loadingLocationList){
@@ -95,13 +95,13 @@ class HostDetail extends Component {
       <Paper>
 
         <div className={Style.titlebar}>
-          <Link to={`/host/${currentHost._id}`}
-                style={{float: 'left'}}>{currentHost.hostname}</Link>
+          <Link to={`/host/${host._id}`}
+                style={{float: 'left'}}>{host.hostname}</Link>
         </div>
 
         <div className={Style.titlebar}>
           <div style={{float: 'left'}}>路由列表</div>
-          <Link to={`/host/${currentHost._id}/location/new`}
+          <Link to={`/host/${host._id}/location/new`}
                 style={{float: 'left'}}>
             <Button type="primary" size="small">新建</Button>
           </Link>

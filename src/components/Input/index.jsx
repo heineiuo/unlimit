@@ -12,7 +12,9 @@ class Input extends Component {
 
   static defaultProps = {
     label: '',
-    type: 'text'
+    type: 'text',
+    value: '',
+    onChange: ()=>{}
   }
 
   static propTypes = {

@@ -5,8 +5,9 @@ const initialState = {
   hostList: [],
   locationList: [],
 
-  currentHostId: '',
-  currentHost: {},
+  hostId: '',
+  host: {},
+  location: {},
 
   // 正在加载详情
   loadingHostDetail: true,
@@ -17,7 +18,7 @@ const initialState = {
 export default handleActions({
   'HOST_LIST_UPDATE' (state, action) {
     return defaultsDeep({
-      currentHostId: action.currentHostId,
+      hostId: action.hostId,
       hostList: action.hostList
     }, state)
   },
@@ -26,8 +27,16 @@ export default handleActions({
     return defaultsDeep({
       loadingLocationList: false,
       locationList: action.locationList,
-      currentHost: action.currentHost,
-      currentHostId: action.currentHostId
+      host: action.host,
+      hostId: action.hostId
+    }, state)
+  },
+
+  'UPDATE_LOCATION_DETAIL' (state, action) {
+    return defaultsDeep({
+      host: action.host,
+      location: action.location
     }, state)
   }
+
 }, initialState)

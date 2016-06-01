@@ -11,6 +11,7 @@ class Tabbar extends Component {
   componentDidMount = ()=>{
     const that = this
     const {children, activeKey} = this.props
+
     if (children.length>0) {
       const width = 100/children.length
       children.forEach((child, index)=> {
@@ -23,7 +24,6 @@ class Tabbar extends Component {
         }
       })
     }
-
   }
 
   componentWillReceiveProps = (nextProps)=>{
@@ -49,6 +49,7 @@ class Tabbar extends Component {
     const that = this
     const {children, activeKey} = this.props
     const {cellWidth} = this.state
+
     if (children.length==0) return []
     const newChildren = []
     React.Children.forEach(children, (child, index)=>{

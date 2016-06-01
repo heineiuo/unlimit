@@ -11,8 +11,8 @@ const getHostLocationList = (host_id)=>{
       if (data.error) throw data.error
       dispatch({
         type: "UPDATE_LOCATION_LIST",
-        currentHost: data.host,
-        currentHostId: host_id,
+        host: data.host,
+        hostId: host_id,
         locationList: data.list
       })
     } catch(e) {

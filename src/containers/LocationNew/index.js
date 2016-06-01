@@ -10,6 +10,7 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 import Paper from '../../components/Paper'
 import Radio from '../../components/Radio'
+import Checkbox from '../../components/Checkbox'
 
 import classnames from 'classnames/bind'
 import Style from './style.scss'
@@ -19,22 +20,26 @@ const cx = classnames.bind(Style)
 class Location extends Component {
 
   state = {
-    activeKey: 'API',
-    location: {}
+    type: 'HTML',
+    pathname: '',
   }
 
   saveLocation=()=>{
     console.log('saving location...')
     const {editLocation} = this.props.hostActions
-    editLocation(this.state.location)
+    editLocation(this.state)
   }
 
   componentWillMount = ()=>{
     console.log(`location_id: ${this.props.params.location_id}`)
     if(this.props.params.location_id) {
-      const {getHostLocationDetail} = this.props.hostActions
-      getHostLocationDetail(this.props.params.location_id)
+      const {getRouterDetail} = this.props.hostActions
+      getRouterDetail(this.props.params.host_id, this.props.params.location_id)
     }
+  }
+
+  componentWillReceiveProps =(nextProps)=>{
+    this.setState(nextProps.hostState.location)
   }
 
   renderTabber=()=>{
@@ -51,17 +56,15 @@ class Location extends Component {
     const panes = bodyType.map((type, index)=>{
       return (
         <TabPane key={type}
-                 onClick={()=>{that.setState({activeKey: type})}}>
-          {bodyType[index]}
-        </TabPane>
+                 onClick={()=>{that.setState({type: type})}}
+        >{bodyType[index]}</TabPane>
       )
     })
 
     return (
-      <Tabbar activeKey={this.state.activeKey}
+      <Tabbar activeKey={that.state.type.toUpperCase()}
               onSwitchKey={(key)=>{
-                console.log(key)
-                this.setState({activeKey: key})
+                this.setState({type: key})
               }}
       >
         {panes}
@@ -70,45 +73,50 @@ class Location extends Component {
   }
 
   renderTabContent=()=>{
-    const {activeKey, location} = this.state
-    const {content, type} = location
-    const checkType = (type)=>{
 
-    }
+    const that = this
+    let {type} = this.state
+    type = type.toUpperCase()
 
-    if (activeKey == 'HTML') {
-        return (
-          <div className="tab-pane active" id="locationContentHTML">
-            <label>HTML</label>
-            <div>
-              <Radio label="text"
-                     checked={type=='text'}
-                     onClick={()=>{checkType('text')}}/>
-              <Radio label="file"
-                     checked={type=='file'}
-                     onClick={()=>{checkType('file')}}/>
-            </div>
-            <div>
-              <textarea
-                className="form-control"
-                name="content"
-                value={content}
-                placeholder="直接输入HTML代码"
-              />
-            </div>
+    if (type == 'HTML') {
+
+      const checkType = (contentType) =>{
+        that.setState({contentType: contentType})
+      }
+      return (
+        <div className="tab-pane active" id="locationContentHTML">
+          <label>HTML</label>
+          <div>
+            <Radio label="text"
+                   checked={this.state.contentType=='text'}
+                   onClick={()=>{checkType('text')}}/>
+            <Radio label="file"
+                   checked={this.state.contentType=='file'}
+                   onClick={()=>{checkType('file')}}/>
           </div>
+          <div>
+            <textarea
+              className="form-control"
+              name="content"
+              value={this.state.content}
+              onChange={(e)=>{this.setState({content: e.target.value})}}
+              placeholder="直接输入HTML代码"
+            />
+          </div>
+        </div>
 
-        )
+      )
     }
 
-    if (activeKey=='API'){
+    if (type=='API'){
       return (
         <div className="tab-pane" id="locationContentAPI">
           <div>
             <Input
               label="API url"
               type="text"
-              value={this.state.location.content}
+              onChange={(e)=>{this.setState({content: e.target.value})}}
+              value={this.state.content}
               name="content"
             />
           </div>
@@ -116,28 +124,30 @@ class Location extends Component {
       )
     }
 
-    if (activeKey=='JSON') {
+    if (type=='JSON') {
       return <div className="tab-pane" id="locationContentJSON">
         <label>json</label>
         <div>
           <textarea
             className="form-control"
             name="content"
-            value={this.state.location.content}
+            onChange={(e)=>{this.setState({content: e.target.value})}}
+            value={this.state.content}
             placeholder="直接输入JSON代码"
           />
         </div>
       </div>
     }
 
-    if (activeKey =='REDIRECT') {
+    if (type =='REDIRECT') {
       return (
         <div className="tab-pane" id="locationContentRedirect">
           <div>
             <Input
               label="url"
               type="text"
-              value={this.state.location.content}
+              onChange={(e)=>{}}
+              value={this.state.content}
               name="content"
             />
           </div>
@@ -145,14 +155,15 @@ class Location extends Component {
       )
     }
 
-    if (activeKey=='PROXY') {
+    if (type=='PROXY') {
       return (
         <div className="tab-pane" id="locationContentProxy">
           <div>
             <Input
               label="反向代理"
               type="text"
-              value={this.state.location.content}
+              onChange={(e)=>{}}
+              value={this.state.content}
               name="content"
             />
           </div>
@@ -160,15 +171,16 @@ class Location extends Component {
       )
     }
 
-    if (activeKey =='FILE') {
+    if (type =='FILE') {
       return (
         <div className="tab-pane" id="locationContentFile">
           <div>
             <Input
               label="文件代理"
               type="text"
+              onChange={(e)=>{}}
               name="content"
-              value={this.state.location.content}
+              value={this.state.content}
               placeholder="请输入服务器真实路径"
             />
           </div>
@@ -179,15 +191,16 @@ class Location extends Component {
 
   }
 
-  
+
   render (){
 
-    const {currentHost} = this.props.hostState
+    const that = this
+    const {host} = this.props.hostState
 
     return (
       <Paper>
         <div className={cx("title")}>
-          <Link to={`/host/${currentHost._id}`}>{currentHost.hostname}</Link>
+          <Link to={`/host/${host._id}`}>{host.hostname}</Link>
         </div>
 
         <h5>添加一个路由</h5>
@@ -197,11 +210,11 @@ class Location extends Component {
             <div className="form-group row">
               <div className="col-xs-12">
                 <Input
-                  label={'/'}
+                  label={'路由地址'}
                   noBorder={true}
                   inlineGroup={true}
-                  name="pathname"
-                  id="pathnameInput"
+                  value={that.state.pathname}
+                  onChange={(e)=>{that.setState({pathname: e.target.value})}}
                   type="text"
                   placeholder="请输入正则表达式"
                 />
@@ -209,11 +222,11 @@ class Location extends Component {
 
               <div className="form-group row">
                 <div className="col-xs-12">
-                  <div className="pull-left active">
-                    <Input type="checkbox"
-                           label="是否跨域"
-                           name="cors" />
-                  </div>
+                  <Checkbox
+                    label="是否跨域"
+                    checked={this.state.cors}
+                    onChange={(e)=>{this.setState({cors: e.target.value})}}
+                  />
                 </div>
               </div>
 

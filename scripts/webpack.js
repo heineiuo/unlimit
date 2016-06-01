@@ -48,6 +48,8 @@ const startServer = ()=>{
         console.log(err)
         return res.sendStatus(500)
       }
+
+      console.log('请求外部接口成功')
       try {
         res.json(JSON.parse(body))
       } catch(e){
@@ -103,23 +105,7 @@ const serverConfig = {
     ]
   },
 
-  plugins: [
-    //new webpack.NoErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      //'process.env.NODE_ENV': JSON.stringify('production')
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
-    // , new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   mangle: {
-    //     except: ['$super', '$', 'exports', 'require']
-    //   }
-    // })
-
-  ]
+  plugins: []
 }
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
@@ -145,11 +131,13 @@ if (argv.build){
   const config = argv.build == 'server'? serverConfig
     : webpackConfigs[argv.build]
 
-  config.plugins.push(uglifyJsPlugin)
-  config.plugins.push(DefinePluginProduction)
+  if (argv.compress){
+    console.log('compress...')
+    config.plugins.push(DefinePluginProduction)
+    config.plugins.push(uglifyJsPlugin)
+  }
 
   const compiler = webpack(config)
-
 
   compiler.run((err, stats)=>{
     if (err) return console.error(err)
