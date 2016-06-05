@@ -8,10 +8,7 @@ import {
 } from '../util/fetch'
 
 
-// const APIHOST = window.__APIHOST
-// const APIHOST = 'https://cloud.youkuohao.com/api'
-const APIHOST = 'http://127.0.0.1:80/api'
-// const APIHOST = '/api'
+const APIHOST = window.__APIHOST
 
 // 获取accessToken
 export const accessToken = ()=> {
@@ -32,9 +29,12 @@ export const getHostList = ()=> {
   return GETJSON(url)
 }
 // 新建 host
-export const createHost = ()=> {
+export const createHost = (data) => {
+  const body = {
+    hostname: data.hostName
+  }
   const url = `${APIHOST}/host/new`
-  return POSTUrlencodeJSON(url)
+  return POSTUrlencodeJSON(url, body)
 }
 
 // 查看host详情
@@ -88,9 +88,7 @@ export const getLocationList = (host_id)=>{
 // 新建location
 export const createLocation = (location)=> {
   const url = `${APIHOST}/location/new`
-  return POSTUrlencodeJSON(url, {
-    location: location
-  })
+  return POSTUrlencodeJSON(url, location)
 }
 
 

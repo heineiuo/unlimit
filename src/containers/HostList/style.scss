@@ -8,9 +8,21 @@
 }
 
 .hostItem {
+  height: 42px;
+
   &:after {
     clear: both;
     content: '';
     display: table;
+  }
+
+  .buttons {
+    display: none;
+  }
+
+  &:hover {
+    .buttons {
+      display: block;
+    }
   }
 }

@@ -10,46 +10,37 @@ import * as HostActions from '../../dataflow/actions/host'
 
 class HostNew extends Component {
 
+  state = {
+    hostName: '',
+    errorContent: '',
+  }
+
+  // static defaultProps = {
+  //   createHost: () => {console.log('LOST_PROPS: createHost()')}
+  // }
+
+  createHost = () => {
+    this.props.hostActions.createHost(this.state)
+  }
 
   render(){
-
-    const {host} = this.props.hostState
-
-
     return (
       <Paper>
-
-        <div className="title">添加一个域名</div>
-
-        <div className="host-new-wrap">
-
-          <div className="form form-horizontal">
-
-            <div className="form-group">
-              <div className="col-sm-4">
-                <Input label="域名"
-                       name="hostname"
-                       id="input-hostname"
-                       type="text"
-                       placeholder="请输入域名"  />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <div className="col-sm-offset-2 col-sm-4 form-error"></div>
-            </div>
-
-            <div className="form-group">
-              <div style={{width: 100}}>
-                <Button
-                >提交</Button>
-              </div>
-            </div>
-
+        <div>添加一个域名</div>
+        <div>
+          <Input label="域名"
+                 name="hostname"
+                 id="input-hostname"
+                 type="text"
+                 onChange={(e)=>{this.setState({hostName: e.target.value})}}
+                 value={this.state.hostName}
+                 placeholder="请输入域名"  />
+          <div>{this.state.errorContent}</div>
+          <div style={{width: 100}}>
+            <Button onClick={this.createHost}>提交</Button>
           </div>
         </div>
       </Paper>
-
     )
   }
 }

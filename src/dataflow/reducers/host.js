@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions'
 import defaultsDeep from 'lodash.defaultsdeep'
+import defaults from 'lodash.defaults'
 
 const initialState = {
   hostList: [],
@@ -17,14 +18,14 @@ const initialState = {
 
 export default handleActions({
   'HOST_LIST_UPDATE' (state, action) {
-    return defaultsDeep({
+    return defaults({
       hostId: action.hostId,
       hostList: action.hostList
     }, state)
   },
 
   'UPDATE_LOCATION_LIST' (state, action) {
-    return defaultsDeep({
+    return defaults({
       loadingLocationList: false,
       locationList: action.locationList,
       host: action.host,
@@ -33,7 +34,7 @@ export default handleActions({
   },
 
   'UPDATE_LOCATION_DETAIL' (state, action) {
-    return defaultsDeep({
+    return defaults({
       host: action.host,
       location: action.location
     }, state)

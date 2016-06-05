@@ -1,17 +1,24 @@
 var _ = require('lodash')
+import {Router} from 'express'
 
-module.exports.err500 = function(err, req, res, next){
-  if (!res.headersSent) {
-    if (!err) return next()
-    console.log(err)
-    if (typeof err === 'string') {
-      return res.json({error: err})
+const middleware = (conf) => {
+  const router = Router()
+
+  router.use((err, req, res, next) => {
+    console.error(err)
+    if (!res.headersSent) {
+      if (!err) return next()
+      if (typeof err === 'string') return res.json({error: err})
+      res.json({error: 'EXCEPTION_ERROR'})
     }
-    res.json({error: 'EXCEPTION_ERROR'})
-  }
+  })
+
+  router.use((req, res) => {
+    if (!res.headersSent) res.end('NOT FOUND')
+  })
+
+  return router
+
 }
 
-module.exports.err404 = function(req, res){
-
-  res.end('NOT FOUND')
-}
+module.exports = middleware

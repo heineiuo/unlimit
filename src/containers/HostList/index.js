@@ -36,7 +36,7 @@ class HostList extends Component {
                   style={{float: 'left'}}
             ><div>{item.hostname}</div>
             </Link>
-            <div style={{float: 'left'}}>
+            <div className={Style.buttons} style={{float: 'left'}}>
               <Button type="danger" size="small">删除</Button>
             </div>
           </div>

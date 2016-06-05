@@ -8,7 +8,9 @@ export deleteHost from './deleteHost'
 export getHostLocationList from './getHostLocationList'
 // 获取路由配置详情
 export getRouterDetail from './getRouterDetail'
-// 新建或保存路由
+// 新建路由
+export createLocation from './createLocation'
+// 修改路由
 export editLocation from './editLocation'
 // 排序,设置优先级
 export editLocationSort from './editLocationSort'

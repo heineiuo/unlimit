@@ -13,7 +13,7 @@ const getHostList = (page=1)=> {
         hostList: list
       })
     } catch(e){
-      alert(e)
+      console.error(e)
     }
   }
 }

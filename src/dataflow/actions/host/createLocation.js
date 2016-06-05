@@ -1,23 +1,30 @@
 import * as API from '../../../sdk/api'
 
 /**
- * 编辑路由
+ * 新建路由
  * @param nextLocation
  * @returns {function()}
  */
- const editLocation = (nextLocation)=>{
+const createLocation = (nextLocation)=>{
   return async(dispatch, getState) =>{
+
     try {
-      const response = await API.editLocation(nextLocation)
+
+      const state = getState()
+      nextLocation.host_id = state.host.hostId
+      const response = await API.createLocation(nextLocation)
       if (response.error) throw new Error(response.error)
+
       dispatch({
         type: 'UPDATE_LOCATION',
         nextLocation: nextLocation
       })
+
     } catch(e){
       alert(e)
     }
+
   }
 }
 
-export default editLocation
+export default createLocation

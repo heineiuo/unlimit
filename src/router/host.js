@@ -1,12 +1,12 @@
+import Joi from 'joi'
+import awaitify from '../util/awaitify'
+
 var _ = require('lodash')
 var async = require('async')
-
 var Host = require('../model/host')
 var Location = require('../model/location')
-
 var express = require('express')
 var router = module.exports = express.Router()
-
 
 // router.use(main.requireInstall)
 // router.use(main.requireEqualHost)
@@ -22,10 +22,8 @@ var router = module.exports = express.Router()
 router.route('/list').get( async(req, res, next)=> {
 
   try {
-    Host.find({}, function(err, docs){
-      if(err) throw err
-      res.json({list: docs})
-    })
+    const docs = await Host.find({})
+    res.json({list: docs})
   } catch(e){
     next(e)
   }
@@ -34,51 +32,51 @@ router.route('/list').get( async(req, res, next)=> {
 })
 
 // 获取域名详情
-router.route('/detail').get((req, res, next) => {
-
-  if (!_.has(req.body, 'hostId')) return res.json({error: "LOST_PARAM"})
-
-  var result = {}
-
-  Host.findOne({_id: req.body.hostId}, function(err, item){
-    if (err) return res.json({error: "EXCEPTION_ERROR"})
+router.route('/detail').get(async (req, res, next) => {
+  try {
+    if (!_.has(req.body, 'hostId')) return res.json({error: "LOST_PARAM"})
+    var result = {}
+    const item = Host.findOne({_id: req.body.hostId})
     if (!item) return res.json({error: "NOT_FOUND"})
     result.host = item
     res.json(result)
-
-  })
+  } catch(e){
+    next(e)
+  }
 
 })
 
 // 创建新的域名
-router.route('/new').post((req, res, next) => {
+router.route('/new').post(async (req, res, next) => {
 
-  if (!_.has(req.body, 'hostname')) return res.json({error: "LOST_PARAM"})
-  if (_.trim(req.body.hostname) == '') return res.json({error: "ILLEGAL_PARAM"})
+  try {
+    await awaitify(Joi.validate)(req.body, Joi.object().keys({
+      hostname: Joi.string().required()
+    }), {allowUnknown: true})
+    
+    const host = await Host.findOne({hostname: req.body.hostname})
+    if (host) throw 'PERMISSION_DENIED'
+    const createdHost = await Host.insert({hostname: req.body.hostname})
+    res.json({host: createdHost})
 
-  Host.findOne({hostname: req.body.hostname}, function(err, item){
-    if (err) return res.json({error: "EXCEPTION_ERROR"})
-    if (item) return res.json({error: "PERMISSION_DENIED", message: "域名已存在"})
+  } catch(e) {
+    next(e)
+  }
 
-    Host.insert({
-      hostname: req.body.hostname
-    }, function(err, item){
-      if (err) return res.json({error: "EXCEPTION_ERROR"})
-      res.json(item)
-    })
 
-  })
 
 })
 
-// 编辑域名
-router.route('/edit').post(function (req, res, next) {
+/**
+ * 编辑域名
+ */
+router.route('/edit').post((req, res, next) =>{
   next('API_BUILDING')
 })
-
+,
 
 // 删除域名
-router.route('/delete').post(function(req, res, next) {
+router.route('/delete').post(async(req, res, next)=> {
 
   if (!_.has(req.body, 'hostId')) return res.json({error: "PERMISSION_DENIED"})
 
@@ -86,7 +84,7 @@ router.route('/delete').post(function(req, res, next) {
     function(callback){
       return Host.remove({_id: req.body.hostId}, {}, callback)
     }, function(callback){
-      return Location.remove({hostId: req.body.hostId}, {multi: true}, callback)
+      return Location.remove({host_id: req.body.hostId}, {multi: true}, callback)
     }
   ], function(err, result){
     if (err) return res.json({error: "EXCEPTION_ERROR"})

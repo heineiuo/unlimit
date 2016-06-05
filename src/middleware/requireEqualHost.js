@@ -16,6 +16,7 @@
 
 const requireEqualHost =  (conf)=>{
   return (req, res, next)=>{
+    console.log(req.headers.host)
     if (req.headers.host == conf.host) return next()
     res.end(`NOT FOUND`)
   }

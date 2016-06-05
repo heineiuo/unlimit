@@ -26,16 +26,16 @@ class Location extends Component {
 
   saveLocation=()=>{
     console.log('saving location...')
-    const {editLocation} = this.props.hostActions
-    editLocation(this.state)
+    const {editLocation, createLocation} = this.props.hostActions
+    const {location_id} = this.props.params
+    location_id?editLocation(this.state):createLocation(this.state)
   }
 
   componentWillMount = ()=>{
-    console.log(`location_id: ${this.props.params.location_id}`)
-    if(this.props.params.location_id) {
-      const {getRouterDetail} = this.props.hostActions
-      getRouterDetail(this.props.params.host_id, this.props.params.location_id)
-    }
+    const {location_id,host_id} = this.props.params
+    console.log(`location_id: ${location_id}`)
+    const {getRouterDetail, getHostLocationList} = this.props.hostActions
+    location_id? getRouterDetail(host_id, location_id):getHostLocationList(host_id)
   }
 
   componentWillReceiveProps =(nextProps)=>{
@@ -146,7 +146,7 @@ class Location extends Component {
             <Input
               label="url"
               type="text"
-              onChange={(e)=>{}}
+              onChange={(e)=>{this.setState({content: e.target.value})}}
               value={this.state.content}
               name="content"
             />
@@ -162,7 +162,7 @@ class Location extends Component {
             <Input
               label="反向代理"
               type="text"
-              onChange={(e)=>{}}
+              onChange={(e)=>{this.setState({content: e.target.value})}}
               value={this.state.content}
               name="content"
             />
@@ -178,7 +178,7 @@ class Location extends Component {
             <Input
               label="文件代理"
               type="text"
-              onChange={(e)=>{}}
+              onChange={(e)=>{this.setState({content: e.target.value})}}
               name="content"
               value={this.state.content}
               placeholder="请输入服务器真实路径"

@@ -1,73 +1,67 @@
 import {Router} from 'express'
 import Joi from 'joi'
 import awaitify from '../util/awaitify'
-
-const _ = require('lodash')
-const ent = require('ent')
-const async = require('async')
-const Location = require('../model/location')
-const Host = require('../model/host')
+import ent from 'ent'
+import Location from '../model/location'
+import Host from '../model/host'
 
 const router = module.exports = Router()
 
+/**
+ * 创建一条location记录
+ */
+router.route('/new').post(async(req, res, next) => {
+  try {
+    await awaitify(Joi.validate)(req.body, Joi.object().keys({
+      host_id: Joi.string().required(),
+      type: Joi.string().required(),
+      content: Joi.string().required()
+    }), {allowUnknown: true})
 
-/** 创建一条location记录 **/
-router.route('/new').post(function(req, res, next) {
-
-  _.forEach(['host_id', 'type', 'content'], function (item) {
-    if (!_.has(req.body, item)) {
-      next('LOST_PARAM')
-      return false
-    }
-  })
-
-  Host.findOne({_id: req.body.host_id}, function(err, host){
-    if (err) return next('EXCEPTION_ERROR')
+    const host = await Host.findOne({_id: req.body.host_id})
     if (!host) return next('NOT_FOUND')
     req.body.type = req.body.type || 'html'
-    if (req.body.type == 'html') req.body.content = ent.encode(req.body.content)
+    req.body.content = req.body.type == 'html'?
+      ent.encode(req.body.content):req.body.content
+    const doc = await Location.cfindOne({host_id: req.body.host_id})
+      .sort({sort: -1}).exec()
+    req.body.sort=!doc?1:Number(doc.sort)+1
+    const newLocation = await Location.insert(req.body)
+    res.json(newLocation)
+  } catch(e){
+    next(e)
+  }
 
-    Location.findOne({hostId: req.body.host_id}).sort({sort: -1}).exec(function (err, doc) {
-      if (err) next(err)
-      if (!doc) {
-        req.body.sort=1
-      } else {
-        req.body.sort = Number(doc.sort)+1
-      }
-      Location.insert(req.body, function(err, doc){
-        if (err) return next('EXCEPTION_ERROR')
-        res.json(doc)
-      })
-    })
-  })
 })
 
 
 
-/** 获取详情 **/
-router.route('/detail').get(function(req, res, next) {
+/**
+ * 获取详情
+ */
+router.route('/detail').get(async(req, res, next) => {
 
-  // _.forEach(['host_id', 'location_id'], function (item) {
-  //   if (!_.has(req.query, item)) {
-  //     next('LOST_PARAM')
-  //     return false
-  //   }
-  // })
+  try {
+    await awaitify(Joi.validate)(req.query, Joi.object().keys({
+      host_id: Joi.string().required(),
+      location_id: Joi.string().required()
+    }), {allowUnknown: true})
 
-  async.parallel([
-    function(callback){
-      Host.findOne({_id: req.query.host_id}, callback)
-    }, function(callback){
-      Location.findOne({_id: req.query.location_id}, callback)
-    }
-  ], function(err, results){
-    if (err) return next('EXCEPTION_ERROR')
-    return res.json({
+    const results = await Promise.all([
+      Host.findOne({_id: req.query.host_id}),
+      Location.findOne({_id: req.query.location_id})
+    ])
+
+    res.json({
       host: results[0],
       location: results[1]
     })
 
-  })
+  } catch(e){
+    next(e)
+  }
+
+
 })
 
 
@@ -79,18 +73,11 @@ router.route('/detail').get(function(req, res, next) {
  * @param req
  * @param res
  */
-router.route('/edit').post(async function(req, res, next) {
-  //
-  // _.forEach(['type', 'content', 'pathname'], function (item) {
-  //   if (!_.has(req.body, item)) {
-  //     next('LOST_PARAM')
-  //     return false
-  //   }
-  // })
+router.route('/edit').post(async (req, res, next) => {
 
   try {
 
-    const valid = await awaitify(Joi.validate)(req.body, Joi.object().keys({
+    await awaitify(Joi.validate)(req.body, Joi.object().keys({
       type: Joi.string().required(),
       content: Joi.string().required(),
       pathname: Joi.string().required()
@@ -99,19 +86,20 @@ router.route('/edit').post(async function(req, res, next) {
     if (req.body.type == 'html' && req.body.contentType == 'text') {
       req.body.content = ent.encode(req.body.content)
     }
+
     req.body.pathname = req.body.pathname.toString()
 
-    Location.update({_id: req.body._id}, {$set: {
+    const numReplaced = await Location.update({_id: req.body._id}, {$set: {
       type: req.body.type,
       cors: Boolean(req.body.cors),
       contentType: req.body.contentType,
       content: req.body.content,
       pathname: req.body.pathname
-    }}, {}, function(err, numReplaced){
-      if (err) return next('EXCEPTION_ERROR')
-      if (numReplaced==0) return next('LOCATION_NOT_FOUND')
-      res.json({success:1})
-    })
+    }})
+
+    if (numReplaced==0) return next('LOCATION_NOT_FOUND')
+    res.json({success:1})
+
   } catch(e){
     next(e)
   }
@@ -126,68 +114,54 @@ router.route('/edit').post(async function(req, res, next) {
  * @param res
  * @param next
  */
-router.route('/update-sort').post(function(req, res, next) {
-  _.forEach(['host_id', 'locationId', 'targetSort'], function (item, index) {
-    if (!_.has(req.body, item)) {
-      next("PARAMS_LOST")
-      return false
-    }
-  })
+router.route('/update-sort').post(async(req, res, next) => {
 
-  var targetSort = Number(req.body.targetSort)
-  if (targetSort < 1) return next('PARAMS_ILLEGAL')
+  try {
+    await awaitify(Joi.validate)(req.body, Joi.object().keys({
+      host_id: Joi.string().required(),
+      locationId: Joi.string().required(),
+      targetSort: Joi.string().required()
+    }), {allowUnknown: true})
 
-  var updateTargetSort = function (err) {
-    if (err) return next(err)
-    Location.update({_id: req.body.locationId}, {$set: {
-      sort: targetSort
-    }}, {}, function (err, doc) {
-      if (err) return next(err)
-      res.json({})
-    })
-  }
+    var targetSort = Number(req.body.targetSort)
+    if (targetSort < 1) return next('PARAMS_ILLEGAL')
 
-  Location.find({hostId: req.body.host_id}).exec(function (err, docs) {
-    if (err) return next(err)
+    const docs = await Location.find({host_id: req.body.host_id})
+    const doc = await Location.findOne({_id: req.body.locationId})
 
-    Location.findOne({_id: req.body.locationId}).exec(function (err, doc) {
-      if (err) return next(err)
-      if (!doc) return next('NOT_FOUND')
-      if (targetSort == doc.sort) return next('NOT_CHANGED')
-      if (targetSort > docs.length) return next('PARAMS_ILLEGAL')
+    if (!doc) return next('NOT_FOUND')
+    if (targetSort == doc.sort) return next('NOT_CHANGED')
+    if (targetSort > docs.length) return next('PARAMS_ILLEGAL')
 
-      doc.sort = Number(doc.sort)
+    doc.sort = Number(doc.sort)
+
+    const sort = targetSort<doc.sort?{
       // sort调小,那么在目标sort和当前sort内的记录都要+1, 再把当前sort调到目标sort
-      if (targetSort<doc.sort) {
-        Location.find({hostId: req.body.host_id, sort: {
-          $gte: targetSort,
-          $lt: doc.sort
-        }}).exec(function (err, docs) {
-          if (err) return next(err)
-          async.map(docs, function (item, callback) {
-            item.sort = Number(item.sort)
-            item.sort ++
-            Location.update({_id: item._id}, {$set: {sort: item.sort}}, {}, callback)
-          }, updateTargetSort)
-        })
-      } else {
-        // 调大, 那么在目标sort和当前sort内的记录都要-1, 再把当前sort调到目标sort
-        Location.find({hostId: req.body.host_id, sort: {
-          $lte: targetSort,
-          $gt: doc.sort
-        }}).exec(function (err, docs) {
-          if (err) return next(err)
-          async.map(docs, function (item, callback) {
-            item.sort = Number(item.sort)
-            item.sort --
-            Location.update({_id: item._id}, {$set: {sort: item.sort}}, {}, callback)
-          }, updateTargetSort)
-        })
-      }
+      $gte: targetSort,
+      $lt: doc.sort
+    }:{
+      // 调大, 那么在目标sort和当前sort内的记录都要-1, 再把当前sort调到目标sort
+      $lte: targetSort,
+      $gt: doc.sort
+    }
 
+    const shouldUpdateDocs = await Location.find({
+      host_id: req.body.host_id,
+      sort: sort
     })
+    await Promise.all(shouldUpdateDocs.map(item => {
+      item.sort = Number(item.sort)
+      targetSort < doc.sort?item.sort ++ : item.sort --
+      return Location.update({_id: item._id}, {$set: {sort: item.sort}}, {})
+    }))
+    await Location.update({_id: req.body.locationId}, {$set: {
+      sort: targetSort
+    }}, {})
 
-  })
+    res.json({})
+  } catch (e) {
+    next(e)
+  }
 
 })
 
@@ -195,35 +169,39 @@ router.route('/update-sort').post(function(req, res, next) {
 /**
  * 获取location列表
  */
-router.route('/list').get((req, res, next) => {
+router.route('/list').get(async (req, res, next) => {
 
-  if (!_.has(req.query, 'host_id')) return res.json({error: "LOST_PARAM"})
+  try {
 
-  var result = {}
+    await awaitify(Joi.validate)(req.query, Joi.object().keys({
+      host_id: Joi.string().required()
+    }), {allowUnknown: true})
 
-  req.query.host_id = decodeURIComponent(req.query.host_id)
-  console.log(req.query.host_id)
-
-  Host.findOne({_id: req.query.host_id}, function(err, item){
-    if (err) return res.json({error: "EXCEPTION_ERROR"})
-    if (!item) return res.json({error: "NOT_FOUND"})
+    var result = {}
+    req.query.host_id = decodeURIComponent(req.query.host_id)
+    const item = await Host.findOne({_id: req.query.host_id})
+    if (!item) return next("NOT_FOUND")
     result.host = item
+    result.list = await Location.cfind({host_id: req.query.host_id})
+      .sort({sort: 1}).exec()
+    res.json(result)
+  } catch(e){
+    next(e)
+  }
 
-    Location.find({hostId: req.query.host_id}).sort({sort: 1}).exec(function(err, docs){
-      if (err) return res.json({error: 'EXCEPTION_ERROR'})
-      result.list = docs
-      res.json(result)
-    })
-
-  })
 })
 
 /**
  * 删除一个location
  */
-router.route('/delete').post(function(req, res, next) {
-  Location.remove({_id: req.body.locationId}, {}, function(err){
-    if (err) return next('EXCEPTION_ERROR')
+router.route('/delete').post(async(req, res, next)=> {
+  try {
+    await awaitify(Joi.validate)(req.body, Joi.object().keys({
+      locationId: Joi.string().required()
+    }), {allowUnknown: true})
+    await Location.remove({_id: req.body.locationId})
     res.json({})
-  })
+  } catch(e){
+    next(e)
+  }
 })
