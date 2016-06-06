@@ -105,13 +105,15 @@ const serverConfig = {
     ]
   },
 
-  plugins: []
+  plugins: [
+  ]
 }
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
   compress: {
     warnings: false
   },
+  sourceMap: false,
   mangle: {
     except: ['$super', '$', 'exports', 'require']
   }
@@ -120,6 +122,7 @@ const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
 const DefinePluginProduction = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify('production')
 })
+
 const DefinePluginDevelopment = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify('development')
 })
@@ -141,8 +144,7 @@ if (argv.build){
 
   compiler.run((err, stats)=>{
     if (err) return console.error(err)
-    // console.log(err, stats)
-    console.log('build success')
+    console.log(`build ${argv.build} success`)
   })
 } else {
   startServer()
