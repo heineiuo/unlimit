@@ -1,12 +1,10 @@
 import {Router} from 'express'
 
-
 const proxy = (conf) => {
 
   const router = Router()
 
-  router.use(require('./getHost'))
-  router.use(require('./getLocation'))
+  router.use(require('./getHostAndLocation'))
   router.use(require('./handleCORS'))
   router.use(require('./handleFILE'))
   router.use(require('./handlePROXY'))
@@ -39,7 +37,6 @@ const proxy = (conf) => {
       return res.end(`${req.headers.host}: LOCATION NOT FOUND`)
     if(err=='UNDEFINED_TYPE')
       return res.end(`${req.headers.host}: CONFIGURE ERROR`)
-
     return res.end(`${req.headers.host}: EXCEPTION ERROR`)
   })
 

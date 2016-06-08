@@ -1,19 +1,19 @@
+import Host from '../../model/host'
 import Location from '../../model/location'
 import parse from 'url-parse'
 import _ from 'lodash'
 
 /**
- * 获取location
- * @param req
- * @param res
- * @param next
- * @returns {*}
+ * 查询host
  */
-const getLocation = async (req, res, next)=>{
-  try {
-    const {host} = res.locals
-    const locations = await Location.cfind({host_id: host._id}).sort({sort: 1}).exec()
+const getHost = async (req, res, next)=>{
 
+  try {
+    const doc = await Host.findOne({hostname: req.headers.host})
+    if (!doc) return next('HOST_NOT_FOUND')
+    res.locals.host = doc
+
+    const locations = await Location.cfind({host_id: doc._id}).sort({sort: 1}).exec()
     if (locations.length==0) return next('LOCATION_NOT_FOUND')
 
     // 获取url, 自动补上'/'
@@ -37,11 +37,10 @@ const getLocation = async (req, res, next)=>{
     if (!found) return next('LOCATION_NOT_FOUND')
     next()
 
-
   } catch(e){
     next(e)
   }
 
 }
 
-module.exports = getLocation
+module.exports = getHost

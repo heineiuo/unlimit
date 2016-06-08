@@ -1,4 +1,3 @@
-
 var fs = require('fs-extra')
 var _ = require('lodash')
 var mkdirp = require('mkdirp')
@@ -12,7 +11,6 @@ var router = module.exports = express.Router()
 var file = module.exports = {}
 
 file.upload = function (req, res, next) {
-
 
   if (!_.has(req.query, 'uploadDir')) throw 'PARAMS_LOST'
 
@@ -167,3 +165,5 @@ router.route('/api/file/download').get(
   main.requireAdmin,
   file.downloadFile
 )
+
+module.exports = router

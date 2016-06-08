@@ -1,12 +1,11 @@
 import Joi from 'joi'
-import awaitify from '../util/awaitify'
+import awaitify from '../../util/awaitify'
+import _ from 'lodash'
+import Host from '../../model/host'
+import Location from '../../model/location'
+import {Router} from 'express'
 
-var _ = require('lodash')
-var async = require('async')
-var Host = require('../model/host')
-var Location = require('../model/location')
-var express = require('express')
-var router = module.exports = express.Router()
+const router = Router()
 
 // router.use(main.requireInstall)
 // router.use(main.requireEqualHost)
@@ -73,22 +72,23 @@ router.route('/new').post(async (req, res, next) => {
 router.route('/edit').post((req, res, next) =>{
   next('API_BUILDING')
 })
-,
 
 // 删除域名
 router.route('/delete').post(async(req, res, next)=> {
 
   if (!_.has(req.body, 'hostId')) return res.json({error: "PERMISSION_DENIED"})
 
-  async.parallel([
-    function(callback){
-      return Host.remove({_id: req.body.hostId}, {}, callback)
-    }, function(callback){
-      return Location.remove({host_id: req.body.hostId}, {multi: true}, callback)
-    }
-  ], function(err, result){
-    if (err) return res.json({error: "EXCEPTION_ERROR"})
-    return res.json({result: result})
-  })
+  try {
+    const promises = [
+      Host.remove({_id: req.body.hostId}, {}),
+      Location.remove({host_id: req.body.hostId}, {multi: true})
+    ]
+    await Promise.all(promises)
+  } catch(e){
+    next(e)
+  }
+
 
 })
+
+module.exports = router
