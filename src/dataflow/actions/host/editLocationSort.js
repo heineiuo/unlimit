@@ -4,25 +4,27 @@ import * as API from '../../../sdk/api'
  * 排序,设置优先级
  * @returns {function()}
  */
-const editLocationSort = ()=>{
+const editLocationSort = (location, arrow)=>{
 
-  // $("[data-updatesort]").on('click', function () {
-  //   var sort = Number($(this).attr('data-sort'))
-  //   var targetSort = $(this).attr('data-updatesort')=='up'?sort-1:sort+1
-  //   if (targetSort<1) return false
-  //   var $tr = $(this).closest('tr')
-  //   ajax('locationUpdateSort').data({
-  //     targetSort: targetSort,
-  //     hostId: $tr.attr('data-hostId'),
-  //     locationId: $tr.attr('data-locationId')
-  //   }).exec(function (err, result) {
-  //     if (err) alert(err)
-  //     location.reload()
-  //   })
-  // })
 
   return async(dispatch, getState)=>{
     try {
+
+      const sort = Number(location.sort)
+      const targetSort = sort + (arrow=='up'?-1:1)
+      if (targetSort < 1) return false
+      const response = await API.editLocationSort(location._id, targetSort)
+      if (response.error) throw response.error
+
+      const host_id = location.host_id
+      const data = await API.getLocationList(host_id)
+      if (data.error) throw data.error
+      dispatch({
+        type: "UPDATE_LOCATION_LIST",
+        host: data.host,
+        hostId: host_id,
+        locationList: data.list
+      })
 
 
     } catch(e){

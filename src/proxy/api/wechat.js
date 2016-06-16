@@ -1,40 +1,12 @@
 import express from 'express'
-import paramRule from '../lib/param-rule'
-import awaitify, {awaitify2} from '../lib/awaitify'
-import WeChatSDK from 'wechat-mp-sdk'
-
-import User from '../model/User'
-import Admin from '../model/Admin'
-import UserFromWechat from '../model/UserFromWechat'
-
-// const needSignature = paramRule.Rule('signature', 'query', 'has')
-// const needTimestamp = paramRule.Rule('timestamp', 'query', 'has')
-// const needNonce = paramRule.Rule('nonce', 'query', 'has')
-// const needEchostr = paramRule.Rule('echostr', 'query', 'has')
 
 const router = module.exports = express.Router()
-
-
-
-router.use(function(req, res, next){
-
-  try {
-    res.locals.wechatsdk = WeChatSDK(res.locals.weixinConfig)
-    next()
-  } catch(e){
-    next(e)
-  }
-})
-
 
 /**
  * router list
  */
 router.route('/list').get(async function(req, res, next){
-
   try {
-
-    console.log(req.query)
     const admin = await Admin.getAdminByToken(req.query.youkuohao_token)
     const list = await UserFromWechat.list(req.query)
 
@@ -46,10 +18,8 @@ router.route('/list').get(async function(req, res, next){
 })
 
 router.route('/list/total').get(async function(req, res, next){
-
   try {
     console.log(req.query)
-
     const admin = await Admin.getAdminByToken(req.query.youkuohao_token)
     const total = await UserFromWechat.count({isDeleted: {$ne: true}})
     res.json({
@@ -70,7 +40,6 @@ router.route('/list/total').get(async function(req, res, next){
 
 // 消息验证
 router.route('/receive').get(async function (req, res, next) {
-
   try {
     const sdk = res.locals.wechatsdk
     const checkResult = await sdk.core.receiveCheck(req.query)
@@ -83,20 +52,16 @@ router.route('/receive').get(async function (req, res, next) {
 
 // 接收消息
 router.route('/receive').post(async function (req, res, next) {
-
   try {
     const sdk = res.locals.wechatsdk
     const parsed = await sdk.core.receiveMsg(req.body)
-
     // todo 处理自动回复和转发到客服
     res.send('success')
-
   } catch(e){
     next(e)
   }
 
 })
-
 
 
 /**************
@@ -107,10 +72,8 @@ router.route('/receive').post(async function (req, res, next) {
 
 // 获取菜单
 router.route('/menu/get').get(async function(req, res, next){
-
   try {
     const sdk = res.locals.wechatsdk
-
     var menuData = await sdk.menu.getMenu()
     res.json(menuData)
   } catch(e){
@@ -121,7 +84,6 @@ router.route('/menu/get').get(async function(req, res, next){
 
 // 创建菜单
 router.route('/menu/create').post(async function(req, res, next){
-
   try {
     const sdk = res.locals.wechatsdk
     var menuData = await sdk.menu.createMenu(req.body)
@@ -141,13 +103,11 @@ router.route('/menu/create').post(async function(req, res, next){
 
 // 发送消息
 router.route('/kf/sendMsg').get(async function(req, res, next){
-
   try {
     res.json({})
   } catch(e){
     next(e)
   }
-
 })
 
 /***************
@@ -162,7 +122,6 @@ router.route('/media/material/list').get(async function(req, res, next){
     const sdk = res.locals.wechatsdk
     const list = await sdk.media.getMaterialList(req.query)
     res.json(list)
-
   } catch(e){
     next(e)
   }
@@ -177,7 +136,6 @@ router.route('/media/material/list').get(async function(req, res, next){
  *******************/
 // require param: code
 router.route('/login').post(async function(req, res, next){
-
   try {
     const sdk = res.locals.wechatsdk
     const code = req.body.code
@@ -186,7 +144,6 @@ router.route('/login').post(async function(req, res, next){
       access_token: accessTokenPack.access_token,
       openid: accessTokenPack.openid
     })
-
     /**
      * 如果没有过账户, 自动创建一个
      * 然后更新UserFromWechat的记录
@@ -200,7 +157,6 @@ router.route('/login').post(async function(req, res, next){
       type: 'wechat',
       userinfo: userinfo
     })
-
   } catch(e){
     next(e)
   }
@@ -215,7 +171,6 @@ router.route('/login').post(async function(req, res, next){
 router.route('/jsapi/signature').get(async function(req, res, next){
   try {
     const sdk = res.locals.wechatsdk
-
     res.json({
       signature: '',
       url: '',

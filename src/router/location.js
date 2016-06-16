@@ -1,9 +1,9 @@
 import {Router} from 'express'
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
+import awaitify from '../util/awaitify'
 import ent from 'ent'
-import Location from '../../model/location'
-import Host from '../../model/host'
+import Location from '../model/location'
+import Host from '../model/host'
 
 const router = module.exports = Router()
 
@@ -118,43 +118,42 @@ router.route('/update-sort').post(async(req, res, next) => {
 
   try {
     await awaitify(Joi.validate)(req.body, Joi.object().keys({
-      host_id: Joi.string().required(),
-      locationId: Joi.string().required(),
+      location_id: Joi.string().required(),
       targetSort: Joi.string().required()
     }), {allowUnknown: true})
 
     var targetSort = Number(req.body.targetSort)
     if (targetSort < 1) return next('PARAMS_ILLEGAL')
 
-    const docs = await Location.find({host_id: req.body.host_id})
-    const doc = await Location.findOne({_id: req.body.locationId})
+    const targetLocation = await Location.findOne({_id: req.body.location_id})
+    const docs = await Location.find({host_id: targetLocation.host_id})
 
-    if (!doc) return next('NOT_FOUND')
-    if (targetSort == doc.sort) return next('NOT_CHANGED')
+    if (!targetLocation) return next('NOT_FOUND')
+    if (targetSort == targetLocation.sort) return next('NOT_CHANGED')
     if (targetSort > docs.length) return next('PARAMS_ILLEGAL')
 
-    doc.sort = Number(doc.sort)
+    targetLocation.sort = Number(targetLocation.sort)
 
-    const sort = targetSort<doc.sort?{
+    const sort = targetSort<targetLocation.sort?{
       // sort调小,那么在目标sort和当前sort内的记录都要+1, 再把当前sort调到目标sort
       $gte: targetSort,
-      $lt: doc.sort
+      $lt: targetLocation.sort
     }:{
       // 调大, 那么在目标sort和当前sort内的记录都要-1, 再把当前sort调到目标sort
       $lte: targetSort,
-      $gt: doc.sort
+      $gt: targetLocation.sort
     }
 
     const shouldUpdateDocs = await Location.find({
-      host_id: req.body.host_id,
+      host_id: targetLocation.host_id,
       sort: sort
     })
     await Promise.all(shouldUpdateDocs.map(item => {
       item.sort = Number(item.sort)
-      targetSort < doc.sort?item.sort ++ : item.sort --
+      targetSort < targetLocation.sort?item.sort ++ : item.sort --
       return Location.update({_id: item._id}, {$set: {sort: item.sort}}, {})
     }))
-    await Location.update({_id: req.body.locationId}, {$set: {
+    await Location.update({_id: req.body.location_id}, {$set: {
       sort: targetSort
     }}, {})
 

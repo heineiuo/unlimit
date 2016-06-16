@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
+import awaitify from '../util/awaitify'
 import _ from 'lodash'
-import Host from '../../model/host'
-import Location from '../../model/location'
+import Host from '../model/host'
+import Location from '../model/location'
 import {Router} from 'express'
 
 const router = Router()
@@ -49,6 +49,7 @@ router.route('/detail').get(async (req, res, next) => {
 router.route('/new').post(async (req, res, next) => {
 
   try {
+    console.log(req.body)
     await awaitify(Joi.validate)(req.body, Joi.object().keys({
       hostname: Joi.string().required()
     }), {allowUnknown: true})

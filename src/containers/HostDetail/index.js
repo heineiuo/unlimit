@@ -3,6 +3,8 @@ import {Link} from 'react-router'
 import Paper from '../../components/Paper'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
+import MdArrowUpward from 'react-icons/md/arrow-upward'
+import MdArrowDownward from 'react-icons/md/arrow-downward'
 
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -20,6 +22,7 @@ class HostDetail extends Component {
 
   renderLocationList = ()=>{
 
+    const {editLocationSort} = this.props.hostActions
     const {locationList, host} = this.props.hostState
     if (locationList.length==0) {
       return (
@@ -27,7 +30,7 @@ class HostDetail extends Component {
       )
     }
     
-    const trs = locationList.map(location=>{
+    const trs = locationList.map((location, index)=>{
       return (
         <tr key={location._id}
             data-hostId="{item.hostId}"
@@ -36,15 +39,13 @@ class HostDetail extends Component {
           <td>
             <div className="btn-group">
               <button className="btn btn-default btn-xs"
-                      data-updatesort="up"
-                      data-sort="{item.sort}">
-                <i className="glyphicon glyphicon-menu-up"> </i>
+                      onClick={()=>editLocationSort(location, 'up')}>
+                <MdArrowUpward />
               </button>
               <button className="btn btn-default btn-xs">{location.sort}</button>
               <button className="btn btn-default btn-xs"
-                      data-updatesort="down"
-                      data-sort="{item.sort}">
-                <i className="glyphicon glyphicon-menu-down"> </i>
+                      onClick={()=>editLocationSort(location, 'down')}>
+              <MdArrowDownward />
               </button>
             </div>
           </td>

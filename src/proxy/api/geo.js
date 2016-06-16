@@ -1,14 +1,12 @@
 import {Router} from 'express'
-import paramRule from '../middleware/param-rule'
-import Admin from '../model/Admin'
-import User from '../model/User'
-import Hire from '../model/Hire'
-import HireLog from '../model/HireLog'
-import {awaitify2} from '../lib/awaitify'
+import {awaitify2} from '../../util/awaitify'
 import request from 'request'
 
 const router = module.exports = Router()
 
+/**
+ * 根据坐标获取城市
+ */
 router.route('/city').get(async function(req, res, next){
 
   try {
@@ -34,6 +32,9 @@ router.route('/city').get(async function(req, res, next){
 })
 
 
+/**
+ * 根据坐标获取城市
+ */
 router.route('/city').post(async function(req, res, next){
 
 

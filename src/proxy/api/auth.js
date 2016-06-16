@@ -1,8 +1,4 @@
 import {Router} from 'express'
-import paramRule from '../lib/param-rule'
-import seashell from 'seashell'
-import authMiddleware, {getUserInfo} from '../middleware/authMiddleware'
-import awaitify, {awaitify2} from '../lib/awaitify'
 
 const router = Router()
 
@@ -76,7 +72,7 @@ router.route('/weixin/code').get(async function(req, res, next){
 // 获取用户信息
 // 根据fudi_token获取用户信息
 // 如果是微信用户, 用户信息每10分钟和微信服务器同步
-router.route('/userinfo').get(getUserInfo, async function(req, res, next){
+router.route('/userinfo').get(async function(req, res, next){
   res.json(res.locals.userinfo)
 })
 

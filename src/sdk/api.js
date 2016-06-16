@@ -67,11 +67,11 @@ export const editLocation = (nextLocation)=>{
 }
 
 // 更新location排序
-export const editLocationSort = (location, targetIndex)=>{
+export const editLocationSort = (location_id, targetSort)=>{
   const url = `${APIHOST}/location/update-sort`
   return POSTUrlencodeJSON(url, {
-    location: location,
-    target_index: targetIndex
+    location_id: location_id,
+    targetSort: targetSort
   })
 }
 

@@ -7,11 +7,13 @@ import argv from '../util/argv'
 const getKeyPair = (host) => {
   const pair = [
     fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`, 'utf8'),
-    fs.readFileSync(`/etc/letsencrypt/live/${host}/cert.pem`, 'utf8')
+    fs.readFileSync(`/etc/letsencrypt/live/${host}/cert.pem`, 'utf8'),
+    fs.readFileSync(`/etc/letsencrypt/live/${host}/chain.pem`)
   ]
   return {
     key: pair[0],
-    cert: pair[1]
+    cert: pair[1],
+    ca: pair[2]
   }
 }
 
@@ -19,21 +21,24 @@ const start = async () => {
 
   try {
     const app = express()
-    const conf = JSON.parse(await fs.readFile(`${process.cwd()}/data/config.json`, 'utf-8'))
+    const configPath = argv.config || `${process.cwd()}/data/config.json`
+    const conf = JSON.parse(await fs.readFile(configPath, 'utf-8'))
 
     app.use(require('morgan')(':req[host]:url :method :status :res[content-length] - :response-time ms', {}))
     app.use(require('compression')())
     app.use(require('../middleware/seashellMiddleware')(conf))
     app.use(require('../middleware/redirectToHttps')(conf))
     app.use(require('../middleware/headers')(conf))
-    app.use(require('../middleware/proxy')(conf))
+    app.use(require('../proxy')(conf))
     app.use(require('../middleware/requireEqualHost')(conf))
 
     /**
      * below is `cloud.youkuohao.com` router
      */
-    app.use('/api', require('../middleware/router'))
-    app.use(express.static(`${process.cwd()}/public`))
+    app.use('/api', require('../router'))
+    app.use(express.static(`${process.cwd()}/public`, {
+      maxAge: 31536000000
+    }))
     app.use(require('../middleware/error')(conf))
 
     const http_server = http.createServer(app)

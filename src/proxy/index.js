@@ -31,12 +31,15 @@ const proxy = (conf) => {
    */
   router.use(async (err, req, res, next)=>{
 
-    if(err=='HOST_NOT_FOUND')
+    if (err=='HOST_NOT_FOUND')
       return next()
     if (err=='LOCATION_NOT_FOUND')
       return res.end(`${req.headers.host}: LOCATION NOT FOUND`)
-    if(err=='UNDEFINED_TYPE')
+    if (err=='UNDEFINED_TYPE')
       return res.end(`${req.headers.host}: CONFIGURE ERROR`)
+    if (err=='NOT_FOUND')
+      return res.end(`${req.headers.host}: NOT FOUND`)
+    
     return res.end(`${req.headers.host}: EXCEPTION ERROR`)
   })
 

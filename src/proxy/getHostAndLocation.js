@@ -1,5 +1,5 @@
-import Host from '../../model/host'
-import Location from '../../model/location'
+import Host from '../model/host'
+import Location from '../model/location'
 import parse from 'url-parse'
 import _ from 'lodash'
 

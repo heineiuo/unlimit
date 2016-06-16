@@ -1,9 +1,4 @@
-import express, {Router} from 'express'
-import Post from '../model/Post'
-import Quara from '../model/Quara'
-import Moment from '../model/Moment'
-import Topic from '../model/Topic'
-import {getUserInfo} from '../middleware/authMiddleware'
+import {Router} from 'express'
 
 const router = module.exports = Router()
 

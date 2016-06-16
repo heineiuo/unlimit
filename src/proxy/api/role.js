@@ -1,7 +1,4 @@
 import {Router} from 'express'
-import paramRule from '../middleware/param-rule'
-import Admin from '../model/Admin'
-import User from '../model/User'
 
 const router = module.exports = Router()
 

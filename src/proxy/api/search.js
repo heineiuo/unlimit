@@ -1,10 +1,4 @@
 import {Router} from 'express'
-import paramRule from '../middleware/param-rule'
-import Admin from '../model/Admin'
-import User from '../model/User'
-import Hire from '../model/Hire'
-import HireLog from '../model/HireLog'
-
 
 const router = module.exports = Router()
 
