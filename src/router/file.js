@@ -8,15 +8,16 @@ var util = require('util')
 var express = require('express')
 var router = module.exports = express.Router()
 
-var file = module.exports = {}
-
-file.upload = function (req, res, next) {
-
+/*****************************
+ *
+ * 文件管理相关接口
+ *
+ *****************************/
+// 上传
+router.use('/').post(function (req, res, next) {
   if (!_.has(req.query, 'uploadDir')) throw 'PARAMS_LOST'
-
   var form = new formidable.IncomingForm()
   form.encoding = 'utf-8'
-
   form.parse(req, function (err, fields, files) {
     if (err) return next(err)
     var rootPath = process.cwd() + '/public'
@@ -50,21 +51,14 @@ file.upload = function (req, res, next) {
         res.json({})
       })
     }
-
-
-
   })
+})
 
-
-}
-
-
-file.readdir = function (req, res, next) {
+// 读取目录
+router.route('/dir').get(function (req, res, next) {
 
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
-
   var rawPath = decodeURI(req.body.path)
-
   var result = {path: rawPath}
   //var truePath = process.cwd()+'/public'+ rawPath
   var truePath = rawPath
@@ -84,19 +78,16 @@ file.readdir = function (req, res, next) {
     }
   })
 
-}
+})
 
-file.deleteFile = function (req, res, next) {
-
+// 删除文件
+router.route('/delete-file').post(function (req, res, next) {
 
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
-
   var rawPath = decodeURI(req.body.path)
-
   var result = {path: rawPath}
   //var truePath = process.cwd()+'/public'+ rawPath
   var truePath = rawPath
-
   fs.lstat(truePath, function (err, stats) {
     if (err) throw 'FILE_NOT_EXIST'
     fs.remove(truePath, function (err) {
@@ -106,64 +97,21 @@ file.deleteFile = function (req, res, next) {
     })
   })
 
-}
+})
 
-file.downloadFile = function (req, res, next) {
-
-
+// 下载文件
+router.route('/download-file').get(function (req, res, next) {
   if (!_.has(req.query, 'path')) return next('PARAMS_LOST')
-
   var rawPath = decodeURI(req.query.path)
-
   var result = {path: rawPath}
   //var truePath = process.cwd()+'/public'+ rawPath
   var truePath = rawPath
-
   res.download(truePath)
+})
 
-}
 
-
-file.downladDir = function (req, res, next) {
+router.route('/download-dir').get(function (req, res, next) {
 
   return next('UNRADY')
-}
+})
 
-/*****************************
- *
- * 文件管理相关接口
- *
- *****************************/
-// 上传
-router.route('/api/upload').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  file.upload
-)
-
-// 读取目录
-router.route('/api/file/readdir').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  file.readdir
-)
-
-// 删除文件
-router.route('/api/file/delete').post(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  file.deleteFile
-)
-
-// 下载文件
-router.route('/api/file/download').get(
-  main.requireInstall,
-  main.requireEqualHost,
-  main.requireAdmin,
-  file.downloadFile
-)
-
-module.exports = router

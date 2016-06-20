@@ -36,6 +36,9 @@ const start = async () => {
      * below is `cloud.youkuohao.com` router
      */
     app.use('/api', require('../router'))
+    app.use('/file', express.static(`${process.cwd()}/data/file`, {
+      maxAge: 31536000000
+    }))
     app.use(express.static(`${process.cwd()}/public`, {
       maxAge: 31536000000
     }))

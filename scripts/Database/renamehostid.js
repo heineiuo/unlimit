@@ -5,10 +5,10 @@ var Location = module.exports = new Datastore({
   autoload: true
 })
 
-const start = async ()=>{
+const start = async () => {
  try {
    const all = await Location.find({})
-   await Promise.all(all.map(item=>{
+   await Promise.all(all.map(item => {
      return Location.update({_id: item._id}, {$set: {
        host_id: item.hostId
      }}, {})
@@ -17,7 +17,6 @@ const start = async ()=>{
  } catch(e){
    next(e)
  }
-
 }
 
 start()

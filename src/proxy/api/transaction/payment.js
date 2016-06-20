@@ -9,7 +9,7 @@ const router = module.exports = Router()
 
 router.route('/list').get(async (req, res, next) => {
   try {
-    const {seashell} = this.locals
+    const {seashell} = res.locals
     const response = await seashell.request('fudi-order/orderList', {
       page: 1
     })
@@ -23,7 +23,7 @@ router.route('/list').get(async (req, res, next) => {
 router.route('/').post(async (req, res, next) => {
 
   try {
-    const {seashell} = this.locals
+    const {seashell} = res.locals
     const response = await seashell.request('fudi-order/createOne', {
       userId: "sbsbsdafjhdkashgjkahdfjkhak"
     })

@@ -6,11 +6,7 @@ const awaitify = function (fn) {
     return new Promise(function (resolve, reject) {
       const thunked = thunkify(fn).apply(this, args)
       thunked(function(err){
-        if (err) {
-          console.log('[awaitify] err: '+err)
-          console.log(err.stack)
-          return reject(err)
-        }
+        if (err) return reject(err)
         resolve.apply(this, Array.prototype.slice.call(arguments, 1))
       })
     })

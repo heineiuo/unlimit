@@ -10,7 +10,7 @@ const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
 const nodeExternals = require('webpack-node-externals')
 const _ = require('lodash')
 
-const port = 8080
+const port = 80
 const app = express()
 
 const webpackConfigs = {

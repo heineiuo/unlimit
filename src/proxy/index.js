@@ -1,18 +1,67 @@
 import {Router} from 'express'
+import Host from '../model/host'
+import Location from '../model/location'
+import parse from 'url-parse'
+import _ from 'lodash'
+
 
 const proxy = (conf) => {
 
   const router = Router()
 
-  router.use(require('./getHostAndLocation'))
-  router.use(require('./handleCORS'))
-  router.use(require('./handleFILE'))
-  router.use(require('./handlePROXY'))
-  router.use(require('./handleBLOCK'))
-  router.use(require('./handleREDIRECT'))
-  router.use(require('./handleJSON'))
-  router.use(require('./handleHTML'))
-  router.use(require('./handleAPI'))
+  /**
+   * 查询host
+   */
+  router.use(async (req, res, next) => {
+    try {
+      const doc = await Host.findOne({hostname: req.headers.host})
+      if (!doc) return next('HOST_NOT_FOUND')
+
+      const locations = await Location.cfind({host_id: doc._id}).sort({sort: 1}).exec()
+      if (locations.length==0) return next('LOCATION_NOT_FOUND')
+
+      // 获取url, 自动补上'/'
+      const url = res.locals.url = parse(req.headers.host + req.url , true)
+      if (url.pathname =='') url.pathname = '/'
+
+      // 通过比对pathname, 找到路由
+      let found = false
+      locations.some( item => {
+        const reg = new RegExp(_.trim(item.pathname, '/').replace('\\\\','\\'))
+        const matches = url.pathname.match(reg)
+        if (matches && matches[0] == url.pathname) {
+          item.type = item.type.toUpperCase()
+          item.cors = 'ALLOW'
+          res.locals.host = doc
+          res.locals.location = item
+          found = true
+        }
+        return found
+      })
+
+      if (!found) return next('LOCATION_NOT_FOUND')
+      next()
+
+    } catch(e){
+      next(e)
+    }
+
+  })
+
+
+  router.use(require('./cors'))
+  router.use(require('./file'))
+  router.use(require('./proxy'))
+  router.use(require('./block'))
+  router.use(require('./redirect'))
+  router.use(require('./json'))
+  router.use(require('./html'))
+
+  /**
+   * `api`是唯一一个自带路由的
+   * 或许目前没有方法让用户自定义这一块的路由
+   */
+  router.use(require('./api'))
 
   /**
    * 未定义的type类型

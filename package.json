@@ -5,7 +5,7 @@
   "scripts": {
     "gulp": "cd scripts; gulp",
     "start": "node scripts/webpack",
-    "start-server": "node scripts/webpack --build=server ; cd build; sudo node server --nohttps=1",
+    "start-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
     "build-server": "node scripts/webpack --build=server --compress",
     "build-dashboard": "node scripts/webpack --build=dashboard --compress"
   },
@@ -87,6 +87,7 @@
     "thunkify": "~2.1.2",
     "ua-parser-js": "~0.7.10",
     "url-parse": "^1.0.5",
+    "uuid": "~2.0.2",
     "webpack": "^1.12.10",
     "webpack-config": "git+ssh://git@git.youkuohao.com:node_modules/webpack-config",
     "webpack-dev-middleware": "~1.6.1",

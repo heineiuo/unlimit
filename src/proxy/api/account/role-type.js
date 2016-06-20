@@ -2,9 +2,9 @@ import {Router} from 'express'
 
 const router = module.exports = Router()
 
-router.route('/login').post(async (req, res, next)=>{
+router.route('/list').post(async (req, res, next)=>{
   try {
-    const {seashell} = this.locals
+    const {seashell} = res.locals
     res.json({
       originUrl: req.originUrl
     })

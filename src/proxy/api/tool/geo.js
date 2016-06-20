@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {awaitify2} from '../../util/awaitify'
+import {awaitify2} from '../../../util/awaitify'
 import request from 'request'
 
 const router = module.exports = Router()
