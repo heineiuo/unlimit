@@ -10,28 +10,28 @@ const handlePROXY = async (req, res, next)=>{
   try {
     const {location} = res.locals
     if (location.type != 'PROXY') return next()
-    const target = location.content
 
-    // todo handle ssl cert to options
+    console.log('proxy...')
+
     const proxy = httpProxy.createProxyServer({
       // protocolRewrite: 'http'
     })
+
+    // todo handle ssl cert to options
     proxy.web(req, res, {
-      target: target
+      target: location.content
     })
+
     proxy.on('error', function (err, req, res) {
-      proxy.close()
       next(err)
     })
+
     proxy.on('proxyRes', function (proxyRes, req, res) {
-      proxy.close()
       Object.keys(proxyRes.headers).forEach(key=>{
         res.set(key, proxyRes.headers[key])
       })
     })
-    proxy.on('close', function (res, socket, head) {
-      console.log('Client disconnected')
-    })
+
   } catch(e){
     next(e)
   }

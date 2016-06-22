@@ -1,4 +1,3 @@
-var _ = require('lodash')
 import {Router} from 'express'
 
 const middleware = (conf) => {

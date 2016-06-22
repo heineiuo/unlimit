@@ -1,4 +1,5 @@
 import {Router} from 'express'
+import bodyParser from 'body-parser'
 
 /**
  * {host}/
@@ -19,6 +20,12 @@ router.use(async (req, res, next) => {
 })
 
 
+router.use('/api', bodyParser.json({limit: "2mb"}))
+router.use('/api', bodyParser.json({type: 'text/html'}))
+router.use('/api', bodyParser.urlencoded({extended: true}))
+router.use('/api', bodyParser.json({type: 'routerlication/*+json'}))
+
+
 /**
  * 工具模块
  */
@@ -30,21 +37,11 @@ router.use('/api/tool/test', require('./tool/test'))
 /**
  * 账号系统模块
  */
-router.use('/api/account/account', require('./account/account'))
-router.use('/api/account/role', require('./account/role'))
-router.use('/api/account/role-type', require('./account/role-type'))
-router.use('/api/account/user', require('./account/user'))
-
+router.use('/api/account', require('./account'))
 /**
  * 微信模块
  */
-router.use('/api/wechat/receive', require('./wechat/receive'))
-router.use('/api/wechat/menu', require('./wechat/menu'))
-router.use('/api/wechat/kf', require('./wechat/kf'))
-router.use('/api/wechat/media', require('./wechat/media'))
-router.use('/api/wechat/jsapi', require('./wechat/jsapi'))
-router.use('/api/wechat/account', require('./wechat/account'))
-router.use('/api/wechat/auth', require('./wechat/auth'))
+router.use('/api/wechat', require('./wechat'))
 
 /**
  * 搜索模块
@@ -81,7 +78,6 @@ router.use('/api/file/upload', require('./file/upload'))
 
 
 // 404
-
 router.use('/api', (req, res, next) => {
   next('NOT_FOUND')
 })
@@ -95,8 +91,26 @@ router.use('/api', (req, res, next) => {
  * 返回错误
  */
 router.use(async (err, req, res, next) => {
-  console.log(err.stack||err)
-  if (err == 'NOT_FOUND') return res.json({error: 'NOT_FOUND'})
-  if (err == 'NOT_CLOUD_API') return next()
-  res.json({error: err})
+
+  /**
+   * 自定义的错误码
+   */
+  if (!err.stack) {
+    if (err == 'NOT_CLOUD_API') return next()
+    return res.json({error: err})
+  }
+
+  /**
+   * 自定义错误类型
+   */
+  if (err.stack.indexOf('ValidationError') == 0)
+    return res.json({error: 'VALIDATION_ERROR'})
+
+  /**
+   * 异常, 需要记录
+   * todo log error
+   */
+  console.log(err.stack)
+  return res.json({error: 'EXCEPTION_ERROR'})
+
 })

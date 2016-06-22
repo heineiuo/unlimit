@@ -8,6 +8,7 @@ const router = module.exports = Router()
  * originUrl: /api/account/login
  */
 router.route('/login').post(async (req, res, next)=>{
+
   try {
     await awaitify(Joi.validate)(req.body, Joi.object().keys({
       username: Joi.string().required(),
@@ -24,7 +25,6 @@ router.route('/login').post(async (req, res, next)=>{
     if (result.error) return next(result.error)
     res.json(result)
   } catch(e){
-    console.log(e.stack||e)
     next(e)
   }
 })

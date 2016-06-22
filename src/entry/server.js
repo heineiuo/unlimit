@@ -29,19 +29,13 @@ const start = async () => {
     app.use(require('../middleware/seashellMiddleware')(conf))
     app.use(require('../middleware/redirectToHttps')(conf))
     app.use(require('../middleware/headers')(conf))
-    app.use(require('../proxy')(conf))
+    app.use(require('../proxy'))
     app.use(require('../middleware/requireEqualHost')(conf))
 
     /**
      * below is `cloud.youkuohao.com` router
      */
-    app.use('/api', require('../router'))
-    app.use('/file', express.static(`${process.cwd()}/data/file`, {
-      maxAge: 31536000000
-    }))
-    app.use(express.static(`${process.cwd()}/public`, {
-      maxAge: 31536000000
-    }))
+    app.use(require('../router'))
     app.use(require('../middleware/error')(conf))
 
     const http_server = http.createServer(app)
@@ -51,8 +45,8 @@ const start = async () => {
 
     if (!argv.nohttps){
       const https_server = https.createServer(getKeyPair(conf.https[0]), app)
-      conf.https.forEach((host, index)=>{
-        if (index > 0)https_server.addContext(host, getKeyPair(host))
+      conf.https.forEach((host, index) => {
+        if (index > 0) https_server.addContext(host, getKeyPair(host))
       })
       https_server.listen(443, function(){
         console.log('Listening on port 443')
