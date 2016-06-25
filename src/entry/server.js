@@ -27,7 +27,7 @@ const start = async () => {
     app.use(require('../middleware/seashellMiddleware')(config))
     app.use(require('../middleware/redirectToHttps')(config))
     app.use(require('../middleware/headers')(config))
-    app.use(require('../proxy')(config))
+    app.use(require('../router')(config))
     app.use(require('../middleware/error')(config))
 
     const http_server = http.createServer(app)
