@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import awaitify from '../util/awaitify'
+import awaitify from '../../util/awaitify'
 import _ from 'lodash'
-import Host from '../model/host'
-import Location from '../model/location'
+import Host from '../../model/host'
+import Location from '../../model/location'
 import {Router} from 'express'
 
 const router = Router()

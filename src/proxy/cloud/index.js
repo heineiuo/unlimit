@@ -6,6 +6,7 @@ const router = Router()
 router.use((req, res, next)=>{
   res.locals.time3 = Date.now()
   console.log(res.locals.time3 - res.locals.time2 + 'ms, tag2')
+  if (!res.locals.isCloud) return next('IS_NOT_CLOUD')
   next()
 })
 router.use('/api', bodyParser.json({limit: "2mb"}))
@@ -29,5 +30,12 @@ router.use('/file', express.static(`${process.cwd()}/data/file`, {
 router.use(express.static(`${process.cwd()}/public`, {
   maxAge: 31536000000
 }))
+
+router.use(async (err, req, res, next) => {
+  if (!err) return res.end('NOT_FOUND')
+  if (err=='IS_NOT_CLOUD') return next()
+  if (typeof err == 'string') return res.end(err)
+  res.end('EXCEPTION_ERROR')
+})
 
 module.exports = router

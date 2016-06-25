@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import Joi from 'joi'
-import awaitify from '../util/awaitify'
+import awaitify from '../../util/awaitify'
 
 const router = module.exports = Router()
 

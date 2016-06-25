@@ -1,4 +1,4 @@
-import Config from '../model/config'
+import Config from '../../model/config'
 
 var router = module.exports = require('express').Router()
 

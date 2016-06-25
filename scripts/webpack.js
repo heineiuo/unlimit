@@ -5,7 +5,7 @@ const fs = require('fs')
 const request = require('request')
 const rucksack = require('rucksack-css')
 const webpackClientConfigCreator = require('webpack-config').webpackClientConfigCreator
-const argv = require('../src/util/argv')
+const config = require('./config')
 const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
 const nodeExternals = require('webpack-node-externals')
 const _ = require('lodash')
@@ -128,23 +128,23 @@ const DefinePluginDevelopment = new webpack.DefinePlugin({
 })
 
 
-console.log(`argv: ${JSON.stringify(argv)}`)
+console.log(`config: ${JSON.stringify(config)}`)
 
-if (argv.build){
-  const config = argv.build == 'server'? serverConfig
-    : webpackConfigs[argv.build]
+if (config.build){
+  const webpackConfig = config.build == 'server'? serverConfig
+    : webpackConfigs[config.build]
 
-  if (argv.compress){
+  if (config.compress){
     console.log('compress...')
-    config.plugins.push(DefinePluginProduction)
-    config.plugins.push(uglifyJsPlugin)
+    webpackConfig.plugins.push(DefinePluginProduction)
+    webpackConfig.plugins.push(uglifyJsPlugin)
   }
 
-  const compiler = webpack(config)
+  const compiler = webpack(webpackConfig)
 
   compiler.run((err, stats)=>{
     if (err) return console.error(err)
-    console.log(`build ${argv.build} success`)
+    console.log(`build ${config.build} success`)
   })
 } else {
   startServer()
