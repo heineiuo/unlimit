@@ -20,7 +20,7 @@ router.use('/').post(function (req, res, next) {
   form.encoding = 'utf-8'
   form.parse(req, function (err, fields, files) {
     if (err) return next(err)
-    var rootPath = process.cwd() + '/public'
+    var rootPath = `${process.cwd()}/data/app`
     //var uploadPath = rootPath + req.query.uploadDir
     var uploadPath = req.query.uploadDir
     mkdirp.sync(uploadPath)
@@ -60,7 +60,6 @@ router.route('/dir').get(function (req, res, next) {
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
   var rawPath = decodeURI(req.body.path)
   var result = {path: rawPath}
-  //var truePath = process.cwd()+'/public'+ rawPath
   var truePath = rawPath
 
   fs.lstat(truePath, function (err, stats) {
@@ -86,7 +85,6 @@ router.route('/delete-file').post(function (req, res, next) {
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
   var rawPath = decodeURI(req.body.path)
   var result = {path: rawPath}
-  //var truePath = process.cwd()+'/public'+ rawPath
   var truePath = rawPath
   fs.lstat(truePath, function (err, stats) {
     if (err) throw 'FILE_NOT_EXIST'
@@ -104,7 +102,6 @@ router.route('/download-file').get(function (req, res, next) {
   if (!_.has(req.query, 'path')) return next('PARAMS_LOST')
   var rawPath = decodeURI(req.query.path)
   var result = {path: rawPath}
-  //var truePath = process.cwd()+'/public'+ rawPath
   var truePath = rawPath
   res.download(truePath)
 })

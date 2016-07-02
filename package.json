@@ -5,7 +5,8 @@
   "scripts": {
     "gulp": "cd scripts; gulp",
     "start": "node scripts/webpack",
-    "start-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
+    "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
+    "start-server": "cd build && sudo node server/index --config=data/config.dev.json --nohttps",
     "build-server": "node scripts/webpack --build=server --compress",
     "build-dashboard": "node scripts/webpack --build=dashboard --compress"
   },

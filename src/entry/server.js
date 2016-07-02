@@ -28,7 +28,7 @@ const start = async () => {
     app.use(require('../middleware/redirectToHttps')(config))
     app.use(require('../middleware/headers')(config))
     app.use(require('../router')(config))
-    app.use(require('../middleware/error')(config))
+    app.use(require('../middleware/404')(config))
 
     const http_server = http.createServer(app)
     http_server.listen(80, function(){
@@ -45,7 +45,7 @@ const start = async () => {
       })
     }
 
-  } catch(e){
+  } catch(e) {
     console.error(e.stack)
   }
 

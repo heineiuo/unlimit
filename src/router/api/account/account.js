@@ -5,7 +5,9 @@ import awaitify from '../../../util/awaitify'
 const router = module.exports = Router()
 
 /**
- * originUrl: /api/account/login
+ * 登录 originUrl: /api/account/login
+ * @param username
+ * @param password
  */
 router.route('/login').post(async (req, res, next)=>{
 
@@ -22,8 +24,8 @@ router.route('/login').post(async (req, res, next)=>{
       username: username,
       password: password
     })
-    if (result.error) return next(result.error)
-    res.json(result)
+    if (result.body.error) return next(result.body.error)
+    res.json(result.body)
   } catch(e){
     next(e)
   }
@@ -48,8 +50,8 @@ router.route('/register').post(async (req, res, next) => {
       password: password
     })
 
-    if (result.error) return next(result.error)
-    res.json(result)
+    if (result.body.error) return next(result.body.error)
+    res.json(result.body)
 
   } catch(e){
     next(e)

@@ -13,26 +13,29 @@ module.exports = (config) => {
    */
   router.use(async (req, res, next) => {
     try {
-      res.locals.time1 = Date.now()
-
-      if (req.headers.host == config.host) {
-        res.locals.isCloud = true
-        return next()
-      }
-
-      res.locals.isCloud = false
-
-      const doc = await Host.findOne({hostname: req.headers.host})
-      if (!doc) return next('HOST_NOT_FOUND')
-
-      const locations = await Location.cfind({host_id: doc._id}).sort({sort: 1}).exec()
-      if (locations.length==0) return next('LOCATION_NOT_FOUND')
-
-      // 获取url, 自动补上'/'
+      /**
+       * 获取url, 自动补上'/'
+       */
       const url = res.locals.url = parse(req.headers.host + req.url , true)
       if (url.pathname =='') url.pathname = '/'
 
-      // 通过比对pathname, 找到路由
+      /**
+       * 检查是否是cloud host.
+       */
+      res.locals.isCloud = req.headers.host == config.host
+      if (res.locals.isCloud) return next()
+
+      /**
+       * 查找host及其location列表
+       */
+      const doc = await Host.findOne({hostname: req.headers.host})
+      if (!doc) return next('HOST_NOT_FOUND')
+      const locations = await Location.cfind({host_id: doc._id}).sort({sort: 1}).exec()
+      if (locations.length==0) return next('LOCATION_NOT_FOUND')
+
+      /**
+       * 通过比对pathname, 找到路由
+       */
       let found = false
       locations.some( item => {
         const reg = new RegExp(_.trim(item.pathname, '/').replace('\\\\','\\'))
@@ -87,9 +90,7 @@ module.exports = (config) => {
    * 其他 err交给全局err处理器
    */
   router.use(async (err, req, res, next)=>{
-
-    res.locals.time2 = Date.now()
-    console.log(res.locals.time2 - res.locals.time1 + 'ms, tag1')
+    console.log(err)
 
     if (err=='HOST_NOT_FOUND')
       return next()
@@ -98,11 +99,10 @@ module.exports = (config) => {
     if (err=='UNDEFINED_TYPE')
       return res.end(`${req.headers.host}: CONFIGURE ERROR`)
     if (err=='NOT_FOUND')
-      return res.end(`${req.headers.host}: NOT FOUND`)
+      return next()
 
     return res.end(`${req.headers.host}: EXCEPTION ERROR`)
   })
-
 
   return router
 }
