@@ -1,9 +1,9 @@
 import path from 'path'
 
 /**
- * 文件代理
+ * 文件下载代理
  */
-const handleFILE = async (req, res, next)=>{
+const handleFILE = async (req, res, next) => {
   try {
     const {location, url} = res.locals
     if (location.type != 'FILE') return next()

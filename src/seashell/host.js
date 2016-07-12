@@ -1,15 +1,11 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
+import awaitify from '../util/awaitify'
 import _ from 'lodash'
-import Host from '../../model/host'
-import Location from '../../model/location'
-import {Router} from 'express'
+import Host from '../model/host'
+import Location from '../model/location'
+import {Router} from 'seashell'
 
-const router = Router()
-
-// router.use(main.requireInstall)
-// router.use(main.requireEqualHost)
-// router.use(main.requireAdmin)
+const router = new Router()
 
 /************************
  *
@@ -18,7 +14,7 @@ const router = Router()
  ************************/
 
 // 获取域名列表
-router.route('/list').get( async(req, res, next)=> {
+router.use('/list', async(req, res, next)=> {
 
   try {
     const docs = await Host.find({})
@@ -31,7 +27,7 @@ router.route('/list').get( async(req, res, next)=> {
 })
 
 // 获取域名详情
-router.route('/detail').get(async (req, res, next) => {
+router.use('/detail', async (req, res, next) => {
   try {
     if (!_.has(req.body, 'hostId')) return res.json({error: "LOST_PARAM"})
     var result = {}
@@ -46,14 +42,14 @@ router.route('/detail').get(async (req, res, next) => {
 })
 
 // 创建新的域名
-router.route('/new').post(async (req, res, next) => {
+router.use('/new', async (req, res, next) => {
 
   try {
     console.log(req.body)
     await awaitify(Joi.validate)(req.body, Joi.object().keys({
       hostname: Joi.string().required()
     }), {allowUnknown: true})
-    
+
     const host = await Host.findOne({hostname: req.body.hostname})
     if (host) throw 'PERMISSION_DENIED'
     const createdHost = await Host.insert({hostname: req.body.hostname})
@@ -70,12 +66,12 @@ router.route('/new').post(async (req, res, next) => {
 /**
  * 编辑域名
  */
-router.route('/edit').post((req, res, next) =>{
+router.use('/edit', (req, res, next) =>{
   next('API_BUILDING')
 })
 
 // 删除域名
-router.route('/delete').post(async(req, res, next)=> {
+router.use('/delete', async(req, res, next)=> {
 
   if (!_.has(req.body, 'hostId')) return res.json({error: "PERMISSION_DENIED"})
 
@@ -91,5 +87,6 @@ router.route('/delete').post(async(req, res, next)=> {
 
 
 })
+
 
 module.exports = router

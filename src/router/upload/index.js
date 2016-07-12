@@ -10,11 +10,29 @@ var router = module.exports = express.Router()
 
 /*****************************
  *
- * 文件管理相关接口
+ * 文件代理
  *
  *****************************/
-// 上传
-router.use('/').post(function (req, res, next) {
+
+
+/**
+ * 检查是否是文件代理类型, 是的话继续处理
+ */
+router.use(async (req, res, next) => {
+  try {
+    const {location, url, host} = res.locals
+    if (location.type != 'UPLOAD') return next('NOT_UPLOAD')
+    next()
+  } catch(e){
+    next(e)
+  }
+})
+
+
+/**
+ * 处理上传
+ */
+router.use(function (req, res, next) {
   if (!_.has(req.query, 'uploadDir')) throw 'PARAMS_LOST'
   var form = new formidable.IncomingForm()
   form.encoding = 'utf-8'
@@ -54,8 +72,10 @@ router.use('/').post(function (req, res, next) {
   })
 })
 
-// 读取目录
-router.route('/dir').get(function (req, res, next) {
+/**
+ * 读取目录
+ */
+router.use(function (req, res, next) {
 
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
   var rawPath = decodeURI(req.body.path)
@@ -79,7 +99,9 @@ router.route('/dir').get(function (req, res, next) {
 
 })
 
-// 删除文件
+/**
+ * 删除文件
+ */
 router.route('/delete-file').post(function (req, res, next) {
 
   if (!_.has(req.body, 'path')) throw 'PARAMS_LOST'
@@ -97,8 +119,11 @@ router.route('/delete-file').post(function (req, res, next) {
 
 })
 
-// 下载文件
-router.route('/download-file').get(function (req, res, next) {
+/**
+ * 下载文件
+ *
+ */
+router.use(function (req, res, next) {
   if (!_.has(req.query, 'path')) return next('PARAMS_LOST')
   var rawPath = decodeURI(req.query.path)
   var result = {path: rawPath}
@@ -106,9 +131,42 @@ router.route('/download-file').get(function (req, res, next) {
   res.download(truePath)
 })
 
+/**
+ * 下载目录
+ */
+// todo
 
-router.route('/download-dir').get(function (req, res, next) {
 
-  return next('UNRADY')
+/**
+ * 错误处理
+ * 如果没有错误,返回404
+ * 如果不是cloud_api, 交给下一个proxy模块处理
+ * 否则,
+ * 说明真有错,
+ * 返回错误
+ */
+router.use(async (err, req, res, next) => {
+
+  /**
+   * 自定义的错误码
+   */
+  if (!err.stack) {
+    if (err == 'NOT_UPLOAD') return next()
+    return res.json({error: err})
+  }
+
+  /**
+   * 自定义错误类型
+   */
+  if (err.name == 'ValidationError') {
+    return res.json({error: 'VALIDATION_ERROR'})
+  }
+
+  /**
+   * 异常, 需要记录
+   * todo log error
+   */
+  console.log(err.stack)
+  return res.json({error: 'EXCEPTION_ERROR'})
+
 })
-

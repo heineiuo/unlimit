@@ -59,7 +59,7 @@ module.exports = (config) => {
 
   })
 
-  router.use(require('./cloud'))
+  // router.use(require('./cloud'))
   router.use(require('./cors'))
   router.use(require('./file'))
   router.use(require('./proxy'))
@@ -72,7 +72,7 @@ module.exports = (config) => {
    * `api`是唯一一个自带路由的
    * 或许目前没有方法让用户自定义这一块的路由
    */
-  router.use(require('./api'))
+  // router.use(require('./api'))
 
   /**
    * 未定义的type类型
