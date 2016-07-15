@@ -22,4 +22,6 @@ const configPath = argv.config || `${process.cwd()}/data/config.json`
 const configData = fs.readFileSync(configPath, 'utf-8')
 const config = Object.assign(argv, JSON.parse(configData))
 
+console.log(config)
+
 module.exports = config

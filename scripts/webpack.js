@@ -4,7 +4,6 @@ const express = require('express')
 const fs = require('fs')
 const request = require('request')
 const rucksack = require('rucksack-css')
-const webpackClientConfigCreator = require('webpack-config').webpackClientConfigCreator
 const config = require('./config')
 const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
 const nodeExternals = require('webpack-node-externals')
@@ -14,7 +13,6 @@ const port = 80
 const app = express()
 
 const webpackConfigs = {
-  dashboard: webpackClientConfigCreator('dashboard', {notCompress: true})
 }
 
 const startServer = ()=>{
@@ -74,7 +72,7 @@ const serverConfig = {
   devtool: false,
   target: 'node',
   entry: {
-    app: [`${process.cwd()}/src/entry/server.js`]
+    app: [`${process.cwd()}/src/server.js`]
   },
   output: {
     path: `${process.cwd()}/build/server`,

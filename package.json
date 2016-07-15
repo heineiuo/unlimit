@@ -7,8 +7,7 @@
     "start": "node scripts/webpack",
     "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
     "start-server": "cd build && sudo node server/index --config=data/config.dev.json --nohttps",
-    "build-server": "node scripts/webpack --build=server --compress",
-    "build-dashboard": "node scripts/webpack --build=dashboard --compress"
+    "build": "node scripts/webpack --build=server --compress"
   },
   "dependencies": {
     "ent": "^2.2.0",

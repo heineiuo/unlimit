@@ -1,4 +1,4 @@
-import Router from 'seashell'
+import {Router} from 'seashell'
 const router = module.exports = new Router()
 
 
