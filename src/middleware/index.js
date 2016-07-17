@@ -1,6 +1,5 @@
 import {Router} from 'express'
 import parse from 'url-parse'
-import _ from 'lodash'
 import Host from '../model/host'
 import Location from '../model/location'
 
@@ -20,15 +19,10 @@ module.exports = (config) => {
       const url = res.locals.url = parse(req.headers.host + req.url , true)
       if (url.pathname =='') url.pathname = '/'
 
-      // /**
-      //  * 检查是否是cloud host.
-      //  */
-      // res.locals.isCloud = req.headers.host == config.host
-      // if (res.locals.isCloud) return next()
-
       /**
        * 查找host及其location列表
        */
+      console.log(`find host: ${req.headers.host}`)
       const doc = await Host.findOne({hostname: req.headers.host})
       if (!doc) return next('HOST_NOT_FOUND')
       const locations = await Location.cfind({host_id: doc._id}).sort({sort: 1}).exec()
@@ -39,7 +33,9 @@ module.exports = (config) => {
        */
       let found = false
       locations.some( item => {
-        const reg = new RegExp(_.trim(item.pathname, '/').replace('\\\\','\\'))
+        console.log(item)
+        const reg = new RegExp(item.pathname.substr(1, item.pathname.length-2)
+          .replace('\\\\','\\'))
         const matches = url.pathname.match(reg)
         if (matches && matches[0] == url.pathname) {
           item.type = item.type.toUpperCase()

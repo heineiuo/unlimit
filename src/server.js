@@ -35,7 +35,7 @@ const start = async () => {
       console.log('Listening on port 80')
     })
 
-    if (!config.nohttps){
+    if (config.https.length > 0){
       const https_server = https.createServer(getKeyPair(config.https[0]), app)
       config.https.forEach((host, index) => {
         if (index > 0) https_server.addContext(host, getKeyPair(host))

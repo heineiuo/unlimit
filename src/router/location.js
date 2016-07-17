@@ -26,7 +26,8 @@ router.use('/new', async(req, res, next) => {
     .sort({sort: -1}).exec()
   req.body.sort=!doc?1:Number(doc.sort)+1
   const newLocation = await Location.insert(req.body)
-  res.json(newLocation)
+  res.body = newLocation
+  res.end()
 
 })
 
@@ -37,14 +38,14 @@ router.use('/new', async(req, res, next) => {
  */
 router.use('/detail', async(req, res, next) => {
 
-  await awaitify(Joi.validate)(req.query, Joi.object().keys({
+  await awaitify(Joi.validate)(req.body, Joi.object().keys({
     host_id: Joi.string().required(),
     location_id: Joi.string().required()
   }), {allowUnknown: true})
 
   const results = await Promise.all([
-    Host.findOne({_id: req.query.host_id}),
-    Location.findOne({_id: req.query.location_id})
+    Host.findOne({_id: req.body.host_id}),
+    Location.findOne({_id: req.body.location_id})
   ])
 
   res.body = {
@@ -157,16 +158,16 @@ router.use('/update-sort', async(req, res, next) => {
  */
 router.use('/list', async (req, res, next) => {
 
-  await awaitify(Joi.validate)(req.query, Joi.object().keys({
+  await awaitify(Joi.validate)(req.body, Joi.object().keys({
     host_id: Joi.string().required()
   }), {allowUnknown: true})
 
   var result = {}
-  req.query.host_id = decodeURIComponent(req.query.host_id)
-  const item = await Host.findOne({_id: req.query.host_id})
+  req.body.host_id = decodeURIComponent(req.body.host_id)
+  const item = await Host.findOne({_id: req.body.host_id})
   if (!item) return next("NOT_FOUND")
   result.host = item
-  result.list = await Location.cfind({host_id: req.query.host_id})
+  result.list = await Location.cfind({host_id: req.body.host_id})
     .sort({sort: 1}).exec()
   res.body = result
   res.end()

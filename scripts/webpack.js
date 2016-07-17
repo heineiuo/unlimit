@@ -4,7 +4,6 @@ const express = require('express')
 const fs = require('fs')
 const request = require('request')
 const rucksack = require('rucksack-css')
-const config = require('./config')
 const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
 const nodeExternals = require('webpack-node-externals')
 const _ = require('lodash')
@@ -12,8 +11,28 @@ const _ = require('lodash')
 const port = 80
 const app = express()
 
-const webpackConfigs = {
+
+
+const getValue = (equalIndex, val) => {
+  var value = val.substring(equalIndex+1)
+  return value==''?true:value
 }
+
+const getArgv = () => {
+  const argv = {}
+  process.argv.forEach((val, index, array) => {
+    if (val.substring(0, 2)=='--'){
+      var equalIndex = val.indexOf('=')
+      if (equalIndex<0) equalIndex = val.length
+      argv[val.substring(2, equalIndex)] = getValue(equalIndex,val)
+    }
+  })
+  return argv
+}
+
+const argv = getArgv()
+const config = argv
+
 
 const startServer = ()=>{
   Object.keys(webpackConfigs).forEach(key=>{
@@ -65,46 +84,53 @@ const startServer = ()=>{
   })
 }
 
-const serverConfig = {
-  context: process.cwd(),
-  // devtool: 'inline-source-map',
-  // devtool: 'eval',
-  devtool: false,
-  target: 'node',
-  entry: {
-    app: [`${process.cwd()}/src/server.js`]
-  },
-  output: {
-    path: `${process.cwd()}/build/server`,
-    //filename: '[name].js'
-    filename: 'index.js'
-  },
-  externals: nodeExternals({
-    //whitelist: [ 'node-uuid', 'sha.js']
-    whitelist: _.keys(packageFile.devDependencies)
-  }),
-  resolve: {
-    extensions: ['', '.jsx', '.scss', '.js', '.json'],
-    modulesDirectories: [
-      'node_modules',
-    ]
-  },
-  module: {
-    loaders: [
-      {
-        test: /(\.js|\.jsx)$/,
-        exclude: /(node_modules)/,
-        loader: 'babel',
-        query: {
-          presets:['es2015','stage-0'],
-          plugins: ['transform-runtime']
-        }
-      }
-    ]
-  },
+const serverConfigCreater = (name) => {
 
-  plugins: [
-  ]
+  return {
+    context: process.cwd(),
+    // devtool: 'inline-source-map',
+    // devtool: 'eval',
+    devtool: false,
+    target: 'node',
+    entry: {
+      app: [`${process.cwd()}/src/${name}.js`]
+    },
+    output: {
+      path: `${process.cwd()}/build/server`,
+      filename: `${name}.js`
+    },
+    externals: nodeExternals({
+      //whitelist: [ 'node-uuid', 'sha.js']
+      whitelist: _.keys(packageFile.devDependencies)
+    }),
+    resolve: {
+      extensions: ['', '.jsx', '.scss', '.js', '.json'],
+      modulesDirectories: [
+        'node_modules',
+      ]
+    },
+    module: {
+      loaders: [
+        {
+          test: /(\.js|\.jsx)$/,
+          exclude: /(node_modules)/,
+          loader: 'babel',
+          query: {
+            presets:['es2015','stage-0'],
+            plugins: ['transform-runtime']
+          }
+        }
+      ]
+    },
+
+    plugins: []
+  }
+
+}
+
+const webpackConfigs = {
+  server: serverConfigCreater('server'),
+  cli: serverConfigCreater('cli')
 }
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
@@ -129,8 +155,7 @@ const DefinePluginDevelopment = new webpack.DefinePlugin({
 console.log(`config: ${JSON.stringify(config)}`)
 
 if (config.build){
-  const webpackConfig = config.build == 'server'? serverConfig
-    : webpackConfigs[config.build]
+  const webpackConfig = webpackConfigs[config.build]
 
   if (config.compress){
     console.log('compress...')

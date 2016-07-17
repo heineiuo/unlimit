@@ -1,5 +1,4 @@
 var fs = require('fs-extra')
-var _ = require('lodash')
 var mkdirp = require('mkdirp')
 var path = require('path')
 var formidable = require('formidable')
@@ -22,7 +21,7 @@ const uploadHandle = async (req, res, next) => {
     const {location, url, host} = res.locals
     if (location.type != 'UPLOAD') return next('NOT_UPLOAD')
 
-    if (!_.has(req.query, 'uploadDir')) throw 'PARAMS_LOST'
+    if (!req.query.hasOwnProperty('uploadDir')) return next('PARAMS_LOST')
     var form = new formidable.IncomingForm()
     form.encoding = 'utf-8'
     form.parse(req, function (err, fields, files) {
@@ -42,14 +41,13 @@ const uploadHandle = async (req, res, next) => {
           var serial = 0
           var extname = path.extname(fileName||'')
           var name = path.basename(fileName, extname)
-          while (_.indexOf(files, fileName)>=0) {
+          while (files.indexOf(fileName) >= 0) {
             serial += 1
             fileName = name + "(" + serial + ")" + extname;
           }
           uploadName = path.join(uploadPath, fileName)
           renameFile()
         })
-
       })
 
       function renameFile(){
@@ -64,7 +62,6 @@ const uploadHandle = async (req, res, next) => {
     next(e)
   }
 }
-
 
 module.exports = uploadHandle
 
