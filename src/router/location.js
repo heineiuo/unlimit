@@ -69,6 +69,7 @@ router.use('/detail', async(req, res, next) => {
  */
 router.use('/edit', async (req, res, next) => {
 
+  console.log(req.body)
 
   await awaitify(Joi.validate)(req.body, Joi.object().keys({
     type: Joi.string().required(),
