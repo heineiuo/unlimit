@@ -63,7 +63,6 @@ module.exports = (config) => {
   router.use(require('./handler/json'))
   router.use(require('./handler/html'))
   router.use(require('./handler/lambda'))
-  router.use(require('./handler/upload'))
   router.use(require('./handler/download'))
 
   /**

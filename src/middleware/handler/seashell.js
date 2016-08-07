@@ -11,7 +11,7 @@ router.use(bodyParser.json({type: 'text/plain'}))
 
 router.use(async (req, res, next) => {
   try {
-    const {location} = res.locals
+    const {location, url, host} = res.locals
     if (location.type != 'SEASHELL') return next()
 
     const {seashell} = res.locals
@@ -19,8 +19,20 @@ router.use(async (req, res, next) => {
       __METHOD: req.method
     })
     const result = await seashell.request(req.path, reqBody)
-    console.log(result)
-    res.json(result.body)
+
+    /**
+     * 不是上传, 直接返回数据
+     */
+    if (!result.headers.__UPLOAD) return res.json(result.body)
+
+    /**
+     * 继续处理上传
+     */
+    if (location.type != 'UPLOAD') return next('NOT_UPLOAD')
+    if (!req.query.hasOwnProperty('uploadDir')) return next('PARAMS_LOST')
+
+    res.json({})
+
   } catch(e){
     next(e)
   }
@@ -29,7 +41,7 @@ router.use(async (req, res, next) => {
 router.use((err, req, res, next) => {
   if (!err) return next()
   if (typeof err == 'string') return res.json({error: err.toUpperCase()})
-  if (typeof err == 'object') console.log(err)
+  if (typeof err == 'object') console.log(err.stack||err)
   res.json({error: 'EXCEPTION_ERROR'})
 })
 

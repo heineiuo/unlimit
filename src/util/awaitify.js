@@ -1,26 +1,12 @@
-import thunkify from 'thunkify'
-
-const awaitify = function (fn) {
-  return async function (){
-    const args = Array.prototype.slice.call(arguments,0)
-    return new Promise(function (resolve, reject) {
-      const thunked = thunkify(fn).apply(this, args)
-      thunked(function(err){
-        if (err) return reject(err)
-        resolve.apply(this, Array.prototype.slice.call(arguments, 1))
-      })
-    })
-  }
-}
-
-
-const awaitify2 = function(fn){
+const awaitify = function(fn, returnArray = false){
   return function(){
     const args = Array.prototype.slice.call(arguments, 0)
     return new Promise(function(resolve, reject){
-      const callback = function(err){
+      const callback = function(err, a, b, c, d, e, f){
         if (err) return reject(err)
-        resolve(Array.prototype.slice.call(arguments, 1))
+        const resultArray = Array.prototype.slice.call(arguments, 1)
+        if (!returnArray) return resolve(resultArray[0])
+        resolve(resultArray)
       }
       args.push(callback)
       fn.apply(this, args)
@@ -29,4 +15,3 @@ const awaitify2 = function(fn){
 }
 
 export default awaitify
-export {awaitify2}

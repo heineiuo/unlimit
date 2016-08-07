@@ -32,6 +32,9 @@ const handlePROXY = async (req, res, next)=>{
       })
     })
 
+    proxy.close()
+
+
   } catch(e){
     next(e)
   }

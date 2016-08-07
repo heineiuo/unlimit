@@ -67,7 +67,7 @@ const deleteHost = async () => {
     console.log(`删除了${numDelete}条数据`)
   } catch(e){
     console.log('删除失败')
-    console.log(e)
+    console.log(e.stack||e)
   }
 }
 
@@ -77,7 +77,7 @@ const deleteHost = async () => {
 const createLocation = async () => {
   try {
     const table = new Table({
-      head: ['#', 'locationId', 'pathname', 'sort','content']
+      head: ['#', 'locationId', 'pathname', 'type', 'sort','content']
     })
 
     const host = await Host.findOne({hostname: config.hostname})
@@ -91,13 +91,13 @@ const createLocation = async () => {
       sort: config.sort
     })
 
-    table.push([1, location._id, location.pathname, location.sort, location.content])
+    table.push([1, location._id, location.pathname, location.type, location.sort, location.content])
     console.log(table.toString())
 
   } catch(e){
 
     console.log(`执行失败`)
-    console.log(e)
+    console.log(e.stack||e)
   }
 }
 
@@ -131,7 +131,7 @@ const updateLocation = async () => {
 
   } catch(e){
     console.log(`执行失败`)
-    console.log(e)
+    console.log(e.stack||e)
   }
 }
 
@@ -141,12 +141,30 @@ const deleteLocation = async () => {
     console.log(`删除了${numDelete}条数据`)
   } catch(e){
     console.log('删除失败')
-    console.log(e)
+    console.log(e.stack||e)
   }
+}
+
+const help = () => {
+  const table = new Table({
+    head: ['command', 'params', 'description']
+  })
+
+  table.push(['help', '', 'show commands'])
+  table.push(['listhost', '', 'list all hosts'])
+  table.push(['listLocationByHost', 'hostname', 'list all location of one host'])
+  table.push(['createHost', 'hostname', 'create a host'])
+  table.push(['createLocation', 'hostname, pathname, type, sort, content', 'create a location'])
+  table.push(['deleteHost', 'hostname', 'delete a host'])
+  table.push(['updateLocation', 'id, pathname, type, sort, content', 'update a location'])
+  table.push(['deleteLocation', 'id', 'delete a location'])
+
+  console.log(table.toString())
 }
 
 const start = () => {
 
+  if (config.help) return help()
   if (config.listhost) return listhost()
   if (config.listLocationByHost) return listLocationByhost()
   if (config.createHost) return createHost()
@@ -154,7 +172,6 @@ const start = () => {
   if (config.deleteHost) return deleteHost()
   if (config.updateLocation) return updateLocation()
   if (config.deleteLocation) return deleteLocation()
-
 
 }
 

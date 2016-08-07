@@ -1,4 +1,4 @@
-const Lambda = require('../../model/Lambda')
+// const Lambda = require('../../model/Lambda')
 
 /**
  * 返回json
@@ -24,10 +24,10 @@ const lambdaHandle = async (req, res, next)=>{
 
      */
 
-    const lam = await Lambda.findOne({path: req.path})
-    if (!lam) return next()
+    // const lam = await Lambda.findOne({path: req.path})
+    // if (!lam) return next()
 
-    const danger = new Function('options', lam.fn)
+    const danger = new Function('options', location.content)
 
     const response = await danger({
       query: req.query

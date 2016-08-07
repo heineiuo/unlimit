@@ -24,7 +24,7 @@ const start = async () => {
 
     app.use(require('morgan')(':req[host]:url :method :status :res[content-length] - :response-time ms', {}))
     app.use(require('compression')())
-    app.use(require('./util/seashellMiddleware')(config))
+    app.use(require('./router/index')(config))
     app.use(require('./util/redirectToHttps')(config))
     app.use(require('./util/headers')(config))
     app.use(require('./middleware/index')(config))
@@ -46,7 +46,7 @@ const start = async () => {
     }
 
   } catch(e) {
-    console.error(e.stack)
+    console.error(e.stack||e)
   }
 
 }

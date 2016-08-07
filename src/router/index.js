@@ -1,12 +1,20 @@
-import {App} from 'seashell'
+import {App} from 'seashell-client-node'
 
 const seashellMiddleware = (conf) => {
 
   const app = new App()
 
-  app.use('/host', require('../router/host'))
-  app.use('/location', require('../router/location'))
-  app.use('/status', require('../router/status'))
+  app.use('/host/list', require('./host/list'))
+  app.use('/host/detail', require('./host/detail'))
+  app.use('/host/delete', require('./host/delete'))
+  app.use('/host/new', require('./host/new'))
+  app.use('/location/new', require('./location/new'))
+  app.use('/location/delete', require('./location/delete'))
+  app.use('/location/detail', require('./location/detail'))
+  app.use('/location/edit', require('./location/edit'))
+  app.use('/location/list', require('./location/list'))
+  app.use('/location/new', require('./location/new'))
+  app.use('/location/update-sort', require('./location/update-sort'))
 
   app.use(async (err, req, res, next) => {
     if (typeof err == 'string') {
