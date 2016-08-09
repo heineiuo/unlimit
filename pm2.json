@@ -1,0 +1,9 @@
+{
+  "name": "gateway",
+  "script": "bin/server.js",
+  "watch": ["bin"],
+  "ignore_watch" : ["node_modules", "data", "bin/cli.js"],
+  "watch_options": {
+    "followSymlinks": false
+  }
+}

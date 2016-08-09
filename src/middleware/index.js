@@ -22,7 +22,6 @@ module.exports = (config) => {
       /**
        * 查找host及其location列表
        */
-      console.log(`find host: ${req.headers.host}`)
       const doc = await Host.findOne({hostname: req.headers.host})
       if (!doc) return next('HOST_NOT_FOUND')
       const locations = await Location.cfind({host_id: doc._id}).sort({sort: 1}).exec()
@@ -33,7 +32,6 @@ module.exports = (config) => {
        */
       let found = false
       locations.some( item => {
-        console.log(item)
         const reg = new RegExp(item.pathname.substr(1, item.pathname.length-2)
           .replace('\\\\','\\'))
         const matches = url.pathname.match(reg)

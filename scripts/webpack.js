@@ -96,7 +96,7 @@ const serverConfigCreater = (name) => {
       app: [`${process.cwd()}/src/${name}.js`]
     },
     output: {
-      path: `${process.cwd()}/build/server`,
+      path: `${process.cwd()}/build/bin`,
       filename: `${name}.js`
     },
     externals: nodeExternals({

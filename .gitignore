@@ -7,11 +7,10 @@ Thumb.db
 .DS_Store
 .svn
 .psd
-
 .grunt-cache
 .grunt
 
-data/*
-
-/build/
+data
+build
+!build/README.md
 
