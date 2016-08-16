@@ -1,12 +1,12 @@
 import Table from 'cli-table2'
-import config from './util/config'
-import Host from './model/host'
-import Location from './model/location'
+import config from '../util/config'
+import Host from '../model/host'
+import Location from '../model/location'
 
 /**
  * 列出所有的host
  */
-const listhost = async () => {
+export const listhost = async () => {
   const table = new Table({
     head: ['#', 'id', 'host']
   })
@@ -20,7 +20,7 @@ const listhost = async () => {
 /**
  * 列出某个host的所有location
  */
-const listLocationByhost = async () => {
+export const listLocationByhost = async () => {
   const table = new Table({
     head: ['#', 'locationId', 'sort', 'pathname', 'type', 'content']
   })
@@ -36,7 +36,7 @@ const listLocationByhost = async () => {
 /**
  * 创建host
  */
-const createHost = async () => {
+export const createHost = async () => {
   const table = new Table({
     head: ['#', 'id', 'host']
   })
@@ -61,7 +61,7 @@ const createHost = async () => {
 /**
  * 删除host
  */
-const deleteHost = async () => {
+export const deleteHost = async () => {
   try {
     const numDelete = await Host.remove({hostname: config.hostname}, {})
     console.log(`删除了${numDelete}条数据`)
@@ -74,7 +74,7 @@ const deleteHost = async () => {
 /**
  * 创建location
  */
-const createLocation = async () => {
+export const createLocation = async () => {
   try {
     const table = new Table({
       head: ['#', 'locationId', 'pathname', 'type', 'sort','content']
@@ -104,7 +104,7 @@ const createLocation = async () => {
 /**
  * 更新location
  */
-const updateLocation = async () => {
+export const updateLocation = async () => {
   try {
     const table = new Table({
       head: ['#', 'locationId', 'pathname', 'sort','content']
@@ -135,7 +135,7 @@ const updateLocation = async () => {
   }
 }
 
-const deleteLocation = async () => {
+export const deleteLocation = async () => {
   try {
     const numDelete = await Location.remove({_id: config.id}, {})
     console.log(`删除了${numDelete}条数据`)
@@ -145,7 +145,7 @@ const deleteLocation = async () => {
   }
 }
 
-const help = () => {
+export const help = () => {
   const table = new Table({
     head: ['command', 'params', 'description']
   })
@@ -161,18 +161,3 @@ const help = () => {
 
   console.log(table.toString())
 }
-
-const start = () => {
-
-  if (config.help) return help()
-  if (config.listhost) return listhost()
-  if (config.listLocationByHost) return listLocationByhost()
-  if (config.createHost) return createHost()
-  if (config.createLocation) return createLocation()
-  if (config.deleteHost) return deleteHost()
-  if (config.updateLocation) return updateLocation()
-  if (config.deleteLocation) return deleteLocation()
-
-}
-
-start()

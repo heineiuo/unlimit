@@ -3,6 +3,7 @@ import fs from 'fs-promise'
 import http from 'http'
 import https from 'https'
 import config from './util/config'
+import * as cli from './cli'
 
 const getKeyPair = (host) => {
   const pair = [
@@ -51,4 +52,15 @@ const start = async () => {
 
 }
 
-start()
+
+(function (){
+  if (config.start) return start()
+  if (config.help) return cli.help()
+  if (config.listhost) return cli.listhost()
+  if (config.listLocationByHost) return cli.listLocationByhost()
+  if (config.createHost) return cli.createHost()
+  if (config.createLocation) return cli.createLocation()
+  if (config.deleteHost) return cli.deleteHost()
+  if (config.updateLocation) return cli.updateLocation()
+  if (config.deleteLocation) return cli.deleteLocation()
+})()

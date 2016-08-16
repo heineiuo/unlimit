@@ -7,8 +7,8 @@
     "start": "node scripts/webpack",
     "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
     "start-server": "cd build && sudo node server/index --config=data/config.dev.json --nohttps",
-    "build": "node scripts/webpack --build=server --compress",
-    "build-cli": "node scripts/webpack --build=cli --compress"
+    "build": "node scripts/webpack --build=gateway --compress",
+    "build-debug": "node scripts/webpack --build=gateway"
   },
   "dependencies": {
     "babel-runtime": "^6.9.2",

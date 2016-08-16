@@ -1,5 +1,3 @@
-import {Router} from 'express'
-
 const middleware = (conf) => {
 
   return (req, res) => {

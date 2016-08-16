@@ -11,8 +11,6 @@ const _ = require('lodash')
 const port = 80
 const app = express()
 
-
-
 const getValue = (equalIndex, val) => {
   var value = val.substring(equalIndex+1)
   return value==''?true:value
@@ -84,8 +82,10 @@ const startServer = ()=>{
   })
 }
 
-const serverConfigCreater = (name) => {
-
+/**
+ * opt = {src: 'index', out: 'index'}
+ */
+const serverConfigCreater = (opt) => {
   return {
     context: process.cwd(),
     // devtool: 'inline-source-map',
@@ -93,11 +93,11 @@ const serverConfigCreater = (name) => {
     devtool: false,
     target: 'node',
     entry: {
-      app: [`${process.cwd()}/src/${name}.js`]
+      app: [`${process.cwd()}/src/${opt.src}.js`]
     },
     output: {
       path: `${process.cwd()}/build/bin`,
-      filename: `${name}.js`
+      filename: `${opt.out}.js`
     },
     externals: nodeExternals({
       //whitelist: [ 'node-uuid', 'sha.js']
@@ -129,8 +129,7 @@ const serverConfigCreater = (name) => {
 }
 
 const webpackConfigs = {
-  server: serverConfigCreater('server'),
-  cli: serverConfigCreater('cli')
+  gateway: serverConfigCreater({src: 'index', out: 'gateway'})
 }
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
