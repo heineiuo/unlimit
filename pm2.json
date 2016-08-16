@@ -2,6 +2,7 @@
   "name": "gateway",
   "script": "bin/gateway.js",
   "watch": ["bin"],
+  "args": "--start",
   "ignore_watch" : ["node_modules", "data"],
   "watch_options": {
     "followSymlinks": false

@@ -21,22 +21,20 @@ router.use(async (req, res, next) => {
     const result = await seashell.request(req.path, reqBody)
 
     /**
-     * 不是上传, 直接返回数据
+     * 检查headers
+     * 如果不是上传, 直接返回数据
+     * 如果是上传, next()
      */
     if (!result.headers.__UPLOAD) return res.json(result.body)
-
-    /**
-     * 继续处理上传
-     */
-    if (location.type != 'UPLOAD') return next('NOT_UPLOAD')
-    if (!req.query.hasOwnProperty('uploadDir')) return next('PARAMS_LOST')
-
-    res.json({})
+    res.locals.upload = result.body
+    return next()
 
   } catch(e){
     next(e)
   }
 })
+
+router.use(require('./upload'))
 
 router.use((err, req, res, next) => {
   if (!err) return next()
