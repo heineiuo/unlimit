@@ -5,7 +5,7 @@
 const downloadHandle = function (req, res, next) {
 
   const {location, url, host} = res.locals
-  if (location.type != 'UPLOAD') return next('NOT_UPLOAD')
+  if (location.type != 'DOWNLOAD') return next('NOT_UPLOAD')
 
   if (typeof req.query.path == 'undefined') return next('PARAMS_LOST')
   const rawPath = decodeURI(req.query.path)

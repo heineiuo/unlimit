@@ -4,11 +4,17 @@ import fs from 'fs-promise'
 
 module.exports = async (req, res, next) => {
   try {
-    const {location, upload} = res.locals
-    if (location.type != 'SEASHELL') return next()
+    const {seashellResult} = res.locals
+    /**
+     * 检查headers
+     * 如果不是上传, 直接返回数据
+     * 如果是上传, next()
+     */
+    if (!seashellResult.headers.__UPLOAD) return next()
 
-    const {uploadDir, uploadLocation, uploadKey} = upload
+    const {uploadDir, uploadLocation, uploadKey} = seashellResult.body
     console.log(uploadDir, uploadLocation, uploadKey)
+
     /**
      * 设置上传参数, 处理上传, 返回上传结果 {fields, files}
      * @returns {Promise}
