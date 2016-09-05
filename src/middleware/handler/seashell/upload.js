@@ -12,6 +12,14 @@ module.exports = async (req, res, next) => {
      */
     if (!seashellResult.headers.__UPLOAD) return next()
 
+    /**
+     * res.headers.__UPLOAD = true
+     * res.body = {
+     *  uploadKey: 'file',
+     *  uploadDir: `/root/gateway/data/app/superuser.youkuohao.com/public/upload`,
+     *  uploadLocation: `http://superuser.youkuohao.com/upload`
+     * }
+     **/
     const {uploadDir, uploadLocation, uploadKey} = seashellResult.body
     console.log(uploadDir, uploadLocation, uploadKey)
 
@@ -39,7 +47,7 @@ module.exports = async (req, res, next) => {
 
     /**
      * 上传后对文件进行处理
-     * 注意, uploaded.files.file 这里的`.file` 是
+     * 注意, uploaded.files.fs 这里的`.fs` 是
      * 客户端传过来的formData的key, 可以改成其他的
      */
     const getPathPromises = () => {

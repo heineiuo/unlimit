@@ -18,8 +18,15 @@ const getArgv = () => {
 }
 
 const argv = getArgv()
-const configPath = argv.config || `${process.cwd()}/data/config.json`
-const configData = fs.readFileSync(configPath, 'utf-8')
+
+if (!argv.hasOwnProperty('datadir')) argv.datadir = 'data'
+
+console.log(argv.datadir)
+
+if (argv.datadir[0] != '/') argv.datadir = `${process.cwd()}/${argv.datadir}`
+
+const configData = fs.readFileSync(`${argv.datadir}/config.json`, 'utf-8')
+
 const config = Object.assign(argv, JSON.parse(configData))
 
-module.exports = config
+export default config

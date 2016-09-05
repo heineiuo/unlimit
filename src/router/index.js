@@ -4,10 +4,19 @@ const seashellMiddleware = (conf) => {
 
   const app = new App()
 
+  app.use((req, res, next) => {
+    res.json = (data) => {
+      res.body = data
+      res.end()
+    }
+    next()
+  })
+
   app.use('/host/list', require('./host/list'))
   app.use('/host/detail', require('./host/detail'))
   app.use('/host/delete', require('./host/delete'))
   app.use('/host/new', require('./host/new'))
+
   app.use('/location/new', require('./location/new'))
   app.use('/location/delete', require('./location/delete'))
   app.use('/location/detail', require('./location/detail'))
@@ -16,24 +25,22 @@ const seashellMiddleware = (conf) => {
   app.use('/location/new', require('./location/new'))
   app.use('/location/update-sort', require('./location/update-sort'))
 
-  app.use(async (err, req, res, next) => {
-    if (typeof err == 'string') {
-      res.body = {error: err}
-    } else if (typeof err.stack != 'undefined') {
-      console.log(err.stack)
-      if (err.name == 'ValidationError') {
-        res.body = {error: 'PARAM_ILLEGAL'}
-      } else {
-        res.body = {error: 'EXCEPTION_ERROR'}
-      }
-    } else {
-      res.body = {error: "EXCEPTION_ERROR"}
+  app.use('/fs/cat', require('./fs/cat').default)
+  app.use('/fs/ls', require('./fs/ls').default)
+
+
+  app.use((err, req, res, next) => {
+    if (typeof err == 'string') return res.json({error: err})
+
+    if (err.hasOwnProperty('name')) {
+      if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'})
     }
-    res.end()
+
+    return res.json({error: "EXCEPTION_ERROR"})
   })
 
-  app.use(async (req, res, next) => {
-    res.end({error: 'NOT_FOUND'})
+  app.use((req, res, next) => {
+    res.json({error: 'NOT_FOUND'})
   })
 
   app.connect(conf.seashell)
