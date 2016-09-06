@@ -28,12 +28,18 @@ const seashellMiddleware = (conf) => {
   app.use('/fs/cat', require('./fs/cat').default)
   app.use('/fs/ls', require('./fs/ls').default)
 
+  app.use('/terminal', require('./terminal').default)
+
 
   app.use((err, req, res, next) => {
     if (typeof err == 'string') return res.json({error: err})
 
     if (err.hasOwnProperty('name')) {
       if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'})
+    }
+
+    if (err.hasOwnProperty('stack')) {
+      if (err.stack.indexOf('Error: Command failed') > -1) return res.json({error: 'COMMAND_FAILED'})
     }
 
     return res.json({error: "EXCEPTION_ERROR"})
