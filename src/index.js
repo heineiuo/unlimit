@@ -6,15 +6,10 @@ import config from './util/config'
 import * as cli from './cli'
 
 const getKeyPair = (host) => {
-  const pair = [
-    fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`, 'utf8'),
-    fs.readFileSync(`/etc/letsencrypt/live/${host}/cert.pem`, 'utf8'),
-    fs.readFileSync(`/etc/letsencrypt/live/${host}/chain.pem`)
-  ]
   return {
-    key: pair[0],
-    cert: pair[1],
-    ca: pair[2]
+    key:  fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`, 'utf8'),
+    cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/cert.pem`, 'utf8'),
+    ca:   fs.readFileSync(`/etc/letsencrypt/live/${host}/chain.pem`)
   }
 }
 
@@ -25,11 +20,11 @@ const start = async () => {
 
     app.use(require('morgan')(':req[host]:url :method :status :res[content-length] - :response-time ms', {}))
     app.use(require('compression')())
-    app.use(require('./util/redirectToHttps')(config))
-    app.use(require('./util/headers')(config))
+    app.use(require('./http/redirectToHttps')(config))
+    app.use(require('./http/headers')(config))
     app.use(require('./router')(config))
-    app.use(require('./middleware')(config))
-    app.use(require('./util/404')(config))
+    app.use(require('./http')(config))
+    app.use(require('./http/404')(config))
 
     const http_server = http.createServer(app)
     http_server.listen(80, function(){
