@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import parse from 'url-parse'
-import Host from '../model/host'
-import Location from '../model/location'
+import Host from '../../model/host'
+import Location from '../../model/location'
 
 module.exports = (config) => {
 
@@ -52,16 +52,16 @@ module.exports = (config) => {
     }
   })
 
-  router.use(require('./handler/cors'))
-  router.use(require('./handler/seashell'))
-  router.use(require('./handler/file'))
-  router.use(require('./handler/proxy'))
-  router.use(require('./handler/block'))
-  router.use(require('./handler/redirect'))
-  router.use(require('./handler/json'))
-  router.use(require('./handler/html'))
-  router.use(require('./handler/lambda'))
-  router.use(require('./handler/download'))
+  router.use(require('./cors'))
+  router.use(require('./seashell'))
+  router.use(require('./file'))
+  router.use(require('./proxy'))
+  router.use(require('./block'))
+  router.use(require('./redirect'))
+  router.use(require('./json'))
+  router.use(require('./html'))
+  router.use(require('./lambda'))
+  router.use(require('./download'))
 
   /**
    * `api`是唯一一个自带路由的

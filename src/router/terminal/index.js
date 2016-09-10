@@ -1,6 +1,7 @@
 import {exec} from 'child-process-promise'
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
+
   try {
     const result = await exec(req.body.command)
     res.json({

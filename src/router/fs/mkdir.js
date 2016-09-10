@@ -1,5 +1,5 @@
 import fs from 'fs-promise'
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
   res.json({})
 }

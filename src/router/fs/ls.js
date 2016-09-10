@@ -2,7 +2,7 @@ import fs from 'fs-promise'
 import config from '../../util/config'
 import Host from '../../model/host'
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
     const {pathname, host_id} = req.body
     const {hostname} = await Host.findOne({_id: host_id})

@@ -1,4 +1,5 @@
 import {App} from 'seashell-client-node'
+import session from '../util/session'
 
 const seashellMiddleware = (conf) => {
 
@@ -9,8 +10,11 @@ const seashellMiddleware = (conf) => {
       res.body = data
       res.end()
     }
+    res.app = app
     next()
   })
+
+  app.use(session)
 
   app.use('/host/list', require('./host/list'))
   app.use('/host/detail', require('./host/detail'))
@@ -25,10 +29,14 @@ const seashellMiddleware = (conf) => {
   app.use('/location/new', require('./location/new'))
   app.use('/location/update-sort', require('./location/update-sort'))
 
-  app.use('/fs/cat', require('./fs/cat').default)
-  app.use('/fs/ls', require('./fs/ls').default)
+  app.use('/fs/cat', require('./fs/cat'))
+  app.use('/fs/ls', require('./fs/ls'))
+  app.use('/fs/vi', require('./fs/vi'))
+  app.use('/fs/mv', require('./fs/mv'))
+  app.use('/fs/rm', require('./fs/rm'))
+  app.use('/fs/mkdir', require('./fs/mkdir'))
 
-  app.use('/terminal', require('./terminal').default)
+  app.use('/terminal', require('./terminal'))
 
 
   app.use((err, req, res, next) => {

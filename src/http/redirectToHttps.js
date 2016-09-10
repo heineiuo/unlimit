@@ -1,6 +1,6 @@
 const UAParser = require('ua-parser-js')
 
-const redirectToHttps = (conf)=>{
+const redirectToHttps = (conf) => {
   return (req, res, next)=>{
     // if (conf.https.length == 0) {
     //   if ( req.protocol == 'https' ) {
