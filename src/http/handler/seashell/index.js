@@ -8,6 +8,7 @@ router.use((req, res, next) => {
   if (location.type == 'SEASHELL') return next()
   return next('NOT_SEASHELL')
 })
+
 router.use(bodyParser.urlencoded({extended: true}))
 router.use(bodyParser.json())
 router.use(bodyParser.json({type: 'application/*+json'}))
@@ -21,6 +22,9 @@ router.use(async (req, res, next) => {
       __GATEWAY: {host, url, location},
       __METHOD: req.method
     })
+    if (location.content == 'session') {
+      reqBody.__SESSION = await seashell.request('/account/session', reqBody)
+    }
     res.locals.seashellResult = await seashell.request(req.path, reqBody)
     next()
   } catch(e){
@@ -28,8 +32,8 @@ router.use(async (req, res, next) => {
   }
 })
 
-router.use(require('./seashell/upload'))
-router.use(require('./seashell/html'))
+router.use(require('./upload'))
+router.use(require('./html'))
 
 
 router.use((req, res, next) => {
