@@ -166,6 +166,7 @@ if (config.build){
 
   compiler.run((err, stats)=>{
     if (err) return console.error(err)
+    console.log(stats)
     console.log(`build ${config.build} success`)
   })
 } else {

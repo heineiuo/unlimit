@@ -1,63 +1,42 @@
-import express from 'express'
-import fs from 'fs-promise'
-import http from 'http'
-import https from 'https'
-import config from './util/config'
+import {App} from 'seashell-client-node'
 import * as cli from './cli'
+import config from './util/config'
 
-const getKeyPair = (host) => {
-  return {
-    key:  fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`, 'utf8'),
-    cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/cert.pem`, 'utf8'),
-    ca:   fs.readFileSync(`/etc/letsencrypt/live/${host}/chain.pem`)
-  }
-}
+const app = new App()
 
-
-const createHttpServer = (app) => {
-  const http_server = http.createServer(app)
-  http_server.listen(80, function(){
-    console.log('Listening on port 80')
-  })
-}
-
-const createHttpsServer = (app) => {
-
-  if (config.https.length > 0){
-    const https_server = https.createServer(getKeyPair(config.https[0]), app)
-    config.https.forEach((host, index) => {
-      if (index > 0) https_server.addContext(host, getKeyPair(host))
-    })
-    https_server.listen(443, function(){
-      console.log('Listening on port 443')
-    })
-  }
-}
-
-const start = async () => {
-
-  try {
-    const app = express()
-
-    app.use(require('morgan')(':req[host]:url :method :status :res[content-length] - :response-time ms', {}))
-    app.use(require('compression')())
-    app.use(require('./router')(config))
-    app.use(require('./http/redirectToHttps')(config))
-    app.use(require('./http/globalHeaders')(config))
-    app.use(require('./http/handler')(config))
-    app.use(require('./http/404')(config))
-
-    createHttpServer(app)
-    createHttpsServer(app)
-
-  } catch(e) {
-    console.error(e.stack||e)
+app.use((req, res, next) => {
+  res.json = (data) => {
+    res.body = data
+    res.end()
   }
 
-}
+  res.app = app
+  next()
+})
+
+app.use(require('./http')(config, app))
+app.use(require('./router'))
+
+app.use((err, req, res, next) => {
+  if (typeof err == 'string') return res.json({error: err})
+
+  if (err.hasOwnProperty('name')) {
+    if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'})
+  }
+
+  if (err.hasOwnProperty('stack')) {
+    if (err.stack.indexOf('Error: Command failed') > -1) return res.json({error: 'COMMAND_FAILED'})
+  }
+
+  return res.json({error: "EXCEPTION_ERROR"})
+})
+
+app.use((req, res) => {
+  res.json({error: 'NOT_FOUND'})
+})
 
 (function (){
-  if (config.start) return start()
+  if (config.start) return app.connect(config.seashell)
   if (config.help) return cli.help()
   if (config.listhost) return cli.listhost()
   if (config.listLocationByHost) return cli.listLocationByhost()
@@ -67,3 +46,5 @@ const start = async () => {
   if (config.updateLocation) return cli.updateLocation()
   if (config.deleteLocation) return cli.deleteLocation()
 })()
+
+export default module.exports = app
