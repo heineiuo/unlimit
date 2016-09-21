@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import parse from 'url-parse'
-import Host from '../../model/host'
-import Location from '../../model/location'
+import Host from '../../models/host'
+import Location from '../../models/location'
 
 module.exports = (config) => {
 
@@ -67,7 +67,7 @@ module.exports = (config) => {
    * `api`是唯一一个自带路由的
    * 或许目前没有方法让用户自定义这一块的路由
    */
-  // router.use(require('./api'))
+  // routes.use(require('./api'))
 
   /**
    * 未定义的type类型

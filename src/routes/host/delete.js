@@ -1,5 +1,5 @@
-import Host from '../../model/host'
-import Location from '../../model/location'
+import Host from '../../models/host'
+import Location from '../../models/location'
 
 /**
  * 删除域名

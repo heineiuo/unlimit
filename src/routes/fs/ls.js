@@ -1,6 +1,6 @@
 import fs from 'fs-promise'
-import config from '../../util/config'
-import Host from '../../model/host'
+import config from '../../utils/config'
+import Host from '../../models/host'
 
 module.exports = async (req, res, next) => {
   try {

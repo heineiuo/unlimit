@@ -1,7 +1,7 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
-import Location from '../../model/location'
-import Host from '../../model/host'
+import awaitify from '../../utils/awaitify'
+import Location from '../../models/location'
+import Host from '../../models/host'
 
 /**
  * 获取详情

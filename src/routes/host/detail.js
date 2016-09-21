@@ -1,4 +1,4 @@
-import Host from '../../model/host'
+import Host from '../../models/host'
 
 /**
  * 获取域名详情

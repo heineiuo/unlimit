@@ -1,5 +1,5 @@
 import fs from 'fs-promise'
-import config from '../../util/config'
+import config from '../../utils/config'
 
 module.exports = async (req, res, next) => {
   const {host, filename} = req.body

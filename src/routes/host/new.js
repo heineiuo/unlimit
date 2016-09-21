@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
-import Host from '../../model/host'
+import awaitify from '../../utils/awaitify'
+import Host from '../../models/host'
 
 /**
  * 创建新的域名

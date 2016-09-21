@@ -1,12 +1,10 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
+import awaitify from '../../utils/awaitify'
 import ent from 'ent'
-import Location from '../../model/location'
+import Location from '../../models/location'
 
 /**
  * 更新已有的记录
- * @param req
- * @param res
  */
 module.exports = async (req, res, next) => {
 

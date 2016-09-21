@@ -19,7 +19,7 @@ router.use(async (req, res, next) => {
   try {
     const {seashell, host, url, location} = res.locals
     const reqBody = Object.assign({}, req.query, req.body, {
-      __GATEWAY: {host, url, location},
+      __GATEWAY: {host, url},
       __METHOD: req.method
     })
     if (location.content == 'session') {

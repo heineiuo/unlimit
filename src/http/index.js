@@ -2,7 +2,7 @@ import express from 'express'
 import fs from 'fs-promise'
 import http from 'http'
 import https from 'https'
-import config from '../util/config'
+import config from '../utils/config'
 
 const getKeyPair = (host) => {
   return {

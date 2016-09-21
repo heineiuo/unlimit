@@ -1,7 +1,7 @@
 import Table from 'cli-table2'
-import config from '../util/config'
-import Host from '../model/host'
-import Location from '../model/location'
+import config from '../utils/config'
+import Host from '../models/host'
+import Location from '../models/location'
 
 /**
  * 列出所有的host

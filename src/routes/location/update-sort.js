@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
-import Location from '../../model/location'
+import awaitify from '../../utils/awaitify'
+import Location from '../../models/location'
 
 /**
  * 修改排序
@@ -27,7 +27,7 @@ module.exports = async(req, res, next) => {
 
   targetLocation.sort = Number(targetLocation.sort)
 
-  const sort = targetSort<targetLocation.sort?{
+  const sort = targetSort < targetLocation.sort?{
     // sort调小,那么在目标sort和当前sort内的记录都要+1, 再把当前sort调到目标sort
     $gte: targetSort,
     $lt: targetLocation.sort

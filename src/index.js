@@ -1,6 +1,6 @@
 import {App} from 'seashell-client-node'
 import * as cli from './cli'
-import config from './util/config'
+import config from './utils/config'
 
 const app = new App()
 
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 })
 
 app.use(require('./http')(config, app))
-app.use(require('./router'))
+app.use(require('./routes'))
 
 app.use((err, req, res, next) => {
   if (typeof err == 'string') return res.json({error: err})
@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 
 app.use((req, res) => {
   res.json({error: 'NOT_FOUND'})
-})
+});
 
 (function (){
   if (config.start) return app.connect(config.seashell)

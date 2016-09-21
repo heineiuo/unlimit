@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import awaitify from '../../util/awaitify'
-import Location from '../../model/location'
+import awaitify from '../../utils/awaitify'
+import Location from '../../models/location'
 
 /**
  * 删除一个location

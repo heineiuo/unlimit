@@ -2,8 +2,8 @@
 // 获取APP列表
 router.route('/app/list').post(
   function(req, res, next) {
-    var App = require('../model/App')
-    var User = require('../model/User')
+    var App = require('../models/App')
+    var User = require('../models/User')
     var result = {list: []}
     App.find({}).select('-_id -__v').exec(function(err, list){
       if (err) return res.json({error: "EXCEPTION_ERROR"})
@@ -26,7 +26,7 @@ router.route('/app/list').post(
 // 获取APP列表
 router.route('/app/detail').post(
   function(req, res, next) {
-    var App = require('../model/App')
+    var App = require('../models/App')
     App.findOne({appId: req.body.appId}, function(err, doc){
       if (err) return res.json({error: "EXCEPTION_ERROR"})
       if (!doc) return res.json({error: "NOT_FOUND"})
@@ -39,7 +39,7 @@ router.route('/app/detail').post(
 router.route('/app/new').post(
   function(req, res, next) {
 
-    var App = require('../model/App')
+    var App = require('../models/App')
     App.create(req.body, function(err, app){
       if (err) return res.json({error: "EXCEPTION_ERROR"})
       if (!app) return res.json({error: "NOT_FOUND"})
@@ -53,7 +53,7 @@ router.route('/app/new').post(
 router.route('/app/edit').post(
   function(req, res, next) {
     if (!_.has(req.body, 'appId')) return res.json({error: "PARAMS_LOST"})
-    var App = require('../model/App')
+    var App = require('../models/App')
     App.findOneAndUpdate({appId: req.body.appId}, req.body, function(err, app){
       if (err) return res.json({error: "EXCEPTION_ERROR"})
       if (!app) return res.json({error: "NOT_FOUND"})
@@ -65,7 +65,7 @@ router.route('/app/edit').post(
 
 router.route('/app/delete').post(function(req, res, next) {
   if (!_.has(req.body, 'appId')) return res.json({error: "PARAMS_LOST"})
-  var App = require('../model/App')
+  var App = require('../models/App')
   App.findOneAndRemove({appId: req.body.appId}, function(err, app){
     if (err) return res.json({error: "EXCEPTION_ERROR"})
     if (!app) return res.json({error: "NOT_FOUND"})
