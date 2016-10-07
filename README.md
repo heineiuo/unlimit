@@ -1,20 +1,50 @@
-# Cloud Platform
+# gateway (Powered by seashell)
 
-Powered by 右括号工作室.
----
+## Feature
 
-## 集成功能
+* CNAME Service
+* HTTPS Support
+* Web File Manage
+    * View
+    * Edit
+    * Upload
+    * Download
+* Domain
+    * port proxy
+    * static file proxy
+    * special file type editor online
+    * seashell proxy
+* Monitor
 
-* CNAME服务
-* SSL服务
-* 文件服务
-    * 在线查看服务
-    * 部分格式在线编辑服务
-    * 单个/批量上传服务
-    * 带个/批量下载服务
-* 路由服务
-    * 反向代理服务
-    * 静态文件代理服务
-    * 特殊格式(html/json)在线编辑服务
-    * 常用API服务(包含数据库支持)
-* 监控服务
+## Get Start
+
+1. clone this repo.
+```bash
+git clone https://github.com/heineiuo/gateway
+```
+
+2. install packages
+```bash
+npm install
+```
+
+3. build
+```base
+npm run build
+```
+
+4. start
+```base
+sudo npm run start
+```
+
+## Web Operate UI
+
+
+## Custom
+
+
+## License
+
+* Free for no-business usage.
+* If you want to use it in business, please contact [heineiuo@gmail.com](heineiuo@gmail.com).
