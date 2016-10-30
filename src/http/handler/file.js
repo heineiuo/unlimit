@@ -10,9 +10,10 @@ const handleFILE = async (req, res, next) => {
     var filePath = path.join(location.content, url.pathname);
     console.log(filePath);
     return res.sendFile(filePath, {
+      CacheControl: true,
+      "maxAge": 31536000000,
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "maxAge": "31536000000",
+        // "Access-Control-Allow-Origin": "*",
         "Expires": new Date(Date.now() + 31536000000)
       }
     }, function (err) {
@@ -28,4 +29,4 @@ const handleFILE = async (req, res, next) => {
   }
 }
 
-module.exports = handleFILE
+module.exports = handleFILE;
