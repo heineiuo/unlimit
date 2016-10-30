@@ -5,9 +5,10 @@ import path from 'path'
  */
 const handleFILE = async (req, res, next) => {
   try {
-    const {location, url} = res.locals
-    if (location.type != 'FILE') return next()
-    var filePath = path.join(location.content, url.pathname)
+    const {location, url} = res.locals;
+    if (location.type.toUpperCase() != 'FILE') return next();
+    var filePath = path.join(location.content, url.pathname);
+    console.log(filePath);
     return res.sendFile(filePath, {
       headers: {
         "Access-Control-Allow-Origin": "*",

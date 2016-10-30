@@ -6,10 +6,10 @@ const request = require('request')
 const rucksack = require('rucksack-css')
 const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
 const nodeExternals = require('webpack-node-externals')
-const _ = require('lodash')
+const _ = require('lodash');
 
 const port = 80
-const app = express()
+const app = express();
 
 const getValue = (equalIndex, val) => {
   var value = val.substring(equalIndex+1)

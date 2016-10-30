@@ -161,3 +161,23 @@ export const help = () => {
 
   console.log(table.toString())
 }
+
+export const init = async () => {
+  try {
+    await Host.put('localhost', {});
+    await Location.put('localhost', {
+      locations: {
+        '/^.*$/': {
+          pathname: '/^.*$/',
+          cors: true,
+          type: 'SEASHELL',
+          sort: 1,
+          contentType: '',
+          content: 'SEASHELL'
+        }
+      }
+    })
+  } catch(e){
+    console.log(e.stack||e)
+  }
+};

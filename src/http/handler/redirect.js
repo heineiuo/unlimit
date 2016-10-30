@@ -8,7 +8,7 @@ const handleREDIRECT = async (req, res, next)=>{
   try {
 
     const {location} = res.locals
-    if (location.type != 'REDIRECT') return next()
+    if (location.type.toUpperCase() != 'REDIRECT') return next()
     res.redirect(location.content)
 
   } catch(e){

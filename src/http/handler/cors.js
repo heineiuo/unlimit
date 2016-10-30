@@ -5,7 +5,7 @@
 
 const handleCORS = async (req, res, next)=>{
   try {
-    if (res.locals.location.cors == 'ALLOW'){
+    if (res.locals.location.cors){
       res.set('Access-Control-Allow-Origin', '*')
       res.set('Access-Control-Expose-Headers', '*')
       res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type')

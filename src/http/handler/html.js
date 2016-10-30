@@ -8,9 +8,9 @@ const handleHTML = async (req, res, next)=>{
 
   try {
 
-    const {location} = res.locals
+    const {location} = res.locals;
 
-    if (location.type != 'HTML') return next()
+    if (location.type.toUpperCase() != 'HTML') return next();
     if (location.contentType=='file'){
       res.sendFile(location.content, {
         headers: {
@@ -27,6 +27,6 @@ const handleHTML = async (req, res, next)=>{
     next(e)
   }
 
-}
+};
 
-module.exports = handleHTML
+module.exports = handleHTML;

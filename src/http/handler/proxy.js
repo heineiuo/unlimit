@@ -9,7 +9,7 @@ const handlePROXY = async (req, res, next)=>{
 
   try {
     const {location} = res.locals
-    if (location.type != 'PROXY') return next()
+    if (location.type.toUpperCase() != 'PROXY') return next()
 
     console.log('proxy...')
 

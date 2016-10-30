@@ -21,7 +21,6 @@ const argv = getArgv()
 
 if (!argv.hasOwnProperty('datadir')) argv.datadir = 'data'
 
-console.log(argv.datadir)
 
 if (argv.datadir[0] != '/') argv.datadir = `${process.cwd()}/${argv.datadir}`
 
