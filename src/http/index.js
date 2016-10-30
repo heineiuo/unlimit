@@ -49,8 +49,10 @@ const middleware = (config, seashell) => {
     app.use(require('./handler')(config));
     app.use(require('./404')(config));
 
-    createHttpServer(app);
-    createHttpsServer(app)
+    if (config.start) {
+      createHttpServer(app);
+      createHttpsServer(app)
+    }
   }
 
   return (req, res, next) => {
