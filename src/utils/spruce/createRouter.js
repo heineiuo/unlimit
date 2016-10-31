@@ -5,18 +5,29 @@ import {Router} from 'seashell-client-node'
 
 /**
  * create a seashell and express protocol router
- * @param model
+ * @param models
  * @returns {*}
  */
-const createRouter = (model) => {
+const createRouter = (...models) => {
   const router = new Router();
-  const keys = Object.keys(model.statics);
+  const modelKeys = {};
+  models.map(model => {
+    const current = modelKeys[model.modelName.toLowerCase()] = {
+      keys: {}
+    };
+    Object.keys(model.statics).forEach(key => {
+      current.keys[key.toLowerCase()] = model.statics[key]
+    })
+  });
 
-  router.use(`/${model.modelName}/:action`, async (req, res, next) => {
+  router.use('/:modelName/:action', async (req, res, next) => {
     try {
-      const {action} = req.params;
-      if (keys.indexOf(action) == -1) return res.error('NOT_FOUND');
-      const result = await model.statics[action](req.body, {req: req, res: res, next: next});
+      const {modelName, action} = req.params;
+      const lowerModelName = modelName.toLowerCase();
+      const lowerAction = action.toLowerCase();
+      if (!modelKeys.hasOwnProperty(lowerModelName)) return next();
+      if (!modelKeys[lowerModelName].keys.hasOwnProperty(lowerAction)) return next();
+      const result = await modelKeys[lowerModelName].keys[lowerAction](req.body, {req: req, res: res, next: next});
       return res.json(result);
     } catch(e){
       next(e)

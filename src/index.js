@@ -1,5 +1,4 @@
 import {App} from 'seashell-client-node'
-import * as cli from './cli'
 import config from './utils/config'
 import {createRouter} from './utils/spruce'
 
@@ -17,9 +16,11 @@ app.use((req, res, next) => {
 });
 
 app.use(require('./http')(config, app));
-app.use(createRouter(require('./models/file')));
-app.use(createRouter(require('./models/host')));
-app.use(createRouter(require('./models/location')));
+app.use(createRouter(
+  require('./models/file'),
+  require('./models/host'),
+  require('./models/location')
+));
 
 app.use((err, req, res, next) => {
   if (typeof err == 'string') return res.json({error: err});
@@ -40,16 +41,9 @@ app.use((req, res) => {
   res.json({error: 'NOT_FOUND'})
 });
 
-(function (){
-  if (config.start) return app.connect(config.seashell);
-  if (config.help) return cli.help();
-  if (config.listhost) return cli.listhost();
-  if (config.listLocationByHost) return cli.listLocationByhost();
-  if (config.createHost) return cli.createHost();
-  if (config.createLocation) return cli.createLocation();
-  if (config.deleteHost) return cli.deleteHost();
-  if (config.updateLocation) return cli.updateLocation();
-  if (config.deleteLocation) return cli.deleteLocation();
+
+(() => {
+  if (config.start) return app.connect(config.seashell)
 })();
 
 export default module.exports = app

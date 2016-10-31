@@ -129,7 +129,8 @@ const serverConfigCreater = (opt) => {
 }
 
 const webpackConfigs = {
-  gateway: serverConfigCreater({src: 'index', out: 'gateway'})
+  gateway: serverConfigCreater({src: 'index', out: 'gateway'}),
+  cli: serverConfigCreater({src: 'cli', out: 'gateway-cli'})
 }
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({

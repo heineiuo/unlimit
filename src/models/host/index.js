@@ -54,6 +54,7 @@ Host.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /host/list 获取域名列表
  * @apiGroup Host
  * @apiName HostList
+ * @apiParam {number} limit 个数限制
  * @apiSuccess {string} list
  */
 Host.statics.list = (query, ctx) => new Promise(async(resolve, reject) => {
@@ -108,6 +109,5 @@ Host.statics.detail = (query, ctx)  => new Promise(async(resolve, reject) => {
     reject(e)
   }
 });
-
 
 export default module.exports = Host

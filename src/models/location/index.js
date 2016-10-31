@@ -54,13 +54,13 @@ Location.statics.delete = (query, ctx) => new Promise(async (resolve, reject) =>
  */
 Location.statics.edit = (query, ctx) => new Promise(async (resolve, reject) => {
   try {
-    await awaitify(Joi.validate)(qyery, Joi.object().keys({
+    await awaitify(Joi.validate)(query, Joi.object().keys({
       hostname: Joi.string().required(),
       pathname: Joi.string().required(),
-      cors: Joi.boolean().required(),
-      type: Joi.string().required(),
-      contentType: Joi.string().required(),
-      content: Joi.string().required()
+      cors: Joi.boolean(),
+      type: Joi.string(),
+      contentType: Joi.string(),
+      content: Joi.string(),
     }), {allowUnknown: true});
 
     const {cors, hostname, type, content, contentType, pathname} = query;
@@ -137,16 +137,17 @@ Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
     await Host.Get(hostname);
     const content = type == 'html'? ent.encode(query.content) :query.content;
     const location = await Location.get(hostname);
-    location.locations[pathname] = {
+    const nextLocation = {
       pathname,
       cors,
       sort: Object.keys(location.locations).length + 1,
       type,
       contentType,
       content,
-    };
+    }
+    location.locations[pathname] = nextLocation;
     await Location.put(hostname, location);
-    resolve({})
+    resolve({nextLocation})
   } catch(e){
     console.log(e.stack||e);
     reject(e);

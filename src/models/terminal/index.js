@@ -1,10 +1,6 @@
 import {exec} from 'child-process-promise'
 
 /**
- * @api {POST} /terminal cli
- * @param req
- * @param res
- * @param next
  */
 module.exports = async (req, res, next) => {
 
