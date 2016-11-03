@@ -27,9 +27,10 @@ const createRouter = (...models) => {
       const lowerAction = action.toLowerCase();
       if (!modelKeys.hasOwnProperty(lowerModelName)) return next();
       if (!modelKeys[lowerModelName].keys.hasOwnProperty(lowerAction)) return next();
-      const result = await modelKeys[lowerModelName].keys[lowerAction](req.body, {req: req, res: res, next: next});
+      const result = await modelKeys[lowerModelName].keys[lowerAction](req.body, {req, res, next});
       return res.json(result);
     } catch(e){
+      if (e == 'NOT_FOUND') return next();
       next(e)
     }
   });

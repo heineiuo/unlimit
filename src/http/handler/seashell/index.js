@@ -3,6 +3,16 @@ import bodyParser from 'body-parser'
 
 const router = Router();
 
+const JSONSafeParse = (content, schema) => {
+  try {
+    return JSON.parse(content)
+  } catch(e){
+    return Object.assign({}, schema, {
+      JSONSafeParseError: e
+    })
+  }
+};
+
 router.use((req, res, next) => {
   const {location} = res.locals;
   if (location.type == 'SEASHELL') return next();
@@ -22,10 +32,12 @@ router.use(async (req, res, next) => {
       __GATEWAY: {host, url},
       __METHOD: req.method
     });
-    if (location.content == 'session') {
-      reqBody.__SESSION = await seashell.request('/account/session', reqBody)
+    const locationContent = JSONSafeParse(location.content);
+    if (locationContent.session) {
+      reqBody.__SESSION = await seashell.request(locationContent.sessionPath, reqBody)
     }
-    res.locals.seashellResult = await seashell.request(req.path, reqBody);
+    const requestPath = req.path.replace(locationContent.prefix || '', '');
+    res.locals.seashellResult = await seashell.request(requestPath, reqBody);
     next()
   } catch(e){
     next(e)

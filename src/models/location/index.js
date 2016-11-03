@@ -127,13 +127,13 @@ Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
     await awaitify(Joi.validate)(query, Joi.object().keys({
       hostname: Joi.string().required(),
       pathname: Joi.string().required(),
-      cors: Joi.boolean().required(),
+      cors: Joi.boolean(),
       type: Joi.string().required(),
-      contentType: Joi.string().required(),
+      contentType: Joi.string(),
       content: Joi.string().required()
     }), {allowUnknown: true});
 
-    const {hostname, type, cors, pathname, contentType} = query;
+    const {hostname, type, cors=false, pathname, contentType='text'} = query;
     await Host.Get(hostname);
     const content = type == 'html'? ent.encode(query.content) :query.content;
     const location = await Location.get(hostname);
@@ -157,7 +157,7 @@ Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
 
 
 /**
- * @api {POST} /location/update-sort 修改排序
+ * @api {POST} /location/updatesort 修改排序
  * @apiGroup Location
  * @apiName LocationUpdateSort
  * @apiParam {string} hostname
@@ -167,32 +167,32 @@ Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
  */
 Location.statics.UpdateSort = (query, ctx) => new Promise(async (resolve, reject) => {
   try {
-
     await awaitify(Joi.validate)(query, Joi.object().keys({
       hostname: Joi.string().required(),
       pathname: Joi.string().required(),
       nextSort: Joi.number().required()
     }), {allowUnknown: true});
-
-    const {nextSort, pathname, hostname} = {query};
+    const {nextSort, pathname, hostname} = query;
     if (nextSort < 1) return reject('PARAMS_ILLEGAL');
     const location = await Location.get(hostname);
-    const prevSort = location.locations[pathname].sort;
-    if (nextSort == location.locations[pathname].sort) return reject('NOT_CHANGED');
+    const targetPath = location.locations[pathname];
+    const prevSort = targetPath.sort;
+    if (nextSort == prevSort) return reject('NOT_CHANGED');
     const beBigger = nextSort > prevSort;
-    if (nextSort > Object.keys(location.locations).length + 1) return reject('PARAMS_ILLEGAL');
+    if (nextSort > Object.keys(location.locations).length) return reject('PARAMS_ILLEGAL');
 
     location.locations[pathname].sort = nextSort;
     Object.values(location.locations).forEach(item => {
       /**
-       * 变大的话, 比之前大的和比现在小的都要变小
-       * 变小的话, 比之前小的和比现在大的都要变大
+       * 变大的话, 比之前大的和比现在小的都要变小, 包括目标sort
+       * 变小的话, 比之前小的和比现在大的都要变大, 包括目标sort
        */
-      if (beBigger  && item.sort > prevSort && item.sort < nextSort) {
+      if (item.pathname == pathname) return false;
+      if (beBigger  && item.sort > prevSort && item.sort <= nextSort) {
         return location.locations[item.pathname].sort --;
       }
-      if (!beBigger && item.sort > nextSort && item.sort < prevSort) {
-        return location.locations[item.pathname].sort --;
+      if (!beBigger && item.sort >= nextSort && item.sort < prevSort) {
+        return location.locations[item.pathname].sort ++;
       }
     });
     await Location.put(hostname, location);
