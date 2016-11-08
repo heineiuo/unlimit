@@ -10,7 +10,7 @@ module.exports = (app) => {
     app: app,
     renewWithin: (91 * 24 * 60 * 60 * 1000),
     renewBy: (90 * 24 * 60 * 60 * 1000),
-    debug: true
+    debug: config.debug || false
   });
 
   https.createServer(lex.httpsOptions, lex.middleware(app)).listen(443, function () {

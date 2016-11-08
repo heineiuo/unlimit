@@ -41,7 +41,7 @@ File.statics.ls = (query, ctx) => new Promise(async (resolve, reject) => {
   try {
     const {pathname, hostname} = query;
     const prefix = `${config.datadir}/app/${hostname}`;
-    console.log(`${prefix}/${pathname}`);
+    if (config.debug) console.log(`${prefix}/${pathname}`);
     const ls = await fs.readdir(`${prefix}${pathname}`);
     resolve({ls})
   } catch(e){

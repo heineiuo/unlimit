@@ -6,7 +6,9 @@ import {Model} from '../../utils/spruce'
 import Joi from 'joi'
 import ent from 'ent'
 import Host from '../host'
+import config from '../../utils/config'
 import awaitify from '../../utils/awaitify'
+
 const Location = new Model('Location', {
   pathname: String,
   cors: Boolean,
@@ -149,7 +151,7 @@ Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
     await Location.put(hostname, location);
     resolve({nextLocation})
   } catch(e){
-    console.log(e.stack||e);
+    if (config.debug) console.log(e.stack||e);
     reject(e);
   }
 });

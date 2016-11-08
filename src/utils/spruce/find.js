@@ -30,7 +30,7 @@ module.exports = (db) => {
         }).on('error', (err) => {
           reject(err)
         }).on('close', () => {
-          // console.log('close')
+
         }).on('end',  () => {
           resolve(result)
         })

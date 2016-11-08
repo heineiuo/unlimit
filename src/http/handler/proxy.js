@@ -1,6 +1,6 @@
 import fs from 'fs-promise'
 import httpProxy from 'http-proxy'
-
+import config from '../../utils/config'
 
 /**
  * 反向代理
@@ -11,7 +11,7 @@ const handlePROXY = async (req, res, next)=>{
     const {location} = res.locals
     if (location.type.toUpperCase() != 'PROXY') return next()
 
-    console.log('proxy...')
+    if (config.debug) console.log('proxy...')
 
     const proxy = httpProxy.createProxyServer({
       // protocolRewrite: 'http'

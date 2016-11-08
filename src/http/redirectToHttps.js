@@ -1,4 +1,5 @@
-const UAParser = require('ua-parser-js')
+import config from '../utils/config'
+import UAParser from 'ua-parser-js'
 
 const redirectToHttps = (conf) => (req, res, next) => {
   // if (conf.https.length == 0) {
@@ -10,7 +11,7 @@ const redirectToHttps = (conf) => (req, res, next) => {
   if ( conf.https.approveDomains.indexOf(req.headers.host) == -1 ) return next()
   if ( req.protocol == 'https' ) return next()
   const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
-  // console.log(browser)
+  if (config.debug) console.log(browser)
   if (browser.name == 'IE' && Number(browser.major) < 9) return next();
   res.redirect(`https://${req.headers.host}${req.originalUrl}`)
 };

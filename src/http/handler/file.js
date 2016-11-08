@@ -1,4 +1,5 @@
 import path from 'path'
+import config from '../../utils/config'
 
 /**
  * 文件下载代理
@@ -8,7 +9,7 @@ const handleFILE = async (req, res, next) => {
     const {location, url} = res.locals;
     if (location.type.toUpperCase() != 'FILE') return next();
     var filePath = path.join(location.content, url.pathname);
-    console.log(filePath);
+    if (config.debug) console.log(filePath);
     return res.sendFile(filePath, {
       CacheControl: true,
       "maxAge": 31536000000,

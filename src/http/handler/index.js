@@ -2,6 +2,7 @@ import {Router} from 'express'
 import Url from 'url'
 import Host from '../../models/host'
 import Location from '../../models/location'
+import config from '../../utils/config'
 
 module.exports = (config) => {
 
@@ -36,7 +37,7 @@ module.exports = (config) => {
           res.locals.host = doc;
           res.locals.location = item;
           found = true;
-          console.log(doc, item);
+          if (config.debug) console.log(doc, item);
         }
         return found
       });
@@ -81,7 +82,7 @@ module.exports = (config) => {
    * 其他 err交给全局err处理器
    */
   router.use(async (err, req, res, next) => {
-    console.log(err.stack||err);
+    if (config.debug) console.log(err.stack||err);
     if (err=='HOST_NOT_FOUND') return next();
     if (err=='LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: LOCATION NOT FOUND`);
     if (err=='UNDEFINED_TYPE') return res.end(`${req.headers.host}: CONFIGURE ERROR`);

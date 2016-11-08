@@ -5,8 +5,9 @@
 
 import SocketIO from 'socket.io'
 import Socket from '../../models/socket'
+import config from '../../utils/config'
 
-const socketMiddleware = (app, config) => {
+const socketMiddleware = (app) => {
   const io = SocketIO(app);
 
   io.on('connection', async (socket) => {
@@ -14,7 +15,7 @@ const socketMiddleware = (app, config) => {
       await Socket.register(socket);
       socket.emit('news', {hello: 'success'});
     } catch(e){
-      console.log(e.stack||e);
+      if (config.debug) console.log(e.stack||e);
       socket.emit('news', {hello: 'fail'});
       return socket.disconnect()
     }

@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import bodyParser from 'body-parser'
+import config from '../../../utils/config'
 
 const router = Router();
 
@@ -57,7 +58,7 @@ router.use((err, req, res, next) => {
   if (err == 'NOT_SEASHELL') return next();
   if (!err) return next();
   if (typeof err == 'string') return res.json({error: err.toUpperCase()});
-  if (typeof err == 'object') console.log(err.stack||err);
+  if (typeof err == 'object' && config.debug) console.log(err.stack||err);
   res.json({error: 'EXCEPTION_ERROR'})
 });
 
