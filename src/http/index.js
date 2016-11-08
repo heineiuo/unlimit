@@ -1,37 +1,5 @@
 import express from 'express'
-import fs from 'fs-promise'
-import http from 'http'
-import https from 'https'
 import config from '../utils/config'
-
-const getKeyPair = (host) => {
-  return {
-    key:  fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`, 'utf8'),
-    cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/cert.pem`, 'utf8'),
-    ca:   fs.readFileSync(`/etc/letsencrypt/live/${host}/chain.pem`)
-  }
-};
-
-
-const createHttpServer = (app) => {
-  const http_server = http.createServer(app);
-  http_server.listen(80, function(){
-    console.log('Listening on port 80')
-  })
-};
-
-const createHttpsServer = (app) => {
-
-  if (config.https.length > 0){
-    const https_server = https.createServer(getKeyPair(config.https[0]), app);
-    config.https.forEach((host, index) => {
-      if (index > 0) https_server.addContext(host, getKeyPair(host))
-    })
-    https_server.listen(443, function(){
-      console.log('Listening on port 443')
-    })
-  }
-};
 
 const middleware = (config, seashell) => {
 
@@ -43,15 +11,15 @@ const middleware = (config, seashell) => {
     app.use((req, res, next) => {
       res.locals.seashell = seashell;
       next()
-    })
+    });
     app.use(require('./redirectToHttps')(config));
     app.use(require('./globalHeaders')(config));
     app.use(require('./handler')(config));
     app.use(require('./404')(config));
 
     if (config.start) {
-      createHttpServer(app);
-      createHttpsServer(app)
+      app.listen(80, () => console.log('Listening on port 80'));
+      require('./letsencrypt/force')(app)
     }
   }
 

@@ -7,7 +7,7 @@ const redirectToHttps = (conf) => (req, res, next) => {
   //   }
   //   return next()
   // }
-  if ( conf.https.indexOf(req.headers.host) == -1 ) return next()
+  if ( conf.https.approveDomains.indexOf(req.headers.host) == -1 ) return next()
   if ( req.protocol == 'https' ) return next()
   const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
   // console.log(browser)

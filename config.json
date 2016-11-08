@@ -1,0 +1,18 @@
+{
+  "cors": true,
+  "http": true,
+  "host": "localhost",
+  "https": {
+    "server": "stage",
+    "email": "abc@example.com",
+    "approveDomains": []
+  },
+  "seashell": {
+    "url": "ws://example.com:3311",
+    "key": {
+      "appId": "3f8bddd9-be30-4767-1705-0cd68589bdcc",
+      "appName": "app",
+      "appSecret": "da5698bji8b9b46962335799779fbe12ce5d491c0d26243bafef9ea1837a9d8"
+    }
+  }
+}
