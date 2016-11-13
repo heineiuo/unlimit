@@ -4,7 +4,7 @@
 import {Router} from 'seashell-client-node'
 
 /**
- * create a seashell and express protocol router
+ * create a common and express protocol router
  * @param models
  * @returns {*}
  */

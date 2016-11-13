@@ -1,8 +1,7 @@
 import {Router} from 'express'
 import Url from 'url'
-import Host from '../../models/host'
-import Location from '../../models/location'
-import config from '../../utils/config'
+import Host from '../../intergation/gateway/host'
+import Location from '../../intergation/gateway/location'
 
 module.exports = (config) => {
 
@@ -43,13 +42,21 @@ module.exports = (config) => {
       });
 
       if (!found) return next('LOCATION_NOT_FOUND');
+      if (res.locals.location.cors){
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Expose-Headers', '*');
+        res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type');
+        res.set('Access-Control-Allow-Methods', '*')
+      }
+
+      res.set("X-Frame-Options", "SAMEORIGIN");
+
       next()
     } catch(e){
-      next(e)
+       next(e)
     }
   });
 
-  router.use(require('./cors'));
   router.use(require('./seashell'));
   router.use(require('./file'));
   router.use(require('./proxy'));
@@ -61,6 +68,7 @@ module.exports = (config) => {
   router.use(require('./download'));
 
   /**
+   * TODO DEPRECATED
    * `api`是唯一一个自带路由的
    * 或许目前没有方法让用户自定义这一块的路由
    */
@@ -70,7 +78,7 @@ module.exports = (config) => {
    * 未定义的type类型
    */
   router.use((req, res, next) => {
-    next('UNDEFINED_TYPE')
+    next('ILLEGAL_HTTP_REQUEST')
   });
 
   /**
@@ -83,10 +91,10 @@ module.exports = (config) => {
    */
   router.use(async (err, req, res, next) => {
     if (config.debug) console.log(err.stack||err);
-    if (err=='HOST_NOT_FOUND') return next();
-    if (err=='LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: LOCATION NOT FOUND`);
-    if (err=='UNDEFINED_TYPE') return res.end(`${req.headers.host}: CONFIGURE ERROR`);
-    if (err=='NOT_FOUND') return next();
+    if (err == 'HOST_NOT_FOUND') return next();
+    if (err == 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: LOCATION NOT FOUND`);
+    if (err == 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: CONFIGURE ERROR`);
+    if (err == 'NOT_FOUND') return next();
     return res.end(`${req.headers.host}: EXCEPTION ERROR`);
   });
 

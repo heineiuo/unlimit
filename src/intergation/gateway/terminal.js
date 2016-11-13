@@ -5,7 +5,7 @@ import {exec} from 'child-process-promise'
 module.exports = async (req, res, next) => {
 
   try {
-    const result = await exec(req.body.command)
+    const result = await exec(req.body.command);
     res.json({
       result: {
         stdout: result.stdout,
@@ -21,4 +21,4 @@ module.exports = async (req, res, next) => {
     })
   }
 
-}
+};

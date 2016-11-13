@@ -2,7 +2,7 @@ import config from '../../utils/config'
 import https from 'https'
 
 module.exports = (app) => {
-  var lex = require('letsencrypt-express').create({
+  const lex = require('letsencrypt-express').create({
     server: config.https.server,
     email: config.https.email,
     agreeTos: true,

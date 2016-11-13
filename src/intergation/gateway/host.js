@@ -5,7 +5,7 @@
 import {Model} from '../../utils/spruce'
 import Joi from 'joi'
 import awaitify from '../../utils/awaitify'
-import Location from '../location'
+import Location from './location'
 
 const Host = new Model('Host', {});
 

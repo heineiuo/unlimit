@@ -5,7 +5,7 @@
 import {Model} from '../../utils/spruce'
 import Joi from 'joi'
 import ent from 'ent'
-import Host from '../host'
+import Host from './host'
 import config from '../../utils/config'
 import awaitify from '../../utils/awaitify'
 
