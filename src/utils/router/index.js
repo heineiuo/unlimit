@@ -1,5 +1,7 @@
 import errHandleChecker from './errHandleChecker'
 import patternCompile from './patternCompile'
+import {createProxyMiddleware, createProxy} from './createProxy'
+
 
 class Router {
 
@@ -97,14 +99,15 @@ class Router {
        * 匹配: run()
        */
       if (typeof middleware.path != 'undefined') {
-        if (middleware.path == '') return run(null, middleware)
+        if (middleware.path == '') return run(null, middleware);
         if (middleware.path.indexOf(':') == -1) {
-          if (_pathname != middleware.path) return next()
+          if (_pathname != middleware.path) return next();
           return run(null, middleware)
         }
-        const patternResult = patternCompile(middleware.path, _pathname)
-        if (!patternResult.match) return next()
-        Object.assign(req.params, patternResult.params)
+        const patternResult = patternCompile(middleware.path, _pathname);
+        if (!patternResult.match) return next();
+        req.params = req.params || {};
+        Object.assign(req.params, patternResult.params);
         run(null, middleware)
       }
 
@@ -138,3 +141,4 @@ class Router {
 }
 
 export default Router
+export {createProxyMiddleware, createProxy}

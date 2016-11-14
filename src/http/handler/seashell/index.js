@@ -27,22 +27,30 @@ router.use(bodyParser.json({type: 'text/html'}));
 router.use(bodyParser.json({type: 'text/plain'}));
 
 router.use(async (req, res, next) => {
+
   try {
-    const {seashell, host, url, location} = res.locals;
-    const reqBody = Object.assign({}, req.query, req.body, {
+    const {hub} = res;
+    const {host, url, location} = res.locals;
+    const {gateway} = hub.integrations;
+
+    const data = Object.assign({}, req.query, req.body, {
       __GATEWAY: {host, url},
-      __METHOD: req.method
+      __METHOD: req.method,
     });
+
     const locationContent = JSONSafeParse(location.content);
-    if (locationContent.session) {
-      reqBody.__SESSION = await seashell.request(locationContent.sessionPath, reqBody)
-    }
+    // if (locationContent.session) {
+    //   reqBody.__SESSION = await gateway.request(reqBody)
+    // }
+
     const requestPath = req.path.replace(locationContent.prefix || '', '');
-    res.locals.seashellResult = await seashell.request(requestPath, reqBody);
+    res.locals.seashellResult = await gateway.request(requestPath, data);
     next()
   } catch(e){
+    if (config.debug) console.log(e.stack||e);
     next(e)
   }
+
 });
 
 router.use(require('./upload'));

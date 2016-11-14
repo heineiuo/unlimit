@@ -15,7 +15,7 @@ app.use((req, res, next) => {
   next()
 });
 
-app.use('/gateway', createRouter(
+app.use(createRouter(
   require('./file'),
   require('./host'),
   require('./location')

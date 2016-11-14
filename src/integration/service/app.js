@@ -93,5 +93,5 @@ App.importFromConfig = (service) => {
   })
 };
 
-export default App
+export default module.exports = App
 

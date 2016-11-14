@@ -172,4 +172,4 @@ Socket.balance = (importAppName) => {
   })
 }
 
-export default Socket
+export default module.exports = Socket

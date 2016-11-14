@@ -1,6 +1,7 @@
 {
   "cors": true,
   "http": true,
+  "debug": true,
   "presets": [
     {
       "appId": "ad8ba8f5-a472-4bc0-8008-5eb464ad26da",

@@ -99,4 +99,4 @@ Group.delete = (groupName) => {
 };
 
 
-export default Group
+export default module.exports = Group

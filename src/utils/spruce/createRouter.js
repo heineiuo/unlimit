@@ -1,7 +1,7 @@
 /**
  * Copyright heineiuo
  */
-import {Router} from 'seashell-client-node'
+import Router from '../../utils/router'
 
 /**
  * create a common and express protocol router

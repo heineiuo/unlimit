@@ -4,20 +4,20 @@ import config from '../../utils/config'
 const app = new Router();
 
 app.use((req, res, next) => {
-  res.app = app
+  res.app = app;
   res.json = (data) => {
-    res.body = data
+    res.body = data;
     res.end()
-  }
+  };
   next()
-})
+});
 
 
 /**
  * 通用中间件
  * 检查session, 并把session传递给下面的中间件
  */
-app.use(require('./checkSession'))
+app.use(require('./checkSession'));
 
 /**
  * 用户操作
@@ -45,8 +45,8 @@ app.use('/session', (req, res, next) => res.json(res.session));
  * 以下需要管理员
  */
 app.use((req, res, next) => {
-  if (!res.session.user) throw 'ERR_NOT_LOGGED'
-  if (res.session.user.email != 'heineiuo@gmail.com') throw 'PERMISSION_DENIED'
+  if (!res.session.user) throw 'ERR_NOT_LOGGED';
+  if (res.session.user.email != 'heineiuo@gmail.com') throw 'PERMISSION_DENIED';
   next()
 })
 
@@ -59,21 +59,13 @@ app.use((req, res, next) => {
 
 
 app.use((err, req, res, next) => {
-  console.log(err.stack||err)
+  console.log(err.stack||err);
   res.json({error: err})
-})
+});
 
 app.use((req, res, next) => {
   res.json({error: 'NOT_FOUND'})
-})
+});
 
-const start = () => {
-  app.connect(config.seashell)
-  console.log(app)
-}
-
-if (config.start) {
-  start()
-}
 
 export default module.exports = app

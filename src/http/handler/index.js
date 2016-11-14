@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import Url from 'url'
-import Host from '../../intergation/gateway/host'
-import Location from '../../intergation/gateway/location'
+import Host from '../../integration/gateway/host'
+import Location from '../../integration/gateway/location'
 
 module.exports = (config) => {
 
