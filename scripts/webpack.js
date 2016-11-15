@@ -3,10 +3,8 @@ const path = require('path')
 const express = require('express')
 const fs = require('fs')
 const request = require('request')
-const rucksack = require('rucksack-css')
 const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
 const nodeExternals = require('webpack-node-externals')
-const _ = require('lodash');
 
 const port = 80
 const app = express();
@@ -101,7 +99,7 @@ const serverConfigCreater = (opt) => {
     },
     externals: nodeExternals({
       //whitelist: [ 'node-uuid', 'sha.js']
-      whitelist: _.keys(packageFile.devDependencies)
+      whitelist: Object.keys(packageFile.devDependencies)
     }),
     resolve: {
       extensions: ['', '.jsx', '.scss', '.js', '.json'],

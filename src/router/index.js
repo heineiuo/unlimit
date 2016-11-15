@@ -30,7 +30,7 @@ class Router {
     const item = {
       path: pathname,
       isErrorHandle: false
-    }
+    };
     if (middleware instanceof Function) {
       item.isErrorHandle = errHandleChecker(middleware);
       item.fn = middleware

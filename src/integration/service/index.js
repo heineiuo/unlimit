@@ -1,5 +1,5 @@
-import Router from '../../utils/router'
-import {createRouter} from '../../utils/spruce'
+import Router from '../../router'
+import {createRouter} from '../../spruce'
 
 const router = new Router();
 
@@ -20,9 +20,6 @@ router.use((req, res, next) => {
 /**
  * router list
  */
-// router.use('/socket/list', require('./socket/list'))
-// router.use('/group/list', require('./group/list'))
-// router.use('/group/delete', require('./group/delete'))
 router.use(createRouter(
   require('./socket'),
   require('./group'),

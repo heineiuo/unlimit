@@ -9,9 +9,9 @@ Thumb.db
 .psd
 .grunt-cache
 .grunt
-apidoc.json
 docs/apidoc
 
+config.json
 data
 build
 !build/README.md

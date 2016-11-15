@@ -1,5 +1,5 @@
 import uuid from 'uuid'
-import {Model} from '../../utils/spruce'
+import {Model} from '../../spruce'
 import Group from './group'
 import crypto from 'crypto'
 
@@ -18,7 +18,11 @@ const createSecret = () => crypto.randomBytes(512);
  *
  */
 
-const App = new Model('App', {});
+const App = new Model('App', {
+  appId: String,
+  appName: String,
+  appSecret: String
+});
 
 /**
  * app create
@@ -32,7 +36,7 @@ App.create = (appName) => {
         appSecret: createSecret()
       };
 
-      const group = await Group.detail(appName)
+      const group = await Group.detail(appName);
       group.list.push({
         appId: nextService.appId,
         socketId: '',

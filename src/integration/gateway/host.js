@@ -2,7 +2,7 @@
  * Copyright heineiuo@gmail.com
  */
 
-import {Model} from '../../utils/spruce'
+import {Model} from '../../spruce'
 import Joi from 'joi'
 import awaitify from '../../utils/awaitify'
 import Location from './location'

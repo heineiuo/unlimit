@@ -6,9 +6,12 @@ import config from '../../utils/config'
  */
 const handleFILE = async (req, res, next) => {
   try {
-    const {location, url} = res.locals;
+    const {location, host, url} = res.locals;
     if (location.type.toUpperCase() != 'FILE') return next();
-    var filePath = path.join(location.content, url.pathname);
+    // const baseDir = location.content;
+    const baseDir = `${config.datadir}/app/${host.hostname}/public`;
+    const filePath = path.join(baseDir, url.pathname);
+
     if (config.debug) console.log(filePath);
     return res.sendFile(filePath, {
       CacheControl: true,
@@ -17,11 +20,11 @@ const handleFILE = async (req, res, next) => {
         // "Access-Control-Allow-Origin": "*",
         "Expires": new Date(Date.now() + 31536000000)
       }
-    }, function (err) {
+    },  (err) => {
       if (err && !res.headersSent) {
-        var lastParam = url.pathname.split('/').pop()
+        const lastParam = url.pathname.split('/').pop();
         if (lastParam.length && !/\./.test(lastParam))
-          return res.redirect(req.path+'/')
+          return res.redirect(req.path+'/');
         next('NOT_FOUND')
       }
     })

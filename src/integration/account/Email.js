@@ -2,7 +2,7 @@
  * Copyright YouKuoHao Inc.
  */
 
-import {Model} from '../../utils/spruce'
+import {Model} from '../../spruce'
 import User from './User'
 
 const Email = new Model('Email', {});
@@ -10,27 +10,25 @@ const Email = new Model('Email', {});
 /**
  *
  */
-Email.getUserIdWithUpsert = (email, userId) => {
-  return new Promise(async (resolve, reject) => {
+Email._getUserIdWithUpset = (email, userId) => new Promise(async (resolve, reject) => {
+  try {
     try {
+      const result = await Email.get(email);
+      resolve(result)
+    } catch(e){
+      if (e.name != 'NotFoundError') return reject(e);
       try {
-        const result = await Email.get(email);
-        resolve(result)
+        const user = await User._createUser({email});
+        await Email.put(email, user.id);
+        resolve(user.id)
       } catch(e){
-        if (e.name != 'NotFoundError') return reject(e);
-        try {
-          const user = await User.createUser({email});
-          await Email.put(email, user.id);
-          resolve(user.id)
-        } catch(e){
-          reject(e)
-        }
+        reject(e)
       }
-    } catch (e) {
-      reject(e)
     }
-  })
-};
+  } catch (e) {
+    reject(e)
+  }
+});
 
 
-export default Email
+export default module.exports = Email

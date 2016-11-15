@@ -1,6 +1,6 @@
-import Router from '../../utils/router'
+import Router from '../../router'
 import config from '../../utils/config'
-import {createRouter} from '../../utils/spruce'
+import {createRouter} from '../../spruce'
 
 const app = new Router();
 

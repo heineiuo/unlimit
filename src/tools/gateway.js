@@ -46,6 +46,7 @@ export const listLocationByhost = () => new Promise(async (resolve, reject) => {
     });
     console.log(table.toString())
   } catch(e){
+    console.log(e.stack||e)
     reject(e)
   }
 });
@@ -73,7 +74,7 @@ export const createHost = () => new Promise(async (resolve, reject) => {
   } catch(e){
     reject(e)
   }
-})
+});
 
 /**
  * 删除host
@@ -178,7 +179,7 @@ export const help = () => {
   table.push(['deleteLocation', 'id', 'delete a location'])
 
   console.log(table.toString())
-}
+};
 
 export const init = async () => {
   try {

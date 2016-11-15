@@ -1,5 +1,6 @@
-import Router from '../../utils/router'
+import Router from '../../router'
 import config from '../../utils/config'
+import {createRouter} from '../../spruce'
 
 const app = new Router();
 
@@ -20,47 +21,36 @@ app.use((req, res, next) => {
 app.use(require('./checkSession'));
 
 /**
- * 用户操作
- *
- * 返回session信息 /session
- * 发送验证码到指定邮箱, 用于登录(获取token) /email-code/login
- * 通过邮箱验证码登录  /login/email-code
- * 通过单点登录授权码登录 /login/sso-code
- * 登出 /logout
+ * @api {POST} /account/session 获取session信息
+ * @apiName Session
+ * @apiGroup Account
+ * @apiDescription 获取session信息
+ * @apiParam {string} token 令牌
+ * @apiSuccess {object} user
  */
 app.use('/session', (req, res, next) => res.json(res.session));
 
-// app.use('/email-code/login', require('./sendEmailCode'))
-// app.use('/login/email-code', require('./getTokenByEmailCode'))
-// app.use('/login/sso-code', require('./getTokenBySSOCode'))
-// app.use('/logout', require('./logout'))
-
-/**
- * 这些需要登录
- * 获取单点登录授权码, 用于登录(获取token)  /sso-code
- */
-// app.use('/sso-code', require('./getSSOCode'))
-
-/**
- * 以下需要管理员
- */
-app.use((req, res, next) => {
-  if (!res.session.user) throw 'ERR_NOT_LOGGED';
-  if (res.session.user.email != 'heineiuo@gmail.com') throw 'PERMISSION_DENIED';
-  next()
-})
-
-/**
- * 管理
- * 获取用户列表 /manage/list
- */
-// app.use('/manage/list', require('./manageList'))
-// app.use('/manage/list/empty', require('./manageListEmpty'))
-
+app.use(createRouter(
+  require('./Email'),
+  require('./EmailCode'),
+  require('./SSOCode'),
+  require('./Token'),
+  require('./User')
+));
 
 app.use((err, req, res, next) => {
+  if (typeof err == 'string') return res.json({error: err});
+
+  if (err.hasOwnProperty('name')) {
+    if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'})
+  }
+
+  if (err.hasOwnProperty('stack')) {
+    if (err.stack.indexOf('Error: Command failed') > -1) return res.json({error: 'COMMAND_FAILED'})
+  }
+
   console.log(err.stack||err);
-  res.json({error: err})
+  return res.json({error: "EXCEPTION_ERROR"})
 });
 
 app.use((req, res, next) => {

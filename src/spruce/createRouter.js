@@ -1,7 +1,7 @@
 /**
  * Copyright heineiuo
  */
-import Router from '../../utils/router'
+import Router from '../router'
 
 /**
  * create a common and express protocol router

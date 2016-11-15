@@ -2,7 +2,7 @@
  * Copyright heineiuo@gmail.com
  */
 
-import {Model} from '../../utils/spruce'
+import {Model} from '../../spruce'
 import Joi from 'joi'
 import ent from 'ent'
 import Host from './host'
@@ -121,7 +121,7 @@ Location.statics.list = (query, ctx) => new Promise(async (resolve, reject) => {
  * @apiParam {string} pathname
  * @apiParam {boolean} cors
  * @apiParam {string} type
- * @apiParam {string} contentType
+ * @apiParam {string} [contentType]
  * @apiParam {string} content
  */
 Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {

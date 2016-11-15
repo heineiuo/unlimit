@@ -2,8 +2,8 @@
  * Copyright heineiuo
  */
 
-import fs from 'fs';
-import {Model} from '../../utils/spruce'
+import fs from 'fs-promise';
+import {Model} from '../../spruce'
 import config from '../../utils/config'
 
 const File = new Model('File', {});
@@ -77,7 +77,7 @@ File.statics.mv = (query, ctx) => new Promise(async (resolve, reject) => {
 File.statics.vi = (query, ctx) => new Promise(async (resolve, reject) => {
   try {
     const {file, content} = query;
-    await fs.writeFile(file, contnet, 'utf-8')
+    await fs.writeFile(file, content, 'utf-8');
     resolve({})
   } catch(e){
     reject(e)
