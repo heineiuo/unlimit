@@ -31,6 +31,6 @@ const handleFILE = async (req, res, next) => {
   } catch(e){
     next(e)
   }
-}
+};
 
 module.exports = handleFILE;

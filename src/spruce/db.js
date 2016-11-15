@@ -1,5 +1,5 @@
 /**
- * Copyright heineiuo <heineiuo@gmail.com>
+ * Copyright 2016 heineiuo <heineiuo@gmail.com>
  */
 
 import level from 'levelup'

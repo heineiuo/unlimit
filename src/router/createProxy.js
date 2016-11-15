@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Hansel <heineiuo@gmail.com>
+ * Copyright 2016 heineiuo <heineiuo@gmail.com>
  * @provideModule middleware for express
  */
 

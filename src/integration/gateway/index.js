@@ -5,6 +5,7 @@ import {createRouter} from '../../spruce'
 const app = new Router();
 
 app.use((req, res, next) => {
+  res.app = app;
   res.json = (data) => {
     res.body = data;
     res.end()
@@ -13,6 +14,14 @@ app.use((req, res, next) => {
   res.error = (error) => res.json({error});
   res.app = app;
   next()
+});
+
+app.use(async (req, res, next) => {
+  const {app} = res;
+  const result = await app.request('/account/session', req.body);
+  if (result.error || result.user == null) throw 'PERMISSION_DENIED';
+  res.session = result;
+  next();
 });
 
 app.use(createRouter(

@@ -1,5 +1,5 @@
 /**
- * Copyright heineiuo
+ * Copyright 2016 heineiuo <heineiuo@gmail.com>
  */
 import Router from '../router'
 

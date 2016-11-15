@@ -1,4 +1,8 @@
 /**
+ * Copyright 2016 heineiuo <heineiuo@gmail.com>
+ */
+
+/**
  * 错误处理中间件判断
  * @param fn
  * @returns {boolean}

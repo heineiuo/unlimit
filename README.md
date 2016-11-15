@@ -1,4 +1,6 @@
-# gateway (Powered by seashell)
+# Gateway
+
+High performance, rich features cloud system kernel.
 
 ## Feature
 
@@ -13,7 +15,7 @@
     * port proxy
     * static file proxy
     * special file type editor online
-    * seashell proxy
+    * seashell protocol
 * Monitor
 
 ## Get Start

@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 - 2016 Youkuohao.
+ * Copyright 2015 - 2016 heineiuo <heineiuo@gmail.com>
  * @provideModule httpStart
  */
 import morgan from 'morgan'
@@ -15,7 +15,12 @@ const httpStart = (config, app) => {
   });
   app.use(require('./redirectToHttps')(config));
   app.use(require('./handler')(config));
-  app.use(require('./404')(config));
+
+  app.use((req, res) => {
+    res.status(404);
+    res.end('NOT FOUND \n GATEWAY.')
+  });
+
   app.listen(80, () => console.log('Listening on port 80'));
   require('./acme/raw')(config, app, () => console.log('Listening on port 443'))
 };

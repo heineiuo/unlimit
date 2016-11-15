@@ -1,4 +1,8 @@
 /**
+ * Copyright 2016 heineiuo <heineiuo@gmail.com>
+ */
+
+/**
  * @param template {string} url template to match truly url
  * @param raw {string} truly url
  */
@@ -6,11 +10,11 @@ const patternCompile = (template, raw) => {
   const result = {
     match: false,
     params: {}
-  }
+  };
 
   const getArray = (string) => {
     return string.split('/').filter(item => item!= '')
-  }
+  };
 
   const templateArray = getArray(template);
   const rawArray = getArray(raw);
@@ -31,7 +35,7 @@ const patternCompile = (template, raw) => {
 
     index ++;
     return walkToCompareAndCreateParam(index)
-  }
+  };
 
   return walkToCompareAndCreateParam(0, [])
 

@@ -117,6 +117,7 @@ class ServiceHub {
       }
     };
 
+    router.request = integrations[name].request;
     this.integrations = integrations;
     return integrations[name]
   };
