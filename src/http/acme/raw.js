@@ -6,7 +6,7 @@ const getKeyPair = (config, host) => {
   return {
     key:  fs.readFileSync(`${certdir}/privkey.pem`, 'utf8'),
     cert: fs.readFileSync(`${certdir}/cert.pem`, 'utf8'),
-    ca:   fs.readFileSync(`${certdir}/chain.pem`, 'utf8')
+    // ca:   fs.readFileSync(`${certdir}/chain.pem`, 'utf8')
   }
 };
 

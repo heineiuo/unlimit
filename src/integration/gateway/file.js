@@ -13,9 +13,10 @@ const File = new Model('File', {});
  * @api {POST} /File/cat 获取文件内容
  * @apiGroup File
  * @apiName FileCat
- * @apiParam {string} host
- * @apiParam {string} filename
- * @apiSuccess {string} cat
+ * @apiParam {string} token 令牌
+ * @apiParam {string} host host
+ * @apiParam {string} filename 文件路径
+ * @apiSuccess {string} cat 内容
  */
 File.statics.cat = (query, ctx) => new Promise(async (resolve, reject) => {
   try {
@@ -34,6 +35,7 @@ File.statics.cat = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /File/ls 获取文件列表
  * @apiGroup File
  * @apiName FileLs
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiParam {string} pathname
  */
@@ -54,6 +56,7 @@ File.statics.ls = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /File/mv 移动、重命名文件
  * @apiGroup File
  * @apiName FileMv
+ * @apiParam {string} token 令牌
  * @apiParam {string} prevFile
  * @apiParam {string} nextFile
  */
@@ -71,6 +74,7 @@ File.statics.mv = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /File/vi 修改文件
  * @apiGroup File
  * @apiName FileVi
+ * @apiParam {string} token 令牌
  * @apiParam {string} file
  * @apiParam {string} content
  */

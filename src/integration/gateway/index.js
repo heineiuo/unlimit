@@ -18,9 +18,13 @@ app.use((req, res, next) => {
 
 app.use(async (req, res, next) => {
   const {app} = res;
-  const result = await app.request('/account/session', req.body);
-  if (result.error || result.user == null) throw 'PERMISSION_DENIED';
-  res.session = result;
+  const {token} = req.body;
+  if (config.debug) console.log(token);
+  if (!token) throw 'PERMISSION_DENIED';
+  const {body} = await app.request('/account/session', {token});
+  if (config.debug) console.log(body);
+  if (body.error || body.user == null) throw 'PERMISSION_DENIED';
+  res.session = body;
   next();
 });
 

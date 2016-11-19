@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "gulp": "cd scripts; gulp",
-    "start": "cd build && nodemon --watch ../src --exec babel-node ../src",
+    "start": "cd build && sudo nodemon --watch ../src --exec sudo babel-node ../src",
     "start:proxy": "cd build && nodemon --watch ../src --exec babel-node ../scripts/proxy",
     "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
     "start-server": "cd build && sudo node server/index --config=data/config.dev.json --nohttps",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "ali-push": "^0.1.6",
+    "auto-sni": "^1.5.1",
     "babel-runtime": "^6.9.2",
     "blueimp-md5": "~2.3.0",
     "body-parser": "^1.14.1",

@@ -22,6 +22,7 @@ const Location = new Model('Location', {
  * @api {POST} /Location/delete 删除一个location
  * @apiGroup Location
  * @apiName LocationDelete
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiParam {string} pathname
  */
@@ -46,6 +47,7 @@ Location.statics.delete = (query, ctx) => new Promise(async (resolve, reject) =>
  * @api {POST} /Location/edit 更新已有的记录
  * @apiGroup Location
  * @apiName LocationEdit
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiParam {string} pathname
  * @apiParam {boolean} cors
@@ -90,6 +92,7 @@ Location.statics.edit = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /location/list 获取location列表
  * @apiGroup Location
  * @apiName LocationList
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiSuccess {object} host
  * @apiSuccess {object} location
@@ -117,6 +120,7 @@ Location.statics.list = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /location/new 创建一条location记录
  * @apiGroup Location
  * @apiName LocationNew
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiParam {string} pathname
  * @apiParam {boolean} cors
@@ -162,6 +166,7 @@ Location.statics.new = (query, ctx) => new Promise(async (resolve, reject) => {
  * @api {POST} /location/updatesort 修改排序
  * @apiGroup Location
  * @apiName LocationUpdateSort
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiParam {string} pathname
  * @apiParam {number} nextSort
@@ -210,6 +215,7 @@ Location.statics.UpdateSort = (query, ctx) => new Promise(async (resolve, reject
  * @api {POST} /location/batch 批量设置
  * @apiGroup Location
  * @apiName LocationBatch
+ * @apiParam {string} token 令牌
  * @apiParam {string} hostname
  * @apiParam {string} locations
  * @apiSuccess {number} success

@@ -16,7 +16,7 @@ const handleHTML = async (req, res, next)=>{
         headers: {
           'Expires': new Date(Date.now() + 1000 * 10) // 10s
         }
-      }, function (err) {
+      }, (err) => {
         if (err && !res.headersSent) res.sendStatus(404)
       })
     } else {
