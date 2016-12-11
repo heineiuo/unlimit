@@ -11,29 +11,20 @@ import account from './integration/account'
 const start = async () => {
 
   try {
-    if (config.http) {
-      const app = express();
-      const server = http.createServer(app);
-      const hub = new Hub(server);
-
-      hub.integrate({name: 'gateway', router: gateway});
-      hub.integrate({name: 'service', router: service});
-      hub.integrate({name: 'account', router: account});
-
-      app.use((req, res, next) => {
-        res.hub = hub;
-        next()
-      });
-
-      return httpStart(config, app);
-    }
-
-    const hub = new Hub();
+    const app = express();
+    const server = http.createServer(app);
+    const hub = new Hub(server);
 
     hub.integrate({name: 'gateway', router: gateway});
     hub.integrate({name: 'service', router: service});
     hub.integrate({name: 'account', router: account});
-    hub.io.listen(config.port);
+
+    app.use((req, res, next) => {
+      res.hub = hub;
+      next()
+    });
+
+    return httpStart(config, app);
 
   } catch(e){
     console.log(e.stack||e);

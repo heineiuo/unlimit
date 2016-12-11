@@ -1,0 +1,3 @@
+[submodule "src/spruce"]
+	path = src/spruce
+	url = https://bitbucket.org/heineiuo/spruce

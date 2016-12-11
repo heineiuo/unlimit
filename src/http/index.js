@@ -22,7 +22,6 @@ const httpStart = (config, app) => {
     res.end('NOT FOUND \n GATEWAY.')
   });
 
-
   const server = createServer({
     email: config.https.email,
     agreeTos: true,

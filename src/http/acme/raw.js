@@ -23,7 +23,7 @@ const createHttpsServer = (config, app, callback) => {
       https_server.listen(443, callback)
     }
   } catch(e){
-    console.log(e.stack||e)
+    if (config.debug) console.log(e.stack||e)
   }
 
 };
