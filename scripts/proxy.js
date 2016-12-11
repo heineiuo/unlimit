@@ -45,7 +45,7 @@ app.use(async (req, res, next) => {
     });
 
     const requestPath = req.path;
-    console.log(requestPath);
+    // console.log(requestPath);
     const seashellResult = await gateway.request(requestPath, data);
     res.json(seashellResult.body)
   } catch(e){
