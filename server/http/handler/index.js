@@ -49,7 +49,10 @@ module.exports = (config) => {
         res.set('Access-Control-Allow-Methods', '*')
       }
 
-      res.set("X-Frame-Options", "SAMEORIGIN");
+      if (res.locals.location['X-Frame-Options']) {
+        const value = res.locals.location['X-Frame-Options'] || 'SAMEORIGIN';
+        res.set("X-Frame-Options", value);
+      }
 
       next()
     } catch(e){

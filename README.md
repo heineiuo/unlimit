@@ -1,4 +1,4 @@
-# Gateway
+# Seashell Server
 
 High performance, rich features cloud system kernel.
 

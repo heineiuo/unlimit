@@ -1,0 +1,20 @@
+{
+  "targets": [
+    {
+      "disable": false,
+      "origin": false,
+      "key": "dashboard",
+      "template": "web/index.html",
+      "filename": "web/index.js",
+      "outputDir": "dashboard"
+    }
+  ],
+  "modulesNeedBabel": [
+    "react-components",
+    "youkuohao-sdk",
+    "react-inlinestyle",
+    "fetch-es6-utils",
+    "react-lang",
+    "react-icons-md"
+  ]
+}

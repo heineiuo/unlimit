@@ -19,7 +19,7 @@ const httpStart = (config, app) => {
 
   app.use((req, res) => {
     res.status(404);
-    res.end('NOT FOUND \n GATEWAY.')
+    res.end('NOT FOUND \n SEASHELL SERVER.')
   });
 
   const server = createServer({

@@ -1,51 +1,52 @@
-const webpack = require('webpack')
-const path = require('path')
-const express = require('express')
-const fs = require('fs')
-const request = require('request')
-const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'))
-const nodeExternals = require('webpack-node-externals')
+const webpack = require('webpack');
+const path = require('path');
+const express = require('express');
+const fs = require('fs');
+const request = require('request');
+const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'));
+const nodeExternals = require('webpack-node-externals');
+const webpackLoaderExclude = require('./react-dev/webpackLoaderExclude');
 
-const port = 80
+const port = 80;
 const app = express();
 
 const getValue = (equalIndex, val) => {
-  var value = val.substring(equalIndex+1)
+  const value = val.substring(equalIndex+1);
   return value==''?true:value
-}
+};
 
 const getArgv = () => {
   const argv = {}
   process.argv.forEach((val, index, array) => {
     if (val.substring(0, 2)=='--'){
-      var equalIndex = val.indexOf('=')
-      if (equalIndex<0) equalIndex = val.length
+      var equalIndex = val.indexOf('=');
+      if (equalIndex<0) equalIndex = val.length;
       argv[val.substring(2, equalIndex)] = getValue(equalIndex,val)
     }
-  })
+  });
   return argv
-}
+};
 
-const argv = getArgv()
-const config = argv
+const argv = getArgv();
+const config = argv;
 
 
 const startServer = ()=>{
   Object.keys(webpackConfigs).forEach(key=>{
 
-    const config = webpackConfigs[key]
-    const compiler = webpack(config)
+    const config = webpackConfigs[key];
+    const compiler = webpack(config);
     app.use(require('webpack-dev-middleware')(compiler, {
       publicPath: config.output.publicPath,
       hot: true,
       stats: {
         colors: true
       }
-    }))
+    }));
     app.use(require('webpack-hot-middleware')(compiler))
-  })
+  });
 
-  app.use('/', express.static(path.join(__dirname, '../build/public')))
+  app.use('/', express.static(path.join(__dirname, '../build/public')));
   app.use('/api', (req, res, next)=>{
 
 
@@ -72,13 +73,13 @@ const startServer = ()=>{
     })
 
 
-  })
+  });
 
   app.listen(port, '127.0.0.1', (err) => {
     if (err) return console.log(err)
     console.log(`Listening at http://0.0.0.0:${port}`)
   })
-}
+};
 
 /**
  * opt = {src: 'index', out: 'index'}
@@ -91,7 +92,7 @@ const serverConfigCreater = (opt) => {
     devtool: false,
     target: 'node',
     entry: {
-      app: [`${process.cwd()}/src/${opt.src}.js`]
+      app: [`${process.cwd()}/server/${opt.src}.js`]
     },
     output: {
       path: `${process.cwd()}/build/bin`,
@@ -111,7 +112,7 @@ const serverConfigCreater = (opt) => {
       loaders: [
         {
           test: /(\.js|\.jsx)$/,
-          exclude: /(node_modules)/,
+          exclude: webpackLoaderExclude(['spruce']),
           loader: 'babel',
           query: {
             presets:['es2015','stage-0'],
@@ -124,12 +125,12 @@ const serverConfigCreater = (opt) => {
     plugins: []
   }
 
-}
+};
 
 const webpackConfigs = {
   gateway: serverConfigCreater({src: 'index', out: 'gateway'}),
-  cli: serverConfigCreater({src: 'cli', out: 'gateway-cli'})
-}
+  // cli: serverConfigCreater({src: 'cli', out: 'gateway-cli'})
+};
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
   compress: {
@@ -139,32 +140,32 @@ const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
   mangle: {
     except: ['$super', '$', 'exports', 'require']
   }
-})
+});
 
 const DefinePluginProduction = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify('production')
-})
+});
 
 const DefinePluginDevelopment = new webpack.DefinePlugin({
   'process.env.NODE_ENV': JSON.stringify('development')
-})
+});
 
 
-console.log(`config: ${JSON.stringify(config)}`)
+console.log(`config: ${JSON.stringify(config)}`);
 
 if (config.build){
-  const webpackConfig = webpackConfigs[config.build]
+  const webpackConfig = webpackConfigs[config.build];
 
   if (config.compress){
-    console.log('compress...')
-    webpackConfig.plugins.push(DefinePluginProduction)
+    console.log('compress...');
+    webpackConfig.plugins.push(DefinePluginProduction);
     webpackConfig.plugins.push(uglifyJsPlugin)
   }
 
-  const compiler = webpack(webpackConfig)
+  const compiler = webpack(webpackConfig);
 
   compiler.run((err, stats)=>{
-    if (err) return console.error(err)
+    if (err) return console.error(err);
     // console.log(stats)
     console.log(`build ${config.build} success`)
   })
