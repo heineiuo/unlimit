@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import NavBar from 'react-components/NavBar'
+import NavBar from 'react-sea/lib/NavBar'
 import Theme from './Theme'
 import {StyleSheet, css} from 'aphrodite';
 import * as API from 'youkuohao-sdk/gateway'

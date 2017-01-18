@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import Paper from 'react-components/Paper'
+import Paper from 'react-sea/lib/Paper'
 import {StyleSheet, css} from 'aphrodite';
 import * as API from 'youkuohao-sdk/gateway'
 

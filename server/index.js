@@ -1,4 +1,4 @@
-import Hub from './hub'
+import ServiceServer from './ServiceServer'
 import httpStart from './http'
 import http from 'http'
 import express from 'express'
@@ -13,18 +13,18 @@ const start = async () => {
   try {
     const app = express();
     const server = http.createServer(app);
-    const hub = new Hub(server);
+    const hub = new ServiceServer(server);
 
     hub.integrate({name: 'gateway', router: gateway});
     hub.integrate({name: 'service', router: service});
     hub.integrate({name: 'account', router: account});
 
     app.use((req, res, next) => {
-      res.hub = hub;
+      res.gateway = hub.integrations.gateway;
       next()
     });
 
-    return httpStart(config, app);
+    httpStart(config, app);
 
   } catch(e){
     console.log(e.stack||e);

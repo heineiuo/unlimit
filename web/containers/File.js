@@ -2,26 +2,26 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import FileList from './FileList'
-import Paper from 'react-components/Paper'
-import * as API from 'youkuohao-sdk/gateway'
+import Paper from 'react-sea/lib/Paper'
+import * as API from ';youkuohao-sdk/gateway'
 
 class File extends Component {
 
   static defaultProps = {
     parentPath: '',
     file: ''
-  }
+  };
 
   updateFileList = (props) => {
-    const {host_id} = this.props.params
-    const {path} = props.location.query
-    const {getFileList} = this.props.actions
+    const {host_id} = this.props.params;
+    const {path} = props.location.query;
+    const {getFileList} = this.props.actions;
     getFileList(host_id, path)
-  }
+  };
 
   componentDidMount = () => {
     this.updateFileList(this.props)
-  }
+  };
 
   componentWillReceiveProps = (nextProps) => {
     console.log(nextProps.location.query.path, this.props.location.query.path)

@@ -2,8 +2,7 @@ import React, {Component} from 'react'
 import SideNavLayout, {
   SideNav,
   SideNavItem,
-  SideNavContent} from 'react-components/Layout/SideNavLayout'
-import * as API from 'youkuohao-sdk/gateway'
+  SideNavContent} from 'react-sea/lib/Layout/SideNavLayout'
 
 
 class HostDetail extends Component {

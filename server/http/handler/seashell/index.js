@@ -29,9 +29,8 @@ router.use(bodyParser.json({type: 'text/plain'}));
 router.use(async (req, res, next) => {
 
   try {
-    const {hub} = res;
+    const {gateway} = res;
     const {host, url, location} = res.locals;
-    const {gateway} = hub.integrations;
 
     const data = Object.assign({}, req.query, req.body, {
       __GATEWAY: {host, url},

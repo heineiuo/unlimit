@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import Paper from 'react-components/Paper'
+import Paper from 'react-sea/lib/Paper'
 import {StyleSheet, css} from 'aphrodite'
 
 

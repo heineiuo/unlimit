@@ -1,7 +1,8 @@
 import {SeashellChalk} from '../utils/seashell-chalk'
 import Socket from '../integration/service/socket'
 import SocketIO from 'socket.io'
-import Emitter from './Emitter'
+import Emitter from 'events'
+// import Emitter from './Emitter'
 import uuid from 'uuid'
 
 const defaultConfig = {

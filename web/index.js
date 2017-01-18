@@ -8,7 +8,7 @@ import "babel-register"
 import "babel-polyfill"
 import 'whatwg-fetch'
 import 'drag-drop-touch-polyfill'
-import shouldBrowserUpdate, {showTip} from 'react-components/ShouldBrowserUpdate'
+import shouldBrowserUpdate, {showTip} from 'react-sea/lib/ShouldBrowserUpdate'
 import App from './containers/App'
 import configure from './store'
 import { hashHistory } from 'react-router'
