@@ -7,8 +7,9 @@ import Button from 'react-sea/lib/Button'
 import Input from 'react-sea/lib/Input'
 import MdArrowUpward from 'react-icons-md/arrow-upward'
 import MdArrowDownward from 'react-icons-md/arrow-downward'
-import { StyleSheet, css } from 'aphrodite';
-import * as API from 'youkuohao-sdk/gateway'
+import { StyleSheet, css } from 'aphrodite'
+import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import {API_HOST} from '../constants'
 
 class HostForm extends Component {
 
@@ -25,6 +26,7 @@ class HostForm extends Component {
       <Paper>
         <div className={css(styles.titlebar, styles.clearfix)}>
           <Link to={`/host/${host.hostname}/location`} style={{float: 'left'}}>{host.hostname}</Link>
+          <a href={`http://${host.hostname}`} target="_blank">打开</a>
         </div>
         <div className={css(styles.titlebar, styles.clearfix)}>
           <div style={{float: 'left'}}>路由列表</div>
@@ -127,9 +129,9 @@ export default module.exports = connect((state) => {
           const {sort, pathname} = location;
           const nextSort = sort + (arrow=='up'?-1:1);
           if (nextSort < 1) return false;
-          const response = await API.LocationUpdateSort({token, hostname, pathname, nextSort});
+          const response = await POSTRawJSON(`${API_HOST}/location/updatesort`,{token, hostname, pathname, nextSort});
           if (response.error) throw response.error;
-          const data = await API.LocationList({token, hostname});
+          const data = await POSTRawJSON(`${API_HOST}/location/list`, {token, hostname});
           if (data.error) throw data.error;
           console.log(data.location.locations);
           dispatch({
@@ -151,7 +153,7 @@ export default module.exports = connect((state) => {
       getHostLocationList: (hostname) => async (dispatch, getState)=>{
         try {
           const {token} = getState().account;
-          const data = await API.LocationList({hostname, token});
+          const data = await POSTRawJSON(`${API_HOST}/location/list`, {hostname, token});
           if (data.error) throw data.error;
           dispatch({
             type: "UPDATE_LOCATION_LIST",

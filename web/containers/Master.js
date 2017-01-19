@@ -5,7 +5,6 @@ import {bindActionCreators} from 'redux'
 import NavBar from 'react-sea/lib/NavBar'
 import Theme from './Theme'
 import {StyleSheet, css} from 'aphrodite';
-import * as API from 'youkuohao-sdk/gateway'
 import * as AccountSDK from 'youkuohao-sdk/account'
 
 class Master extends Component {

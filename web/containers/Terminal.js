@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Paper from 'react-sea/lib/Paper'
-import {StyleSheet, css} from 'aphrodite';
-import * as API from 'youkuohao-sdk/gateway'
-
+import {StyleSheet, css} from 'aphrodite'
+import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import {API_HOST} from '../constants'
 
 class Terminal extends Component {
 
@@ -142,9 +142,9 @@ export default module.exports = connect((state) => {
        */
       sendCommand: (command) => async(dispatch, getState) => {
         try {
-          const {pwd} = getState().terminal
-          const result = await API.sendCommand(command)
-          if (result.error) throw result.error
+          const {pwd} = getState().terminal;
+          const result = await POSTRawJSON(`${API_HOST}/command/send`, {command});
+          if (result.error) throw result.error;
           dispatch({
             type: 'HISTORY_PUSH',
             newHistory: {

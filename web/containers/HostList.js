@@ -8,7 +8,8 @@ import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
 import Input from 'react-sea/lib/Input'
 import { StyleSheet, css } from 'aphrodite'
-import * as API from 'youkuohao-sdk/gateway'
+import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import {API_HOST} from '../constants'
 import {push} from 'react-router-redux'
 
 class HostList extends Component {
@@ -20,13 +21,13 @@ class HostList extends Component {
   };
 
   componentWillMount = ()=>{
-    const {getHostList, setNav} = this.props.actions;
+    const {getHostList, setNav} = this.props;
     setNav('id2');
     getHostList(this.state.page)
   };
 
   createHost = () => {
-    this.props.actions.createHost({hostName: this.state.hostName})
+    this.props.createHost({hostName: this.state.hostName})
   };
 
   handleClickOpenModal = () => {
@@ -39,6 +40,11 @@ class HostList extends Component {
     this.setState({
       modalOpen: false
     })
+  };
+
+  _deleteHost = (host) => {
+    console.log(host);
+    this.props.deleteHost(host.hostname)
   };
 
   render(){
@@ -64,7 +70,7 @@ class HostList extends Component {
                       <div>{item.hostname}</div>
                     </Link>
                     <div className={css(styles.buttons)} style={{float: 'left'}}>
-                      <Button type="danger" size="small">删除</Button>
+                      <Button onClick={(e) => this._deleteHost(item)} type="danger" size="small">删除</Button>
                     </div>
                   </div>
                 )
@@ -152,56 +158,53 @@ const styles = StyleSheet.create({
 
 });
 
-export default module.exports = connect((state) => {
-  return {
+export default module.exports = connect(
+  (state) => ({
     host: state.host
-  }
-},(dispatch) => {
-  return {
-    actions: bindActionCreators({
-      /**
-       * 添加host
-       */
-      createHost: (opts) => async (dispatch, getState) => {
-        try {
-          const data = await API.HostNew(opts.hostname);
-          if (data.error) throw new Error(data.error);
-          dispatch(push(`/host/${opts.hostname}/location`))
-        } catch(e){
-          console.log(`${e}${JSON.stringify(e.stack||{})}`)
-        }
-      },
-      /**
-       * 渲染我的app列表
-       */
-      getHostList: (page=1) => async (dispatch, getState) => {
-        try {
-          const {token} = getState().account;
-          const data = await API.HostList({limit: 0, token});
-          const list = data.list
-          dispatch({
-            type: "HOST_LIST_UPDATE",
-            hostList: list
-          })
-        } catch(e){
-          console.log(e)
-        }
-      },
+  }),
+  (dispatch) => bindActionCreators({
+    /**
+     * 添加host
+     */
+    createHost: (opts) => async (dispatch, getState) => {
+      try {
+        const data = await POSTRawJSON(`${API_HOST}/Host/new`,{hostname: opts.hostname});
+        if (data.error) throw new Error(data.error);
+        dispatch(push(`/host/${opts.hostname}/location`))
+      } catch(e){
+        console.log(`${e}${JSON.stringify(e.stack||{})}`)
+      }
+    },
+    /**
+     * 渲染我的app列表
+     */
+    getHostList: (page=1) => async (dispatch, getState) => {
+      try {
+        const {token} = getState().account;
+        const data = await POSTRawJSON(`${API_HOST}/host/list`,{limit: 0, token});
+        const list = data.list;
+        dispatch({
+          type: "HOST_LIST_UPDATE",
+          hostList: list
+        })
+      } catch(e){
+        console.log(e)
+      }
+    },
 
-      /**
-       * 删除host
-       * @returns {function()}
-       */
-      deleteHost: (hostname) => async (dispatch, getState) =>{
-        try {
-          const {token} = getState().account;
-          await API.HostDelete({hostname, token})
-        }catch(e){
-          console.log(e)
-        }
-      },
+    /**
+     * 删除host
+     * @returns {function()}
+     */
+    deleteHost: (hostname) => async (dispatch, getState) =>{
+      try {
+        const {token} = getState().account;
+        await POSTRawJSON(`${API_HOST}/Host/delete`, {hostname, token})
+      }catch(e){
+        console.log(e)
+      }
+    },
 
-      setNav: (next) => {return {type: 'NAV_CHANGE', next}}
-    }, dispatch)
-  }
-})(HostList)
+    setNav: (next) => {return {type: 'NAV_CHANGE', next}}
+  }, dispatch)
+)(HostList)

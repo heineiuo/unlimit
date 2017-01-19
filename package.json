@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "gulp": "cd scripts; gulp",
+    "web": "react-sh",
     "start": "cd build && sudo nodemon --watch ../src --exec sudo babel-node ../src",
     "start:proxy": "cd build && nodemon --watch ../src --exec babel-node ../scripts/proxy",
     "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
@@ -32,6 +33,7 @@
     "ent": "^2.2.0",
     "express": "^4.13.4",
     "fetch-es6-utils": "^0.1.0",
+    "fetch-tools": "^0.2.0",
     "formidable": "^1.0.17",
     "fs-promise": "~0.5.0",
     "homedir": "~0.6.0",
@@ -76,6 +78,7 @@
     "fs-extra": "^0.26.5",
     "nedb": "^1.5.0",
     "react-modal": "^1.6.5",
+    "react-sh": "^0.3.0",
     "seashell-proxy": "^0.2.4",
     "webpack": "^1.12.10",
     "webpack-dev-middleware": "~1.6.1",

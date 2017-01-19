@@ -16,7 +16,7 @@ const initialState = {
   loadingLocationList: true
 }
 
-export default module.exports =  handleActions({
+export default handleActions({
   HOST_LIST_UPDATE (state, action) {
     return defaults({
       hostname: action.hostname,

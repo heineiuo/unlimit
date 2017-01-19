@@ -31,7 +31,7 @@ const initialState = {
   currentId: 'id1'
 }
 
-export default module.exports = handleActions({
+export default handleActions({
 
   NAV_CHANGE (state, action) {
     return Object.assign({}, state, {

@@ -7,7 +7,7 @@ const initialState = {
   loginError: null
 };
 
-export default module.exports = handleActions({
+export default handleActions({
 
   ACCOUNT_LOGIN_CHECKED (state, action) {
     return Object.assign({}, state, action.payload, {loginChecked: true})

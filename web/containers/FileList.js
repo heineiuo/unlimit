@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {StyleSheet, css} from 'aphrodite';
-import * as API from 'youkuohao-sdk/gateway'
+import {StyleSheet, css} from 'aphrodite'
+import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import {API_HOST} from '../constants'
 
 class FileList extends Component {
 
@@ -78,7 +79,7 @@ export default connect(
     actions: bindActionCreators({
       deleteFile: (filename) =>  async (dispatch, getState) => {
         try {
-          const result = await API.FileRm(filename)
+          const result = await POSTRawJSON(`${API_HOST}/File/del`, {filename});
           if (result.error) throw result.error
 
         } catch(e){
@@ -89,7 +90,7 @@ export default connect(
       downloadFile : (path)=> async (dispatch) => {
         try {
 
-          var url = API.FileDownload(path)
+          var url = POSTRawJSON(`${API_HOST}/File/download`, {path})
           window.open(url)
 
         } catch(e){
@@ -101,7 +102,7 @@ export default connect(
       getDirInfo: (path) => async (dispatch) => {
         try {
           path = decodeURI(path)
-          const result = await API.FileLs(path);
+          const result = await POSTRawJSON(`${API_HOST}/File/ls`, {path});
           result.parentPath = path + ( path =='/'?'':'/')
 
         } catch(e){
@@ -117,7 +118,7 @@ export default connect(
       renameFile: (prevName, nextName)=> async (dispatch, getState) => {
         try {
 
-          const result = await API.FileMv(prevName, nextName)
+          const result = await POSTRawJSON(`${API_HOST}/File/mv`, {prevName, nextName})
           if (result.error) throw result.error
 
         } catch(e){

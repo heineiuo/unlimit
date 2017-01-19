@@ -3,12 +3,26 @@ import {routerMiddleware} from 'react-router-redux'
 import { routerReducer as routing } from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 
+import host from './host'
+import terminal from './terminal'
+import account from './account'
+import file from './file'
+import nav from './nav'
+
+
 const logger = store => next => action  => {
   console.log(action);
   return next(action)
 };
 
-const reducers = require('./reducers');
+const reducers = {
+  host,
+  terminal,
+  account,
+  file,
+  nav
+};
+
 
 const rootReducer = combineReducers({
   routing,
@@ -32,13 +46,13 @@ const configure = function (history, initialState) {
   )(create);
 
   const store = createStoreWithMiddleware(rootReducer, initialState)
-
-  if (module.hot) {
-    module.hot.accept('./reducers.js', () => {
-      const nextReducer = require('./reducers.js')
-      store.replaceReducer(nextReducer)
-    })
-  }
+  //
+  // if (module.hot) {
+  //   module.hot.accept('./reducers.js', () => {
+  //     const nextReducer = reducers;
+  //     store.replaceReducer(nextReducer)
+  //   })
+  // }
 
   return store
 };

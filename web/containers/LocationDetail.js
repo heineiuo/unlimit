@@ -8,8 +8,9 @@ import Button from 'react-sea/lib/Button'
 import Paper from 'react-sea/lib/Paper'
 import Radio from 'react-sea/lib/Radio'
 import Checkbox from 'react-sea/lib/Checkbox'
-import {StyleSheet, css} from 'aphrodite';
-import * as API from 'youkuohao-sdk/gateway'
+import {StyleSheet, css} from 'aphrodite'
+import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import {API_HOST} from '../constants'
 
 class LocationDetail extends Component {
 
@@ -239,9 +240,14 @@ export default module.exports = connect(
       try {
         const {token} = getState().account;
         const {pathname, cors, type, contentType='text', content} = nextLocation;
-        const response = await API.LocationEdit({
-          token, hostname, pathname, cors,
-          type, contentType, content
+        const response = await POSTRawJSON( `${API_HOST}/Location/edit`, {
+          token,
+          hostname,
+          pathname,
+          cors,
+          type,
+          contentType,
+          content
         });
 
         if (response.error) throw new Error(response.error);
@@ -264,7 +270,15 @@ export default module.exports = connect(
       try {
         const {token} = getState().account;
         const {pathname, cors, type, contentType, content} = nextLocation;
-        const response = await API.LocationNew({token, hostname, pathname, cors, type, contentType, content});
+        const response = await POSTRawJSON( `${API_HOST}/location/new`, {
+          token,
+          hostname,
+          pathname,
+          cors,
+          type,
+          contentType,
+          content
+        });
         if (response.error) throw new Error(response.error);
         dispatch({
           type: 'UPDATE_LOCATION',
@@ -281,7 +295,7 @@ export default module.exports = connect(
     getRouterDetail: (hostname, pathname, callback) => async (dispatch, getState) => {
       try {
         const {token} = getState().account;
-        const data = await API.LocationList({hostname, token});
+        const data = await POSTRawJSON(`${API_HOST}/location/list`, {hostname, token});
         dispatch({
           type: 'UPDATE_LOCATION_DETAIL',
           hostname: data.host.hostname,

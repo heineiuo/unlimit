@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import FileList from './FileList'
 import Paper from 'react-sea/lib/Paper'
-import * as API from ';youkuohao-sdk/gateway'
+import { GETJSON, POSTRawJSON, Mock, Urlencode } from 'fetch-tools'
+import {API_HOST} from '../constants'
 
 class File extends Component {
 
@@ -77,8 +78,8 @@ export default module.exports = connect((state) => {
             ls: []
           });
 
-          const result = await API.FileLs(hostname, path)
-          if (result.error) throw result.error
+          const result = await POSTRawJSON(`${API_HOST}/File/ls`, {hostname, path})
+          if (result.error) throw result.error;
 
           dispatch({
             type: 'FILE_LIST_UPDATE',

@@ -2,9 +2,9 @@ import { handleActions } from 'redux-actions'
 
 const initialState = {
   ls: []
-}
+};
 
-export default module.exports = handleActions({
+export default handleActions({
 
   FILE_LIST_UPDATE (state, action) {
     return Object.assign({}, state, {

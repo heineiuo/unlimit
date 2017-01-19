@@ -5,7 +5,7 @@ const initialState = {
   pwd: ''
 }
 
-export default module.exports =  handleActions({
+export default handleActions({
 
   HISTORY_PUSH (state, action) {
     const history = state.history.slice()

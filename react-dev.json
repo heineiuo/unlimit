@@ -10,10 +10,7 @@
     }
   ],
   "modulesNeedBabel": [
-    "react-components",
-    "youkuohao-sdk",
     "react-inlinestyle",
-    "fetch-es6-utils",
     "react-lang",
     "react-icons-md"
   ]
