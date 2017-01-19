@@ -3,15 +3,12 @@
     {
       "disable": false,
       "origin": false,
-      "key": "dashboard",
+      "key": "gateway",
       "template": "web/index.html",
       "filename": "web/index.js",
-      "outputDir": "dashboard"
+      "outputDir": "gateway"
     }
   ],
   "modulesNeedBabel": [
-    "react-inlinestyle",
-    "react-lang",
-    "react-icons-md"
   ]
 }

@@ -4250,16 +4250,6 @@ react-dom@^15.0.0, react-dom@^15.4.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-icon-base@1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/react-icon-base/download/react-icon-base-1.0.0.tgz#5692d495a7cf340fcf664b8c4d4a369c56467ea5"
-
-react-icons-md@^1.1.0:
-  version "1.1.0"
-  resolved "http://registry.npm.taobao.org/react-icons-md/download/react-icons-md-1.1.0.tgz#7a9b02fe1c9b6dc6b4f93bd5cc5dc2c13a6047a9"
-  dependencies:
-    react-icon-base "1.0.0"
-
 react-loading@^0.0.9:
   version "0.0.9"
   resolved "http://registry.npm.taobao.org/react-loading/download/react-loading-0.0.9.tgz#e9fba6948915ba7742a508193828b6c73eb04956"
@@ -5491,21 +5481,21 @@ webpack-core@~0.6.9:
     source-list-map "~0.1.7"
     source-map "~0.4.1"
 
-webpack-dev-middleware@^1.4.0, webpack-dev-middleware@~1.6.1:
-  version "1.6.1"
-  resolved "http://registry.npm.taobao.org/webpack-dev-middleware/download/webpack-dev-middleware-1.6.1.tgz#c25ef832abc7d360c38bb40eb918692720ced611"
-  dependencies:
-    memory-fs "~0.3.0"
-    mime "^1.3.4"
-    range-parser "^1.0.3"
-
-webpack-dev-middleware@^1.9.0:
+webpack-dev-middleware@^1.4.0, webpack-dev-middleware@^1.9.0:
   version "1.9.0"
   resolved "https://registry.npmjs.org/webpack-dev-middleware/-/webpack-dev-middleware-1.9.0.tgz#a1c67a3dfd8a5c5d62740aa0babe61758b4c84aa"
   dependencies:
     memory-fs "~0.4.1"
     mime "^1.3.4"
     path-is-absolute "^1.0.0"
+    range-parser "^1.0.3"
+
+webpack-dev-middleware@~1.6.1:
+  version "1.6.1"
+  resolved "http://registry.npm.taobao.org/webpack-dev-middleware/download/webpack-dev-middleware-1.6.1.tgz#c25ef832abc7d360c38bb40eb918692720ced611"
+  dependencies:
+    memory-fs "~0.3.0"
+    mime "^1.3.4"
     range-parser "^1.0.3"
 
 webpack-dev-server@^1.14.0:
