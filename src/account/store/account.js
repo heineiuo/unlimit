@@ -1,6 +1,9 @@
-import { handleActions } from 'redux-actions'
-import * as SDK from '../api/account'
+import {handleActions} from 'redux-actions'
+import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
+
+const API_HOST = 'https://www.youkuohao.com/api/account';
+const signature = (params) => params;
 
 const initialState = {
   loginChecked: false,
@@ -93,10 +96,10 @@ export default handleActions({
 
 export const login = (formData) => async (dispatch, getState) => {
   try {
-    const result = await SDK.TokenByEmailCode({
+    const result = await POSTUrlencodeJSON(`${API_HOST}/token/gettokenbyemailcode`, signature({
       email: formData.email,
       code: formData.code
-    });
+    }));
 
     if (result.error) throw result.error;
     localStorage.userId = result.userId;
@@ -120,7 +123,9 @@ export const login = (formData) => async (dispatch, getState) => {
 export const logout = () => async (dispatch, getState) => {
   try {
     console.log('正在登出系统...');
-    const result = await SDK.Logout(localStorage.userToken);
+    const result = await POSTUrlencodeJSON(`${API_HOST}/token/logout`, signature({
+      token: localStorage.userToken
+    }));
     if (result.error) throw result.error;
     localStorage.clear();
     dispatch({
@@ -142,7 +147,7 @@ export const sendVerifyCode = (form) => async (dispatch, getState) => {
     const {registerVerifyCodeCount} = getState().account;
     if (registerVerifyCodeCount>0) return console.log('count not finish.');
 
-    const result = await SDK.EmailCodeForLogin({email: form.email});
+    const result = await POSTUrlencodeJSON(`${API_HOST}/token/gettokenbyemailcode`, signature({email: form.email}));
     if (result.error) throw result.error;
 
     const countdown = (count) => {
@@ -177,7 +182,9 @@ export const checkLogin = (redirectUrl='') => async (dispatch, getState) => {
       })
     }
 
-    const result = await SDK.Session({token: userToken});
+    const result = await POSTUrlencodeJSON(`${API_HOST}/session`,
+      signature({token: userToken})
+    );
     if (result.error || result.user == null) {
       return dispatch({
         type: 'CHECKED_LOGIN',
@@ -208,7 +215,9 @@ export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   try {
     const {userToken=null} = localStorage;
     const {redirectUrl} = getState().account;
-    const res = await SDK.SSOCodeGet(userToken);
+    const res = await POSTUrlencodeJSON(`${API_HOST}/ssocode/get`,
+      signature({token: userToken})
+    );
     if (res.error) return console.log(res.error);
     location.href = `${redirectUrl}?code=${res.code}`
   } catch(e){
