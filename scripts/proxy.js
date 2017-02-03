@@ -7,11 +7,11 @@ import http from 'http'
 import morgan from 'morgan'
 import compression from 'compression'
 import bodyParser from 'body-parser'
-import Hub from '../server/ServiceServer'
-import gateway from '../server/integration/gateway'
-import service from '../server/integration/service'
-import account from '../server/integration/account'
-import config from '../server/utils/config'
+import Hub from '../src/server/ServiceServer'
+import gateway from '../src/server/integration/gateway'
+import service from '../src/server/integration/service'
+import account from '../src/server/integration/account'
+import config from '../src/server/utils/config'
 
 
 const app = express();

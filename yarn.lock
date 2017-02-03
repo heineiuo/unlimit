@@ -164,10 +164,6 @@ asn1@~0.2.3:
   version "0.2.3"
   resolved "http://registry.npm.taobao.org/asn1/download/asn1-0.2.3.tgz#dac8787713c9966849fc8180777ebe9c1ddf3b86"
 
-asn1js@^1.2.12:
-  version "1.2.12"
-  resolved "http://registry.npm.taobao.org/asn1js/download/asn1js-1.2.12.tgz#87d5ee797596ae2d2a3cb0247220dc42ffc3f211"
-
 assert-plus@^0.2.0:
   version "0.2.0"
   resolved "http://registry.npm.taobao.org/assert-plus/download/assert-plus-0.2.0.tgz#d74e1b87e7affc0db8aadb7021f3fe48101ab234"
@@ -567,7 +563,7 @@ babel-plugin-transform-class-constructor-call@^6.3.13:
     babel-runtime "^6.0.0"
     babel-template "^6.8.0"
 
-babel-plugin-transform-class-properties@^6.18.0, babel-plugin-transform-class-properties@^6.19.0:
+babel-plugin-transform-class-properties@^6.18.0:
   version "6.19.0"
   resolved "http://registry.npm.taobao.org/babel-plugin-transform-class-properties/download/babel-plugin-transform-class-properties-6.19.0.tgz#1274b349abaadc835164e2004f4a2444a2788d5f"
   dependencies:
@@ -762,6 +758,12 @@ babel-plugin-transform-es2015-unicode-regex@^6.3.13:
     babel-helper-regex "^6.8.0"
     babel-runtime "^6.0.0"
     regexpu-core "^2.0.0"
+
+babel-plugin-transform-es3-property-literals@^6.22.0:
+  version "6.22.0"
+  resolved "https://registry.npmjs.org/babel-plugin-transform-es3-property-literals/-/babel-plugin-transform-es3-property-literals-6.22.0.tgz#b2078d5842e22abf40f73e8cde9cd3711abd5758"
+  dependencies:
+    babel-runtime "^6.22.0"
 
 babel-plugin-transform-exponentiation-operator@^6.3.13:
   version "6.8.0"
@@ -994,6 +996,13 @@ babel-runtime@6.x, babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
+babel-runtime@^6.22.0:
+  version "6.22.0"
+  resolved "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
+  dependencies:
+    core-js "^2.4.0"
+    regenerator-runtime "^0.10.0"
+
 babel-template@^6.14.0, babel-template@^6.15.0, babel-template@^6.16.0, babel-template@^6.8.0, babel-template@^6.9.0:
   version "6.16.0"
   resolved "http://registry.npm.taobao.org/babel-template/download/babel-template-6.16.0.tgz#e149dd1a9f03a35f817ddbc4d0481988e7ebc8ca"
@@ -1140,7 +1149,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.0.6, bluebird@^3.4.1, bluebird@^3.4.6:
+bluebird@^3.0.6, bluebird@^3.4.6:
   version "3.4.7"
   resolved "http://registry.npm.taobao.org/bluebird/download/bluebird-3.4.7.tgz#f72d760be09b7f76d08ed8fae98b289a8d05fab3"
 
@@ -1312,15 +1321,6 @@ center-align@^0.1.1:
   dependencies:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
-
-certpem@^1.0.0:
-  version "1.0.1"
-  resolved "http://registry.npm.taobao.org/certpem/download/certpem-1.0.1.tgz#fa4a258c4057965c465700822fb8d807d7f2d9f5"
-  dependencies:
-    asn1js "^1.2.12"
-    buffer-v6-polyfill "^1.0.3"
-    node.extend "^1.1.5"
-    pkijs "^1.3.27"
 
 chalk@1.1.1:
   version "1.1.1"
@@ -1952,7 +1952,7 @@ es6-symbol@3, es6-symbol@^3.0.2, es6-symbol@~3.1:
     d "~0.1.1"
     es5-ext "~0.10.11"
 
-escape-html@^1.0.2, escape-html@~1.0.3:
+escape-html@~1.0.3:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/escape-html/download/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
 
@@ -2113,10 +2113,6 @@ fd-slicer@~1.0.1:
   resolved "http://registry.npm.taobao.org/fd-slicer/download/fd-slicer-1.0.1.tgz#8b5bcbd9ec327c5041bf9ab023fd6750f1177e65"
   dependencies:
     pend "~1.2.0"
-
-fetch-es6-utils@^0.1.0:
-  version "0.1.0"
-  resolved "http://registry.npm.taobao.org/fetch-es6-utils/download/fetch-es6-utils-0.1.0.tgz#256c8f5eaea1679845ce6c16875aabb96dfe7cc8"
 
 fetch-tools@^0.2.0:
   version "0.2.0"
@@ -2503,7 +2499,7 @@ home-or-tmp@^2.0.0:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.1"
 
-homedir@^0.6.0, homedir@~0.6.0:
+homedir@^0.6.0:
   version "0.6.0"
   resolved "http://registry.npm.taobao.org/homedir/download/homedir-0.6.0.tgz#2b21db66bf08a6db38249a3eff52d7d18706af1e"
 
@@ -2815,10 +2811,6 @@ is-zip@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/is-zip/download/is-zip-1.0.0.tgz#47b0a8ff4d38a76431ccfd99a8e15a4c86ba2325"
 
-is@^3.1.0:
-  version "3.2.0"
-  resolved "http://registry.npm.taobao.org/is/download/is-3.2.0.tgz#a362e3daf7df3fd8b7114115d624c5b7e1cb90f7"
-
 isarray@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/isarray/download/isarray-0.0.1.tgz#8a18acfca9a8f4177e09abfc6038939b05d1eedf"
@@ -3004,47 +2996,6 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-le-acme-core@^2.0.5:
-  version "2.0.7"
-  resolved "http://registry.npm.taobao.org/le-acme-core/download/le-acme-core-2.0.7.tgz#c6d538888db0114fa2daef1a4ed40a290cac7cff"
-  dependencies:
-    request "^2.74.0"
-    rsa-compat "^1.2.7"
-
-le-challenge-fs@^2.0.2, le-challenge-fs@^2.0.4:
-  version "2.0.8"
-  resolved "http://registry.npm.taobao.org/le-challenge-fs/download/le-challenge-fs-2.0.8.tgz#b6d458a37f097e87df3d8b5ff67013737ab9d5a2"
-  dependencies:
-    mkdirp "^0.5.1"
-
-le-challenge-sni@^2.0.0:
-  version "2.0.1"
-  resolved "http://registry.npm.taobao.org/le-challenge-sni/download/le-challenge-sni-2.0.1.tgz#4e262f1bf52cf1d181e64bc187776b7a68c8f417"
-  dependencies:
-    le-tls-sni "^0.1.0"
-
-le-sni-auto@^2.0.1, le-sni-auto@^2.1.0:
-  version "2.1.0"
-  resolved "http://registry.npm.taobao.org/le-sni-auto/download/le-sni-auto-2.1.0.tgz#a58adbf92e0ac5f9652192961d8668861e633d46"
-  dependencies:
-    bluebird "^3.4.1"
-
-le-store-certbot@^2.0.3:
-  version "2.0.3"
-  resolved "http://registry.npm.taobao.org/le-store-certbot/download/le-store-certbot-2.0.3.tgz#8de549b5b23bbef8d920cb4fea8eb4b8e14c70eb"
-  dependencies:
-    bluebird "^3.4.1"
-    mkdirp "^0.5.1"
-    pyconf "^1.1.2"
-    safe-replace "^1.0.2"
-
-le-tls-sni@^0.1.0:
-  version "0.1.4"
-  resolved "http://registry.npm.taobao.org/le-tls-sni/download/le-tls-sni-0.1.4.tgz#785309a07b0ebb24190fe5ba615b9cc7685ce19c"
-  dependencies:
-    node-forge "^0.6.43"
-    rsa-compat "^1.2.7"
-
 letiny-core@^2.0.1:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/letiny-core/download/letiny-core-2.0.3.tgz#f8e383f64e0a939d8dea56c00fe2ab0c767a9a97"
@@ -3054,17 +3005,6 @@ letiny-core@^2.0.1:
     rsa-compat "^1.2.3"
   optionalDependencies:
     ursa "^0.9.1"
-
-letsencrypt-express@^2.0.5:
-  version "2.0.5"
-  resolved "http://registry.npm.taobao.org/letsencrypt-express/download/letsencrypt-express-2.0.5.tgz#e42d466b773f11aff8aa8c8b41cb5558c8c22295"
-  dependencies:
-    le-challenge-fs "^2.0.4"
-    le-sni-auto "^2.0.1"
-    le-store-certbot "^2.0.3"
-    letsencrypt "^2.1.0"
-    localhost.daplie.com-certificates "^1.2.3"
-    redirect-https "^1.1.0"
 
 letsencrypt@1.5.1:
   version "1.5.1"
@@ -3078,24 +3018,6 @@ letsencrypt@1.5.1:
     request "^2.67.0"
     rsa-compat "^1.2.1"
     safe-replace "^1.0.2"
-
-letsencrypt@^2.1.0:
-  version "2.1.8"
-  resolved "http://registry.npm.taobao.org/letsencrypt/download/letsencrypt-2.1.8.tgz#981ae1415b9fb372ae15f1156d5d32b7dcc78bdd"
-  dependencies:
-    asn1js "^1.2.12"
-    bluebird "^3.0.6"
-    certpem "^1.0.0"
-    homedir "^0.6.0"
-    le-acme-core "^2.0.5"
-    le-challenge-fs "^2.0.2"
-    le-challenge-sni "^2.0.0"
-    le-sni-auto "^2.1.0"
-    le-store-certbot "^2.0.3"
-    localhost.daplie.com-certificates "^1.2.3"
-    node.extend "^1.1.5"
-    pkijs "^1.3.27"
-    rsa-compat "^1.2.1"
 
 level-codec@~6.1.0:
   version "6.1.0"
@@ -3207,10 +3129,6 @@ localforage@^1.3.0:
   resolved "http://registry.npm.taobao.org/localforage/download/localforage-1.4.3.tgz#a212543c39c7c76424edd12bf474c489aaca494c"
   dependencies:
     lie "3.0.2"
-
-localhost.daplie.com-certificates@^1.2.3:
-  version "1.2.3"
-  resolved "http://registry.npm.taobao.org/localhost.daplie.com-certificates/download/localhost.daplie.com-certificates-1.2.3.tgz#f8958077ba152e33301aa87195211dd28fdb0266"
 
 lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.17.4"
@@ -3527,7 +3445,7 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-forge@^0.6.38, node-forge@^0.6.41, node-forge@^0.6.43:
+node-forge@^0.6.38, node-forge@^0.6.41:
   version "0.6.46"
   resolved "http://registry.npm.taobao.org/node-forge/download/node-forge-0.6.46.tgz#04a8a1c336eb72ef6f434ba7c854d608916c328d"
 
@@ -3614,12 +3532,6 @@ node-pre-gyp@^0.6.29:
 node-version@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/node-version/download/node-version-1.0.0.tgz#1b9b9584a9a7f7a6123f215cd14a652bf21ab19e"
-
-node.extend@^1.1.5:
-  version "1.1.6"
-  resolved "http://registry.npm.taobao.org/node.extend/download/node.extend-1.1.6.tgz#a7b882c82d6c93a4863a5504bd5de8ec86258b96"
-  dependencies:
-    is "^3.1.0"
 
 noop-logger@^0.1.0:
   version "0.1.1"
@@ -3911,10 +3823,6 @@ pkg-dir@^1.0.0:
   resolved "http://registry.npm.taobao.org/pkg-dir/download/pkg-dir-1.0.0.tgz#7a4b508a8d5bb2d629d447056ff4e9c9314cf3d4"
   dependencies:
     find-up "^1.0.0"
-
-pkijs@^1.3.27:
-  version "1.3.33"
-  resolved "http://registry.npm.taobao.org/pkijs/download/pkijs-1.3.33.tgz#a689ef62113b7c348e1ffc09965d2239e5bb4c92"
 
 postcss-alias@^0.2.2:
   version "0.2.2"
@@ -4290,15 +4198,11 @@ react-router@^3.0.0:
     loose-envify "^1.2.0"
     warning "^3.0.0"
 
-react-sea@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/react-sea/-/react-sea-0.1.0.tgz#92f3000e516bb227a70035478c6fe8624d6dea9b"
+react-sea@latest:
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/react-sea/-/react-sea-0.1.1.tgz#2fc4a4771ce26c7bb9b4216c7922f11c46136bcf"
   dependencies:
     aphrodite "^1.1.0"
-    babel-plugin-transform-class-properties "^6.19.0"
-    babel-preset-es2015 "^6.18.0"
-    babel-preset-react "^6.16.0"
-    babel-preset-stage-0 "^6.16.0"
     deep-assign "^2.0.0"
     lodash.clone "^4.5.0"
     lodash.clonedeep "^4.5.0"
@@ -4455,12 +4359,6 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redirect-https@^1.1.0:
-  version "1.1.1"
-  resolved "http://registry.npm.taobao.org/redirect-https/download/redirect-https-1.1.1.tgz#5cb28f8c7428b9594cf20d8eda468041f72c90f3"
-  dependencies:
-    escape-html "^1.0.2"
-
 reduce-css-calc@^1.2.7:
   version "1.3.0"
   resolved "https://registry.npmjs.org/reduce-css-calc/-/reduce-css-calc-1.3.0.tgz#747c914e049614a4c9cfbba629871ad1d2927716"
@@ -4577,7 +4475,7 @@ replace-ext@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/replace-ext/download/replace-ext-0.0.1.tgz#29bbd92078a739f0bcce2b4ee41e837953522924"
 
-request@2, request@^2.55.0, request@^2.65.0, request@^2.67.0, request@^2.74.0, request@^2.75.0, request@^2.79.0:
+request@2, request@^2.55.0, request@^2.65.0, request@^2.67.0, request@^2.75.0, request@^2.79.0:
   version "2.79.0"
   resolved "http://registry.npm.taobao.org/request/download/request-2.79.0.tgz#4dfe5bf6be8b8cdc37fcf93e04b65577722710de"
   dependencies:
@@ -4634,7 +4532,7 @@ ripemd160@0.2.0:
   version "0.2.0"
   resolved "http://registry.npm.taobao.org/ripemd160/download/ripemd160-0.2.0.tgz#2bf198bde167cacfa51c0a928e84b68bbe171fce"
 
-rsa-compat@^1.2.1, rsa-compat@^1.2.3, rsa-compat@^1.2.7:
+rsa-compat@^1.2.1, rsa-compat@^1.2.3:
   version "1.2.7"
   resolved "http://registry.npm.taobao.org/rsa-compat/download/rsa-compat-1.2.7.tgz#7c4636de798885a9f3c90436ea3804e35b1684c8"
   dependencies:
@@ -5693,7 +5591,3 @@ yauzl@^2.2.1:
 yeast@0.1.2:
   version "0.1.2"
   resolved "http://registry.npm.taobao.org/yeast/download/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
-
-"youkuohao-sdk@git+https://bitbucket.org/heineiuo/youkuohao-sdk.git#6351bd0":
-  version "1.0.0"
-  resolved "git+https://bitbucket.org/heineiuo/youkuohao-sdk.git#6351bd0"

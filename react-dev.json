@@ -3,10 +3,18 @@
     {
       "disable": false,
       "origin": false,
-      "key": "gateway",
-      "template": "web/index.html",
-      "filename": "web/index.js",
-      "outputDir": "gateway"
+      "key": "drive",
+      "template": "src/drive/index.html",
+      "filename": "src/drive/index.js",
+      "outputDir": "drive"
+    },
+    {
+      "disable": false,
+      "origin": false,
+      "key": "account",
+      "template": "src/account/index.html",
+      "filename": "src/account/index.js",
+      "outputDir": "account"
     }
   ],
   "modulesNeedBabel": [
