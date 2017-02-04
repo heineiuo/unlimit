@@ -3,71 +3,52 @@ import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {StyleSheet, css} from 'aphrodite'
-import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
-import {API_HOST} from '../constants'
 
 class FileList extends Component {
-
 
   static defaultProps = {
     ls: [],
     parentPath: ''
-  }
-
-
-  renderList = () => {
-    const {ls, parentPath, hrefPrefix} = this.props
-    return ls.map((file, index) => {
-      return (
-        <tr key={index}>
-          <td>{index+1}</td>
-          <td>
-            <Link to={`${hrefPrefix}?path=${parentPath}/${file}`}>{file}</Link>
-          </td>
-        </tr>
-      )
-    })
-  }
+  };
 
   render(){
 
-    const isFile = false
-    const parentPath = ''
-    const {ls} = this.props
+    const {ls, hrefPrefix, path} = this.props;
+    const parentPath = path == '/'?'':path;
 
-    if (isFile) {
-      return (
-        <div>
-          <div>这是一个文件</div>
+    return (
+      <div>
+        {
+          !ls.length?
+            <div>目录为空</div>:
+            <div>
+              <div>
+                <span>序号</span>
+                <span>名称</span>
+                <span>操作</span>
+              </div>
+              <div>
+                {
+                  ls.map((item, index) => (
+                    <div key={item}>
+                      <span>{index+1}</span>
+                      <span>
+                        <Link to={`${hrefPrefix}?path=${parentPath}/${item}`}>{item}</Link>
+                      </span>
+                      <span>
+                        <span>删除</span>
+                        <span>重命名</span>
+                        <span>下载</span>
+                      </span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+        }
+      </div>
+    )
 
-        </div>
-      )
-
-    } else if (!ls.length) {
-
-        return <div>目录为空</div>
-
-      } else {
-
-
-        return (
-
-          <table className="table table-bordered table-hover">
-            <thead>
-            <tr>
-              <th>序号</th>
-              <th>名称</th>
-              <th>操作</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            { this.renderList()}
-            </tbody>
-
-          </table>
-        )
-      }
   }
 }
 
@@ -76,8 +57,6 @@ export default connect(
     account: state.account
   }),
   dispatch => bindActionCreators({
-
-
 
   }, dispatch)
 )(FileList)

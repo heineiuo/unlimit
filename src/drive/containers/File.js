@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import FileList from './FileList'
 import Paper from 'react-sea/lib/Paper'
+import Button from 'react-sea/lib/Button'
+import Upload from 'rc-upload'
 import {setTitle} from '../store/nav'
 import {getFileList} from '../store/file'
 
@@ -13,10 +15,9 @@ class File extends Component {
     file: ''
   };
 
-  updateFileList = (props) => {
-    const {hostname} = this.props.params;
-    const {path} = props.location.query;
-    this.props.getFileList(hostname, path);
+  updateFileList = (path) => {
+    const {params, getFileList} = this.props;
+    getFileList(params.hostname, path);
   };
 
   componentWillMount = () => {
@@ -24,42 +25,48 @@ class File extends Component {
   };
 
   componentDidMount = () => {
-    this.updateFileList(this.props)
+    const {location} = this.props;
+    this.updateFileList(location.query.path||'/')
   };
 
   componentWillReceiveProps = (nextProps) => {
-    console.log(nextProps.location.query.path, this.props.location.query.path)
-    if (nextProps.location.query.path != this.props.location.query.path) {
-      this.updateFileList(nextProps)
+    const nextPath = nextProps.location.query.path;
+    // console.log(nextPath, this.props.location.query.path);
+    if (nextPath != this.props.location.query.path) {
+      this.updateFileList(nextPath)
     }
   };
 
   render (){
 
-    const {parentPath, file, params} = this.props;
+    const {parentPath, file, params, location} = this.props;
+    const path = location.query.path || '/';
+    const isFile = false;
 
     return (
       <Paper>
         <div>
-          <div>路径:</div>
-          <ul>
-          </ul>
-          <div>
-            <button>
-              <span>上传文件</span>
-              <input type="file" name="file" />
-            </button>
-            <div>
-              <span>删除</span>
-              <span>重命名</span>
-              <span>下载</span>
-            </div>
-          </div>
+          <div>路径:{path}</div>
         </div>
-        <FileList
-          parentPath={this.props.location.query.path}
-          ls={this.props.file.ls}
-          hrefPrefix={`/${params.hostname}/file`}/>
+        {
+          isFile?
+            <div>这是个文件</div>:
+            <div>
+              <div>
+                <Upload>
+                  <div style={{width: 80}}>
+                    <Button type="primary" size="small">上传文件</Button>
+                  </div>
+                </Upload>
+              </div>
+              <FileList
+                path={path}
+                location={location}
+                ls={file.ls}
+                hrefPrefix={`/${params.hostname}/file`}/>
+            </div>
+        }
+
       </Paper>
     )
 
