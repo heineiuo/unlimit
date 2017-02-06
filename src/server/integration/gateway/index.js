@@ -1,57 +1,61 @@
-import Router from '../../router'
+import {Router} from 'seashell-client-node'
 import config from '../../utils/config'
-import {createRouter} from '../../spruce'
+import {combineReducers} from 'sprucejs'
 
-const app = new Router();
+const createApp = (db) => {
 
-app.use((req, res, next) => {
-  res.app = app;
-  res.json = (data) => {
-    res.body = data;
-    res.end()
-  };
+  const app = new Router();
 
-  res.error = (error) => res.json({error});
-  res.app = app;
-  next()
-});
+  const handleRequest = combineReducers([
+    require('./File'),
+    require('./Host'),
+    require('./Location')
+  ])(db);
 
-app.use(async (req, res, next) => {
-  const {app} = res;
-  const {token} = req.body;
-  if (config.debug) console.log(token);
-  if (!token) throw 'PERMISSION_DENIED';
-  const {body} = await app.request('/account/session', {token});
-  if (config.debug) console.log(body);
-  if (body.error || body.user == null) throw 'PERMISSION_DENIED';
-  res.session = body;
-  next();
-});
+  app.use((req, res, next) => {
+    res.app = app;
+    res.json = (data) => {
+      res.body = data;
+      res.end()
+    };
+    res.error = (error) => res.json({error});
+    next()
+  });
 
-app.use(createRouter(
-  require('./file'),
-  require('./host'),
-  require('./location')
-));
+  app.use(async (req, res, next) => {
 
+    const {token} = req.body;
+    if (config.debug) console.log(token);
+    if (!token) throw new Error('PERMISSION_DENIED');
+    const {body} = await app.request('/account/session', {token});
+    if (config.debug) console.log(body);
+    if (body.error || body.user == null) throw new Error('PERMISSION_DENIED');
+    res.session = body;
+    next()
+  });
 
-app.use((err, req, res, next) => {
-  if (typeof err == 'string') return res.json({error: err});
+  app.use(async (req, res, next) => {
 
-  if (err.hasOwnProperty('name')) {
-    if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'})
-  }
+    const {modelName} = req.body;
+    if (!modelName) return next(new Error('PARAM_ILLEGAL'));
+    req.reducerName = modelName.toLowerCase();
+    const result = await handleRequest(req.body);
+    res.json(result)
+  });
 
-  if (err.hasOwnProperty('stack')) {
-    if (err.stack.indexOf('Error: Command failed') > -1) return res.json({error: 'COMMAND_FAILED'})
-  }
+  app.use((err, req, res, next) => {
 
-  console.log(err.stack||err);
-  return res.json({error: "EXCEPTION_ERROR"})
-});
+    if (err.name == 'ValidationError') return res.error('PARAM_ILLEGAL');
+    if (err.message == 'Command failed') return res.error('COMMAND_FAILED');
 
-app.use((req, res) => {
-  res.json({error: 'NOT_FOUND'})
-});
+    return res.error(err.message);
+  });
 
-export default module.exports = app
+  app.use((req, res) => {
+    res.error('NOT_FOUND')
+  });
+
+  return app;
+};
+
+export default module.exports = createApp

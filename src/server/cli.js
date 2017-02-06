@@ -46,7 +46,7 @@ export const listLocationByhost = () => new Promise(async (resolve, reject) => {
     });
     console.log(table.toString())
   } catch(e){
-    console.log(e.stack||e)
+    console.log(e.stack||e);
     reject(e)
   }
 });
@@ -58,7 +58,7 @@ export const createHost = () => new Promise(async (resolve, reject) => {
   try {
     const table = new Table({
       head: ['#', 'hostname']
-    })
+    });
 
     /**
      * 先检查有没有host
@@ -67,8 +67,8 @@ export const createHost = () => new Promise(async (resolve, reject) => {
     await Host.ShouldNotFound(hostname);
     await Host.put(hostname, {hostname});
     await Location.put(hostname, {locations: {}});
-    table.push([1, hostname])
-    console.log(table.toString())
+    table.push([1, hostname]);
+    console.log(table.toString());
     resolve()
 
   } catch(e){
@@ -83,14 +83,14 @@ export const deleteHost = () => new Promise(async (resolve, reject) => {
   try {
     const {hostname} = config;
     await Host.statics.delete({hostname});
-    console.log(`删除${hostname}成功`)
+    console.log(`删除${hostname}成功`);
     resolve()
   } catch(e){
-    console.log('删除失败')
-    console.log(e.stack||e)
+    console.log('删除失败');
+    console.log(e.stack||e);
     reject(e)
   }
-})
+});
 
 /**
  * 创建location
@@ -101,8 +101,8 @@ export const createLocation =  () =>new Promise(async (resolve, reject) => {
       head: ['#', 'locationId', 'pathname', 'type', 'sort','content']
     })
 
-    const host = await Host.findOne({hostname: config.hostname})
-    if (!host) throw '没有找到这个域名'
+    const host = await Host.findOne({hostname: config.hostname});
+    if (!host) throw '没有找到这个域名';
 
     const location = await Location.insert({
       host_id: host._id,
@@ -112,14 +112,14 @@ export const createLocation =  () =>new Promise(async (resolve, reject) => {
       sort: config.sort
     })
 
-    table.push([1, location._id, location.pathname, location.type, location.sort, location.content])
-    console.log(table.toString())
+    table.push([1, location._id, location.pathname, location.type, location.sort, location.content]);
+    console.log(table.toString());
     resolve()
 
   } catch(e){
 
-    console.log(`执行失败`)
-    console.log(e.stack||e)
+    console.log(`执行失败`);
+    console.log(e.stack||e);
     reject(e)
   }
 })

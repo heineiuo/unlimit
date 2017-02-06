@@ -11,6 +11,8 @@ Thumb.db
 .grunt
 docs/apidoc
 
+*.log*
+
 config.json
 data
 build

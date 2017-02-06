@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run web",
-    "server": "cd build && sudo nodemon --watch ../src/server --exec sudo babel-node ../src/server",
+    "server": "cd build && sudo nodemon --watch ../src/server --exec sudo babel-node ../src/server --debug",
     "web": "react-sh",
     "start:proxy": "cd build && nodemon --watch ../src --exec babel-node ../scripts/proxy",
     "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
@@ -46,8 +46,10 @@
     "node-version": "^1.0.0",
     "q-level": "^1.1.3",
     "request": "^2.67.0",
+    "seashell-client-node": "^0.2.3",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1",
+    "sprucejs": "^0.2.1",
     "ua-parser-js": "~0.7.10",
     "uuid": "~2.0.2",
     "yargs": "^6.6.0"

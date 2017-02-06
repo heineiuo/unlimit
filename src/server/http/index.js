@@ -6,7 +6,7 @@ import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
 
-const createApp = (config) => {
+const createApp = (db, config) => {
   const app = express();
 
   app.use(morgan(':req[host]:url :method :status :res[content-length] - :response-time ms', {}));
@@ -17,7 +17,12 @@ const createApp = (config) => {
     next()
   });
   app.use(require('./redirectToHttps')(config));
-  app.use(require('./handler/index')(config));
+  app.use(require('./handler')(db, config));
+
+  app.use((err, req, res, next) => {
+    console.log(err);
+    res.json({error: err.msg})
+  });
 
   app.use((req, res) => {
     res.status(404);

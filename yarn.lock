@@ -989,16 +989,16 @@ babel-register@^6.18.0, babel-register@^6.9.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@6.x, babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.20.0, babel-runtime@^6.9.0, babel-runtime@^6.9.1, babel-runtime@^6.9.2:
-  version "6.20.0"
-  resolved "http://registry.npm.taobao.org/babel-runtime/download/babel-runtime-6.20.0.tgz#87300bdcf4cd770f09bf0048c64204e17806d16f"
+babel-runtime@6.x, babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.20.0, babel-runtime@^6.22.0:
+  version "6.22.0"
+  resolved "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@^6.22.0:
-  version "6.22.0"
-  resolved "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
+babel-runtime@^6.9.0, babel-runtime@^6.9.1, babel-runtime@^6.9.2:
+  version "6.20.0"
+  resolved "http://registry.npm.taobao.org/babel-runtime/download/babel-runtime-6.20.0.tgz#87300bdcf4cd770f09bf0048c64204e17806d16f"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
@@ -3062,7 +3062,7 @@ level-sublevel@^6.6.1:
     typewiselite "~1.0.0"
     xtend "~4.0.0"
 
-leveldown@^1.5.0:
+leveldown@^1.5.0, leveldown@^1.5.3:
   version "1.5.3"
   resolved "http://registry.npm.taobao.org/leveldown/download/leveldown-1.5.3.tgz#1f360f9e8cbcfd28f363e8ae380d4341fbef33b0"
   dependencies:
@@ -4574,6 +4574,14 @@ safetimeout@^0.1.1:
   version "0.1.1"
   resolved "http://registry.npm.taobao.org/safetimeout/download/safetimeout-0.1.1.tgz#142560bd8d46e4a097891bc88a6362a1e3657b4a"
 
+seashell-client-node@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/seashell-client-node/-/seashell-client-node-0.2.3.tgz#ba2d8eb4574c26cb7f19f70dd7b3548216881fd2"
+  dependencies:
+    chalk "^1.1.3"
+    socket.io-client "^1.4.5"
+    uuid "~2.0.2"
+
 seashell-proxy@^0.2.4:
   version "0.2.4"
   resolved "http://registry.npm.taobao.org/seashell-proxy/download/seashell-proxy-0.2.4.tgz#d50b6fde26159446123c81ea5d744b26f0ea00ba"
@@ -4731,7 +4739,7 @@ socket.io-adapter@0.5.0:
     debug "2.3.3"
     socket.io-parser "2.3.1"
 
-socket.io-client@1.7.2, socket.io-client@^1.5.1:
+socket.io-client@1.7.2, socket.io-client@^1.4.5, socket.io-client@^1.5.1:
   version "1.7.2"
   resolved "http://registry.npm.taobao.org/socket.io-client/download/socket.io-client-1.7.2.tgz#39fdb0c3dd450e321b7e40cfd83612ec533dd644"
   dependencies:
@@ -4829,6 +4837,15 @@ spdx-license-ids@^1.0.2:
 spin.js@^2.0.1:
   version "2.3.2"
   resolved "http://registry.npm.taobao.org/spin.js/download/spin.js-2.3.2.tgz#6caa56d520673450fd5cfbc6971e6d0772c37a1a"
+
+sprucejs@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.npmjs.org/sprucejs/-/sprucejs-0.2.1.tgz#2f9c33a46d0b70370f7d46085e6b2b7b96a2ef7c"
+  dependencies:
+    level-sublevel "^6.6.1"
+    leveldown "^1.5.3"
+    levelup "^1.3.3"
+    q-level "^1.1.3"
 
 sshpk@^1.7.0:
   version "1.10.1"

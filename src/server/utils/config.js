@@ -2,20 +2,13 @@ import os from 'os'
 import fs from 'fs'
 import {argv} from 'yargs'
 
-const getConfigFileContent = () => {
-  const configpath = argv.configpath||`${process.cwd()}/config.json`;
-  return JSON.parse(fs.readFileSync(configpath, 'utf-8'));
-};
-
-const configFileContent = getConfigFileContent();
-
-const defaultConfig = {
+const config = Object.assign({
+  debug: false,
   datadir: `${os.homedir()}/data/gateway`
-};
+}, argv);
 
-const config = Object.assign({}, defaultConfig, configFileContent ,argv);
+config.production = JSON.parse(fs.readFileSync(`${config.datadir}/production.json`, 'utf-8'));
 
-console.log(config);
-
+// console.log(config);
 
 export default config

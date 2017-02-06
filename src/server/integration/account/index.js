@@ -1,61 +1,68 @@
-import Router from '../../router'
-import config from '../../utils/config'
-import {createRouter} from '../../spruce'
-
-const app = new Router();
-
-app.use((req, res, next) => {
-  res.app = app;
-  res.json = (data) => {
-    res.body = data;
-    res.end()
-  };
-  next()
-});
+import {Router} from 'seashell-client-node'
+import {combineReducers} from 'sprucejs'
 
 
-/**
- * 通用中间件
- * 检查session, 并把session传递给下面的中间件
- */
-app.use(require('./checkSession'));
+export default module.exports = (db) => {
 
-/**
- * @api {POST} /account/session 获取session信息
- * @apiName Session
- * @apiGroup Account
- * @apiDescription 获取session信息
- * @apiParam {string} token 令牌
- * @apiSuccess {object} user
- */
-app.use('/session', (req, res, next) => res.json(res.session));
+  const app = new Router();
+  const handler = combineReducers([
+    require('./Email'),
+    require('./EmailCode'),
+    require('./SSOCode'),
+    require('./Token'),
+    require('./User')
+  ])(db);
 
-app.use(createRouter(
-  require('./Email'),
-  require('./EmailCode'),
-  require('./SSOCode'),
-  require('./Token'),
-  require('./User')
-));
-
-app.use((err, req, res, next) => {
-  if (typeof err == 'string') return res.json({error: err});
-
-  if (err.hasOwnProperty('name')) {
-    if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'})
-  }
-
-  if (err.hasOwnProperty('stack')) {
-    if (err.stack.indexOf('Error: Command failed') > -1) return res.json({error: 'COMMAND_FAILED'})
-  }
-
-  console.log(err.stack||err);
-  return res.json({error: "EXCEPTION_ERROR"})
-});
-
-app.use((req, res, next) => {
-  res.json({error: 'NOT_FOUND'})
-});
+  app.use((req, res, next) => {
+    res.app = app;
+    res.json = (data) => {
+      res.body = data;
+      res.end()
+    };
+    next()
+  });
 
 
-export default module.exports = app
+  /**
+   * 通用中间件
+   * 检查session, 并把session传递给下面的中间件
+   */
+  app.use(async(req, res, next) => {
+    req.body.session = {
+      user: null
+    };
+
+    try {
+      if (!req.body.hasOwnProperty('token')) return next();
+      const user = await handler({
+        reducerName: 'token',
+        action: 'session',
+        token: req.body.token
+      });
+      req.body.session = {user};
+      next()
+    } catch(e){
+      if (e.message == 'SESSION_EMPTY') return next();
+      next(e)
+    }
+  });
+
+  app.use(async (req, res, next) => {
+    if (!req.body.hasOwnProperty('reducerName')) throw new Error('PARAM_ILLEGAL');
+    const result = await handler(req.body);
+    res.json(result)
+  });
+
+
+  app.use((err, req, res, next) => {
+    if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'});
+    if (err.message == 'Command failed') return res.json({error: 'COMMAND_FAILED'});
+    return res.json({error: err.message});
+  });
+
+  app.use((req, res, next) => {
+    res.json({error: 'NOT_FOUND'})
+  });
+
+  return app
+}

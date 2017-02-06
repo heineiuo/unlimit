@@ -17,7 +17,7 @@ const JSONSafeParse = (content, schema) => {
 router.use((req, res, next) => {
   const {location} = res.locals;
   if (location.type == 'SEASHELL') return next();
-  return next('NOT_SEASHELL')
+  return next(new Error('NOT_SEASHELL'))
 });
 
 router.use(bodyParser.urlencoded({extended: true}));
@@ -62,11 +62,10 @@ router.use((req, res, next) => {
 });
 
 router.use((err, req, res, next) => {
-  if (err == 'NOT_SEASHELL') return next();
   if (!err) return next();
-  if (typeof err == 'string') return res.json({error: err.toUpperCase()});
-  if (typeof err == 'object' && config.debug) console.log(err.stack||err);
-  res.json({error: 'EXCEPTION_ERROR'})
+  if (err.message == 'NOT_SEASHELL') return next();
+  if (config.debug) console.log(err.stack||err);
+  res.json({error: err.message});
 });
 
 

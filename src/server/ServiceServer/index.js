@@ -1,20 +1,35 @@
-import Socket from '../integration/service/socket'
 import SocketIO from 'socket.io'
 import Emitter from 'events'
 // import Emitter from './Emitter'
 import uuid from 'uuid'
 import chalk from 'chalk'
+import {combineReducers} from 'sprucejs'
 
 const SeashellChalk = chalk.blue.bold('[Seashell]');
 
-const defaultConfig = {
-  port: 3311,
-  presets: []
-};
-
 class ServiceHub {
 
-  constructor (app){
+  constructor (app, db){
+
+    this.db = db;
+
+    const handler = combineReducers([
+      require('../integration/service/socket')
+    ])(db);
+
+    const createQuery = (action) => (params) => handler({
+      reducerName: 'socket',
+      action,
+      ...params
+    });
+
+    this.Socket = {
+      detail: createQuery('detail'),
+      delete: createQuery('delete'),
+      findByAppId: createQuery('findByAppId'),
+      balance: createQuery('balance'),
+      bindApp: createQuery('bindApp')
+    };
 
     /**
      * Create a socket instance
@@ -43,7 +58,7 @@ class ServiceHub {
         const deleteSocket = async(socketId, retry = 0) => {
           try {
             console.log(`${SeashellChalk} ${socketId} disconnected`);
-            await Socket.delete(socketId)
+            await this.Socket.delete({socketId})
           } catch (e) {
             if (retry < 3) {
               retry++;
@@ -113,7 +128,7 @@ class ServiceHub {
             console.log(`request has sent`);
             await this.request(req, {integration: true})
           } catch(e){
-            console.log(e.stack||e)
+            console.log(e.stack||e);
             reject(e)
           }
         })
@@ -136,13 +151,13 @@ class ServiceHub {
   register = async (socket, data, io) => {
     try {
       if (!socket.id) throw 'LOST_SOCKET_ID';
-      const insertData = {
+      const registerInfo = {
         appName: data.appName,
         appId: data.appId,
         appSecret: data.appSecret
       };
 
-      const socketData = await Socket.bindApp(socket.id, insertData);
+      const socketData = await this.Socket.bindApp({socketId: socket.id, registerInfo});
       console.log(`${SeashellChalk} register success, data: ${JSON.stringify(data)}`);
       socket.emit('YOUR_REGISTER_HAS_RESPONSE', {success: 1, socketData: socketData})
     } catch(e){
@@ -168,7 +183,7 @@ class ServiceHub {
        * 如果请求来自集成服务, 不判断
        */
       if (!isIntegration) {
-        const reqService = await Socket.detail(socket.id);
+        const reqService = await this.Socket.detail({socketId: socket.id});
         console.log(`${SeashellChalk} ${reqService.appName} --> ${req.headers.importAppName}${req.headers.originUrl}`);
       }
 
@@ -186,7 +201,7 @@ class ServiceHub {
         socket.emit('YOUR_REQUEST_HAS_RESPONSE', result);
         resolve();
       }
-      const resServiceId = await Socket.balance(importAppName);
+      const resServiceId = await this.Socket.balance({importAppName});
       io.sockets.connected[resServiceId].emit('PLEASE_HANDLE_THIS_REQUEST', req)
 
     } catch(e) {
@@ -251,7 +266,7 @@ class ServiceHub {
        * 根据appId找到socket
        * 如果目标在线, 发送消息
        */
-      const reqSocket = await Socket.findByAppId(res.headers.appId);
+      const reqSocket = await this.Socket.findByAppId({appId: res.headers.appId});
       io.sockets.connected[reqSocket.socketId].emit('YOUR_REQUEST_HAS_RESPONSE', res);
       console.log(
         `${SeashellChalk} ${reqSocket.appName} <-- ${res.headers.importAppName}${res.headers.originUrl},` +

@@ -25,7 +25,7 @@ const handleFILE = async (req, res, next) => {
         const lastParam = url.pathname.split('/').pop();
         if (lastParam.length && !/\./.test(lastParam))
           return res.redirect(req.path+'/');
-        next('NOT_FOUND')
+        next(new Error('NOT_FOUND'))
       }
     })
   } catch(e){
