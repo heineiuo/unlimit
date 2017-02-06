@@ -3,7 +3,7 @@ import http from 'http'
 import createServer from 'auto-sni'
 
 import config from './utils/config'
-import ServiceServer from './ServiceServer'
+import Seashell from 'seashell'
 import createApp from './http'
 import gateway from './integration/gateway'
 import service from './integration/service'
@@ -43,10 +43,12 @@ const start = async () => {
 
     const app = express();
     const server = http.createServer(app);
-    const hub = new ServiceServer(server, db);
+    const hub = new Seashell(db, server);
+
+    console.log(hub.Socket);
 
     hub.integrate({name: 'gateway', router: gateway(db)});
-    hub.integrate({name: 'service', router: service(db)});
+    hub.integrate({name: 'service', router: service(db, hub.handler)});
     hub.integrate({name: 'account', router: account(db)});
 
     app.use((req, res, next) => {

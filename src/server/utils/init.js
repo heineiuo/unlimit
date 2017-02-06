@@ -6,7 +6,7 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
     const {domain} = initdata;
 
     const handler = combineReducers([
-      require('../integration/gateway/host'),
+      require('../integration/gateway/Host'),
       require('../integration/gateway/Location')
     ])(db);
 

@@ -45,8 +45,8 @@ module.exports = (db, config) => {
   const router = Router();
 
   const handler = combineReducers([
-    require('../../integration/gateway/host'),
-    require('../../integration/gateway/location')
+    require('../../integration/gateway/Host'),
+    require('../../integration/gateway/Location')
   ])(db);
 
   /**

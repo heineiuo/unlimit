@@ -4586,6 +4586,15 @@ seashell-proxy@^0.2.4:
   version "0.2.4"
   resolved "http://registry.npm.taobao.org/seashell-proxy/download/seashell-proxy-0.2.4.tgz#d50b6fde26159446123c81ea5d744b26f0ea00ba"
 
+seashell@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npmjs.org/seashell/-/seashell-0.7.0.tgz#d9cae68d487dcf986faaf6cbb9b379b7dcc69224"
+  dependencies:
+    chalk "^1.1.3"
+    socket.io "^1.4.5"
+    sprucejs "^0.2.1"
+    uuid "~2.0.2"
+
 seek-bzip@^1.0.3:
   version "1.0.5"
   resolved "http://registry.npm.taobao.org/seek-bzip/download/seek-bzip-1.0.5.tgz#cfe917cb3d274bcffac792758af53173eb1fabdc"
@@ -4764,7 +4773,7 @@ socket.io-parser@2.3.1:
     isarray "0.0.1"
     json3 "3.3.2"
 
-socket.io@^1.5.1:
+socket.io@^1.4.5, socket.io@^1.5.1:
   version "1.7.2"
   resolved "http://registry.npm.taobao.org/socket.io/download/socket.io-1.7.2.tgz#83bbbdf2e79263b378900da403e7843e05dc3b71"
   dependencies:
