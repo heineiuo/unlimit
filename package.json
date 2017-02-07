@@ -46,7 +46,7 @@
     "node-version": "^1.0.0",
     "q-level": "^1.1.3",
     "request": "^2.67.0",
-    "seashell": "^0.7.0",
+    "seashell": "^0.7.1",
     "seashell-client-node": "^0.2.3",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1",

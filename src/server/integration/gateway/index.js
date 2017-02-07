@@ -22,23 +22,22 @@ const createApp = (db) => {
     next()
   });
 
+  // app.use(async (req, res, next) => {
+  //
+  //   const {token} = req.body;
+  //   if (config.debug) console.log(token);
+  //   if (!token) throw new Error('PERMISSION_DENIED');
+  //   const {body} = await app.request('/account/session', {token});
+  //   if (config.debug) console.log(body);
+  //   if (body.error || body.user == null) throw new Error('PERMISSION_DENIED');
+  //   res.session = body;
+  //   next()
+  // });
+
   app.use(async (req, res, next) => {
 
-    const {token} = req.body;
-    if (config.debug) console.log(token);
-    if (!token) throw new Error('PERMISSION_DENIED');
-    const {body} = await app.request('/account/session', {token});
-    if (config.debug) console.log(body);
-    if (body.error || body.user == null) throw new Error('PERMISSION_DENIED');
-    res.session = body;
-    next()
-  });
-
-  app.use(async (req, res, next) => {
-
-    const {modelName} = req.body;
-    if (!modelName) return next(new Error('PARAM_ILLEGAL'));
-    req.reducerName = modelName.toLowerCase();
+    const {reducerName} = req.body;
+    if (!reducerName) return next(new Error('PARAM_ILLEGAL'));
     const result = await handleRequest(req.body);
     res.json(result)
   });

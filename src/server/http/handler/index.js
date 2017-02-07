@@ -9,7 +9,6 @@ const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
 
     console.log(sortedLocations);
 
-
     /**
      * 通过比对pathname, 找到路由
      */
@@ -33,7 +32,15 @@ const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
       return found
     });
 
-    if (!found) return reject(new Error('LOCATION_NOT_FOUND'))
+    if (!found) {
+      resolve({
+        url,
+        location: {
+          pathname: '/^.*$/',
+          type: 'FILE'
+        }
+      })
+    }
 
   } catch(e){
     reject(new Error('LOCATION_NOT_FOUND'))

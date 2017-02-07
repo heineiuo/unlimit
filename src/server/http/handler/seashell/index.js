@@ -37,13 +37,7 @@ router.use(async (req, res, next) => {
       __METHOD: req.method,
     });
 
-    const locationContent = JSONSafeParse(location.content);
-    // if (locationContent.session) {
-    //   reqBody.__SESSION = await gateway.request(reqBody)
-    // }
-
-    const requestPath = req.path.replace(locationContent.prefix || '', '');
-    res.locals.seashellResult = await gateway.request(requestPath, data);
+    res.locals.seashellResult = await gateway.request(location.content, data);
     next()
   } catch(e){
     if (config.debug) console.log(e.stack||e);
@@ -54,7 +48,6 @@ router.use(async (req, res, next) => {
 
 router.use(require('./upload'));
 router.use(require('./html'));
-
 
 router.use((req, res, next) => {
   const {seashellResult} = res.locals;

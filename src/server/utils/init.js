@@ -10,7 +10,6 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
       require('../integration/gateway/Location')
     ])(db);
 
-
     try {
       await handler({
         reducerName: 'host',
@@ -33,12 +32,36 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
       reducerName: 'location',
       action: 'New',
       hostname: domain,
-      pathname:'/^.*$/',
+      pathname:'/^\/api\/account.*$/',
       cors: true,
       sort: 1,
       type: 'SEASHELL',
       contentType: 'TEXT',
-      content: ''
+      content: 'account'
+    });
+
+    await handler({
+      reducerName: 'location',
+      action: 'New',
+      hostname: domain,
+      pathname:'/^\/api\/gateway.*$/',
+      cors: true,
+      sort: 1,
+      type: 'SEASHELL',
+      contentType: 'TEXT',
+      content: 'gateway'
+    });
+
+    await handler({
+      reducerName: 'location',
+      action: 'New',
+      hostname: domain,
+      pathname:'/^\/api\/service.*$/',
+      cors: true,
+      sort: 1,
+      type: 'SEASHELL',
+      contentType: 'TEXT',
+      content: 'service'
     });
 
     resolve()

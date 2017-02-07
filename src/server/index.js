@@ -26,26 +26,24 @@ const start = async () => {
     try {
       const dbdata = await basedb.get('init');
       isInitInDB = true;
-      initdata = dbdata
+      initdata = dbdata;
 
     } catch(e){
       if (e.name == 'NotFoundError') isInitInDB = false;
       await basedb.put('init', initdata);
-      console.log('[gateway] running init.');
+      console.log('[gateway] Running init.');
       await init(db, initdata)
     }
 
     if (isInitInDB) {
-      console.log('[gateway] initdata has been found, init in production.json will be ignore.');
+      console.log('[gateway] Init data has been found, init in production.json will be ignore.');
     } else {
-      console.log('[gateway] use initdata in production.json')
+      console.log('[gateway] Use initdata in production.json')
     }
 
     const app = express();
     const server = http.createServer(app);
     const hub = new Seashell(db, server);
-
-    console.log(hub.Socket);
 
     hub.integrate({name: 'gateway', router: gateway(db)});
     hub.integrate({name: 'service', router: service(db, hub.handler)});
@@ -69,8 +67,7 @@ const start = async () => {
         http: 80,
         https: 443
       }
-    }, app).once("listening", () => console.log("listening"));
-
+    }, app).once("listening", () => console.log("[gateway] Listening on port 443 and 80."));
 
   } catch(e){
     console.log(e.stack);
