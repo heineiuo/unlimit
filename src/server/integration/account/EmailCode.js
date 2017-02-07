@@ -68,7 +68,9 @@ class EmailCode extends Model {
     }
   });
 
-  resolve(){
+  resolve(query){
+    if (query.action == 'createLoginCode') return this.createLoginCode(query);
+    return new Promise((resolve, reject) => reject(new Error('ACTION_NOT_FOUND')))
 
   }
 }

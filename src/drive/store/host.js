@@ -49,9 +49,12 @@ export default handleActions({
  */
 export const createHost = (opts) => async (dispatch, getState) => {
   try {
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway/Host/new`,{hostname: opts.hostname});
+    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'host', action: 'New',
+      hostname: opts.hostname
+    });
     if (data.error) throw new Error(data.error);
-    dispatch(push(`/host/${opts.hostname}/location`))
+    dispatch(push(`/${opts.hostname}/file`))
   } catch(e){
     console.log(`${e}${JSON.stringify(e.stack||{})}`)
   }
@@ -64,7 +67,9 @@ export const createHost = (opts) => async (dispatch, getState) => {
 export const getHostList = (page=1) => async (dispatch, getState) => {
   try {
     const {token} = getState().account;
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway/host/list`,{limit: 0, token});
+    const data = await POSTRawJSON(`${API_HOST}/api/gateway`,{
+      reducerName: 'host', action: 'list',limit: 0, token
+    });
     const list = data.list;
     dispatch({
       type: "HOST_LIST_UPDATE",
@@ -83,7 +88,9 @@ export const getHostList = (page=1) => async (dispatch, getState) => {
 export const deleteHost = (hostname) => async (dispatch, getState) =>{
   try {
     const {token} = getState().account;
-    await POSTRawJSON(`${API_HOST}/api/gateway/Host/delete`, {hostname, token})
+    await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'host', action: 'Delete',hostname, token
+    })
   }catch(e){
     console.log(e)
   }
@@ -99,9 +106,12 @@ export const editLocationSort = (hostname, location, arrow) => async(dispatch, g
     const {sort, pathname} = location;
     const nextSort = sort + (arrow=='up'?-1:1);
     if (nextSort < 1) return false;
-    const response = await POSTRawJSON(`${API_HOST}/api/gateway/location/updatesort`,{token, hostname, pathname, nextSort});
+    const response = await POSTRawJSON(`${API_HOST}/api/gateway`,{
+      reducerName: 'Location', action: 'UpdateSort', token, hostname, pathname, nextSort});
     if (response.error) throw response.error;
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway/location/list`, {token, hostname});
+    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'location', action: 'list',token, hostname
+    });
     if (data.error) throw data.error;
     console.log(data.location.locations);
     dispatch({
@@ -124,7 +134,9 @@ export const editLocationSort = (hostname, location, arrow) => async(dispatch, g
 export const getHostLocationList = (hostname) => async (dispatch, getState)=>{
   try {
     const {token} = getState().account;
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway/location/list`, {hostname, token});
+    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'location', action: 'list', hostname, token
+    });
     if (data.error) throw data.error;
     dispatch({
       type: "UPDATE_LOCATION_LIST",
@@ -145,7 +157,9 @@ export const getHostLocationList = (hostname) => async (dispatch, getState)=>{
 export const getRouterDetail =(hostname, pathname, callback) => async (dispatch, getState) => {
   try {
     const {token} = getState().account;
-    const data = await POSTRawJSON(`${API_HOST}/location/list`, {hostname, token});
+    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'location', action: 'detail', hostname, token, pathname
+    });
     dispatch({
       type: 'UPDATE_LOCATION_DETAIL',
       hostname: data.host.hostname,
@@ -168,14 +182,9 @@ export const createLocation = (hostname, nextLocation) => async(dispatch, getSta
   try {
     const {token} = getState().account;
     const {pathname, cors, type, contentType, content} = nextLocation;
-    const response = await POSTRawJSON( `${API_HOST}/api/gateway/location/new`, {
-      token,
-      hostname,
-      pathname,
-      cors,
-      type,
-      contentType,
-      content
+    const response = await POSTRawJSON( `${API_HOST}/api/gateway`, {
+      reducerName: 'location', action: 'New',
+      token, hostname, pathname, cors, type, contentType, content
     });
     if (response.error) throw new Error(response.error);
     dispatch({
@@ -197,7 +206,8 @@ export const editLocation = (hostname, nextLocation) => async(dispatch, getState
   try {
     const {token} = getState().account;
     const {pathname, cors, type, contentType='text', content} = nextLocation;
-    const response = await POSTRawJSON( `${API_HOST}/api/gateway/Location/edit`, {
+    const response = await POSTRawJSON( `${API_HOST}/api/gateway`, {
+      reducerName: 'location', action: 'edit',
       token,
       hostname,
       pathname,

@@ -10,15 +10,15 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
       require('../integration/gateway/Location')
     ])(db);
 
-    try {
-      await handler({
-        reducerName: 'host',
-        action: 'Delete',
-        hostname: domain
-      });
-    } catch(e){
-      console.log(e.stack)
-    }
+    // try {
+    //   await handler({
+    //     reducerName: 'host',
+    //     action: 'Delete',
+    //     hostname: domain
+    //   });
+    // } catch(e){
+    //   console.log(e.stack)
+    // }
 
 
     await handler({

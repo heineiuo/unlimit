@@ -24,7 +24,10 @@ export const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
-    const result = await POSTRawJSON(`${API_HOST}/api/gateway/File/mv`, {token, prevName, nextName})
+    const result = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'file', action: 'mv',
+      token, prevName, nextName
+    });
     if (result.error) throw result.error
 
   } catch(e){
@@ -32,7 +35,7 @@ export const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
   }
 };
 
-export const uploadFileToPath = () =>async (dispatch) => {
+export const uploadFileToPath = () => async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
@@ -40,7 +43,6 @@ export const uploadFileToPath = () =>async (dispatch) => {
 
   } catch(e){
     console.log(e);
-    console.log()
   }
 };
 
@@ -50,7 +52,10 @@ export const deleteFile = (filename) => async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
-    const result = await POSTRawJSON(`${API_HOST}/api/gateway/File/del`, {token, filename});
+    const result = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'file', action: 'del',
+      token, filename
+    });
     if (result.error) throw result.error
 
   } catch(e){
@@ -63,7 +68,9 @@ export const downloadFile = (path)=> async (dispatch) => {
   try {
     const {token} = getState().account;
 
-    const url = POSTRawJSON(`${API_HOST}/api/gateway/File/download`, {token, path});
+    const url = POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'file', action: 'download',
+      token, path});
     window.open(url)
 
   } catch(e){
@@ -77,7 +84,9 @@ export const getDirInfo = (path) => async (dispatch) => {
     const {token} = getState().account;
 
     path = decodeURI(path);
-    const result = await POSTRawJSON(`${API_HOST}/api/gateway/File/ls`, {token, path});
+    const result = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'file', action: 'ls',
+      token, path});
     result.parentPath = path + ( path =='/'?'':'/')
 
   } catch(e){
@@ -95,7 +104,8 @@ export const getFileList = (hostname, pathname='/') => async (dispatch, getState
     });
 
     const {token} = getState().account;
-    const result = await POSTRawJSON(`${API_HOST}/api/gateway/File/ls`, {
+    const result = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'file', action: 'ls',
       hostname, pathname, token
     });
 

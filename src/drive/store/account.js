@@ -50,7 +50,8 @@ export const checkLogin = () =>  async (dispatch, getState) => {
       })
     }
 
-    const session = await POSTUrlencodeJSON(`${API_HOST}/api/account/session`, signature({
+    const session = await POSTUrlencodeJSON(`${API_HOST}/api/account`, signature({
+      reducerName: 'token', action: 'session',
       token: userToken
     }));
 

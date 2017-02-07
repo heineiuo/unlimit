@@ -18,7 +18,6 @@ const start = async () => {
     const db = opendb(`${config.datadir}/db`);
     const basedb = promisifydb(subdb(db, 'base'));
 
-    await basedb.del('init');
 
     let isInitInDB = false;
     let initdata = Object.assign({}, config.production.init);

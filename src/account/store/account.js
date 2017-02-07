@@ -2,7 +2,7 @@ import {handleActions} from 'redux-actions'
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
 
-const API_HOST = 'https://www.youkuohao.com/api/account';
+const API_HOST = 'http://local.youkuohao.com/api/account';
 const signature = (params) => params;
 
 const initialState = {
@@ -13,7 +13,6 @@ const initialState = {
   registerError: '',
   loginError: '',
   resetPasswordError:'',
-  redirectUrl: '',
   profile: {},
   questions:[],
   title:'',
@@ -30,12 +29,7 @@ export default handleActions({
   },
 
   CHECKED_LOGIN (state, action ) {
-    return Object.assign({}, state, {
-      logged: action.logged,
-      loginChecked: true,
-      redirectUrl: action.redirectUrl,
-      profile: action.profile || {}
-    }, action.payload)
+    return Object.assign({}, state, action.payload, {loginChecked: true})
   },
 
   RESET_PASSWORD_ERROR (state,action) {
@@ -96,7 +90,9 @@ export default handleActions({
 
 export const login = (formData) => async (dispatch, getState) => {
   try {
-    const result = await POSTUrlencodeJSON(`${API_HOST}/token/gettokenbyemailcode`, signature({
+    const result = await POSTUrlencodeJSON(API_HOST, signature({
+      reducerName: 'Token',
+      action: 'getTokenByEmailCode',
       email: formData.email,
       code: formData.code
     }));
@@ -123,7 +119,9 @@ export const login = (formData) => async (dispatch, getState) => {
 export const logout = () => async (dispatch, getState) => {
   try {
     console.log('正在登出系统...');
-    const result = await POSTUrlencodeJSON(`${API_HOST}/token/logout`, signature({
+    const result = await POSTUrlencodeJSON(API_HOST, signature({
+      reducerName: 'Token',
+      action: 'logout',
       token: localStorage.userToken
     }));
     if (result.error) throw result.error;
@@ -147,7 +145,11 @@ export const sendVerifyCode = (form) => async (dispatch, getState) => {
     const {registerVerifyCodeCount} = getState().account;
     if (registerVerifyCodeCount>0) return console.log('count not finish.');
 
-    const result = await POSTUrlencodeJSON(`${API_HOST}/token/gettokenbyemailcode`, signature({email: form.email}));
+    const result = await POSTUrlencodeJSON(API_HOST, signature({
+      action: "createLoginCode",
+      reducerName: 'EmailCode',
+      email: form.email
+    }));
     if (result.error) throw result.error;
 
     const countdown = (count) => {
@@ -171,39 +173,43 @@ export const sendVerifyCode = (form) => async (dispatch, getState) => {
  * 检查登录
  * @returns {function()}
  */
-export const checkLogin = (redirectUrl='') => async (dispatch, getState) => {
+export const checkLogin = () => async (dispatch, getState) => {
   try {
     const userToken = localStorage.userToken || null;
     if (!userToken) {
       return dispatch({
         type: "CHECKED_LOGIN",
-        logged: false,
-        redirectUrl: redirectUrl
+        payload: {
+          logged: false
+        }
       })
     }
 
-    const result = await POSTUrlencodeJSON(`${API_HOST}/session`,
-      signature({token: userToken})
-    );
-    if (result.error || result.user == null) {
+    const result = await POSTUrlencodeJSON(API_HOST, signature({
+      reducerName: 'token',
+      action: 'session',
+      token: userToken
+    }));
+
+    if (result.error || result.user === null) {
       return dispatch({
         type: 'CHECKED_LOGIN',
-        logged: false,
-        redirectUrl: redirectUrl
+        payload: {
+          logged: false
+        }
       })
     }
 
     dispatch({
       type: 'CHECKED_LOGIN',
-      logged: true,
       payload: {
-        email: result.user.email
+        logged: true,
+        email: result.email,
+        profile: result
       },
-      profile: result,
-      redirectUrl: redirectUrl
     })
   } catch(e){
-    console.log(e.stack||e)
+    console.log(e.stack)
   }
 };
 
@@ -215,9 +221,11 @@ export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   try {
     const {userToken=null} = localStorage;
     const {redirectUrl} = getState().account;
-    const res = await POSTUrlencodeJSON(`${API_HOST}/ssocode/get`,
-      signature({token: userToken})
-    );
+    const res = await POSTUrlencodeJSON(API_HOST, signature({
+      action: 'getTokenBySSOCode',
+      reducerName: 'token',
+      token: userToken
+    }));
     if (res.error) return console.log(res.error);
     location.href = `${redirectUrl}?code=${res.code}`
   } catch(e){

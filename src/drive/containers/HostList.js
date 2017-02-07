@@ -25,8 +25,9 @@ class HostList extends Component {
     getHostList(this.state.page)
   };
 
-  createHost = () => {
-    this.props.createHost({hostName: this.state.hostName})
+  _createHost = () => {
+    this.props.createHost({hostname: this.state.hostName})
+    this.setState({modalOpen: false})
   };
 
   handleClickOpenModal = () => {
@@ -78,6 +79,7 @@ class HostList extends Component {
 
         <Modal
           style={customStyles}
+          ref={(modal) => this.modal = modal}
           contentLabel="ADD_HOST"
           isOpen={this.state.modalOpen}>
           <Paper>
@@ -94,7 +96,7 @@ class HostList extends Component {
                 placeholder="请输入域名"  />
               <div style={{textAlign: 'right'}}>
                 <Button style={{width: 100, marginRight: 10}} type="secondary" onClick={this.cancel}>取消</Button>
-                <Button style={{width: 100}} onClick={this.createHost}>提交</Button>
+                <Button style={{width: 100}} onClick={this._createHost}>提交</Button>
               </div>
             </div>
           </Paper>

@@ -35,6 +35,19 @@ class Check extends Component {
     }
   };
 
+  componentWillReceiveProps = (nextProps) => {
+    const {account, location} = this.props;
+    if (nextProps.account.logged && location.query.redirectTo) {
+      if (
+        (!account.loginChecked && nextProps.account.loginChecked) ||
+        !account.logged
+      ) {
+        window.location.href = location.query.redirectTo;
+      }
+    }
+
+  };
+
   switchPane = (target) => {
     this.setState({
       view: target
@@ -43,6 +56,7 @@ class Check extends Component {
 
   render (){
     const {account} = this.props;
+
     return (
       <div>
         {
@@ -50,11 +64,9 @@ class Check extends Component {
             <div>
               <Spin />
             </div>:
-            account.logged && account.redirectUrl.length > 0?
-              <div>Redirecting..</div>:
-              account.logged?
-                <Logged />:
-                <UnLogged />
+            account.logged?
+              <Logged />:
+              <UnLogged />
         }
       </div>
     )
