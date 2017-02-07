@@ -122,7 +122,7 @@ module.exports = (db, config) => {
    * 其他 err交给全局err处理器
    */
   router.use(async (err, req, res, next) => {
-    console.log(err.stack||err);
+    console.log(err.stack);
     if (err.message == 'HOST_NOT_FOUND') return next();
     if (err.message == 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: LOCATION NOT FOUND`);
     if (err.message == 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: CONFIGURE ERROR`);

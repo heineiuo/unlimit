@@ -2,7 +2,7 @@
 /**
  * 返回json
  */
-const handleJSON = async (req, res, next)=>{
+const handleJSON = async (req, res, next) => {
 
   try {
     const {location} = res.locals;
@@ -13,6 +13,6 @@ const handleJSON = async (req, res, next)=>{
     next(e)
   }
 
-}
+};
 
-module.exports = handleJSON
+module.exports = handleJSON;

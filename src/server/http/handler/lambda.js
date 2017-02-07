@@ -3,7 +3,7 @@
 /**
  * 返回json
  */
-const lambdaHandle = async (req, res, next)=>{
+const lambdaHandle = async (req, res, next) => {
 
   try {
 
@@ -41,4 +41,4 @@ const lambdaHandle = async (req, res, next)=>{
 
 };
 
-module.exports = lambdaHandle
+module.exports = lambdaHandle;

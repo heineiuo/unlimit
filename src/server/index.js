@@ -1,9 +1,9 @@
 import express from 'express'
 import http from 'http'
 import createServer from 'auto-sni'
+import Seashell from 'seashell'
 
 import config from './utils/config'
-import Seashell from 'seashell'
 import createApp from './http'
 import gateway from './integration/gateway'
 import service from './integration/service'

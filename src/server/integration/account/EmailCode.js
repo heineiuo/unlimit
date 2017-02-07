@@ -29,9 +29,10 @@ class EmailCode extends Model {
   createLoginCode = (query, ctx) => new Promise(async (resolve, reject) => {
     try {
       const {email} = query;
+      const {db} = this.props;
       console.log(email);
       const code = createNumberCode();
-      await EmailCode.put(email, {code, createTime: Date.now()});
+      await db.put(email, {code, createTime: Date.now()});
 
       const options = {
         ToAddress: email,
@@ -67,6 +68,9 @@ class EmailCode extends Model {
     }
   });
 
+  resolve(){
+
+  }
 }
 
 module.exports = EmailCode;
