@@ -5,7 +5,7 @@ const fs = require('fs');
 const request = require('request');
 const packageFile = JSON.parse(fs.readFileSync('package.json', 'UTF-8'));
 const nodeExternals = require('webpack-node-externals');
-const webpackLoaderExclude = require('./react-dev/webpackLoaderExclude');
+const webpackLoaderExclude = inNodeModuleButNeedCompile => new RegExp('(node_modules\/)(?!' + inNodeModuleButNeedCompile.join('|') + ')');
 
 const port = 80;
 const app = express();

@@ -37,7 +37,9 @@ router.use(async (req, res, next) => {
       __METHOD: req.method,
     });
 
-    res.locals.seashellResult = await gateway.request(location.content, data);
+    const importAppName = location.content.search('{') != 0 ? location.content:
+      url.pathname.search('account') > 0 ?'account':'gateway'
+    res.locals.seashellResult = await gateway.request(importAppName, data);
     next()
   } catch(e){
     if (config.debug) console.log(e.stack||e);

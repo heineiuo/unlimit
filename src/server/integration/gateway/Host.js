@@ -87,6 +87,7 @@ class Host extends Model {
       await this.ShouldNotFound(hostname);
       await db.put(hostname, {hostname});
       await reducers.Location.batch({hostname, locations: {}, reset: true});
+      await reducers.File.initHostDir(hostname);
       resolve({hostname})
     } catch(e){
       reject(e)

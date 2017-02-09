@@ -3,15 +3,18 @@ import { GETJSON, POSTRawJSON, Mock, Urlencode } from 'fetch-tools'
 import {API_HOST} from '../constants'
 
 const initialState = {
-  ls: []
+  ls: [],
+  fileState: 0,
 };
 
 export default handleActions({
 
+  FILE_STATE_UPDATE (state, action) {
+    return Object.assign({}, state, action.payload)
+  },
+
   FILE_LIST_UPDATE (state, action) {
-    return Object.assign({}, state, {
-      ls: action.ls
-    })
+    return Object.assign({}, state, action.payload, {fileState: 2})
   }
 
 }, initialState)
@@ -28,7 +31,7 @@ export const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
       reducerName: 'file', action: 'mv',
       token, prevName, nextName
     });
-    if (result.error) throw result.error
+    if (result.error) throw new Error(result.error);
 
   } catch(e){
     console.log(e)
@@ -91,32 +94,40 @@ export const getDirInfo = (path) => async (dispatch) => {
 
   } catch(e){
     console.log(e);
-    console.log()
   }
 };
 
-export const getFileList = (hostname, pathname='/') => async (dispatch, getState) => {
+export const getFileList = (pathname='/') => async (dispatch, getState) => {
   try {
-    console.log(hostname, pathname);
     dispatch({
-      type: 'FILE_LIST_UPDATE',
-      ls: []
+      type: 'FILE_STATE_UPDATE',
+      payload: {
+        fileState: 1
+      }
     });
 
+    const {hostname} = getState().host;
     const {token} = getState().account;
     const result = await POSTRawJSON(`${API_HOST}/api/gateway`, {
       reducerName: 'file', action: 'ls',
       hostname, pathname, token
     });
 
-    if (result.error) throw result.error;
+    if (result.error) throw new Error(result.error);
 
     dispatch({
       type: 'FILE_LIST_UPDATE',
-      ls: result.ls
+      payload: {
+        ls: result.ls
+      }
     })
 
   } catch(e){
-    console.log(e.stack||e)
+    console.log(e.stack)
   }
 };
+
+export const restoreFileList = () => ({
+  type: 'FILE_STATE_UPDATE',
+  payload: {fileState: 0}
+});

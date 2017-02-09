@@ -1,0 +1,8 @@
+{
+  "name": "gateway",
+  "script": "./bin/gateway.js",
+  "watch": true,
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

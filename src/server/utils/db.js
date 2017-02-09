@@ -12,8 +12,7 @@ const promisifydb = (db) => {
 };
 
 const subdb = (db, subname) => {
-  const {sublevel} = levelSubLevel(db);
-  return sublevel(subname)
+  return levelSubLevel(db).sublevel(subname)
 };
 
 export {

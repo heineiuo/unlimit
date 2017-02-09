@@ -4,7 +4,7 @@ import {POSTUrlencodeJSON} from 'fetch-tools'
 import {API_HOST, signature} from '../constants'
 
 const initialState = {
-  loginChecked: false,
+  loginCheckState: 0,
   logged: false,
   token: null,
   loginError: null
@@ -13,7 +13,7 @@ const initialState = {
 export default handleActions({
 
   ACCOUNT_LOGIN_CHECKED (state, action) {
-    return Object.assign({}, state, action.payload, {loginChecked: true})
+    return Object.assign({}, state, action.payload, {loginCheckState: 2})
   },
 
   ACCOUNT_LOGOUT (state, action) {

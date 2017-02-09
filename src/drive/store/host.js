@@ -1,84 +1,173 @@
 import { handleActions } from 'redux-actions'
-import defaults from 'lodash.defaults'
 import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
 import {API_HOST} from '../constants'
 import {push} from 'react-router-redux'
+import {restoreFileList} from './file'
 
 const initialState = {
+  hostDefault: '',
   hostList: [],
-  locationList: [],
-
   hostname: '',
-  host: {},
-  location: {},
+  locations: {},
 
-  // 正在加载详情
-  loadingHostDetail: true,
-
-  loadingLocationList: true
+  hostListState: 0, // 0=not init, 1=loading, 2=ready
+  locationState: 0, // 0=not init, 1=loading, 2=ready
 };
 
 export default handleActions({
+  HOST_STATE_UPDATE (state, action) {
+    return Object.assign({}, state, action.payload)
+  },
+
   HOST_LIST_UPDATE (state, action) {
-    return defaults({
-      hostname: action.hostname,
-      hostList: action.hostList
-    }, state)
+    return Object.assign({}, state, action.payload, {
+      hostListState: 2,
+    })
   },
 
-  UPDATE_LOCATION_LIST (state, action) {
-    return defaults({
-      loadingLocationList: false,
-      locationList: action.locationList,
-      host: action.host,
-      hostname: action.hostname
-    }, state)
+  HOST_SWITCH (state, action) {
+    return Object.assign({}, state, action.payload, {locationState: 0})
   },
 
-  UPDATE_LOCATION_DETAIL (state, action) {
-    return defaults({
-      hostname: action.hostname,
-      location: action.location
-    }, state)
+  HOST_ADD (state, action) {
+    const nextHostList = state.hostList.concat({
+      hostname: action.payload.hostname
+    });
+    return Object.assign({}, state, {hostList: nextHostList})
+  },
+
+  HOST_DEFAULT_UPDATE (state, action) {
+
+  },
+
+  HOST_REMOVE (state, action) {
+    const nextHostList = state.hostList.filter(item => {
+      return item.hostname != action.payload.hostname
+    });
+    return Object.assign({}, state, {hostList: nextHostList})
+
+  },
+
+
+  HOST_LOCATION_UPDATE (state, action) {
+    return Object.assign({}, state, action.payload, {
+      locationState: 2
+    })
+  },
+
+  HOST_LOCATION_EDIT (state, action) {
+    const newLocationItem = action.payload.nextLocation;
+    const nextLocations = Object.assign({}, state.locations, {
+      [newLocationItem.pathname]: newLocationItem
+    });
+    return Object.assign({}, state, {
+      locations: nextLocations
+    })
+  },
+
+  HOST_LOCATION_ADD (state, action) {
+    const newLocationItem = action.payload.nextLocation;
+    const nextLocations = Object.assign({}, state.locations, {
+      [newLocationItem.pathname]: newLocationItem
+    });
+
+    return Object.assign({}, state, {
+      locations: nextLocations
+    })
+  },
+
+  HOST_LOCATION_SORT_UPDATE (state, action) {
+
+  },
+
+  HOST_LOCATION_REMOVE (state, action) {
+
   }
-
 }, initialState)
 
-/**
- * 添加host
- */
-export const createHost = (opts) => async (dispatch, getState) => {
-  try {
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
-      reducerName: 'host', action: 'New',
-      hostname: opts.hostname
-    });
-    if (data.error) throw new Error(data.error);
-    dispatch(push(`/${opts.hostname}/file`))
-  } catch(e){
-    console.log(`${e}${JSON.stringify(e.stack||{})}`)
-  }
-};
 
 
 /**
  * 渲染我的app列表
  */
-export const getHostList = (page=1) => async (dispatch, getState) => {
+export const getHostList = (currentHostname=null) => async (dispatch, getState) => {
   try {
+    dispatch({
+      type: 'HOST_STATE_UPDATE',
+      payload: {
+        hostListState: 1,
+      }
+    });
+
     const {token} = getState().account;
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway`,{
+    const hostListResult = await POSTRawJSON(`${API_HOST}/api/gateway`,{
       reducerName: 'host', action: 'list',limit: 0, token
     });
-    const list = data.list;
-    dispatch({
-      type: "HOST_LIST_UPDATE",
-      hostList: list
-    })
+
+    if (hostListResult.error) throw new Error(hostListResult.error);
+
+    if (hostListResult.list.length == 0) {
+      // todo
+      throw new Error('空间数量为零！')
+
+    } else {
+      const hostDefault = hostListResult.list[0].hostname;
+
+      if (currentHostname) {
+        const currentHostnameIndex = hostListResult.list.findIndex(item => item.hostname == currentHostname);
+        if (currentHostnameIndex) {
+
+          return dispatch({
+            type: "HOST_LIST_UPDATE",
+            payload: {
+              hostList: hostListResult.list,
+              hostDefault,
+              hostname: currentHostname
+            }
+          });
+        }
+      }
+
+      dispatch({
+        type: "HOST_LIST_UPDATE",
+        payload: {
+          hostList: hostListResult.list,
+          hostDefault,
+          hostname: hostDefault,
+        }
+      });
+    }
+
   } catch(e){
-    console.log(e)
+    alert(e.message);
+    console.log(e.stack)
   }
 };
+
+
+/**
+ * 添加host
+ */
+export const createHost = (form) => async (dispatch, getState) => {
+  try {
+    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
+      reducerName: 'host', action: 'New',
+      hostname: form.hostname
+    });
+    if (data.error) throw new Error(data.error);
+    dispatch({
+      type: 'HOST_ADD',
+      payload: {
+        hostname: form.hostname
+      }
+    });
+
+    dispatch(push(`/${form.hostname}`))
+  } catch(e){
+    console.log(`${e}${JSON.stringify(e.stack||{})}`)
+  }
+};
+
 
 
 /**
@@ -90,9 +179,49 @@ export const deleteHost = (hostname) => async (dispatch, getState) =>{
     const {token} = getState().account;
     await POSTRawJSON(`${API_HOST}/api/gateway`, {
       reducerName: 'host', action: 'Delete',hostname, token
+    });
+    dispatch({
+      type: 'HOST_REMOVE',
+      payload: {hostname}
     })
   }catch(e){
-    console.log(e)
+    console.log(e.stack)
+  }
+};
+
+
+export const switchHost = (hostname) => ({
+  type: 'HOST_SWITCH',
+  payload: {hostname}
+});
+
+
+export const getLocation = (hostname) => async (dispatch, getState) => {
+  try {
+
+    dispatch({
+      type: "HOST_STATE_UPDATE",
+      payload: {
+        locationState: 1
+      }
+    });
+
+    const {token} = getState().account;
+    const hostDetailResult = await await POSTRawJSON(`${API_HOST}/api/gateway`,{
+      reducerName: 'location', action: 'list', hostname, token
+    });
+
+    if (hostDetailResult.error) throw new Error(hostDetailResult.error);
+    dispatch({
+      type: "HOST_LOCATION_UPDATE",
+      payload: {
+        hostname,
+        locations: hostDetailResult.location.locations
+      }
+    })
+
+  } catch(e){
+    console.log(e.stack)
   }
 };
 
@@ -108,66 +237,23 @@ export const editLocationSort = (hostname, location, arrow) => async(dispatch, g
     if (nextSort < 1) return false;
     const response = await POSTRawJSON(`${API_HOST}/api/gateway`,{
       reducerName: 'Location', action: 'UpdateSort', token, hostname, pathname, nextSort});
-    if (response.error) throw response.error;
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
-      reducerName: 'location', action: 'list',token, hostname
-    });
-    if (data.error) throw data.error;
-    console.log(data.location.locations);
-    dispatch({
-      type: "UPDATE_LOCATION_LIST",
-      host: data.host,
-      hostname: hostname,
-      locationList: data.location.locations
-    })
-  } catch(e){
-    console.log(e);
-    alert(e)
-  }
-};
+    if (response.error) throw new Error(response.error);
 
-
-/**
- * 获取location列表
- * @returns {function()}
- */
-export const getHostLocationList = (hostname) => async (dispatch, getState)=>{
-  try {
-    const {token} = getState().account;
+    // 直接获取一下新的列表
     const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
-      reducerName: 'location', action: 'list', hostname, token
+      reducerName: 'location', action: 'list', token, hostname
     });
     if (data.error) throw data.error;
     dispatch({
-      type: "UPDATE_LOCATION_LIST",
-      host: data.host,
-      hostname: hostname,
-      locationList: data.location.locations
+      type: "HOST_LOCATION_UPDATE",
+      payload: {
+        hostname,
+        locations: data.location.locations
+      }
     })
-  } catch(e) {
-    console.log(e)
-  }
-};
-
-
-
-/**
- * 获取路由配置详情
- */
-export const getRouterDetail =(hostname, pathname, callback) => async (dispatch, getState) => {
-  try {
-    const {token} = getState().account;
-    const data = await POSTRawJSON(`${API_HOST}/api/gateway`, {
-      reducerName: 'location', action: 'detail', hostname, token, pathname
-    });
-    dispatch({
-      type: 'UPDATE_LOCATION_DETAIL',
-      hostname: data.host.hostname,
-      location: data.location.locations[pathname]
-    });
-    callback(data.location.locations[pathname])
   } catch(e){
-    console.log(e)
+    console.log(e.stack);
+    alert(e.message)
   }
 };
 
@@ -188,8 +274,10 @@ export const createLocation = (hostname, nextLocation) => async(dispatch, getSta
     });
     if (response.error) throw new Error(response.error);
     dispatch({
-      type: 'UPDATE_LOCATION',
-      nextLocation: nextLocation
+      type: 'HOST_LOCATION_ADD',
+      payload: {
+        nextLocation: nextLocation
+      }
     })
   } catch (e) {
     console.log(e)
@@ -219,8 +307,10 @@ export const editLocation = (hostname, nextLocation) => async(dispatch, getState
 
     if (response.error) throw new Error(response.error);
     dispatch({
-      type: 'UPDATE_LOCATION',
-      nextLocation: nextLocation
+      type: 'HOST_LOCATION_EDIT',
+      payload: {
+        nextLocation: nextLocation
+      }
     })
   } catch(e){
     console.log(e)

@@ -14,7 +14,10 @@ export default handleActions({
 
 }, initialState)
 
-export const setTitle = (title) => ({
-  type: 'NAV_TITLE_UPDATE',
-  payload: {title}
-});
+export const setTitle = (title) => {
+  document.title = title;
+  return {
+    type: 'NAV_TITLE_UPDATE',
+      payload: {title}
+  }
+};

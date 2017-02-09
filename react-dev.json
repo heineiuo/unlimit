@@ -3,13 +3,14 @@
     {
       "disable": false,
       "origin": false,
+      "externalsReact": true,
       "key": "drive",
       "template": "src/drive/index.html",
       "filename": "src/drive/index.js",
       "outputDir": "drive"
     },
     {
-      "disable": false,
+      "disable": true,
       "origin": false,
       "key": "account",
       "template": "src/account/index.html",

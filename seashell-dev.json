@@ -1,0 +1,9 @@
+{
+  "targets": [
+    {
+      "entry": "./src/server/index.js",
+      "outputPath": "build/bin",
+      "outputName": "gateway"
+    }
+  ]
+}

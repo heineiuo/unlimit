@@ -31,9 +31,11 @@ class Master extends Component {
     checkLogin();
   };
 
-  componentWillUpdate = () => {
+  componentWillReceiveProps = (nextProps) => {
     const {account} = this.props;
-    if (account.loginChecked && !account.logged) return location.href = '/account'
+    if (account.loginCheckState < 2 && nextProps.account.loginCheckState == 2) {
+      if (!nextProps.account.logged) return location.href = '/account/#/?redirectTo=/drive'
+    }
   };
 
   componentDidUpdate = () => {
@@ -41,21 +43,23 @@ class Master extends Component {
   };
 
   render(){
-    const {nav, account, children} = this.props;
+    const { account, children} = this.props;
 
     return (
       <div>
         <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
 
         {
-          !account.loginChecked?
+          account.loginCheckState < 2?
             <div>loading</div>:
-            <div
-              className={css(styles.container)}
-              onWheel={this.handleWheel}>
-              <Header />
-              {children}
-            </div>
+            !account.logged?
+              <div>redirecting...</div>:
+              <div
+                className={css(styles.container)}
+                onWheel={this.handleWheel}>
+                <Header />
+                {children}
+              </div>
         }
       </div>
     )
@@ -70,9 +74,9 @@ const styles = StyleSheet.create({
 });
 
 export default module.exports = connect(
-  (state) => ({
-    account: state.account,
-    nav: state.nav
+  (store) => ({
+    account: store.account,
+    nav: store.nav
   }),
   (dispatch) => bindActionCreators({
     checkLogin

@@ -249,7 +249,6 @@ class Location extends Model {
     const {action} = req;
     if (action == 'UpdateSort') return this.UpdateSort(req);
     if (action == 'batch') return this.batch(req);
-    if (action == 'Get') return this.Get(req.hostname);
     if (action == 'Delete') return this.Delete(req);
     if (action == 'edit') return this.edit(req);
     if (action == 'list') return this.list(req);

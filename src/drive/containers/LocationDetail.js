@@ -9,7 +9,7 @@ import Paper from 'react-sea/lib/Paper'
 import Radio from 'react-sea/lib/Radio'
 import Checkbox from 'react-sea/lib/Checkbox'
 import {StyleSheet, css} from 'aphrodite'
-import {editLocation, createLocation, getRouterDetail} from '../store/host'
+import {editLocation, createLocation} from '../store/host'
 import {setTitle} from '../store/nav'
 
 class LocationDetail extends Component {
@@ -27,11 +27,12 @@ class LocationDetail extends Component {
   };
 
   componentWillMount = () => {
-    const {hostname} = this.props.params;
-    const {pathname} = this.props.location.query;
-    const {setTitle} = this.props;
+    const {params, location, host, setTitle} = this.props;
+    const {hostname} = params;
+    const {pathname} = location.query;
     setTitle('路由详情');
-    this.props.getRouterDetail(hostname, pathname, (location) => this.setState(location))
+    const routerDetail = host.locations[pathname];
+    this.setState(routerDetail)
   };
 
   // componentWillReceiveProps = (nextProps) => {
@@ -233,7 +234,6 @@ export default module.exports = connect(
   }), (dispatch) => bindActionCreators({
     editLocation,
     setTitle,
-    createLocation,
-    getRouterDetail
+    createLocation
   }, dispatch)
 )(LocationDetail)

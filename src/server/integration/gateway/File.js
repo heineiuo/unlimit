@@ -1,9 +1,17 @@
 
 import fs from 'fs-promise';
 import {Model} from 'sprucejs'
+import mkdirp from 'mkdirp';
 import config from '../../utils/config'
 
 class File extends Model {
+
+  initHostDir = (hostname) => new Promise(async (resolve, reject) => {
+    mkdirp(`${config.datadir}/app/${hostname}/public`, (err) => {
+      if (err) return reject(err)
+      resolve()
+    })
+  });
 
   /**
    * @api {POST} /File/vi 修改文件
@@ -53,8 +61,20 @@ class File extends Model {
     try {
       const {pathname, hostname} = req;
       const prefix = `${config.datadir}/app/${hostname}`;
-      if (config.debug) console.log(`${prefix}/${pathname}`);
-      const ls = await fs.readdir(`${prefix}${pathname}`);
+      const directory = `${prefix}${pathname}`;
+      const files = await fs.readdir(directory);
+      const stats = await Promise.all(files.map(file => {
+        return fs.lstat(`${directory}/${file}`)
+      }));
+      const ls = files.map((name, index) => {
+        const stat = stats[index];
+        return {
+          name,
+          stat,
+          isFile: stat.isFile(),
+          isDirectory: stat.isDirectory(),
+        }
+      });
       resolve({ls})
     } catch(e){
       reject(new Error('ENOENT'))
@@ -73,7 +93,6 @@ class File extends Model {
    */
   cat = (req) => new Promise(async (resolve, reject) => {
     try {
-      const {db, reducers} = this.props;
       const {host, filename} = req;
       const prefix = `${config.datadir}/app/${host}`;
       const cat = await fs.readFile(`${prefix}/${filename}`, 'utf-8');
