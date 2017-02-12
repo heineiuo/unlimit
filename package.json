@@ -1,17 +1,11 @@
 {
-  "name": "gateway-server",
+  "name": "gateway-service",
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "start": "npm run web",
-    "server": "sudo nodemon --watch ./src/server --exec sudo babel-node ./src/server --debug",
-    "web": "react-sh",
-    "start:proxy": "cd build && nodemon --watch ../src --exec babel-node ../scripts/proxy",
-    "dev-server": "sudo babel-node src/entry/server --config=build/data/config.json --nohttps=1",
-    "start-server": "cd build && sudo node server/index --config=data/config.dev.json --nohttps",
-    "build-server": "seashell-dev --build --compress",
-    "build-web": "react-sh --build --production --compress",
-    "build:debug": "node scripts/webpack --build=gateway"
+    "start": "npm run server",
+    "server": "sudo nodemon --watch ./src --exec sudo babel-node ./src --debug",
+    "build-server": "seashell-dev --build --compress"
   },
   "dependencies": {
     "ali-push": "^0.1.6",
@@ -74,7 +68,7 @@
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
     "react-sea": "latest",
-    "react-sh": "^0.3.0",
+    "react-sh": "^0.4.0",
     "redux": "^3.6.0",
     "redux-actions": "^1.2.0",
     "redux-thunk": "^2.1.0",

@@ -38,7 +38,7 @@ router.use(async (req, res, next) => {
     });
 
     const importAppName = location.content.search('{') != 0 ? location.content:
-      url.pathname.search('account') > 0 ?'account':'gateway'
+      url.pathname.search('account') > 0 ?'account':'gateway';
     res.locals.seashellResult = await gateway.request(importAppName, data);
     next()
   } catch(e){

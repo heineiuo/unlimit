@@ -1,8 +1,8 @@
 {
   "targets": [
     {
-      "entry": "./src/server/index.js",
-      "outputPath": "build/bin",
+      "entry": "./src/index.js",
+      "outputPath": "dist/bin",
       "outputName": "gateway"
     }
   ]

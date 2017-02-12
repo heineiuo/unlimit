@@ -44,9 +44,9 @@ const start = async () => {
     const server = http.createServer(app);
     const hub = new Seashell(db, server);
 
-    hub.integrate({name: 'gateway', router: gateway(db)});
-    hub.integrate({name: 'service', router: service(db, hub.handler)});
-    hub.integrate({name: 'account', router: account(db)});
+    hub.integrate({name: 'gateway', router: gateway(subdb(db, 'gateway'))});
+    hub.integrate({name: 'service', router: service(subdb(db, 'service'), hub.handler)});
+    hub.integrate({name: 'account', router: account(subdb(db, 'account'))});
 
     app.use((req, res, next) => {
       res.gateway = hub.integrations.gateway;

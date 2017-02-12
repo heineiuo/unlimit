@@ -1,7 +1,7 @@
 import Table from 'cli-table2'
-import config from './utils/config'
-import Host from './integration/gateway/host'
-import Location from './integration/gateway/location'
+import config from '../src/utils/config'
+import Host from '../src/integration/gateway/Host'
+import Location from '../src/integration/gateway/Location'
 
 /**
  * 列出所有的host

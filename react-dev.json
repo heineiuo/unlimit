@@ -10,7 +10,9 @@
       "outputDir": "drive"
     },
     {
-      "disable": true,
+      "_disable": "是否禁用",
+      "disable": false,
+      "_origin": "",
       "origin": false,
       "key": "account",
       "template": "src/account/index.html",
