@@ -20,7 +20,7 @@ const createApp = (db, config) => {
   app.use(require('./handler')(db, config));
 
   app.use((err, req, res, next) => {
-    console.log(err);
+    if (config.debug) console.log(err);
     res.json({error: err.msg})
   });
 

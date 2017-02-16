@@ -7,7 +7,7 @@ const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
     const sortedLocations = Object.values(locations).sort((a, b) => a.sort > b.sort);
     const url = Url.parse(requrl);
 
-    console.log(sortedLocations);
+    // console.log(sortedLocations);
 
     /**
      * 通过比对pathname, 找到路由
@@ -66,15 +66,15 @@ module.exports = (db, config) => {
        * 查找host及其location列表
        */
       const {host} = req.headers;
-      console.log('[gateway] searching host');
+      // console.log('[gateway] searching host');
       const doc = await handler({reducerName: 'host', hostname: host, action: 'Get'});
-      console.log('doc: '+JSON.stringify(doc));
+      // console.log('doc: '+JSON.stringify(doc));
       const list = await handler({reducerName: 'location', hostname: host, action: 'list'});
       const {locations} = list.location;
-      console.log('locations: '+JSON.stringify(locations));
+      // console.log('locations: '+JSON.stringify(locations));
       const {location, url} = await pickLocation(locations, req.url);
 
-      console.log(location);
+      // console.log(location);
       res.locals.host = doc;
       res.locals.url = url;
       res.locals.location = location;
@@ -129,7 +129,7 @@ module.exports = (db, config) => {
    * 其他 err交给全局err处理器
    */
   router.use(async (err, req, res, next) => {
-    console.log(err.stack);
+    if (config.debug) console.log(err.stack);
     if (err.message == 'HOST_NOT_FOUND') return next();
     if (err.message == 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: LOCATION NOT FOUND`);
     if (err.message == 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: CONFIGURE ERROR`);

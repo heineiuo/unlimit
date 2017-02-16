@@ -37,6 +37,7 @@ const createApp = (db) => {
   app.use(async (req, res, next) => {
 
     const {reducerName} = req.body;
+    console.log(req.body);
     if (!reducerName) return next(new Error('PARAM_ILLEGAL'));
     const result = await handleRequest(req.body);
     res.json(result)

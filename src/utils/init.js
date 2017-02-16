@@ -1,4 +1,5 @@
 import {combineReducers} from 'sprucejs'
+import {opendb, promisifydb, subdb} from './db'
 
 export default (db, initdata) => new Promise(async (resolve, reject) => {
   try {
@@ -8,7 +9,7 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
     const handler = combineReducers([
       require('../integration/gateway/Host'),
       require('../integration/gateway/Location')
-    ])(db);
+    ])(subdb(db, 'gateway'));
 
     // try {
     //   await handler({

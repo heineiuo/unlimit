@@ -23,6 +23,8 @@ const start = async () => {
     let initdata = Object.assign({}, config.production.init);
 
     try {
+      // await basedb.del('init');
+
       const dbdata = await basedb.get('init');
       isInitInDB = true;
       initdata = dbdata;

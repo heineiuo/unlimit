@@ -15,7 +15,7 @@ const socketMiddleware = (app) => {
       await Socket.register(socket);
       socket.emit('news', {hello: 'success'});
     } catch(e){
-      if (config.debug) console.log(e.stack||e);
+      if (config.debug) console.log(e.stack);
       socket.emit('news', {hello: 'fail'});
       return socket.disconnect()
     }
