@@ -1,0 +1,34 @@
+{
+  "name": "smilefeed",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "web": "react-sh",
+    "build": "react-sh --build --production --compress"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "aphrodite": "^1.1.0",
+    "babel-plugin-transform-es2015-modules-systemjs": "^6.22.0",
+    "babel-polyfill": "^6.22.0",
+    "fetch-tools": "^0.3.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-lang": "^0.1.2",
+    "react-modal": "^1.6.5",
+    "react-redux": "^5.0.2",
+    "react-router": "^3.0.2",
+    "react-router-redux": "^4.0.8",
+    "react-sea": "^0.1.2",
+    "react-sh": "^0.6.3",
+    "react-spin": "^0.6.2",
+    "redux": "^3.6.0",
+    "redux-actions": "^1.2.1",
+    "redux-thunk": "^2.2.0",
+    "systemjs": "^0.20.7",
+    "uuid": "^3.0.1"
+  }
+}
