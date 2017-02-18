@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Provider, connect} from 'react-redux'
-import {Router, Route, IndexRoute, createMemoryHistory, hashHistory} from 'react-router'
+import {Router, Route, IndexRoute, createMemoryHistory, hashHistory, browserHistory} from 'react-router'
 import { createStore, applyMiddleware, combineReducers, bindActionCreators } from 'redux'
 import {routerMiddleware, syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
@@ -52,7 +52,7 @@ class App extends Component {
   };
 
   componentWillUnmount = () => {
-    console.error('Root Component Will Unmount!')
+    console.error('WTF! Root Component Will Unmount!')
   };
 
   render (){

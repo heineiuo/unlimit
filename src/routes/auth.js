@@ -7,13 +7,14 @@ module.exports = (injectAsyncReducer) => {
 
   return (
     <Route>
-      <IndexRoute
-        getComponent={(nextState, callback) => {
-          require.ensure([], (require) => {
-            callback(null, require('../components/Account/Auth/Auth2').default)
-          })
-        }}
-      />
+      <IndexRoute getComponent={asyncAuth}/>
     </Route>
   )
+};
+
+
+const asyncAuth = (nextState, callback) => {
+  require.ensure([], (require) => {
+    callback(null, require('../components/Account/Auth/Auth2').default)
+  })
 };

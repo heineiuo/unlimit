@@ -4,6 +4,9 @@ import {ORIGIN_HOST} from '../constants'
 
 const initialState = {
   ls: [],
+  isFile: false,
+  // isDirectory: true,
+  cat: '',
   fileState: 0,
 };
 
@@ -56,8 +59,10 @@ export const deleteFile = (filename) => async (dispatch, getState) => {
     const {token} = getState().account;
 
     const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      reducerName: 'file', action: 'del',
-      token, filename
+      reducerName: 'file',
+      action: 'del',
+      token,
+      filename
     });
     if (result.error) throw result.error
 
@@ -117,9 +122,7 @@ export const getFileList = (pathname='/') => async (dispatch, getState) => {
 
     dispatch({
       type: 'FILE_LIST_UPDATE',
-      payload: {
-        ls: result.ls
-      }
+      payload: result
     })
 
   } catch(e){

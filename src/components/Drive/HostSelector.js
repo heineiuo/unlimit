@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default HostSelector
+export default module.exports = HostSelector

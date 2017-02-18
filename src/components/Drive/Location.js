@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
 
 
 
-export default Location
+export default module.exports = Location

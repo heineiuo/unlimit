@@ -28,8 +28,8 @@ class HostWrapper extends Component {
 
   handleSwitchKey = (activeTab) => {
     const {params} = this.props;
+    this.context.router.push(`/drive/${params.hostname}/${activeTab}`);
     this.setState({activeTab});
-    this.context.router.push(`/drive/${params.hostname}/${activeTab}`)
   };
 
   render (){

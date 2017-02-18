@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Header
+export default module.exports = Header

@@ -22,7 +22,7 @@ class HostList extends Component {
   };
 
   render(){
-    const {style, host} = this.props;
+    const {style, host, closeDropdown} = this.props;
     const {hostList} = host;
 
     return (
@@ -32,20 +32,18 @@ class HostList extends Component {
             {
               host.hostListState == 2 ?
                 <div className={css(styles.hostList)}>
-                  {(() => {
-                    return hostList.map((item, index)=>{
-                      return (
-                        <div className={css(styles.hostItem)} key={index}>
-                          <Link to={`/drive/${item.hostname}`} style={{float: 'left'}} onClick={this.props.closeDropdown}>
-                            <div>{item.hostname}</div>
-                          </Link>
-                          <div className={css(styles.buttons)} style={{float: 'left'}}>
-                            <Button onClick={(e) => this._deleteHost(item)} type="danger" size="small">删除</Button>
-                          </div>
+                  {
+                    hostList.map((item, index)=> (
+                      <div className={css(styles.hostItem)} key={index}>
+                        <Link to={`/drive/${item.hostname}`} style={{float: 'left'}} onClick={closeDropdown}>
+                          <div>{item.hostname}</div>
+                        </Link>
+                        <div className={css(styles.buttons)} style={{float: 'left'}}>
+                          <Button onClick={(e) => this._deleteHost(item)} type="danger" size="small">删除</Button>
                         </div>
-                      )
-                    })
-                  })()}
+                      </div>
+                    ))
+                  }
                 </div>:
                 <Spin />
             }
