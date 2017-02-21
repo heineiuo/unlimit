@@ -3,18 +3,8 @@
  * 重定向
  */
 
-const handleREDIRECT = async (req, res, next)=>{
-
-  try {
-
-    const {location} = res.locals;
-    if (location.type.toUpperCase() != 'REDIRECT') return next();
-    res.redirect(location.content)
-
-  } catch(e){
-    next(e)
-  }
-
+const handleREDIRECT = async (res, content)=>{
+  res.redirect(content)
 };
 
-module.exports = handleREDIRECT
+export default handleREDIRECT

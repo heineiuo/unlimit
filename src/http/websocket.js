@@ -4,7 +4,7 @@
  */
 
 import SocketIO from 'socket.io'
-import Socket from '../../integration/gateway/socket'
+import Socket from '../integration/gateway/socket'
 import config from '../utils/config'
 
 const socketMiddleware = (app) => {

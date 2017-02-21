@@ -55,7 +55,7 @@ const start = async () => {
       next()
     });
 
-    app.use(createApp(db, config));
+    app.use(createApp(config, db));
 
     createServer({
       email: config.production.https.email,

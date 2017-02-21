@@ -4,29 +4,9 @@ import ent from 'ent'
  * 返回html
  */
 
-const handleHTML = async (req, res, next)=>{
-
-  try {
-
-    const {location} = res.locals;
-
-    if (location.type.toUpperCase() != 'HTML') return next();
-    if (location.contentType=='file'){
-      res.sendFile(location.content, {
-        headers: {
-          'Expires': new Date(Date.now() + 1000 * 10) // 10s
-        }
-      }, (err) => {
-        if (err && !res.headersSent) res.sendStatus(404)
-      })
-    } else {
-      res.end(ent.decode(location.content))
-    }
-
-  } catch(e){
-    next(e)
-  }
+const handleHTML = (res, content) => {
+  res.end(ent.decode(content))
 
 };
 
-module.exports = handleHTML;
+export default handleHTML

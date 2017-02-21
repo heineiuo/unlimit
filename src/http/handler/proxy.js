@@ -1,44 +1,35 @@
 import fs from 'fs-promise'
 import httpProxy from 'http-proxy'
-import config from '../../utils/config'
 
 /**
  * 反向代理
  */
 const handlePROXY = async (req, res, next) => {
 
-  try {
-    const {location} = res.locals;
-    if (location.type.toUpperCase() != 'PROXY') return next();
+  const {location} = res.locals;
+  if (location.type.toUpperCase() != 'PROXY') return next();
 
-    if (config.debug) console.log('proxy...');
+  const proxy = httpProxy.createProxyServer({
+    // protocolRewrite: 'http'
+  });
 
-    const proxy = httpProxy.createProxyServer({
-      // protocolRewrite: 'http'
-    });
+  // todo handle ssl cert to options
+  proxy.web(req, res, {
+    target: location.content
+  });
 
-    // todo handle ssl cert to options
-    proxy.web(req, res, {
-      target: location.content
-    });
+  proxy.on('error', (err, req, res) => {
+    next(err)
+  });
 
-    proxy.on('error', (err, req, res) => {
-      next(err)
-    });
+  proxy.on('proxyRes', (proxyRes, req, res) => {
+    Object.keys(proxyRes.headers).forEach(key=>{
+      res.set(key, proxyRes.headers[key])
+    })
+  });
 
-    proxy.on('proxyRes', (proxyRes, req, res) => {
-      Object.keys(proxyRes.headers).forEach(key=>{
-        res.set(key, proxyRes.headers[key])
-      })
-    });
-
-    proxy.close()
-
-
-  } catch(e){
-    next(e)
-  }
+  proxy.close()
 
 };
 
-module.exports = handlePROXY;
+export default handlePROXY;

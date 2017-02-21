@@ -78,5 +78,8 @@
     "webpack-dev-server": "^1.14.0",
     "webpack-hot-middleware": "~2.10.0",
     "webpack-node-externals": "^1.0.0"
+  },
+  "peerDependencies": {
+    "prettyjson": "^1.2.1"
   }
 }

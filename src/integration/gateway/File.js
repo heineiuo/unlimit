@@ -1,7 +1,7 @@
 
-import fs from 'fs-promise';
+import fs from 'fs-promise'
 import {Model} from 'sprucejs'
-import mkdirp from 'mkdirp';
+import mkdirp from 'mkdirp'
 import config from '../../utils/config'
 
 class File extends Model {
@@ -50,6 +50,29 @@ class File extends Model {
   });
 
   /**
+   * 创建文件夹
+   */
+  mkdir = () => new Promise(async (resolve, reject) => {
+    try {
+      reject(new Error('API_NOT_OK'))
+
+    } catch(e){
+      reject(e)
+    }
+  });
+
+  /**
+   * 删除文件、文件夹
+   */
+  rm = () => new Promise(async (resolve, reject) => {
+    try {
+      reject(new Error('API_NOT_OK'))
+    } catch(e){
+      reject(e)
+    }
+  });
+
+  /**
    * @api {POST} /File/ls 获取文件列表
    * @apiGroup File
    * @apiName FileLs
@@ -75,9 +98,22 @@ class File extends Model {
           isDirectory: stat.isDirectory(),
         }
       });
-      resolve({ls})
+      resolve({
+        isFile: false,
+        ls
+      })
     } catch(e){
-      reject(new Error('ENOENT'))
+      if (e.message.search('ENOTDIR:') == 0) {
+        try {
+          const file = await this.cat(req);
+          resolve(file)
+        } catch(e){
+          reject(e)
+        }
+
+      } else {
+        reject(new Error('ENOENT'))
+      }
     }
   });
 
@@ -93,10 +129,13 @@ class File extends Model {
    */
   cat = (req) => new Promise(async (resolve, reject) => {
     try {
-      const {host, filename} = req;
-      const prefix = `${config.datadir}/app/${host}`;
-      const cat = await fs.readFile(`${prefix}/${filename}`, 'utf-8');
-      resolve({cat})
+      const {hostname, pathname} = req;
+      const prefix = `${config.datadir}/app/${hostname}`;
+      const cat = await fs.readFile(`${prefix}/${pathname}`, 'utf-8');
+      resolve({
+        isFile: true,
+        cat
+      })
     } catch(e){
       reject(e)
     }
@@ -106,9 +145,11 @@ class File extends Model {
 
     const {action} = req;
     if (action == 'cat') return this.cat(req);
-    if (action == 'ls') return this.ls(req);
-    if (action == 'mv') return this.mv(req);
     if (action == 'vi') return this.vi(req);
+    if (action == 'ls') return this.ls(req);
+    if (action == 'mkdir') return this.mkdir(req);
+    if (action == 'rm') return this.rm(req);
+    if (action == 'mv') return this.mv(req);
     return new Promise((resolve, reject) => reject(new Error('NOT_FOUND')))
 
   }
