@@ -40,8 +40,18 @@ module.exports = (config) => {
 
       const importAppName = location.content.search('{') != 0 ? location.content:
         url.pathname.search('account') > 0 ?'account':'gateway';
-      res.locals.seashellResult = await gateway.request(importAppName, data);
+      const result = await gateway.request(importAppName, data);
+
+      if (result.headers.hasOwnProperty('__HTML')) {
+        Object.assign(res.locals.location, {type: 'HTML', content: result.body.html})
+      } else if (result.headers.hasOwnProperty('__UPLOAD')) {
+        Object.assign(res.locals.location, {type: 'UPLOAD', content: result.body})
+      } else {
+        Object.assign(res.locals.location, {type: 'JSON', content: result.body})
+      }
+
       next()
+
     } catch(e){
       if (config.debug) console.log(e.stack||e);
       next(e)
@@ -49,19 +59,11 @@ module.exports = (config) => {
 
   });
 
-  router.use(require('./upload'));
-  router.use(require('./html'));
-
-  router.use((req, res, next) => {
-    const {seashellResult} = res.locals;
-    res.json(seashellResult.body)
-  });
-
   router.use((err, req, res, next) => {
     if (!err) return next();
     if (err.message == 'NOT_SEASHELL') return next();
     if (config.debug) console.log(err.stack||err);
-    res.json({error: err.message});
+    next(err)
   });
 
   return router

@@ -8,18 +8,19 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
 
     const handler = combineReducers([
       require('../integration/gateway/Host'),
+      require('../integration/gateway/File'),
       require('../integration/gateway/Location')
     ])(subdb(db, 'gateway'));
 
-    // try {
-    //   await handler({
-    //     reducerName: 'host',
-    //     action: 'Delete',
-    //     hostname: domain
-    //   });
-    // } catch(e){
-    //   console.log(e.stack)
-    // }
+    try {
+      await handler({
+        reducerName: 'host',
+        action: 'Delete',
+        hostname: domain
+      });
+    } catch(e){
+      console.log(e.stack)
+    }
 
 
     await handler({

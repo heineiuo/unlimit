@@ -1,7 +1,4 @@
-/**
- * Copyright 2015 - 2017 heineiuo <heineiuo@gmail.com>
- * @provideModule httpStart
- */
+
 import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
@@ -13,7 +10,6 @@ const createApp = (config, db) => {
   app.use(compression());
   app.use((req, res, next) => {
     res.removeHeader("x-powered-by");
-    // res.locals.seashell = seashell;
     next()
   });
 
@@ -25,20 +21,20 @@ const createApp = (config, db) => {
    * 对象，并交给handler处理，如果请求结果是直接返回结果，则直接返回，不经过handler。
    * handler处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  app.use(require('./seashell')(config));
+  app.use(require('./seashellProxy')(config));
   app.use(require('./handler')(config));
 
-  app.use((err, req, res, next) => {
 
-    /**
-     * 处理handler内遇到的异常和错误
-     * `HOST_NOT_FOUND` 即没有找到host，返回404
-     * `LOCATION_NOT_FOUND` 即没有找到location，404
-     * `UNDEFINED_TYPE` 用户非法请求
-     *
-     * 其他的错误显示异常
-     */
-    if (config.debug) console.log(err.stack);
+  /**
+   * 处理handler内遇到的异常和错误
+   * `HOST_NOT_FOUND` 即没有找到host，返回404
+   * `LOCATION_NOT_FOUND` 即没有找到location，404
+   * `UNDEFINED_TYPE` 用户非法请求
+   *
+   * 其他的错误显示异常
+   */
+  app.use((err, req, res, next) => {
+    // console.log(err.stack);
     if (err.message == 'HOST_NOT_FOUND') return next();
     if (err.message == 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
     if (err.message == 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);

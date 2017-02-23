@@ -28,7 +28,8 @@ module.exports = (config, db) => {
       // console.log(location);
       res.locals.host = doc;
       res.locals.url = url;
-      res.locals.location = location;
+      // res.locals.location = location;
+      res.locals.location = Object.assign({}, location, {content: location.content});
 
       if (location.cors) {
         res.set('Access-Control-Allow-Origin', '*');

@@ -84,7 +84,9 @@ class Location extends Model {
       const {Host} = this.props.reducers;
       const host = await Host.Get(hostname);
       const location = await db.get(hostname);
-      resolve({host, location})
+      // console.log('=================location============');
+      // console.log(location);
+      resolve({host, location, hostname})
     } catch(e){
       reject(e)
     }
@@ -191,7 +193,6 @@ class Location extends Model {
       reject(e)
     }
   });
-
 
 
   /**

@@ -4,45 +4,37 @@ import handleBLOCK from './block'
 import handleFILE from './file'
 import handleREDIRECT from './redirect'
 import handleDOWNLOAD from './download'
+import handleUPLOAD from './upload'
 
-module.exports = (config) => (req, res, next) => {
+module.exports = (config) => async (req, res, next) => {
 
   try {
 
     const {host, url, location, location: {type, content}} = res.locals;
+    const handles = {
+      JSON: () => new Promise((resolve, reject) => {
+        try {
+          res.json(location.content);
+          resolve()
+        } catch(e){
+          reject(e)
+        }
+      }),
+      HTML: () => handleHTML(res, content),
+      PROXY: () => handlePROXY(req, res, next),
+      BLOCK: () => handleBLOCK(res, content),
+      FILE: () => handleFILE(res, host.hostname, url.pathname, config.datadir, req.path),
+      REDIRECT: () => handleREDIRECT(res, content),
+      DOWNLOAD: () => handleDOWNLOAD(res, req.query.path),
+      UPLOAD: () => handleUPLOAD(req, res, content),
+    };
 
-    if (type == 'JSON') {
-      return res.json(JSON.parse(location.content))
-    }
-
-    if (type == 'HTML') {
-      return handleHTML(res, content)
-    }
-
-    if (type == 'PROXY') {
-      return handlePROXY(req, res, next)
-    }
-
-    if (type == 'BLOCK') {
-      return handleBLOCK(res, content)
-    }
-
-    if (type == 'FILE') {
-      return handleFILE(res, host.hostname, url.pathname, config.datadir, req.path)
-    }
-
-    if (type == 'REDIRECT') {
-      return handleREDIRECT(res, content)
-    }
-
-    if (type == 'DOWNLOAD') {
-      return handleDOWNLOAD(res, req.query.path)
-    }
+    if (handles.hasOwnProperty(type)) return await handles[type]();
 
     /**
      * 未定义的type类型
      */
-    throw new Error('ILLEGAL_HTTP_REQUEST')
+    next(new Error('ILLEGAL_HTTP_REQUEST'))
 
   } catch(e){
     next(e)

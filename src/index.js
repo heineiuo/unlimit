@@ -23,7 +23,7 @@ const start = async () => {
     let initdata = Object.assign({}, config.production.init);
 
     try {
-      // await basedb.del('init');
+      await basedb.del('init');
 
       const dbdata = await basedb.get('init');
       isInitInDB = true;
@@ -55,8 +55,7 @@ const start = async () => {
       next()
     });
 
-    app.use(createApp(config, db));
-
+    app.use(createApp(config, subdb(db, 'gateway')));
     createServer({
       email: config.production.https.email,
       agreeTos: true,

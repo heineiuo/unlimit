@@ -3,8 +3,13 @@
  * 重定向
  */
 
-const handleREDIRECT = async (res, content)=>{
-  res.redirect(content)
-};
+const handleREDIRECT = (res, content) => new Promise((resolve, reject) => {
+  try {
+    res.redirect(content);
+    resolve()
+  } catch(e){
+    reject(e)
+  }
+});
 
 export default handleREDIRECT

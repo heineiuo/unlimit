@@ -1,6 +1,5 @@
-
-import {Model} from 'sprucejs'
-import Joi from 'joi'
+import {Model} from "sprucejs"
+import Joi from "joi"
 
 
 class Host extends Model {
@@ -22,7 +21,7 @@ class Host extends Model {
       const {hostname} = req;
       const host = await this.Get(hostname);
       resolve({host})
-    } catch(e){
+    } catch (e) {
       reject(e)
     }
   });
@@ -39,7 +38,7 @@ class Host extends Model {
       const {db} = this.props;
       const list = await db.find({});
       resolve({list});
-    } catch(e){
+    } catch (e) {
       reject(e)
     }
   });
@@ -50,7 +49,7 @@ class Host extends Model {
    * @apiName HostDelete
    * @apiParam {string} hostname
    */
-  Delete = (req) => new Promise(async (resolve, reject) => {
+  Delete = (req) => new Promise(async(resolve, reject) => {
     try {
       Joi.validate(req, Joi.object().keys({
         hostname: Joi.string().required()
@@ -64,7 +63,7 @@ class Host extends Model {
         reducers.Location.destroy(hostname)
       ]);
       resolve({})
-    } catch(e){
+    } catch (e) {
       reject(e)
     }
   });
@@ -76,31 +75,33 @@ class Host extends Model {
    * @apiParam {string} hostname
    * @apiSuccess {string} hostname
    */
-  New = (query) => new Promise(async (resolve, reject) => {
+  New = (query) => new Promise(async(resolve, reject) => {
     try {
       Joi.validate(query, Joi.object().keys({
         hostname: Joi.string().required()
       }), {allowUnknown: true});
 
-      const {hostname } = query;
+      const {hostname} = query;
       const {db, reducers} = this.props;
       await this.ShouldNotFound(hostname);
       await db.put(hostname, {hostname});
       await reducers.Location.batch({hostname, locations: {}, reset: true});
+      console.log('===========reducers===========');
+      console.log(reducers)
       await reducers.File.initHostDir(hostname);
       resolve({hostname})
-    } catch(e){
+    } catch (e) {
       reject(e)
     }
   });
 
-  Get = (key) => new Promise(async(resolve, reject) => {
+  Get = (hostname) => new Promise(async(resolve, reject) => {
     try {
       const {db} = this.props;
-      const host = await db.get(key);
+      const host = await db.get(hostname);
       // console.log('host: '+ JSON.stringify(host));
       resolve(host)
-    } catch(e){
+    } catch (e) {
       if (e.name == 'NotFoundError') return reject(new Error('HOST_NOT_FOUND'));
       reject(e)
     }
@@ -111,7 +112,7 @@ class Host extends Model {
       const {db} = this.props;
       await db.get(key);
       reject(new Error('HOST_EXIST'));
-    } catch(e){
+    } catch (e) {
       if (e.name == 'NotFoundError') return resolve();
       reject(e)
     }
