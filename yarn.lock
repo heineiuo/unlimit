@@ -2206,9 +2206,9 @@ form-urlencoded@^1.5.0:
   version "1.5.0"
   resolved "https://registry.npmjs.org/form-urlencoded/-/form-urlencoded-1.5.0.tgz#8942b9e0d0f4f2d6a1d4ef740d07b065a43482c3"
 
-formidable@^1.0.17:
-  version "1.0.17"
-  resolved "http://registry.npm.taobao.org/formidable/download/formidable-1.0.17.tgz#ef5491490f9433b705faa77249c99029ae348559"
+formidable@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/formidable/-/formidable-1.1.1.tgz#96b8886f7c3c3508b932d6bd70c4d3a88f35f1a9"
 
 forwarded@~0.1.0:
   version "0.1.0"
@@ -3978,13 +3978,6 @@ pretty-error@^2.0.2:
   dependencies:
     renderkid "~2.0.0"
     utila "~0.4"
-
-prettyjson@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/prettyjson/-/prettyjson-1.2.1.tgz#fcffab41d19cab4dfae5e575e64246619b12d289"
-  dependencies:
-    colors "^1.1.2"
-    minimist "^1.2.0"
 
 private@^0.1.6, private@~0.1.5:
   version "0.1.6"

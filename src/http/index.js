@@ -23,6 +23,7 @@ const createApp = (config, db) => {
    */
   app.use(require('./seashellProxy')(config));
   app.use(require('./handler')(config));
+  app.use(require('./httpProxy')(config, app));
 
 
   /**
@@ -34,7 +35,7 @@ const createApp = (config, db) => {
    * 其他的错误显示异常
    */
   app.use((err, req, res, next) => {
-    // console.log(err.stack);
+    console.log(err.stack);
     if (err.message == 'HOST_NOT_FOUND') return next();
     if (err.message == 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
     if (err.message == 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);

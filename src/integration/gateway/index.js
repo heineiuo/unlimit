@@ -34,19 +34,18 @@ const createApp = (db) => {
   //   next()
   // });
 
-  app.use('/upload', (req, res, next) => {
-    res.header.__UPLOAD = true;
-    res.body = {
-      uploadDir: `${config.datadir}/apps/local.youkuohao.com/upload`,
-      uploadLocation: `http://local.youkuohao.com/upload`
-    };
-    res.end()
-  });
-
   app.use(async (req, res, next) => {
 
     const {reducerName} = req.body;
     if (!reducerName) return next(new Error('PARAM_ILLEGAL'));
+    if (reducerName == 'upload') {
+      res.headers.__UPLOAD = true;
+      res.body = {
+        uploadDir: `${config.datadir}/app/local.youkuohao.com/public/upload`,
+        uploadLocation: `http://local.youkuohao.com/upload`
+      };
+      return res.end()
+    }
     const result = await handleRequest(req.body);
     res.json(result)
   });

@@ -42,6 +42,10 @@ module.exports = (config) => {
         url.pathname.search('account') > 0 ?'account':'gateway';
       const result = await gateway.request(importAppName, data);
 
+      console.log('==============seashell result =============');
+
+      console.log(result);
+
       if (result.headers.hasOwnProperty('__HTML')) {
         Object.assign(res.locals.location, {type: 'HTML', content: result.body.html})
       } else if (result.headers.hasOwnProperty('__UPLOAD')) {
@@ -49,6 +53,8 @@ module.exports = (config) => {
       } else {
         Object.assign(res.locals.location, {type: 'JSON', content: result.body})
       }
+
+      console.log(res.locals.location);
 
       next()
 

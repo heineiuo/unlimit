@@ -1,5 +1,4 @@
 import express from 'express'
-import http from 'http'
 import createServer from 'auto-sni'
 import Seashell from 'seashell'
 
@@ -23,7 +22,7 @@ const start = async () => {
     let initdata = Object.assign({}, config.production.init);
 
     try {
-      await basedb.del('init');
+      // await basedb.del('init');
 
       const dbdata = await basedb.get('init');
       isInitInDB = true;
@@ -43,8 +42,8 @@ const start = async () => {
     }
 
     const app = express();
-    const server = http.createServer(app);
-    const hub = new Seashell(db, server);
+    const hub = new Seashell(db);
+
 
     hub.integrate({name: 'gateway', router: gateway(subdb(db, 'gateway'))});
     hub.integrate({name: 'service', router: service(subdb(db, 'service'), hub.handler)});
@@ -56,7 +55,11 @@ const start = async () => {
     });
 
     app.use(createApp(config, subdb(db, 'gateway')));
-    createServer({
+
+    // server.listen(80, () => console.log("[gateway] Listening on port 80."));
+
+
+    const server = createServer({
       email: config.production.https.email,
       agreeTos: true,
       debug: config.production.https.debug,
@@ -68,6 +71,8 @@ const start = async () => {
         https: 443
       }
     }, app).once("listening", () => console.log("[gateway] Listening on port 443 and 80."));
+
+    hub.io.attach(server);
 
   } catch(e){
     console.log(e.stack);

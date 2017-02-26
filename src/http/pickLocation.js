@@ -5,6 +5,7 @@ import {combineReducers} from 'sprucejs'
 module.exports = (config, db) => {
 
   const handler = combineReducers([
+    require('../integration/gateway/File'),
     require('../integration/gateway/Host'),
     require('../integration/gateway/Location')
   ])(db);
@@ -70,6 +71,9 @@ const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
       const matches = url.pathname.match(reg);
       if (matches && matches[0] == url.pathname) {
         item.type = item.type.toUpperCase();
+        try {
+          item.content = JSON.parse(item.content)
+        } catch(e){}
         // res.locals.host = doc;
         // res.locals.location = item;
         found = true;
