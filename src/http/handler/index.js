@@ -24,9 +24,6 @@ module.exports = (config) => {
           }
         }),
         HTML: () => handleHTML(res, content),
-        PROXY: () => (req, res, next) => {
-
-        },
         BLOCK: () => handleBLOCK(res, content),
         FILE: () => handleFILE(res, host.hostname, url.pathname, config.datadir, req.path),
         REDIRECT: () => handleREDIRECT(res, content),

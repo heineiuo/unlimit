@@ -30,6 +30,8 @@ module.exports = (config, app) => {
     try {
       const {location} = res.locals;
 
+      if (location.type != 'PROXY') return next();
+
       // todo handle ssl cert to options
       proxy.web(req, res, {
         target: location.content

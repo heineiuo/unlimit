@@ -1,12 +1,6 @@
 import UAParser from 'ua-parser-js'
 
-const redirectToHttps = (config) => (req, res, next) => {
-  // if (config.production.https.length == 0) {
-  //   if ( req.protocol == 'https' ) {
-  //     return res.redirect(`http://${req.headers.host}${req.originalUrl}`)
-  //   }
-  //   return next()
-  // }
+module.exports = (config) => (req, res, next) => {
   try {
     if ( config.production.https.approvedDomains.indexOf(req.headers.host) == -1 ) return next();
     if ( req.protocol == 'https' ) return next();
@@ -19,5 +13,3 @@ const redirectToHttps = (config) => (req, res, next) => {
   }
 
 };
-
-module.exports = redirectToHttps;
