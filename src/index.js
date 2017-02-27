@@ -1,22 +1,17 @@
-import express from 'express'
-import createServer from 'auto-sni'
-import Seashell from 'seashell'
 
 import config from './utils/config'
-import createApp from './http'
-import gateway from './integration/gateway'
-import service from './integration/service'
-import account from './integration/account'
 import {opendb, promisifydb, subdb} from './utils/db'
 import init from './utils/init'
-
+import createHub from './integration'
+import createServer from './http'
 
 const start = async () => {
 
-  try {
-    const db = opendb(`${config.datadir}/db`);
-    const basedb = promisifydb(subdb(db, 'base'));
+  const db = opendb(`${config.datadir}/db`);
+  const hub = createHub(db);
 
+  try {
+    const basedb = promisifydb(subdb(db, 'base'));
 
     let isInitInDB = false;
     let initdata = Object.assign({}, config.production.init);
@@ -28,7 +23,7 @@ const start = async () => {
       isInitInDB = true;
       initdata = dbdata;
 
-    } catch(e){
+    } catch(e) {
       if (e.name == 'NotFoundError') isInitInDB = false;
       await basedb.put('init', initdata);
       console.log('[gateway] Running init.');
@@ -41,36 +36,7 @@ const start = async () => {
       console.log('[gateway] Use initdata in production.json')
     }
 
-    const app = express();
-    const hub = new Seashell(db);
-
-
-    hub.integrate({name: 'gateway', router: gateway(subdb(db, 'gateway'))});
-    hub.integrate({name: 'service', router: service(subdb(db, 'service'), hub.handler)});
-    hub.integrate({name: 'account', router: account(subdb(db, 'account'))});
-
-    app.use((req, res, next) => {
-      res.gateway = hub.integrations.gateway;
-      next()
-    });
-
-    app.use(createApp(config, subdb(db, 'gateway')));
-
-    // server.listen(80, () => console.log("[gateway] Listening on port 80."));
-
-
-    const server = createServer({
-      email: config.production.https.email,
-      agreeTos: true,
-      debug: config.production.https.debug,
-      domains: config.production.https.domains,
-      forceSSL: false,
-      redirectCode: 301,
-      ports: {
-        http: 80,
-        https: 443
-      }
-    }, app).once("listening", () => console.log("[gateway] Listening on port 443 and 80."));
+    const server = createServer(subdb(db, 'gateway'), config, hub);
 
     hub.io.attach(server);
 

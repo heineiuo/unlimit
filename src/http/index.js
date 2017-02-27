@@ -1,14 +1,16 @@
-
+import createServer from 'auto-sni'
 import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
 
-const createApp = (config, db) => {
+export default (db, config, hub) => {
+
   const app = express();
 
   app.use(morgan(':req[host]:url :method :status :res[content-length] - :response-time ms', {}));
   app.use(compression());
   app.use((req, res, next) => {
+    res.gateway = hub.integrations.gateway;
     res.removeHeader("x-powered-by");
     next()
   });
@@ -48,8 +50,19 @@ const createApp = (config, db) => {
     res.end('NOT FOUND \n SEASHELL SERVER.')
   });
 
-  return app;
+  const server = createServer({
+    email: config.production.https.email,
+    agreeTos: true,
+    debug: config.production.https.debug,
+    domains: config.production.https.domains,
+    forceSSL: false,
+    redirectCode: 301,
+    ports: {
+      http: 80,
+      https: 443
+    }
+  }, app).once("listening", () => console.log("[gateway] Listening on port 443 and 80."));
+
+  return server
 
 };
-
-export default createApp
