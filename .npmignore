@@ -13,3 +13,5 @@ yarn.lock
 react-dev.json
 *.log*
 README.md
+.babelrc
+index.html

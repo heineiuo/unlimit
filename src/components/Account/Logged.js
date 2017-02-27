@@ -1,16 +1,11 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
 import Modal from 'react-modal'
 import Button from 'react-sea/lib/Button'
 import PopModal from '../PopModal'
 import ImageUpload from 'react-sea/lib/ImageUpload'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite/no-important'
-import {logout} from '../../store/account'
-
-const {localStorage} = window;
 
 
 class Profile extends Component {
@@ -288,11 +283,4 @@ const buttonStyle = {
 };
 
 
-export default connect(
-  (state) => ({
-    account: state.account
-  }),
-  (dispatch) => bindActionCreators({
-    logout
-  }, dispatch)
-)(Profile)
+export default Profile

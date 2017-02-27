@@ -4,8 +4,8 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import { push } from 'react-router-redux'
 
-import host, {getHostList, deleteHost, editLocation, createLocation,
-  switchHost, getLocation} from '../store/host'
+import host, {createHost, getHostList, deleteHost, editLocation, createLocation,
+  switchHost, getLocation, editLocationSort} from '../store/host'
 import file, {restoreFileList, getFileList, deleteFile} from '../store/file'
 import nav, {setTitle} from '../store/nav'
 
@@ -42,7 +42,8 @@ const connectDriveMaster = connect(
   }),
   (dispatch) => bindActionCreators({
     getHostList,
-    deleteHost
+    deleteHost,
+    createHost
   }, dispatch)
 );
 
@@ -131,6 +132,7 @@ const asyncLocation = (partialNextState, callback) => {
         getLocation,
         switchHost,
         getHostList,
+        editLocationSort,
         restoreFileList
       }, dispatch)
     )(Component);

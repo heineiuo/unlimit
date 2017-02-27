@@ -6,7 +6,8 @@ import Upload from 'rc-upload'
 import {setTitle} from '../../store/nav'
 import {getFileList} from '../../store/file'
 import Spin from 'react-spin'
-import TextEditor from '../TextEditor'
+import {THIS_HOST} from '../../constants'
+import modulePath from 'path'
 
 class File extends Component {
 
@@ -93,9 +94,15 @@ class File extends Component {
               </div>
               {
                 isFile?
+                  // TODO 不集成编辑工具，只显示文件基本信息，并显示支持编辑此文件的程序列表。
                   <div className="file">
                     <div>
-                      <TextEditor text={cat} ref={(editor) => this.editor = editor}/>
+                      <div>文件名：{modulePath.basename(path)}</div>
+                      <div>打开方式：</div>
+                      <div>
+                        <a href={`${THIS_HOST}/#/integrateapp/smile-text-editor`} target="_blank">text editor</a>
+                      </div>
+                      {/*<TextEditor text={cat} ref={(editor) => this.editor = editor}/>*/}
                     </div>
                   </div>:
                   <div className="directory">

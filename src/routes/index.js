@@ -32,6 +32,12 @@ module.exports = (injectAsyncReducer) => {
           callback(null, routes)
         })
       }} />
+      <Route path="/integrateapp" getChildRoutes={(location, callback) => {
+        require.ensure([], (require) => {
+          const routes = createRoutes(require('./integrateapp')(injectAsyncReducer));
+          callback(null, routes)
+        })
+      }} />
     </Route>
   )
 };

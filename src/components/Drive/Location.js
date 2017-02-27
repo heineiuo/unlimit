@@ -8,8 +8,6 @@ import Input from 'react-sea/lib/Input'
 import MdArrowUpward from 'react-sea/lib/Icons/arrow-upward'
 import MdArrowDownward from 'react-sea/lib/Icons/arrow-downward'
 import { StyleSheet, css } from 'aphrodite'
-import {editLocationSort, getLocation} from '../../store/host'
-import {setTitle} from '../../store/nav'
 import Spin from 'react-spin'
 
 class Location extends Component {

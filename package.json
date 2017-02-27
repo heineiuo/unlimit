@@ -1,18 +1,17 @@
 {
-  "name": "smilefeed",
+  "name": "smile-web",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/smile-web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "web": "react-sh",
+    "start": "react-sh",
     "build": "react-sh --build --production --compress"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "@heineiuo",
+  "license": "Common Public License 1.0",
   "devDependencies": {
     "aphrodite": "^1.1.0",
-    "babel-plugin-transform-es2015-modules-systemjs": "^6.22.0",
     "babel-polyfill": "^6.22.0",
     "fetch-tools": "^0.3.1",
     "react": "^15.4.2",
@@ -28,6 +27,7 @@
     "redux": "^3.6.0",
     "redux-actions": "^1.2.1",
     "redux-thunk": "^2.2.0",
+    "requirejs": "^2.3.3",
     "selection-range": "^1.1.0",
     "systemjs": "^0.20.7",
     "uuid": "^3.0.1"

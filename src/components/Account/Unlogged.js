@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
 import {StyleSheet, css} from 'aphrodite/no-important'
 import {inputStyle, buttonStyle} from './common/inlinestyles'
 import Input from 'react-sea/lib/Input'
@@ -123,11 +121,4 @@ class UnLogged extends Component {
   }
 }
 
-export default connect(
-  (state) => ({
-    account: state.account
-  }),
-  (dispatch) => bindActionCreators({
-    login, sendVerifyCode
-  }, dispatch)
-)(UnLogged)
+export default UnLogged

@@ -56,7 +56,7 @@ class Check extends Component {
   };
 
   render (){
-    const {account} = this.props;
+    const {account, logout, sendVerifyCode} = this.props;
 
     return (
       <div>
@@ -66,8 +66,8 @@ class Check extends Component {
               <Spin />
             </div>:
             account.logged?
-              <Logged />:
-              <UnLogged />
+              <Logged logout={logout} account={account}/>:
+              <UnLogged sendVerifyCode={sendVerifyCode} account={account}/>
         }
       </div>
     )
