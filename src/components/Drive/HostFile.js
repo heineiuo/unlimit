@@ -100,7 +100,9 @@ class File extends Component {
                       <div>文件名：{modulePath.basename(path)}</div>
                       <div>打开方式：</div>
                       <div>
-                        <a href={`${THIS_HOST}/#/integrateapp/smile-text-editor`} target="_blank">text editor</a>
+                        <a
+                          href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${path}`}
+                          target="_blank">text editor</a>
                       </div>
                       {/*<TextEditor text={cat} ref={(editor) => this.editor = editor}/>*/}
                     </div>

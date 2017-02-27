@@ -8,6 +8,8 @@ class IntegrateApp extends Component {
   };
 
   componentDidMount = async () => {
+    const {account, location} = this.props;
+
     try {
       const {appName} = this.props.params;
       this.setState({appState: 1});
@@ -23,11 +25,11 @@ class IntegrateApp extends Component {
       const url = urls[appName];
       const app = await SystemJS.import(url);
       this.setState({appState: 2});
-      app(this.mountPoint);
+      app(this.mountPoint, {account, location});
     } catch(e){
+      console.error(e);
       this.setState({appState: 4})
     }
-
 
   };
 

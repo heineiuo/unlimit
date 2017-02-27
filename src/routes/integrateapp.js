@@ -13,6 +13,15 @@ module.exports = (injectAsyncReducer) => {
 
 const asyncIntegrateApp = (nextState, callback) => {
   require.ensure([], (require) => {
-    callback(null, require('../components/IntegrateApp'))
+    const Component = require('../components/IntegrateApp');
+    const ConnectedComponent = connect(
+      (state) => ({
+        account: state.account,
+      }),
+      (dispatch) => bindActionCreators({
+      }, dispatch)
+    )(Component);
+
+    callback(null, ConnectedComponent)
   })
 };

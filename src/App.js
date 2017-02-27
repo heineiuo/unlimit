@@ -5,6 +5,10 @@ import { createStore, applyMiddleware, combineReducers, bindActionCreators } fro
 import {routerMiddleware, syncHistoryWithStore, routerReducer} from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 
+import notice from './store/feed/notice'
+import postList from './store/feed/postList'
+import account from './store/account'
+
 class App extends Component {
 
   componentWillMount = () => {
@@ -32,13 +36,12 @@ class App extends Component {
     const createReducer = (asyncReducers) => {
       return combineReducers({
         routing: routerReducer,
-        notice: require('./store/feed/notice').default,
-        postList: require('./store/feed/postList').default,
-        account: require('./store/account').default,
+        notice,
+        postList,
+        account,
         ...asyncReducers
       });
     };
-
 
     const store = this._store = createStoreWithMiddleware(createReducer({}), {});
     store.asyncReducers = {};
