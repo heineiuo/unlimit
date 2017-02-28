@@ -8,6 +8,8 @@ import {getFileList} from '../../store/file'
 import Spin from 'react-spin'
 import {THIS_HOST} from '../../constants'
 import modulePath from 'path'
+import urlencode from 'form-urlencoded'
+import filesize from 'filesize'
 
 class File extends Component {
 
@@ -31,12 +33,27 @@ class File extends Component {
     }
   };
 
+  _handleUploadSuccess = () => {
+
+    const {setTitle, getFileList, host, location} = this.props;
+    getFileList(location.query.path);
+    setTitle(`${host.hostname} - 文件`);
+  };
+
   render (){
 
-    const {file, file: {isFile, cat, ls}, location, host} = this.props;
+    const {file, file: {isFile, cat, ls}, location, host, host: {hostname}, account} = this.props;
     const path = location.query.path || '/';
-    const hrefPrefix = `/drive/${host.hostname}`;
+    const hrefPrefix = `/drive/${hostname}`;
     const parsed = path.split('/').filter(item => item != '');
+
+    const uploadAction = `/api/gateway?${urlencode({
+      token: account.token,
+      reducerName: 'file',
+      action: 'upload',
+      hostname,
+      pathname: path
+    })}`;
 
     return (
 
@@ -83,7 +100,9 @@ class File extends Component {
                   </div>
                   {/*上传*/}
                   <div>
-                    <Upload>
+                    <Upload
+                      onSuccess={this._handleUploadSuccess}
+                      action={uploadAction}>
                       <div style={{width: 80}}>
                         <Button type="primary" size="small">上传文件</Button>
                       </div>
@@ -116,6 +135,7 @@ class File extends Component {
                             <div className={css(styles.listViewBar)}>
                               <div className={css(styles.listViewBar__index)}>序号</div>
                               <div className={css(styles.listViewBar__name)}>名称</div>
+                              <div className={css(styles.listViewBar__size)}>大小</div>
                               <div className={css(styles.listViewBar__options)}>操作</div>
                             </div>
                             <div>
@@ -125,6 +145,9 @@ class File extends Component {
                                     <div className={css(styles.fileItem__index)}>{index+1}</div>
                                     <div className={css(styles.fileItem__name)}>
                                       <Link to={`${hrefPrefix}?path=${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
+                                    </div>
+                                    <div className={css(styles.fileItem__size)}>
+                                      {filesize(item.stat.size)}
                                     </div>
                                     <div className={css(styles.fileItem__options)}>
                                       <span onClick={() => this.props.deleteFile()}>删除</span>
@@ -183,6 +206,9 @@ const styles = StyleSheet.create({
   listViewBar__name: {
     flex: 1
   },
+  listViewBar__size: {
+    flex: 1,
+  },
   listViewBar__options: {
     flex: 1
   },
@@ -199,6 +225,9 @@ const styles = StyleSheet.create({
     width: 40
   },
   fileItem__name: {
+    flex: 1
+  },
+  fileItem__size: {
     flex: 1
   },
   fileItem__options: {

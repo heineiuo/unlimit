@@ -14,6 +14,7 @@
     "aphrodite": "^1.1.0",
     "babel-polyfill": "^6.22.0",
     "fetch-tools": "^0.3.1",
+    "filesize": "^3.5.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-lang": "^0.1.2",

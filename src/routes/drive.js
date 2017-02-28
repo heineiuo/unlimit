@@ -103,6 +103,7 @@ const asyncHostFile = (partialNextState, callback) => {
   const Component = require('../components/Drive/HostFile');
   const ConnectedComponent = connect(
     (state) => ({
+      account: state.account,
       host: state.host,
       file: state.file,
     }),
