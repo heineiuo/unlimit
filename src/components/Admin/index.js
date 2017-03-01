@@ -1,18 +1,27 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router'
 import Spin from 'react-spin'
 import {css, StyleSheet} from 'aphrodite/no-important'
 
-class IntegrateApp extends Component {
+/**
+ * 集成APP
+ * 用户
+ * TAG
+ * 消息
+ * 空间
+ */
+
+class Admin extends Component {
   state = {
     appState: 0,
     target: {}
   };
 
   componentDidMount = async () => {
-    const {account, location, params: {appName}, injectAsyncReducer} = this.props;
+    const {account, location,} = this.props;
+    const appName = 'admin';
     const urls = {
-      familytree: 'http://127.0.0.1:8084/dist/familytree.js',
-      'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js'
+      admin: 'http://127.0.0.1:8088/dist/smile-admin.js',
     };
     if (!urls.hasOwnProperty(appName)) {
       return this.mountPoint.innerHTML = `应用程序（${appName}）未找到:( <br> <a href="/">回到首页</a>`
@@ -23,12 +32,10 @@ class IntegrateApp extends Component {
 
     try {
       const app = await SystemJS.import(url);
-      this.component = app(injectAsyncReducer);
-
       this.setState({
         appState: 2
       });
-
+      app(this.mountPoint, {account, location});
     } catch(e){
       console.error(e);
       this.setState({
@@ -48,11 +55,11 @@ class IntegrateApp extends Component {
             <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>{`app(${appName})加载失败, 请检查：${url}`}</div>
           ):
             appState < 2? <Spin />:
-              React.createElement(this.component, {})
+              null
         }
       </div>
     )
   }
 }
 
-export default module.exports = IntegrateApp
+export default module.exports = Admin

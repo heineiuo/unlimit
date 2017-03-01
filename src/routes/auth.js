@@ -15,6 +15,6 @@ module.exports = (injectAsyncReducer) => {
 
 const asyncAuth = (nextState, callback) => {
   require.ensure([], (require) => {
-    callback(null, require('../components/Account/Auth/Auth2').default)
+    callback(null, require('../components/Auth'))
   })
 };

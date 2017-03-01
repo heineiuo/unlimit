@@ -32,6 +32,11 @@ module.exports = (injectAsyncReducer) => {
           callback(null, routes)
         })
       }} />
+      <Route path="/admin" getChildRoutes={async (location, callback) => {
+        const admin = await SystemJS.import('http://127.0.0.1:8088/dist/smile-admin.js');
+        const routes = createRoutes(admin(injectAsyncReducer));
+        callback(null, routes)
+      }} />
       <Route path="/integrateapp" getChildRoutes={(location, callback) => {
         require.ensure([], (require) => {
           const routes = createRoutes(require('./integrateapp')(injectAsyncReducer));
