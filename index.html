@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -15,10 +16,29 @@
   <meta http-equiv="cleartype" content="on">
 </head>
 <body>
-  <div id="app"></div>
-  <script src="https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js"></script>
-  <script src="https://unpkg.com/react@15.4.2/dist/react.js"></script>
-  <script src="https://unpkg.com/react-dom@15.4.2/dist/react-dom.js"></script>
-  <script src="http://127.0.0.1:8083/dist/smile-web.js"></script>
+<div id="app"></div>
+<script src="/babel-polyfill@6.23.0/dist/polyfill.min.js"></script>
+<script src="/systemjs@0.20.9/dist/system.src.js"></script>
+
+<script>
+  System.config({
+    baseUrl: '/',
+    meta: {
+      "*.js": {
+        format: 'amd'
+      }
+    },
+    map: {
+      react: '/react@15.4.2/dist/react.js',
+      'react-dom': '/react-dom@15.4.2/dist/react-dom.js',
+      familytree: 'http://127.0.0.1:8084/dist/familytree.js',
+      'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
+      'smile-admin': 'http://127.0.0.1:8088/dist/smile-admin.js',
+      'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js'
+    }
+  })
+
+  System.import('smile-web');
+</script>
 </body>
 </html>
