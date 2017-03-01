@@ -33,7 +33,7 @@ module.exports = (injectAsyncReducer) => {
         })
       }} />
       <Route path="/admin" getChildRoutes={async (location, callback) => {
-        const admin = await SystemJS.import('http://127.0.0.1:8088/dist/smile-admin.js');
+        const admin = await SystemJS.import('smile-admin');
         const routes = createRoutes(admin(injectAsyncReducer));
         callback(null, routes)
       }} />
@@ -43,6 +43,7 @@ module.exports = (injectAsyncReducer) => {
           callback(null, routes)
         })
       }} />
+      <Route path="*" getComponent={asyncNotFound}/>
     </Route>
   )
 };
@@ -73,5 +74,12 @@ const asyncHome = (partialNextState, callback) => {
       }, dispatch)
     )(Home.default);
     callback(null, HomeConnect)
+  })
+};
+
+const asyncNotFound = (partialNextState, callback) => {
+  require.ensure([], (require) => {
+    const component = require('../components/NotFound');
+    callback(null, component)
   })
 };

@@ -26,6 +26,8 @@ module.exports = (injectAsyncReducer) => {
   };
 
   return (
-    <Route path=":appName" getComponent={asyncIntegrateApp}/>
+    <Route>
+      <Route path=":appName" getComponent={asyncIntegrateApp}/>
+    </Route>
   )
 };

@@ -4,25 +4,21 @@ import {css, StyleSheet} from 'aphrodite/no-important'
 
 class IntegrateApp extends Component {
   state = {
-    appState: 0,
+    appState: 0, // 0未初始化， 1正在加载，2加载成功，3，app不存在，4加载失败
     target: {}
   };
 
   componentDidMount = async () => {
-    const {account, location, params: {appName}, injectAsyncReducer} = this.props;
-    const urls = {
-      familytree: 'http://127.0.0.1:8084/dist/familytree.js',
-      'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js'
-    };
-    if (!urls.hasOwnProperty(appName)) {
-      return this.mountPoint.innerHTML = `应用程序（${appName}）未找到:( <br> <a href="/">回到首页</a>`
+    const {params: {appName}, injectAsyncReducer} = this.props;
+    const urls = ['familytree', 'smile-text-editor'];
+    if (urls.indexOf(appName) == -1 || !SystemJS.map.hasOwnProperty(appName)) {
+      return this.setState({appState: 3, target: {appName}});
     }
 
-    const url = urls[appName];
     this.setState({appState: 1});
 
     try {
-      const app = await SystemJS.import(url);
+      const app = await SystemJS.import(appName);
       this.component = app(injectAsyncReducer);
 
       this.setState({
@@ -33,7 +29,7 @@ class IntegrateApp extends Component {
       console.error(e);
       this.setState({
         appState: 4,
-        target: {appName, url}
+        target: {appName}
       })
     }
 
@@ -45,10 +41,16 @@ class IntegrateApp extends Component {
       <div ref={div => this.mountPoint = div}>
         {
           appState == 4? (
-            <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>{`app(${appName})加载失败, 请检查：${url}`}</div>
+            <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>{`app(${appName})加载失败:(`}</div>
           ):
-            appState < 2? <Spin />:
-              React.createElement(this.component, {})
+            appState == 3 ? (
+              <div>
+                <div>{`app(${appName}）不存在:( `}</div>
+                <a href="/">回到首页</a>
+              </div>
+            ):
+              appState < 2? <Spin />:
+                React.createElement(this.component, {})
         }
       </div>
     )
