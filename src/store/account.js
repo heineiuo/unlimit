@@ -90,6 +90,7 @@ export default handleActions({
 export const login = (formData) => async (dispatch, getState) => {
   try {
     const result = await POSTUrlencodeJSON(API_HOST, signature({
+      importAppName: 'account',
       reducerName: 'Token',
       action: 'getTokenByEmailCode',
       email: formData.email,
@@ -119,6 +120,7 @@ export const logout = () => async (dispatch, getState) => {
   try {
     console.log('正在登出系统...');
     const result = await POSTUrlencodeJSON(API_HOST, signature({
+      importAppName: 'account',
       reducerName: 'Token',
       action: 'logout',
       token: localStorage.userToken
@@ -145,6 +147,7 @@ export const sendVerifyCode = (form) => async (dispatch, getState) => {
     if (registerVerifyCodeCount>0) return console.log('count not finish.');
 
     const result = await POSTUrlencodeJSON(API_HOST, signature({
+      importAppName: 'account',
       action: "createLoginCode",
       reducerName: 'EmailCode',
       email: form.email
@@ -185,6 +188,7 @@ export const checkLogin = () => async (dispatch, getState) => {
     }
 
     const result = await POSTUrlencodeJSON(API_HOST, signature({
+      importAppName: 'account',
       reducerName: 'token',
       action: 'session',
       token: userToken
@@ -221,6 +225,7 @@ export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
     const {userToken=null} = localStorage;
     const {redirectUrl} = getState().account;
     const res = await POSTUrlencodeJSON(API_HOST, signature({
+      importAppName: 'account',
       action: 'getTokenBySSOCode',
       reducerName: 'token',
       token: userToken

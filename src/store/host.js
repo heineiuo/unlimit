@@ -101,7 +101,10 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
 
     const {token} = getState().account;
     const hostListResult = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      reducerName: 'host', action: 'list',limit: 0, token
+      importAppName: 'gateway',
+      reducerName: 'host',
+      action: 'list',
+      limit: 0, token
     });
 
     if (hostListResult.error) throw new Error(hostListResult.error);
@@ -114,7 +117,9 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
       const hostDefault = hostListResult.list[0].hostname;
 
       if (currentHostname) {
-        const currentHostnameIndex = hostListResult.list.findIndex(item => item.hostname == currentHostname);
+        const currentHostnameIndex = hostListResult.list.findIndex(item => {
+          return item.hostname == currentHostname
+        });
         if (currentHostnameIndex) {
 
           return dispatch({
@@ -151,7 +156,9 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
 export const createHost = (form) => async (dispatch, getState) => {
   try {
     const data = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      reducerName: 'host', action: 'New',
+      importAppName: 'gateway',
+      reducerName: 'host',
+      action: 'New',
       hostname: form.hostname
     });
     if (data.error) throw new Error(data.error);
@@ -178,7 +185,11 @@ export const deleteHost = (hostname) => async (dispatch, getState) =>{
   try {
     const {token} = getState().account;
     await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      reducerName: 'host', action: 'Delete',hostname, token
+      importAppName: 'gateway',
+      reducerName: 'host',
+      action: 'Delete',
+      hostname,
+      token
     });
     dispatch({
       type: 'HOST_REMOVE',
@@ -208,7 +219,11 @@ export const getLocation = (hostname) => async (dispatch, getState) => {
 
     const {token} = getState().account;
     const hostDetailResult = await await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      reducerName: 'location', action: 'list', hostname, token
+      importAppName: 'gateway',
+      reducerName: 'location',
+      action: 'list',
+      hostname,
+      token
     });
 
     if (hostDetailResult.error) throw new Error(hostDetailResult.error);
@@ -236,12 +251,22 @@ export const editLocationSort = (hostname, location, arrow) => async(dispatch, g
     const nextSort = sort + (arrow=='up'?-1:1);
     if (nextSort < 1) return false;
     const response = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      reducerName: 'Location', action: 'UpdateSort', token, hostname, pathname, nextSort});
+      reducerName: 'Location',
+      action: 'UpdateSort',
+      token,
+      hostname,
+      pathname,
+      nextSort
+    });
     if (response.error) throw new Error(response.error);
 
     // 直接获取一下新的列表
     const data = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      reducerName: 'location', action: 'list', token, hostname
+      importAppName: 'gateway',
+      reducerName: 'location',
+      action: 'list',
+      token,
+      hostname
     });
     if (data.error) throw data.error;
     dispatch({
@@ -269,7 +294,9 @@ export const createLocation = (hostname, nextLocation) => async(dispatch, getSta
     const {token} = getState().account;
     const {pathname, cors, type, contentType, content} = nextLocation;
     const response = await POSTRawJSON( `${ORIGIN_HOST}/api/gateway`, {
-      reducerName: 'location', action: 'New',
+      importAppName: 'gateway',
+      reducerName: 'location',
+      action: 'New',
       token, hostname, pathname, cors, type, contentType, content
     });
     if (response.error) throw new Error(response.error);
@@ -295,7 +322,9 @@ export const editLocation = (hostname, nextLocation) => async(dispatch, getState
     const {token} = getState().account;
     const {pathname, cors, type, contentType='text', content} = nextLocation;
     const response = await POSTRawJSON( `${ORIGIN_HOST}/api/gateway`, {
-      reducerName: 'location', action: 'edit',
+      importAppName: 'gateway',
+      reducerName: 'location',
+      action: 'edit',
       token,
       hostname,
       pathname,
