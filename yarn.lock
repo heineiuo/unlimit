@@ -3181,6 +3181,10 @@ lodash.padstart@^4.1.0:
   version "4.6.1"
   resolved "http://registry.npm.taobao.org/lodash.padstart/download/lodash.padstart-4.6.1.tgz#d2e3eebff0d9d39ad50f5cbd1b52a7bce6bb611b"
 
+lodash.pick@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.npmjs.org/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
+
 lodash.pullallby@^4.7.0:
   version "4.7.0"
   resolved "http://registry.npm.taobao.org/lodash.pullallby/download/lodash.pullallby-4.7.0.tgz#8786dfe21936191e688f0c235d1ac67e4c3db65e"

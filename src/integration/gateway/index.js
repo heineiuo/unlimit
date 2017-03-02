@@ -38,14 +38,10 @@ const createApp = (db) => {
 
     const {reducerName} = req.body;
     if (!reducerName) return next(new Error('PARAM_ILLEGAL'));
-    if (reducerName == 'upload') {
-      res.headers.__UPLOAD = true;
-      res.body = {
-        uploadDir: `${config.datadir}/app/local.youkuohao.com/public/upload`,
-        uploadLocation: `http://local.youkuohao.com/upload`
-      };
-      return res.end()
-    }
+    req.body.setHeader = (header) => {
+      Object.assign(res.headers, header);
+    };
+    req.body.__config = config;
     const result = await handleRequest(req.body);
     res.json(result)
   });

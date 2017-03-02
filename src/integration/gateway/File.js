@@ -8,7 +8,7 @@ class File extends Model {
 
   initHostDir = (hostname) => new Promise(async (resolve, reject) => {
     mkdirp(`${config.datadir}/app/${hostname}/public`, (err) => {
-      if (err) return reject(err)
+      if (err) return reject(err);
       resolve()
     })
   });
@@ -141,12 +141,28 @@ class File extends Model {
     }
   });
 
+  upload = (req) => new Promise(async (resolve, reject) => {
+    try {
+      req.setHeader({
+        __UPLOAD: true
+      });
+      resolve({
+        uploadDir: `${req.__config.datadir}/app/${req.hostname}/${req.pathname}`,
+        uploadLocation: `http://local.youkuohao.com/${req.pathname}`
+      })
+    } catch(e){
+      console.log(e.stack);
+      reject(e)
+    }
+  });
+
   resolve(req){
 
     const {action} = req;
     if (action == 'cat') return this.cat(req);
     if (action == 'vi') return this.vi(req);
     if (action == 'ls') return this.ls(req);
+    if (action == 'upload') return this.upload(req);
     if (action == 'mkdir') return this.mkdir(req);
     if (action == 'rm') return this.rm(req);
     if (action == 'mv') return this.mv(req);

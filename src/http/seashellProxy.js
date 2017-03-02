@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import bodyParser from 'body-parser'
+import pick from 'lodash.pick'
 
 const JSONSafeParse = (content, schema) => {
   try {
@@ -34,17 +35,25 @@ module.exports = (config) => {
       const {host, url, location} = res.locals;
 
       const data = Object.assign({}, req.query, req.body, {
-        __GATEWAY: {host, url},
-        __METHOD: req.method,
+        __GATEWAY_META: Object.assign(
+          {},
+          pick(req, ['ip', 'method', 'originalUrl', 'protocol']),
+          pick(req.headers, ['user-agent', 'host'])
+        )
       });
 
-      const importAppName = location.content.search('{') != 0 ? location.content:
-        url.pathname.search('account') > 0 ?'account':'gateway';
-      const result = await gateway.request(importAppName, data);
+      // console.log(data);
 
-      console.log('==============seashell result =============');
+      const requestSession = await gateway.request('account', Object.assign(data));
 
-      console.log(result);
+      Object.assign(data, {__GATEWAY_USER: requestSession.body});
+
+      // const importAppName = location.content.search('{') != 0 ? location.content:
+      //   url.pathname.search('account') > 0 ?'account':'gateway';
+      const result = await gateway.request(data.importAppName, data);
+
+      // console.log('==============seashell result =============');
+      // console.log(result);
 
       if (result.headers.hasOwnProperty('__HTML')) {
         Object.assign(res.locals.location, {type: 'HTML', content: result.body.html})
@@ -54,7 +63,7 @@ module.exports = (config) => {
         Object.assign(res.locals.location, {type: 'JSON', content: result.body})
       }
 
-      console.log(res.locals.location);
+      // console.log(res.locals.location);
 
       next()
 
