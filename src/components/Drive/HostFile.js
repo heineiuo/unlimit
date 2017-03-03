@@ -6,18 +6,12 @@ import Upload from "rc-upload"
 import {setTitle} from "../../store/nav"
 import {getFileList} from "../../store/file"
 import Spin from "react-spin"
-import {THIS_HOST} from "../../constants"
-import modulePath from "path"
 import urlencode from "form-urlencoded"
-import filesize from "filesize"
-import IntegrateApp from "../IntegrateApp"
-import Modal from "react-modal"
+import FileItem from './FileItem'
+import FilePathBar from './FilePathBar'
+import FileInfo from './FileInfo'
 
-class File extends Component {
-
-  state = {
-    showModal: false
-  };
+class HostFile extends Component {
 
   componentWillMount = () => {
     const {setTitle, getFileList, host, location} = this.props;
@@ -46,12 +40,6 @@ class File extends Component {
     setTitle(`${host.hostname} - 文件`);
   };
 
-  _open = (appName) => {
-    this.setState({
-      appName,
-      showModal: true
-    })
-  };
 
   render() {
 
@@ -67,7 +55,6 @@ class File extends Component {
     } = this.props;
     const path = location.query.path || '/';
     const hrefPrefix = `/drive/${hostname}`;
-    const parsed = path.split('/').filter(item => item != '');
 
     const uploadAction = `/api/gateway?${urlencode({
       importAppName: 'gateway',
@@ -86,31 +73,11 @@ class File extends Component {
             <Spin /> :
             <div>
               <div className={css(styles.headerBar)}>
-                <div className={css(styles.headerBar__path)}>
-                  <Link to={`${hrefPrefix}?path=/`}>空间</Link>
-                  {(() => {
-                    let prevPath = '';
-                    return parsed.map((dirname, index) => {
-                      const currentLink = `${hrefPrefix}?path=${prevPath}/${dirname}`;
-                      prevPath = `${prevPath}/${dirname}`;
-                      return (
-                        <span key={index}>
-                          <span> > </span>
-                          <span>
-                            {
-                              index == parsed.length - 1 ?
-                                <span className={css(styles.headerBar__path__dirname)}>{dirname}</span> :
-                                <Link className={css(
-                                  styles.headerBar__path__dirname,
-                                  styles.headerBar__path__dirname_link,
-                                  )} to={currentLink}>{dirname}</Link>
-                            }
-                          </span>
-                      </span>
-                      )
-                    })
-                  })()}
-                </div>
+                <FilePathBar
+                  isFile={isFile}
+                  driveName={hostname}
+                  hrefPrefix={hrefPrefix}
+                  pathname={path} />
                 <div className={css(styles.headerBar__tools)} style={isFile?{display: 'none'}:{}}>
                   {/*展示样式*/}
                   <div>
@@ -136,76 +103,37 @@ class File extends Component {
               </div>
               {
                 isFile ?
-                  // TODO 不集成编辑工具，只显示文件基本信息，并显示支持编辑此文件的程序列表。
-                  <div className="file">
-                    <div>
-                      <div>文件名：{modulePath.basename(path)}</div>
-                      <div>打开方式：</div>
-                      <div>
-                        <a
-                          href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${path}`}
-                          target="_blank">text editor</a>
+                  <FileInfo
+                    pathname={path}
+                    injectAsyncReducer={injectAsyncReducer}
+                    hostname={hostname}
+                    location={location}
+                  /> :
+                  <div className={css(styles.fileList)}>
+                    {
+                      !ls.length ?
+                        <div>目录为空</div> :
                         <div>
-                          <Button onClick={() => this._open('smile-text-editor', path)}>在弹窗中打开</Button>
-                        </div>
-                      </div>
-                      {/*<TextEditor text={cat} ref={(editor) => this.editor = editor}/>*/}
-                    </div>
-                    <Modal
-                      overlayClassName={css(styles.modal__overlay)}
-                      className={css(styles.modal__content)}
-                      isOpen={this.state.showModal}
-                      contentLabel="IntegrateAppModal"
-                      ref={ref => this.modal = ref}>
-                      {
-                        !this.state.showModal ? null :
-                          <IntegrateApp
-                            location={location}
-                            path={path}
-                            hostname={hostname}
-                            injectAsyncReducer={injectAsyncReducer}
-                            appName={this.state.appName}
-                          />
-                      }
-                    </Modal>
-                  </div> :
-                  <div className="directory">
-                    <div className={styles.fileList}>
-                      {
-                        !ls.length ?
-                          <div>目录为空</div> :
-                          <div>
-                            <div className={css(styles.listViewBar)}>
-                              <div className={css(styles.listViewBar__index)}>序号</div>
-                              <div className={css(styles.listViewBar__name)}>名称</div>
-                              <div className={css(styles.listViewBar__size)}>大小</div>
-                              <div className={css(styles.listViewBar__options)}>操作</div>
-                            </div>
-                            <div>
-                              {
-                                file.ls.map((item, index) => (
-                                  <div key={item.name} className={css(styles.fileItem)}>
-                                    <div className={css(styles.fileItem__index)}>{index + 1}</div>
-                                    <div className={css(styles.fileItem__name)}>
-                                      <Link
-                                        className={css(styles.fileItem__name__text)}
-                                        to={`${hrefPrefix}?path=${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
-                                    </div>
-                                    <div className={css(styles.fileItem__size)}>
-                                      {filesize(item.stat.size)}
-                                    </div>
-                                    <div className={css(styles.fileItem__options)}>
-                                      <span onClick={() => this.props.deleteFile()}>删除</span>
-                                      <span>重命名</span>
-                                    </div>
-                                  </div>
-                                ))
-                              }
-
-                            </div>
+                          <div className={css(styles.listViewBar)}>
+                            <div className={css(styles.listViewBar__index)}>序号</div>
+                            <div className={css(styles.listViewBar__name)}>名称</div>
+                            <div className={css(styles.listViewBar__size)}>大小</div>
+                            <div className={css(styles.listViewBar__options)}>操作</div>
                           </div>
-                      }
-                    </div>
+                          <div>
+                            {
+                              file.ls.map((item, index) => (
+                                <FileItem
+                                  hrefPrefix={hrefPrefix}
+                                  key={item.name}
+                                  index={index}
+                                  path={path}
+                                  item={item} />
+                              ))
+                            }
+                          </div>
+                        </div>
+                    }
                   </div>
               }
             </div>
@@ -220,21 +148,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: "row",
     justifyContent: 'space-between',
-    padding: '10px 10px',
+    padding: '10px 0px',
     borderBottom: '1px solid #EEE'
   },
-  headerBar__path: {
-    padding: '4px 10px',
-  },
-  headerBar__path__dirname: {
-    flex: 1,
-    padding: '0 8px'
-  },
-  headerBar__path__dirname_link: {
-    ":hover": {
-      backgroundColor: '#EEE'
-    }
-  },
+
   headerBar__tools: {
     display: 'flex'
   },
@@ -243,7 +160,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     padding: '5px 10px',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: '#F1F1F5'
   },
   listViewBar__index: {
     width: 40
@@ -258,56 +176,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
-  fileItem: {
-    borderBottom: '1px solid #E8E8E4',
-    padding: '5px 10px',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  fileList: {
+
   },
 
-  fileItem__index: {
-    width: 40
-  },
-  fileItem__name: {
-    flex: 1,
-  },
-  fileItem__name__text: {
-    color: '#1077ff',
-    textDecoration: 'none',
-    fontSize: 15,
-    letterSpacing: 1
-  },
-  fileItem__size: {
-    flex: 1
-  },
-  fileItem__options: {
-    flex: 1
-  },
-
-  // modal
-  modal__content: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    border: 0,
-    overflow: 'auto',
-    overflowScrolling: 'touch',
-  },
-
-  modal__overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 100,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
-  }
 
 });
 
 
-export default module.exports = File
+export default module.exports = HostFile
