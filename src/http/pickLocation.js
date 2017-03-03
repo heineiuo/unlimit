@@ -1,41 +1,37 @@
 import Url from 'url'
 import {Router} from 'express'
-import {combineReducers} from 'sprucejs'
 
-module.exports = (config, db) => {
-
-  const handler = combineReducers([
-    require('../integration/gateway/File'),
-    require('../integration/gateway/Host'),
-    require('../integration/gateway/Location')
-  ])(db);
+module.exports = (config) => {
 
   return async (req, res, next) => {
 
     try {
+      const {gateway} = res;
 
       /**e
        * 查找host及其location列表
        */
       const {host} = req.headers;
       // console.log('[gateway] searching host');
-      const doc = await handler({reducerName: 'host', hostname: host, action: 'Get'});
-      // console.log('doc: '+JSON.stringify(doc));
-      const list = await handler({reducerName: 'location', hostname: host, action: 'list'});
-      const {locations} = list.location;
+      const requestHost = await gateway.request('gateway', { reducerName: 'host', hostname: host, action: 'Get'});
+      // console.log(requestHost.body);
+      if (requestHost.body.error) throw new Error(requestHost.body.error);
+      const requestLocations = await gateway.request('gateway', { reducerName: 'location', hostname: host, action: 'list'});
+      // console.log(requestLocations.body);
+      const {locations} = requestLocations.body.location;
       // console.log('locations: '+JSON.stringify(locations));
       const {location, url} = await pickLocation(locations, req.url);
 
       // console.log(location);
-      res.locals.host = doc;
+      res.locals.host = requestHost.body;
       res.locals.url = url;
       // res.locals.location = location;
       res.locals.location = Object.assign({}, location, {content: location.content});
 
       if (location.cors) {
-        res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Expose-Headers', '*');
-        res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type');
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type, X-Requested-With');
         res.set('Access-Control-Allow-Methods', '*')
       }
 
@@ -63,38 +59,25 @@ const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
     /**
      * 通过比对pathname, 找到路由
      */
-    let found = false;
-    sortedLocations.some( item => {
+
+    const targetLocation = sortedLocations.find(item => {
       const reg = new RegExp(
         item.pathname.substr(1, item.pathname.length - 2).replace('\\\\','\\')
       );
       const matches = url.pathname.match(reg);
-      if (matches && matches[0] == url.pathname) {
-        item.type = item.type.toUpperCase();
-        try {
-          item.content = JSON.parse(item.content)
-        } catch(e){}
-        // res.locals.host = doc;
-        // res.locals.location = item;
-        found = true;
-        resolve({
-          url,
-          location: item
-        });
-
-      }
-      return found
+      return matches && matches[0] == url.pathname;
     });
 
-    if (!found) {
-      resolve({
-        url,
-        location: {
-          pathname: '/^.*$/',
-          type: 'FILE'
-        }
-      })
-    }
+    const location = targetLocation?targetLocation: {
+      pathname: '/^.*$/',
+      type: 'FILE'
+    };
+
+    try {
+      location.content = JSON.parse(location.content);
+    } catch(e){}
+
+    resolve({url, location});
 
   } catch(e){
     reject(new Error('LOCATION_NOT_FOUND'))

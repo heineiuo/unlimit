@@ -1,7 +1,36 @@
 import {combineReducers} from 'sprucejs'
 import {opendb, promisifydb, subdb} from './db'
 
-export default (db, initdata) => new Promise(async (resolve, reject) => {
+
+export default (db, config) => new Promise(async(resolve, reject) => {
+  const basedb = promisifydb(subdb(db, 'base'));
+
+  let isInitInDB = false;
+  let initdata = Object.assign({}, config.production.init);
+
+  try {
+    // await basedb.del('init');
+    const dbdata = await basedb.get('init');
+    isInitInDB = true;
+    initdata = dbdata;
+
+  } catch(e) {
+    if (e.name == 'NotFoundError') isInitInDB = false;
+    await basedb.put('init', initdata);
+    console.log('[gateway] Running init.');
+    await runInit(db, initdata)
+  }
+
+  if (isInitInDB) {
+    console.log('[gateway] Init data has been found, init in production.json will be ignore.');
+  } else {
+    console.log('[gateway] Use initdata in production.json')
+  }
+
+  resolve()
+})
+
+const runInit = (db, initdata) => new Promise(async (resolve, reject) => {
   try {
 
     const {domain} = initdata;
@@ -70,4 +99,4 @@ export default (db, initdata) => new Promise(async (resolve, reject) => {
   } catch(e){
     reject(e)
   }
-})
+});

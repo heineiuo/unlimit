@@ -3,7 +3,7 @@ import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
 
-export default (db, config, hub) => {
+export default (config, hub) => {
 
   const app = express();
 
@@ -16,7 +16,7 @@ export default (db, config, hub) => {
   });
 
   app.use(require('./redirectToHttps')(config));
-  app.use(require('./pickLocation')(config, db));
+  app.use(require('./pickLocation')(config));
 
   /**
    * 先判断是否需要经过seashell请求，如果是，则等待seashell请求，请求结果如果是继续操作，则修改res.locals.location等
