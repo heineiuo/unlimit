@@ -24,6 +24,21 @@
           "root": "ReactDOM",
           "amd": "react-dom",
           "commonjs": "react-dom"
+        },
+        "react-router": {
+          "root": "ReactRouter",
+          "amd": "react-router",
+          "commonjs": "react-router"
+        },
+        "redux": {
+          "root": "Redux",
+          "amd": "redux",
+          "commonjs": "redux"
+        },
+        "react-redux": {
+          "root": "ReactRedux",
+          "amd": "react-redux",
+          "commonjs": "react-redux"
         }
       },
       "isLibrary": true

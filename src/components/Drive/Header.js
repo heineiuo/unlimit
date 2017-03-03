@@ -44,7 +44,7 @@ class Header extends Component {
       <div className={css(styles.headerBar)}>
         <Link to="/drive" style={{display: 'flex', textDecoration: 'none'}}>
           <Logo />
-          <div>协作空间</div>
+          <div style={{color: 'rgb(153, 153, 153)'}}>协作空间</div>
         </Link>
         <div>{nav.title}</div>
         <div style={{display: 'flex'}}>

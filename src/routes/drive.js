@@ -15,6 +15,120 @@ module.exports = (injectAsyncReducer) => {
   injectAsyncReducer('file', file);
   injectAsyncReducer('nav', nav);
 
+
+  const connectDriveMaster = connect(
+    (store) => ({
+      account: store.account,
+      host: store.host,
+      nav: store.nav
+    }),
+    (dispatch) => bindActionCreators({
+      getHostList,
+      deleteHost,
+      createHost
+    }, dispatch)
+  );
+
+  const asyncLocationDetail = (partialNextState, callback) => {
+    require.ensure([], (require) => {
+      const Component = require('../components/Drive/LocationDetail');
+      const ConnectedComponent = connect(
+        (state) => ({
+          host: state.host,
+        }),
+        (dispatch) => bindActionCreators({
+          push,
+          setTitle,
+          editLocation,
+          createLocation
+        }, dispatch)
+      )(Component);
+      callback(null, ConnectedComponent)
+    })
+  };
+
+  const asyncHostList = (nextRoute, callback) => {
+    const Component = require('../components/Drive/HostList');
+    const ConnectedComponent = connect(
+      (state) => ({
+        host: state.host,
+      }),
+      (dispatch) => bindActionCreators({
+        push,
+        setTitle,
+        switchHost,
+        getHostList,
+        restoreFileList
+      }, dispatch)
+    )(Component);
+    callback(null, ConnectedComponent)
+  };
+
+  const asyncHostWrapper = (nextState, callback) => {
+    const Component = require('../components/Drive/HostWrapper');
+    const ConnectedComponent = connect(
+      (state) => ({
+        host: state.host,
+      }),
+      (dispatch) => bindActionCreators({
+        push,
+        setTitle,
+        switchHost,
+        getHostList,
+        restoreFileList
+      }, dispatch)
+    )(Component);
+    callback(null, ConnectedComponent)
+  };
+
+  const asyncHostFile = (partialNextState, callback) => {
+    const Component = require('../components/Drive/HostFile');
+    const ConnectedComponent = connect(
+      (state) => ({
+        account: state.account,
+        host: state.host,
+        file: state.file,
+      }),
+      (dispatch) => bindActionCreators({
+        push,
+        switchHost,
+        getFileList,
+        deleteFile,
+        setTitle,
+        getHostList,
+        restoreFileList,
+      }, dispatch),
+      (stateProps, dispatchProps, ownProps) => {
+        return Object.assign({}, stateProps, dispatchProps, ownProps, {
+          injectAsyncReducer
+        })
+      }
+    )(Component);
+    callback(null, ConnectedComponent)
+  };
+
+  const asyncLocation = (partialNextState, callback) => {
+    require.ensure([], (require) => {
+      const Component = require('../components/Drive/Location');
+      const ConnectedComponent = connect(
+        (state) => ({
+          host: state.host,
+        }),
+        (dispatch) => bindActionCreators({
+          push,
+          setTitle,
+          getLocation,
+          switchHost,
+          getHostList,
+          editLocationSort,
+          restoreFileList
+        }, dispatch)
+      )(Component);
+      callback(null, ConnectedComponent)
+    })
+  };
+
+
   return (
     <Route component={connectDriveMaster(require('../components/Drive/Master'))}>
       <IndexRoute getComponent={asyncHostList}/>
@@ -31,114 +145,6 @@ module.exports = (injectAsyncReducer) => {
     </Route>
   )
 
-};
-
-
-const connectDriveMaster = connect(
-  (store) => ({
-    account: store.account,
-    host: store.host,
-    nav: store.nav
-  }),
-  (dispatch) => bindActionCreators({
-    getHostList,
-    deleteHost,
-    createHost
-  }, dispatch)
-);
-
-const asyncLocationDetail = (partialNextState, callback) => {
-  require.ensure([], (require) => {
-    const Component = require('../components/Drive/LocationDetail');
-    const ConnectedComponent = connect(
-      (state) => ({
-        host: state.host,
-      }),
-      (dispatch) => bindActionCreators({
-        push,
-        setTitle,
-        editLocation,
-        createLocation
-      }, dispatch)
-    )(Component);
-    callback(null, ConnectedComponent)
-  })
-};
-
-const asyncHostList = (nextRoute, callback) => {
-  const Component = require('../components/Drive/HostList');
-  const ConnectedComponent = connect(
-    (state) => ({
-      host: state.host,
-    }),
-    (dispatch) => bindActionCreators({
-      push,
-      setTitle,
-      switchHost,
-      getHostList,
-      restoreFileList
-    }, dispatch)
-  )(Component);
-  callback(null, ConnectedComponent)
-};
-
-const asyncHostWrapper = (nextState, callback) => {
-  const Component = require('../components/Drive/HostWrapper');
-  const ConnectedComponent = connect(
-    (state) => ({
-      host: state.host,
-    }),
-    (dispatch) => bindActionCreators({
-      push,
-      setTitle,
-      switchHost,
-      getHostList,
-      restoreFileList
-    }, dispatch)
-  )(Component);
-  callback(null, ConnectedComponent)
-};
-
-const asyncHostFile = (partialNextState, callback) => {
-  const Component = require('../components/Drive/HostFile');
-  const ConnectedComponent = connect(
-    (state) => ({
-      account: state.account,
-      host: state.host,
-      file: state.file,
-    }),
-    (dispatch) => bindActionCreators({
-      push,
-      switchHost,
-      getFileList,
-      deleteFile,
-      setTitle,
-      getHostList,
-      restoreFileList,
-    }, dispatch)
-  )(Component);
-  callback(null, ConnectedComponent)
-};
-
-const asyncLocation = (partialNextState, callback) => {
-  require.ensure([], (require) => {
-    const Component = require('../components/Drive/Location');
-    const ConnectedComponent = connect(
-      (state) => ({
-        host: state.host,
-      }),
-      (dispatch) => bindActionCreators({
-        push,
-        setTitle,
-        getLocation,
-        switchHost,
-        getHostList,
-        editLocationSort,
-        restoreFileList
-      }, dispatch)
-    )(Component);
-    callback(null, ConnectedComponent)
-  })
 };
 
 

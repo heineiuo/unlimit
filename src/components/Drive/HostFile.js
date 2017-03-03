@@ -1,17 +1,23 @@
-import React, {Component} from 'react'
-import { StyleSheet, css } from 'aphrodite/no-important'
-import { Link } from 'react-router'
-import Button from 'react-sea/lib/Button'
-import Upload from 'rc-upload'
-import {setTitle} from '../../store/nav'
-import {getFileList} from '../../store/file'
-import Spin from 'react-spin'
-import {THIS_HOST} from '../../constants'
-import modulePath from 'path'
-import urlencode from 'form-urlencoded'
-import filesize from 'filesize'
+import React, {Component} from "react"
+import {StyleSheet, css} from "aphrodite/no-important"
+import {Link} from "react-router"
+import Button from "react-sea/lib/Button"
+import Upload from "rc-upload"
+import {setTitle} from "../../store/nav"
+import {getFileList} from "../../store/file"
+import Spin from "react-spin"
+import {THIS_HOST} from "../../constants"
+import modulePath from "path"
+import urlencode from "form-urlencoded"
+import filesize from "filesize"
+import IntegrateApp from "../IntegrateApp"
+import Modal from "react-modal"
 
 class File extends Component {
+
+  state = {
+    showModal: false
+  };
 
   componentWillMount = () => {
     const {setTitle, getFileList, host, location} = this.props;
@@ -40,14 +46,31 @@ class File extends Component {
     setTitle(`${host.hostname} - 文件`);
   };
 
-  render (){
+  _open = (appName) => {
+    this.setState({
+      appName,
+      showModal: true
+    })
+  };
 
-    const {file, file: {isFile, cat, ls}, location, host, host: {hostname}, account} = this.props;
+  render() {
+
+    const {
+      file,
+      file: {isFile, cat, ls},
+      location,
+      host,
+      host: {hostname},
+      account,
+      params,
+      injectAsyncReducer
+    } = this.props;
     const path = location.query.path || '/';
     const hrefPrefix = `/drive/${hostname}`;
     const parsed = path.split('/').filter(item => item != '');
 
     const uploadAction = `/api/gateway?${urlencode({
+      importAppName: 'gateway',
       token: account.token,
       reducerName: 'file',
       action: 'upload',
@@ -59,8 +82,8 @@ class File extends Component {
 
       <div>
         {
-          file.fileState < 2?
-            <Spin />:
+          file.fileState < 2 ?
+            <Spin /> :
             <div>
               <div className={css(styles.headerBar)}>
                 <div className={css(styles.headerBar__path)}>
@@ -76,7 +99,7 @@ class File extends Component {
                           <span>
                             {
                               index == parsed.length - 1 ?
-                                <span className={css(styles.headerBar__path__dirname)}>{dirname}</span>:
+                                <span className={css(styles.headerBar__path__dirname)}>{dirname}</span> :
                                 <Link className={css(
                                   styles.headerBar__path__dirname,
                                   styles.headerBar__path__dirname_link,
@@ -112,7 +135,7 @@ class File extends Component {
                 </div>
               </div>
               {
-                isFile?
+                isFile ?
                   // TODO 不集成编辑工具，只显示文件基本信息，并显示支持编辑此文件的程序列表。
                   <div className="file">
                     <div>
@@ -122,15 +145,35 @@ class File extends Component {
                         <a
                           href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${path}`}
                           target="_blank">text editor</a>
+                        <div>
+                          <Button onClick={() => this._open('smile-text-editor', path)}>在弹窗中打开</Button>
+                        </div>
                       </div>
                       {/*<TextEditor text={cat} ref={(editor) => this.editor = editor}/>*/}
                     </div>
-                  </div>:
+                    <Modal
+                      overlayClassName={css(styles.modal__overlay)}
+                      className={css(styles.modal__content)}
+                      isOpen={this.state.showModal}
+                      contentLabel="IntegrateAppModal"
+                      ref={ref => this.modal = ref}>
+                      {
+                        !this.state.showModal ? null :
+                          <IntegrateApp
+                            location={location}
+                            path={path}
+                            hostname={hostname}
+                            injectAsyncReducer={injectAsyncReducer}
+                            appName={this.state.appName}
+                          />
+                      }
+                    </Modal>
+                  </div> :
                   <div className="directory">
                     <div className={styles.fileList}>
                       {
-                        !ls.length?
-                          <div>目录为空</div>:
+                        !ls.length ?
+                          <div>目录为空</div> :
                           <div>
                             <div className={css(styles.listViewBar)}>
                               <div className={css(styles.listViewBar__index)}>序号</div>
@@ -142,9 +185,11 @@ class File extends Component {
                               {
                                 file.ls.map((item, index) => (
                                   <div key={item.name} className={css(styles.fileItem)}>
-                                    <div className={css(styles.fileItem__index)}>{index+1}</div>
+                                    <div className={css(styles.fileItem__index)}>{index + 1}</div>
                                     <div className={css(styles.fileItem__name)}>
-                                      <Link to={`${hrefPrefix}?path=${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
+                                      <Link
+                                        className={css(styles.fileItem__name__text)}
+                                        to={`${hrefPrefix}?path=${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
                                     </div>
                                     <div className={css(styles.fileItem__size)}>
                                       {filesize(item.stat.size)}
@@ -225,15 +270,44 @@ const styles = StyleSheet.create({
     width: 40
   },
   fileItem__name: {
-    flex: 1
+    flex: 1,
+  },
+  fileItem__name__text: {
+    color: '#1077ff',
+    textDecoration: 'none',
+    fontSize: 15,
+    letterSpacing: 1
   },
   fileItem__size: {
     flex: 1
   },
   fileItem__options: {
     flex: 1
+  },
+
+  // modal
+  modal__content: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    border: 0,
+    overflow: 'auto',
+    overflowScrolling: 'touch',
+  },
+
+  modal__overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 100,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)'
   }
 
 });
+
 
 export default module.exports = File
