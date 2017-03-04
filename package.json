@@ -1,6 +1,6 @@
 {
   "name": "smile-web",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/smile-web.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "redux-thunk": "^2.2.0",
     "requirejs": "^2.3.3",
     "selection-range": "^1.1.0",
+    "sketch-js": "^1.1.3",
     "systemjs": "^0.20.7",
     "uuid": "^3.0.1"
   }

@@ -7,8 +7,7 @@
       "template": "src/index.html",
       "filename": "src/index.js",
       "distPath": "./dist",
-      "//publicPath": "//unpkg.com/smile-web@0.0.1/dist/",
-      "publicPath": "/smile-web@0.0.1/dist/",
+      "publicPath": "//unpkg.com/smile-web@0.0.3/dist/",
       "devPublicPath": "http://127.0.0.1:8083/dist/",
       "//alias": {
         "react": "react/dist/react.js",

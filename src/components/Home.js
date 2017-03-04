@@ -5,7 +5,7 @@ import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown
 import {Logo} from 'react-sea/lib/Smile'
 import Background from 'react-sea/lib/Background'
 import {Link} from 'react-router'
-
+import Particle from './Particle'
 
 class Home extends Component {
 
@@ -27,6 +27,10 @@ class Home extends Component {
   render () {
 
     const {postList} = this.props;
+    return (
+      <Particle />
+    );
+
     return (
       <div>
         <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
