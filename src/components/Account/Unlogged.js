@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite/no-important'
-import {inputStyle, buttonStyle} from './common/inlinestyles'
+import {inputStyle, buttonStyle} from '../common/inlinestyles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
-import styles from './common/styles'
+import styles from '../common/styles'
 import {login, sendVerifyCode} from '../../store/account'
 
 

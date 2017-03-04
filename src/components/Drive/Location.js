@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
 import Paper from 'react-sea/lib/Paper'
 import Button from 'react-sea/lib/Button'
 import Input from 'react-sea/lib/Input'

@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    transition: 'all .15s ease'
+    transition: 'all .15s ease',
+    lineHeight: '30px'
   },
 
   fileItem_hover: {
@@ -87,7 +88,9 @@ const styles = StyleSheet.create({
     letterSpacing: 1
   },
   size: {
-    flex: 1
+    flex: 1,
+    color: '#a5a5a5',
+    fontSize: 12
   },
   options: {
     flex: 1,

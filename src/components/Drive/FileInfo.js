@@ -31,7 +31,7 @@ class FileInfo extends Component {
               {/*href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${pathname}`}*/}
               {/*target="_blank">text editor</a>*/}
             <div>
-              <Button onClick={() => this._open('smile-text-editor', pathname)}>在弹窗中打开</Button>
+              <Button style={{width: 100}} onClick={() => this._open('smile-text-editor', pathname)}>Ace</Button>
             </div>
           </div>
           {/*<TextEditor text={cat} ref={(editor) => this.editor = editor}/>*/}
@@ -40,8 +40,7 @@ class FileInfo extends Component {
           overlayClassName={css(styles.modal__overlay)}
           className={css(styles.modal__content)}
           isOpen={this.state.showModal}
-          contentLabel="IntegrateAppModal"
-          ref={ref => this.modal = ref}>
+          contentLabel="IntegrateAppModal">
           {
             !this.state.showModal ? null :
               <IntegrateApp
