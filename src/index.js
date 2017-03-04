@@ -11,13 +11,12 @@ const start = async () => {
     const db = opendb(`${config.datadir}/db`);
     const hub = createHub(db);
 
-    await init(db, config);
+    if (config.init) await init(hub, config);
 
-    const server = createServer(config, hub);
-    hub.io.attach(server);
-
+    // start with https server
+    hub.io.attach(createServer(config, hub));
     // or only start WebSocket server
-    // hub.listen(3443)
+    // hub.io.listen(3443)
 
   } catch(e){
     console.log(e.stack);

@@ -1,65 +1,28 @@
-import {combineReducers} from 'sprucejs'
-import {opendb, promisifydb, subdb} from './db'
 
-
-export default (db, config) => new Promise(async(resolve, reject) => {
-  const basedb = promisifydb(subdb(db, 'base'));
-
-  let isInitInDB = false;
-  let initdata = Object.assign({}, config.production.init);
-
-  try {
-    // await basedb.del('init');
-    const dbdata = await basedb.get('init');
-    isInitInDB = true;
-    initdata = dbdata;
-
-  } catch(e) {
-    if (e.name == 'NotFoundError') isInitInDB = false;
-    await basedb.put('init', initdata);
-    console.log('[gateway] Running init.');
-    await runInit(db, initdata)
-  }
-
-  if (isInitInDB) {
-    console.log('[gateway] Init data has been found, init in production.json will be ignore.');
-  } else {
-    console.log('[gateway] Use initdata in production.json')
-  }
-
-  resolve()
-})
-
-const runInit = (db, initdata) => new Promise(async (resolve, reject) => {
+export default (hub, config) => new Promise(async(resolve, reject) => {
   try {
 
-    const {domain} = initdata;
 
-    const handler = combineReducers([
-      require('../integration/gateway/Host'),
-      require('../integration/gateway/File'),
-      require('../integration/gateway/Location')
-    ])(subdb(db, 'gateway'));
+    console.log('[gateway] running init program...');
 
-    try {
-      await handler({
-        reducerName: 'host',
-        action: 'Delete',
-        hostname: domain
-      });
-    } catch(e){
-      console.log(e.stack)
-    }
+    const {gateway} = hub.integrations;
+    const {domain} = config.production.init;
+
+    await gateway.request('gateway', {
+      reducerName: 'host',
+      action: 'Delete',
+      hostname: domain
+    });
 
 
-    await handler({
+    await gateway.request('gateway', {
       reducerName: 'host',
       action: 'New',
       hostname: domain
     });
 
 
-    await handler({
+    await gateway.request('gateway',{
       reducerName: 'location',
       action: 'New',
       hostname: domain,
@@ -71,7 +34,7 @@ const runInit = (db, initdata) => new Promise(async (resolve, reject) => {
       content: 'account'
     });
 
-    await handler({
+    await gateway.request('gateway',{
       reducerName: 'location',
       action: 'New',
       hostname: domain,
@@ -83,7 +46,7 @@ const runInit = (db, initdata) => new Promise(async (resolve, reject) => {
       content: 'gateway'
     });
 
-    await handler({
+    await gateway.request('gateway',{
       reducerName: 'location',
       action: 'New',
       hostname: domain,
@@ -95,8 +58,25 @@ const runInit = (db, initdata) => new Promise(async (resolve, reject) => {
       content: 'service'
     });
 
+    await gateway.request('gateway', {
+      reducerName: 'file',
+      action: 'mkdir',
+      hostname: domain,
+      pathname:'/',
+    });
+
+    await gateway.request('gateway',{
+      reducerName: 'file',
+      action: 'mkdir',
+      hostname: domain,
+      pathname:'/public',
+    });
+
+    console.log('[gateway] init success');
     resolve()
   } catch(e){
+    console.log(e.stack);
     reject(e)
   }
-});
+
+})

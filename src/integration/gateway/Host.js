@@ -87,8 +87,7 @@ class Host extends Model {
       await db.put(hostname, {hostname});
       await reducers.Location.batch({hostname, locations: {}, reset: true});
       console.log('===========reducers===========');
-      console.log(reducers)
-      await reducers.File.initHostDir(hostname);
+      console.log(reducers);
       resolve({hostname})
     } catch (e) {
       reject(e)

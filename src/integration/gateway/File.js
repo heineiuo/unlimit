@@ -1,35 +1,14 @@
 
-import fs from 'fs-promise'
 import {Model} from 'sprucejs'
-import mkdirp from 'mkdirp'
-import config from '../../utils/config'
+import path from 'path'
+import filesystem from 'level-filesystem'
 
 class File extends Model {
 
-  initHostDir = (hostname) => new Promise(async (resolve, reject) => {
-    mkdirp(`${config.datadir}/app/${hostname}/public`, (err) => {
-      if (err) return reject(err);
-      resolve()
-    })
-  });
-
-  /**
-   * @api {POST} /File/vi 修改文件
-   * @apiGroup File
-   * @apiName FileVi
-   * @apiParam {string} token 令牌
-   * @apiParam {string} file
-   * @apiParam {string} content
-   */
-  vi = (req) => new Promise(async (resolve, reject) => {
-    try {
-      const {file, content} = req;
-      await fs.writeFile(file, content, 'utf-8');
-      resolve({})
-    } catch(e){
-      reject(e)
-    }
-  });
+  constructor (props) {
+    super();
+    this.fs = filesystem(props.db);
+  }
 
   /**
    * @api {POST} /File/mv 移动、重命名文件
@@ -39,10 +18,11 @@ class File extends Model {
    * @apiParam {string} prevFile
    * @apiParam {string} nextFile
    */
-  mv = (req) => new Promise(async (resolve, reject) => {
+  rename = (req) => new Promise(async (resolve, reject) => {
     try {
-      const {prevFile, nextFile} = req;
-      await fs.rename(prevFile, nextFile);
+      const {hostname, prevFile, nextFile} = req;
+      const fs = filesystem(this.props.db);
+      await fs.rename(`${hostname}${prevFile}`, `${hostname}${nextFile}`);
       resolve({})
     } catch(e){
       reject(e)
@@ -52,10 +32,17 @@ class File extends Model {
   /**
    * 创建文件夹
    */
-  mkdir = () => new Promise(async (resolve, reject) => {
+  mkdir = (req) => new Promise(async (resolve, reject) => {
     try {
-      reject(new Error('API_NOT_OK'))
-
+      const {hostname, pathname} = req;
+      const fs = filesystem(this.props.db);
+      await new Promise((resolve, reject) => {
+        fs.mkdir(`${hostname}${pathname}`, (err) => {
+          if (err) return reject(err);
+          resolve()
+        })
+      });
+      resolve({})
     } catch(e){
       reject(e)
     }
@@ -64,9 +51,19 @@ class File extends Model {
   /**
    * 删除文件、文件夹
    */
-  rm = () => new Promise(async (resolve, reject) => {
+  unlink = (req) => new Promise(async (resolve, reject) => {
     try {
-      reject(new Error('API_NOT_OK'))
+      const {hostname, pathname} = req;
+      const fs = filesystem(this.props.db);
+      await new Promise((resolve, reject) => {
+        fs.unlink(`${hostname}${pathname}`, (err) => {
+          if (err) return reject(err)
+          resolve()
+        })
+      });
+
+      resolve({})
+
     } catch(e){
       reject(e)
     }
@@ -83,11 +80,21 @@ class File extends Model {
   ls = (req) => new Promise(async (resolve, reject) => {
     try {
       const {pathname, hostname} = req;
-      const prefix = `${config.datadir}/app/${hostname}`;
-      const directory = `${prefix}${pathname}`;
-      const files = await fs.readdir(directory);
-      const stats = await Promise.all(files.map(file => {
-        return fs.lstat(`${directory}/${file}`)
+      const fs = filesystem(this.props.db);
+      const directory = `${hostname}${pathname}`;
+      const files = await new Promise((resolve, reject) => {
+        fs.readdir(directory, (err, files) => {
+          if (err) return reject(err);
+          resolve(files)
+        });
+      });
+      const stats = await Promise.all(files.map(filename => {
+        return new Promise((resolve, reject) => {
+          fs.lstat(`${directory}/${filename}`, (err, stat) => {
+            if (err) return reject(err);
+            resolve(stat);
+          })
+        })
       }));
       const ls = files.map((name, index) => {
         const stat = stats[index];
@@ -130,12 +137,36 @@ class File extends Model {
   cat = (req) => new Promise(async (resolve, reject) => {
     try {
       const {hostname, pathname} = req;
-      const prefix = `${config.datadir}/app/${hostname}`;
-      const cat = await fs.readFile(`${prefix}/${pathname}`, 'utf-8');
-      resolve({
-        isFile: true,
-        cat
-      })
+      this.fs.readFile(`${hostname}${pathname}`, (err, cat) => {
+
+        console.log('======a====')
+        console.log(path.join(`${hostname}${pathname}`, 'index.html'))
+        if (err) {
+          const lastParam = pathname.split('/').pop();
+          console.log('=======c=========')
+          console.log(pathname)
+          console.log(lastParam)
+          if (lastParam.length =="" || !/\./.test(lastParam)) {
+            console.log('=====b=====')
+            console.log(path.join(`${hostname}${pathname}`, 'index.html'))
+            this.fs.readFile(path.join(`${hostname}${pathname}`, 'index.html'), (err, cat) => {
+              if (err) return reject(err);
+              resolve({
+                isFile: true,
+                cat
+              })
+            });
+          } else {
+            reject(err);
+          }
+        } else {
+          resolve({
+            isFile: true,
+            cat
+          })
+        }
+      });
+
     } catch(e){
       reject(e)
     }
@@ -143,12 +174,38 @@ class File extends Model {
 
   upload = (req) => new Promise(async (resolve, reject) => {
     try {
+      const {hostname, pathname, isHashName=true} = req;
+      const isPublic = pathname.search('/public') == 0;
       req.setHeader({
         __UPLOAD: true
       });
       resolve({
-        uploadDir: `${req.__config.datadir}/app/${req.hostname}/${req.pathname}`,
-        uploadLocation: `http://local.youkuohao.com/${req.pathname}`
+        uploadDir: `${hostname}${pathname}`,
+        isPublic,
+        isHashName,
+        uploadLocation: `//${hostname}${pathname}`
+      })
+    } catch(e){
+      console.log(e.stack);
+      reject(e)
+    }
+  });
+
+  /**
+   * @api {POST} /File/writeFile 修改文件
+   * @apiGroup File
+   * @apiName FileVi
+   * @apiParam {string} token 令牌
+   * @apiParam {string} file
+   * @apiParam {string} content
+   */
+  writeFile = (req) => new Promise(async (resolve, reject) => {
+    try {
+      const {hostname, pathname, filename, content} = req;
+      const {fs} = this;
+      fs.writeFile(`${hostname}${pathname}/${filename}`, content, (err) => {
+        if (err) return reject(err);
+        resolve({})
       })
     } catch(e){
       console.log(e.stack);
@@ -164,8 +221,9 @@ class File extends Model {
     if (action == 'ls') return this.ls(req);
     if (action == 'upload') return this.upload(req);
     if (action == 'mkdir') return this.mkdir(req);
-    if (action == 'rm') return this.rm(req);
-    if (action == 'mv') return this.mv(req);
+    if (action == 'unlink') return this.unlink(req);
+    if (action == 'writeFile') return this.writeFile(req);
+    if (action == 'rename') return this.rename(req);
     return new Promise((resolve, reject) => reject(new Error('NOT_FOUND')))
 
   }

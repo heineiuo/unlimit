@@ -25,7 +25,7 @@ module.exports = (config) => {
         }),
         HTML: () => handleHTML(res, content),
         BLOCK: () => handleBLOCK(res, content),
-        FILE: () => handleFILE(res, host.hostname, url.pathname, config.datadir, req.path),
+        FILE: () => handleFILE(res, host.hostname, url.pathname, req.path),
         REDIRECT: () => handleREDIRECT(res, content),
         DOWNLOAD: () => handleDOWNLOAD(res, req.query.path),
         UPLOAD: () => handleUPLOAD(req, res, content),
