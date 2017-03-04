@@ -80,7 +80,7 @@ class File extends Model {
   ls = (req) => new Promise(async (resolve, reject) => {
     try {
       const {pathname, hostname} = req;
-      const fs = filesystem(this.props.db);
+      const fs = this.fs;
       const directory = `${hostname}${pathname}`;
       const files = await new Promise((resolve, reject) => {
         fs.readdir(directory, (err, files) => {
@@ -110,7 +110,7 @@ class File extends Model {
         ls
       })
     } catch(e){
-      if (e.message.search('ENOTDIR:') == 0) {
+      if (e.message.search('ENOTDIR') == 0 || e.message.search('ENOENT') == 0) {
         try {
           const file = await this.cat(req);
           resolve(file)
@@ -138,17 +138,9 @@ class File extends Model {
     try {
       const {hostname, pathname} = req;
       this.fs.readFile(`${hostname}${pathname}`, (err, cat) => {
-
-        console.log('======a====')
-        console.log(path.join(`${hostname}${pathname}`, 'index.html'))
         if (err) {
           const lastParam = pathname.split('/').pop();
-          console.log('=======c=========')
-          console.log(pathname)
-          console.log(lastParam)
           if (lastParam.length =="" || !/\./.test(lastParam)) {
-            console.log('=====b=====')
-            console.log(path.join(`${hostname}${pathname}`, 'index.html'))
             this.fs.readFile(path.join(`${hostname}${pathname}`, 'index.html'), (err, cat) => {
               if (err) return reject(err);
               resolve({
@@ -183,6 +175,8 @@ class File extends Model {
         uploadDir: `${hostname}${pathname}`,
         isPublic,
         isHashName,
+        pathname,
+        hostname,
         uploadLocation: `//${hostname}${pathname}`
       })
     } catch(e){

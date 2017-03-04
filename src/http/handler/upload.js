@@ -12,7 +12,7 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
      *  uploadLocation: the prefix for the uploaded file, like `http://superuser.youkuohao.com/upload`
      * }
      **/
-    const {uploadKey='file', uploadDir, uploadLocation, isPublic, isHashName} = options;
+    const {uploadKey='file', uploadDir, hostname, pathname, uploadLocation, isPublic, isHashName} = options;
 
     console.log(uploadKey, uploadDir, uploadLocation);
 
@@ -23,7 +23,7 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
       const form = new formidable.IncomingForm();
       form.encoding = 'utf-8';
       form.hash = 'md5';
-      form.uploadDir = uploadDir;
+      // form.uploadDir = uploadDir;
       form.keepExtensions = true;
       form.multiples = true;
 
