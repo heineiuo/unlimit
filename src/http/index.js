@@ -3,14 +3,14 @@ import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
 
-export default (config, hub) => {
+export default (config, gateway) => {
 
   const app = express();
 
   app.use(morgan(':req[host]:url :method :status :res[content-length] - :response-time ms', {}));
   app.use(compression());
   app.use((req, res, next) => {
-    res.gateway = hub.integrations.gateway;
+    res.gateway = gateway;
     res.removeHeader("x-powered-by");
     next()
   });
