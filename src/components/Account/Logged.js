@@ -3,10 +3,10 @@ import {Link} from 'react-router'
 import Modal from 'react-modal'
 import Button from 'react-sea/lib/Button'
 import PopModal from '../PopModal'
+import commonStyles from '../common/styles'
 import ImageUpload from 'react-sea/lib/ImageUpload'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite/no-important'
-
 
 class Profile extends Component {
 
@@ -91,16 +91,8 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    width: 480,
-    height: 618,
-    margin: '60px auto 0',
-    padding: '70px 40px 30px 40px',
-    background: '#fff',
-    fontSize: 14,
-    borderRadius: 2,
-    boxShadow: '0 2px 3px rgba(213,213,213,0.7)'
-  },
+
+  ...commonStyles,
 
   userNameInput: {
     boxSizing: 'border-box',
@@ -108,7 +100,8 @@ const styles = StyleSheet.create({
     lineHeight: '20px',
     padding: 2,
     borderRadius: 1,
-    width: 160,
+    width: '100%',
+    maxWidth: 160,
     outline: 'none',
     fontSize: 14,
     border: '1px solid #333',
@@ -120,7 +113,8 @@ const styles = StyleSheet.create({
   },
 
   itemSpan: {
-    width: 140,
+    width: '100%',
+    maxWidth: 140,
     display: 'inline-block'
   },
 

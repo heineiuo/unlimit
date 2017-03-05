@@ -14,29 +14,28 @@ import FileInfo from './FileInfo'
 class HostFile extends Component {
 
   componentWillMount = () => {
-    const {setTitle, getFileList, host, location} = this.props;
-    getFileList(location.query.path);
-    setTitle(`${host.hostname} - 文件`);
+    const {setTitle, getFileList, params, location} = this.props;
+    getFileList(params.hostname, location.query.path);
   };
 
   componentWillReceiveProps = (nextProps) => {
-    const {getFileList, location, setTitle} = this.props;
+    const {getFileList, location, setTitle, params, host} = this.props;
     const nextPath = nextProps.location.query.path;
 
     if (nextProps.file.fileState == 0) {
       setTitle(`${nextProps.host.hostname} - 文件`);
-      return getFileList('/');
+      return getFileList(params.hostname, '/');
     }
 
     if (nextPath != location.query.path) {
-      getFileList(nextPath)
+      getFileList(params.hostname, nextPath)
     }
   };
 
   _handleUploadSuccess = () => {
 
-    const {setTitle, getFileList, host, location} = this.props;
-    getFileList(location.query.path);
+    const {setTitle, getFileList, host, params, location} = this.props;
+    getFileList(params.hostname,location.query.path);
     setTitle(`${host.hostname} - 文件`);
   };
 
@@ -47,10 +46,8 @@ class HostFile extends Component {
       file,
       file: {isFile, cat, ls},
       location,
-      host,
-      host: {hostname},
       account,
-      params,
+      params: {hostname},
       injectAsyncReducer
     } = this.props;
     const path = location.query.path || '/';
@@ -104,6 +101,7 @@ class HostFile extends Component {
               {
                 isFile ?
                   <FileInfo
+                    cat={cat}
                     pathname={path}
                     injectAsyncReducer={injectAsyncReducer}
                     hostname={hostname}

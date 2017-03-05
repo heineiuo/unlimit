@@ -1,11 +1,10 @@
-import {StyleSheet, css} from 'aphrodite/no-important'
-
-const styles = StyleSheet.create({
+export default {
   card: {
-    width: 480,
+    width: '100%',
+    maxWidth: 480,
     height: 618,
     margin: '60px auto 0',
-    padding: '70px 92px 30px 92px',
+    padding: '70px 40px 30px 40px',
     background: '#fff',
     fontSize: 14,
     borderRadius: 2,
@@ -84,7 +83,22 @@ const styles = StyleSheet.create({
     cursor: 'pointer',
     color: '#333',
     float: 'right'
-  }
-});
+  },
 
-export default module.exports = styles
+  input: {
+    backgroundColor: '#f5f5f5',
+    height: '44px',
+    border: '0px',
+    padding: '0 8px',
+    color: '#333',
+    marginBottom: '2px'
+  },
+
+  button: {
+    marginTop: '10px',
+    // backgroundColor: '#41464b',
+    // color: '#fff',
+    cursor: 'pointer',
+    borderRadius: '2px'
+  }
+}

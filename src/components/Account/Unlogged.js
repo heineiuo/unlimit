@@ -1,25 +1,19 @@
 import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite/no-important'
-import {inputStyle, buttonStyle} from '../common/inlinestyles'
+import commonStyles from '../common/styles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
-import styles from '../common/styles'
 import {login, sendVerifyCode} from '../../store/account'
 
 
-const codeInputStyle = Object.assign({}, inputStyle, {
+const codeInputStyle = Object.assign({}, commonStyles.input, {
   width: '164px',
   overflow: 'hidden',
   marginRight: '2px',
   float: 'left'
 });
 
-const inputCodeBarStyle = {
-  height: '44px',
-  marginBottom: '2px'
-};
-
-const sendCodeStyle = Object.assign({}, buttonStyle, {
+const sendCodeStyle = Object.assign({}, commonStyles.button, {
   width: '130px',
   fontSize: 14,
   float: 'left',
@@ -80,12 +74,12 @@ class UnLogged extends Component {
         <div>
           <div>
             <Input
-              style={inputStyle}
+              style={commonStyles.input}
               type="text"
               value={this.state.email}
               onChange={(e)=>this.setState({email: e.target.value})}
               placeholder="邮箱" />
-            <div style={inputCodeBarStyle}>
+            <div style={{height: '44px', marginBottom: '2px'}}>
               <Input
                 type="text"
                 value={this.state.code}
@@ -112,7 +106,7 @@ class UnLogged extends Component {
             <div className={css(styles.errorMsg, account.registerError != '' && styles['errorMsg--show'])}>
               {account.registerError}
             </div>
-            <Button style={buttonStyle} onClick={this.submit}>提交</Button>
+            <Button style={commonStyles.button} onClick={this.submit}>提交</Button>
           </div>
           {/*<div className={css(styles.forgot)} onClick={() => switchPane({tab: 'login'})}>登录</div>*/}
         </div>
@@ -120,5 +114,9 @@ class UnLogged extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  ...commonStyles
+});
 
 export default UnLogged

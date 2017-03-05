@@ -28,7 +28,7 @@ class HostList extends Component {
     return (
       <div className={css(styles.container)}>
         <div className={css(styles.list)}>
-          <Card>
+          <Card style={{boxShadow: 'none'}}>
             {
               host.hostListState == 2 ?
                 <div className={css(styles.hostList)}>

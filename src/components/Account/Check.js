@@ -4,6 +4,8 @@ import {bindActionCreators} from 'redux'
 import Logged from "./Logged"
 import UnLogged from './Unlogged'
 import Spin from 'react-spin'
+import Header from './Header'
+import Body from 'react-sea/lib/Body'
 import {checkLogin, getAuthCodeAndRedirect} from '../../store/account'
 
 class Check extends Component {
@@ -60,14 +62,22 @@ class Check extends Component {
 
     return (
       <div>
+        <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
         {
-          !account.loginChecked?
+          !account.loginChecked? (
             <div>
               <Spin />
-            </div>:
-            account.logged?
-              <Logged logout={logout} account={account}/>:
-              <UnLogged sendVerifyCode={sendVerifyCode} account={account}/>
+            </div>
+          ): (
+            <div>
+              <Header />
+              {
+                account.logged ?
+                  <Logged logout={logout} account={account}/> :
+                  <UnLogged sendVerifyCode={sendVerifyCode} account={account}/>
+              }
+            </div>
+          )
         }
       </div>
     )

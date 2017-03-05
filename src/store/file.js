@@ -106,7 +106,7 @@ export const getDirInfo = (path) => async (dispatch, getState) => {
   }
 };
 
-export const getFileList = (pathname='/') => async (dispatch, getState) => {
+export const getFileList = (hostname, pathname='/') => async (dispatch, getState) => {
   try {
     dispatch({
       type: 'FILE_STATE_UPDATE',
@@ -115,7 +115,6 @@ export const getFileList = (pathname='/') => async (dispatch, getState) => {
       }
     });
 
-    const {hostname} = getState().host;
     const {token} = getState().account;
     const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
       importAppName: 'gateway',

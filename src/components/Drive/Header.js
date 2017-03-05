@@ -3,11 +3,11 @@ import {Link} from 'react-router'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import HostSelector from './HostSelector'
 import {StyleSheet, css} from 'aphrodite/no-important'
-import {Logo} from 'react-sea/lib/Smile'
 import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
+import Title from '../Title'
 
 class Header extends Component {
 
@@ -42,31 +42,28 @@ class Header extends Component {
 
     return (
       <div className={css(styles.headerBar)}>
-        <Link to="/drive" style={{display: 'flex', textDecoration: 'none'}}>
-          <Logo />
-          <div style={{color: 'rgb(153, 153, 153)'}}>协作空间</div>
-        </Link>
-        <div>{nav.title}</div>
         <div style={{display: 'flex'}}>
+          <Link to="/drive" style={{textDecoration: 'none', marginRight: 10}}>
+            <Title title="协作空间"/>
+          </Link>
           <span>
             <DropDown ref={dropdown => this.dropdown=dropdown}>
-              <DropDownTrigger>切换空间</DropDownTrigger>
+              <DropDownTrigger>
+                <span style={{color: '#666', fontSize: 13}}>切换空间</span>
+              </DropDownTrigger>
               <DropDownContent>
                 <HostSelector
                   host={host}
                   getHostList={getHostList}
                   deleteHost={deleteHost}
                   openHostCreateModal={this.handleClickOpenModal}
-                  style={{position: 'absolute', right: 0}}
+                  style={{position: 'absolute', left: 120}}
                   closeDropdown={this.closeDropdown}/>
-              </DropDownContent>
-            </DropDown>
-
-            <Modal
-              style={customStyles}
-              ref={(modal) => this.modal = modal}
-              contentLabel="ADD_HOST"
-              isOpen={this.state.modalOpen}>
+                <Modal
+                  style={customStyles}
+                  ref={(modal) => this.modal = modal}
+                  contentLabel="ADD_HOST"
+                  isOpen={this.state.modalOpen}>
               <Paper>
                 {/*<div>添加一个域名</div>*/}
                 <div>
@@ -86,11 +83,25 @@ class Header extends Component {
                 </div>
               </Paper>
             </Modal>
+              </DropDownContent>
+            </DropDown>
           </span>
-          <Link to="/account">我</Link>
         </div>
+        {/*<div>{nav.title}</div>*/}
+        <div style={{display: 'flex'}}>
 
 
+          <span>
+            <DropDown ref={ref => this.accountMenu=ref}>
+              <DropDownTrigger>我</DropDownTrigger>
+              <DropDownContent>
+                <div style={{position: 'absolute', right: 0}}>
+                  <Link to="/account">账号</Link>
+                </div>
+              </DropDownContent>
+            </DropDown>
+          </span>
+        </div>
       </div>
     )
   }
@@ -134,6 +145,7 @@ const styles = StyleSheet.create({
     height: 56,
     // borderBottom: '1px solid #e2e2e2',
     backgroundColor: '#FFF',
+    // backgroundColor: '#212a2d',
     lineHeight: `${56}px`,
     marginBottom: 10,
   }

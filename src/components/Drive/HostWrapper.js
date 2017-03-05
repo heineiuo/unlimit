@@ -38,8 +38,8 @@ class HostWrapper extends Component {
 
     return (
       <div style={{padding: '20px 0', margin: '0 auto', maxWidth: 1000}}>
-        <Paper>
-          {params.hostname}
+        <Paper style={{boxShadow: 'none'}}>
+          <div>{params.hostname}</div>
           <div style={{position: 'relative', height: 40, width: 400}}>
             <TabBar style={{}} activeKey={this.state.activeTab} onSwitchKey={this.handleSwitchKey}>
               <TabPane key="file">文件</TabPane>

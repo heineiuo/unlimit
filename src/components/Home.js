@@ -26,56 +26,53 @@ class Home extends Component {
 
   render () {
 
-    const {postList} = this.props;
-    return (
-      <Particle />
-    );
+    const {postList, account} = this.props;
 
-    return (
-      <div>
-        <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
-        <Background bgColor="#efeff4" />
-        <div className={css(styles.headerBar)}>
-          <div style={{padding: '0 20px', display: 'flex'}}>
-            <Link to="/" style={{display: 'flex', textDecoration: 'none'}}>
-              <Logo color="#f56455"/>
-              <span style={{color: '#f56455'}}>右括号</span>
-            </Link>
-          </div>
-          <div>
+    return !account.logged?<Particle />:
+      (
+        <div>
+          <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
+          <Background bgColor="#efeff4" />
+          <div className={css(styles.headerBar)}>
+            <div style={{padding: '0 20px', display: 'flex'}}>
+              <Link to="/" style={{display: 'flex', textDecoration: 'none'}}>
+                <Logo color="#f56455"/>
+                <span style={{color: '#f56455'}}>右括号</span>
+              </Link>
+            </div>
+            <div>
 
+            </div>
+            <div style={{padding: '12px 20px 0', display: 'flex'}}>
+              {/*<Link className={css(styles.navItem)} to="/post">写文章</Link>*/}
+              <Link className={css(styles.navItem)} to="/drive">空间</Link>
+              <DropDown className={css(styles.navItem)}>
+                <DropDownTrigger>
+                  <div className={css(styles.avatar)}>我</div>
+                </DropDownTrigger>
+                <DropDownContent>
+                  <Link to="/account">账号</Link>
+                </DropDownContent>
+              </DropDown>
+            </div>
           </div>
-          <div style={{padding: '12px 20px 0', display: 'flex'}}>
-            {/*<Link className={css(styles.navItem)} to="/post">写文章</Link>*/}
-            <Link className={css(styles.navItem)} to="/drive">空间</Link>
-            <DropDown className={css(styles.navItem)}>
-              <DropDownTrigger>
-                <div className={css(styles.avatar)}>我</div>
-              </DropDownTrigger>
-              <DropDownContent>
-                <Link to="/account">账号</Link>
-              </DropDownContent>
-            </DropDown>
+
+          <div style={{paddingTop: 76, margin: '0 auto', width: '100%', maxWidth: 1000}}>
+            {
+              postList.list.map(item => (
+                <div key={item._key} className={css(styles.item)}>
+                  <Link to={`/post/${item._key}`}>
+                    <div>
+                      <div className="title">{item.title}</div>
+                      <div>{String(new Date(item.time||Date.now()))}</div>
+                    </div>
+                  </Link>
+                </div>
+              ))
+            }
           </div>
         </div>
-
-        <div style={{paddingTop: 76, margin: '0 auto', width: '100%', maxWidth: 1000}}>
-          {
-            postList.list.map(item => (
-              <div key={item._key} className={css(styles.item)}>
-                <Link to={`/post/${item._key}`}>
-                  <div>
-                    <div className="title">{item.title}</div>
-                    <div>{String(new Date(item.time||Date.now()))}</div>
-                  </div>
-                </Link>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-
-    )
+      )
   }
 }
 
