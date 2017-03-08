@@ -13,44 +13,66 @@ import FileInfo from './FileInfo'
 
 class HostFile extends Component {
 
+  state = {
+    selected: []
+  };
+
   componentWillMount = () => {
-    const {setTitle, getFileList, params, location} = this.props;
-    getFileList(params.hostname, location.query.path);
+    const {setTitle, getFileList, params: {hostname, splat}} = this.props;
+    getFileList(hostname, splat);
   };
 
   componentWillReceiveProps = (nextProps) => {
-    const {getFileList, location, setTitle, params, host} = this.props;
-    const nextPath = nextProps.location.query.path;
+    const {getFileList, setTitle, params: {hostname, splat}, host} = this.props;
+    const nextPath = nextProps.params.splat;
 
     if (nextProps.file.fileState == 0) {
       setTitle(`${nextProps.host.hostname} - 文件`);
       return getFileList(params.hostname, '/');
     }
 
-    if (nextPath != location.query.path) {
-      getFileList(params.hostname, nextPath)
+    if (nextPath != splat) {
+      getFileList(hostname, nextPath)
     }
   };
 
-  _handleUploadSuccess = () => {
+  componentWillUnmount = () => {
+    console.error('\<HostFile \/\> will unmounted')
+  };
 
-    const {setTitle, getFileList, host, params, location} = this.props;
-    getFileList(params.hostname,location.query.path);
+  handleFileToggleSelect = (toggle, file) => {
+    const {selected} = this.state;
+    if (toggle == 0) {
+      this.setState({
+        selected: selected.slice().filter(item => {
+          return item.name != file.name
+        })
+      })
+    } else {
+      this.setState({
+        selected: selected.slice().concat(file)
+      })
+    }
+
+  };
+
+  _handleUploadSuccess = () => {
+    const {setTitle, getFileList, host, params: {hostname, splat}} = this.props;
+    getFileList(hostname, splat);
     setTitle(`${host.hostname} - 文件`);
   };
 
 
   render() {
-
+    const {selected} = this.state;
     const {
       file,
       file: {isFile, cat, ls},
-      location,
       account,
-      params: {hostname},
+      params: {hostname, splat},
       injectAsyncReducer
     } = this.props;
-    const path = location.query.path || '/';
+    const path = splat || '/';
     const hrefPrefix = `/drive/${hostname}`;
 
     const uploadAction = `/api/gateway?${urlencode({
@@ -77,6 +99,13 @@ class HostFile extends Component {
                   pathname={path} />
                 <div className={css(styles.headerBar__tools)} style={isFile?{display: 'none'}:{}}>
                   {/*展示样式*/}
+                  {
+                    selected.length == 0 ? null:
+                      <div>
+                        <div>删除</div>
+                        <div>移动</div>
+                      </div>
+                  }
                   <div>
                     <span>列表</span>
                     <span>图标</span>
@@ -105,7 +134,6 @@ class HostFile extends Component {
                     pathname={path}
                     injectAsyncReducer={injectAsyncReducer}
                     hostname={hostname}
-                    location={location}
                   /> :
                   <div className={css(styles.fileList)}>
                     {
@@ -113,7 +141,7 @@ class HostFile extends Component {
                         <div>目录为空</div> :
                         <div>
                           <div className={css(styles.listViewBar)}>
-                            <div className={css(styles.listViewBar__index)}>序号</div>
+                            <div className={css(styles.listViewBar__index)}>选中</div>
                             <div className={css(styles.listViewBar__name)}>名称</div>
                             <div className={css(styles.listViewBar__size)}>大小</div>
                             <div className={css(styles.listViewBar__options)}>操作</div>
@@ -122,6 +150,7 @@ class HostFile extends Component {
                             {
                               file.ls.map((item, index) => (
                                 <FileItem
+                                  onToggleSelect={this.handleFileToggleSelect}
                                   hrefPrefix={hrefPrefix}
                                   key={item.name}
                                   index={index}

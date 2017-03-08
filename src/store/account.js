@@ -16,6 +16,7 @@ const initialState = {
   profile: {},
   questions:[],
   title:'',
+  token:'',
   key: '',
   description:'初始值'
 };
@@ -29,7 +30,9 @@ export default handleActions({
   },
 
   CHECKED_LOGIN (state, action ) {
-    return Object.assign({}, state, action.payload, {loginChecked: true})
+    return Object.assign({}, state, action.payload, {
+      loginChecked: true
+    })
   },
 
   RESET_PASSWORD_ERROR (state,action) {
@@ -68,6 +71,7 @@ export default handleActions({
     return Object.assign({}, state, {
       loginError:'',
       email: action.payload.email,
+      token: action.payload.token,
       logged: true
     })
   },
@@ -103,6 +107,7 @@ export const login = (formData) => async (dispatch, getState) => {
     dispatch({
       type: 'LOGIN_SUCCESS',
       payload: {
+        token: result.token,
         email: result.email
       }
     })
@@ -194,7 +199,7 @@ export const checkLogin = () => async (dispatch, getState) => {
       token: userToken
     }));
 
-    if (result.error || result.user === null) {
+    if (result.error || !result.hasOwnProperty('id')) {
       return dispatch({
         type: 'CHECKED_LOGIN',
         payload: {
@@ -208,6 +213,7 @@ export const checkLogin = () => async (dispatch, getState) => {
       payload: {
         logged: true,
         email: result.email,
+        token: userToken,
         profile: result
       },
     })

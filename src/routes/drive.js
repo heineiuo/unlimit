@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Router, Route, IndexRoute} from 'react-router'
+import {Router, Route, IndexRoute, IndexRedirect} from 'react-router'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import { push } from 'react-router-redux'
@@ -133,8 +133,8 @@ module.exports = (injectAsyncReducer) => {
     <Route component={connectDriveMaster(require('../components/Drive/Master'))}>
       <IndexRoute getComponent={asyncHostList}/>
       <Route path=":hostname" getComponent={asyncHostWrapper}>
-        <IndexRoute getComponent={asyncHostFile}/>
-        <Route path="file" getComponent={asyncHostFile}/>
+        <IndexRedirect to="file" />
+        <Route path="file**" getComponent={asyncHostFile}/>
         <Route path="setting" component={require('../components/Drive/Setting')}/>
         <Route path="location">
           <IndexRoute getComponent={asyncLocation}/>

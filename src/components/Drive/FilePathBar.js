@@ -14,11 +14,11 @@ class FilePathBar extends Component {
 
     return (
       <div className={css(styles.path)}>
-        <Link className={linkClass} to={`${hrefPrefix}?path=/`}>{driveName}</Link>
+        <Link className={linkClass} to={`${hrefPrefix}/file`}>{driveName}</Link>
         {
           parsed.map((dirname, index) => {
-            const currentLink = `${hrefPrefix}?path=${prevPath}/${dirname}`;
-            prevPath = `${prevPath}/${dirname}`;
+            const currentLink = `${hrefPrefix}${prevPath}/file/${dirname}`;
+            prevPath = `${prevPath}/file/${dirname}`;
             return (
               <span key={index}>
                 <span className={css(styles.separator)}>/</span>

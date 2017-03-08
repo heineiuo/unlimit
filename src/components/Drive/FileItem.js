@@ -8,6 +8,7 @@ class FileItem extends Component {
 
 
   state = {
+    selectState: 0,
     mouseOver: false
   };
 
@@ -28,20 +29,43 @@ class FileItem extends Component {
     })
   };
 
+  _toggleSelect = (state) => {
+    const selectState = state || (this.state.selectState == 2?0:2);
+    this.setState({
+      selectState,
+    });
+
+    this.props.onToggleSelect(selectState, this.props.item);
+  };
+
+  toggleSelect = (e) => {
+    this._toggleSelect();
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  select = () => {
+    this._toggleSelect(2)
+  };
+
   render() {
     const {index, item, hrefPrefix, path} = this.props;
-    const {mouseOver} = this.state;
+    const {mouseOver, selectState} = this.state;
 
     return (
       <div
-        className={css(styles.fileItem, mouseOver && styles.fileItem_hover)}
+        onClick={this.select}
+        className={css(styles.fileItem, mouseOver && styles.fileItem_hover, selectState == 2 && styles.fileItem_selected)}
         onMouseOut={this.onMouseOut}
         onMouseOver={this.onMouseOver}>
-        <div className={css(styles.index)}>{index + 1}</div>
+        {/*<div className={css(styles.index)}>{index + 1}</div>*/}
+        <div className={css(styles.index)} onClick={this.toggleSelect}>
+          {selectState == 2?1:0}
+        </div>
         <div className={css(styles.name)}>
           <Link
             className={css(styles.name__text)}
-            to={`${hrefPrefix}?path=${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
+            to={`${hrefPrefix}/file${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
         </div>
         <div className={css(styles.size)}>
           {filesize(item.stat.size)}
@@ -69,7 +93,12 @@ const styles = StyleSheet.create({
   },
 
   fileItem_hover: {
-    backgroundColor: '#EEE'
+    backgroundColor: '#EEE',
+  },
+
+  fileItem_selected: {
+    backgroundColor: '#DDD',
+    borderBottom: '1px solid #D2D2D2',
   },
 
   index: {
@@ -104,4 +133,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default module.exports = FileItem
+export default FileItem

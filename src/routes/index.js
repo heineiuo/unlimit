@@ -14,7 +14,7 @@ module.exports = (injectAsyncReducer) => {
     <Route component={connectCheckLogin(require('../components/CheckLogin'))}>
       <Route path="/" getComponent={asyncHome}/>
       <Route path="/drive" getChildRoutes={(location, callback) => {
-        console.error('this should only exec once.');
+        {/*console.error('this should only exec once.');*/}
         require.ensure([], (require) => {
           const routes = createRoutes(require('./drive')(injectAsyncReducer));
           callback(null, routes);
@@ -32,7 +32,7 @@ module.exports = (injectAsyncReducer) => {
           callback(null, routes)
         })
       }} />
-      <Route path="/admin" getChildRoutes={async (location, callback) => {
+      <Route path="/console" getChildRoutes={async (location, callback) => {
         const admin = await SystemJS.import('smile-admin');
         const routes = createRoutes(admin(injectAsyncReducer));
         callback(null, routes)
