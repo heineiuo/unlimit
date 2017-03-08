@@ -3,7 +3,7 @@ import {StyleSheet, css} from "aphrodite/no-important"
 import Button from "react-sea/lib/Button"
 import path from 'path'
 import IntegrateApp from "../IntegrateApp"
-import Modal from "react-modal"
+// import Modal from "react-modal"
 // import utf8 from 'utf8'
 
 const matchAppByPathname = (pathname) => {
@@ -37,8 +37,16 @@ class FileInfo extends Component {
     })
   };
 
-  closeModal = () => {
+  toggleFullScreen = () => {
+    const {infoState} = this.state;
     this.setState({
+      infoState: infoState == 0? 0: infoState==1?2:1
+    })
+  };
+
+  closeEdit = () => {
+    this.setState({
+      infoState: 0,
       appName: null,
       showModal: false,
     })
@@ -53,7 +61,7 @@ class FileInfo extends Component {
     const blobUrl = 'data:image;base64,'+buffer.toString('base64');
 
     return (
-      <div>
+      <div style={{paddingTop: 10}}>
         <div className={css(styles.fileInfo, infoState == 0 && styles.fileInfo_show)}>
           <div className={css(styles.info)}>
             <div>
@@ -81,38 +89,36 @@ class FileInfo extends Component {
           </div>
           <div className={css(styles.preview)}>
             <div>预览：</div>
-            <div>
+            <div className={css(styles.preview__box)}>
               {
-                (matchApp.length == 0 || matchApp[0].type != 'image')? <div>该文件无法预览</div>:
+                (matchApp.length == 0 || matchApp[0].type != 'image')?
+                  <div className={css(styles.preview__normal)}>{matchApp[0].type}</div>:
                   <img className={css(styles.preview__img)} src={blobUrl} alt=""/>
               }
             </div>
           </div>
 
         </div>
-        <Modal
-          overlayClassName={css(styles.modal__overlay)}
-          className={css(styles.modal__content)}
-          isOpen={this.state.showModal}
-          contentLabel="IntegrateAppModal">
-          {
-            !this.state.showModal ? null : (
-              <div>
-                {/*<a*/}
-                {/*href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${pathname}`}*/}
-                {/*target="_blank">text editor</a>*/}
-                <IntegrateApp
-                  pathname={pathname}
-                  hostname={hostname}
-                  injectAsyncReducer={injectAsyncReducer}
-                  appName={this.state.appName}
-                />
-                <div onClick={this.closeModal} className={css(styles.modal__closeBtn)}>关闭应用</div>
+        {
+          infoState == 0 ? null:
+            <div className={css(styles.edit, infoState == 2 && styles.edit_fullScreen)}>
+              {/*<a*/}
+              {/*href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${pathname}`}*/}
+              {/*target="_blank">text editor</a>*/}
 
+              <div className={css(styles.appToolBar)} style={infoState==2?{position: 'absolute'}:{}}>
+                <div onClick={this.toggleFullScreen} className={css(styles.appToolBar__btn)}>全屏</div>
+                <div onClick={this.closeEdit} className={css(styles.appToolBar__btn)}>关闭应用</div>
               </div>
-            )
-          }
-        </Modal>
+              <IntegrateApp
+                pathname={pathname}
+                hostname={hostname}
+                injectAsyncReducer={injectAsyncReducer}
+                appName={this.state.appName}
+              />
+            </div>
+
+        }
       </div>
 
     )
@@ -138,21 +144,51 @@ const styles = StyleSheet.create({
   },
 
   preview: {
-    flex: 1
+    flex: 1,
+  },
+
+  preview__box: {
+    border: '1px solid #E9E9E9'
+  },
+
+  preview__normal: {
+    height: '300px',
+    lineHeight: '300px',
+    textAlign: 'center'
   },
 
   preview__img: {
     maxWidth: '100%'
   },
 
-  modal__closeBtn: {
-    position: 'absolute',
-    right: 0,
+
+  edit: {
+    display: 'block'
+  },
+
+  edit_fullScreen: {
+    position: 'fixed',
     top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: '#FFF',
+    zIndex: 2000,
+  },
+
+  ///////////
+
+  appToolBar: {
+    display: 'flex',
+    flexDirection: 'flex-end',
+    alignItems: 'center',
+    zIndex: 1001
+  },
+
+  appToolBar__btn: {
     backgroundColor: 'rgba(0,0,0,0.6)',
     color: '#FFF',
     padding: '4px 10px',
-    zIndex: 1000,
     cursor: 'pointer'
   },
 

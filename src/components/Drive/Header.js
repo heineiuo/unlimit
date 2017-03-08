@@ -43,9 +43,7 @@ class Header extends Component {
     return (
       <div className={css(styles.headerBar)}>
         <div style={{display: 'flex'}}>
-          <Link to="/drive" style={{textDecoration: 'none', marginRight: 10}}>
-            <Title title="协作空间"/>
-          </Link>
+          <Title title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
           <span>
             <DropDown ref={dropdown => this.dropdown=dropdown}>
               <DropDownTrigger>

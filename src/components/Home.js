@@ -6,6 +6,7 @@ import {Logo} from 'react-sea/lib/Smile'
 import Background from 'react-sea/lib/Background'
 import {Link} from 'react-router'
 import Particle from './Particle'
+import Title from './Title'
 
 class Home extends Component {
 
@@ -34,12 +35,13 @@ class Home extends Component {
           <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
           <Background bgColor="#efeff4" />
           <div className={css(styles.headerBar)}>
-            <div style={{padding: '0 20px', display: 'flex'}}>
-              <Link to="/" style={{display: 'flex', textDecoration: 'none'}}>
-                <Logo color="#f56455"/>
-                <span style={{color: '#f56455'}}>右括号</span>
-              </Link>
-            </div>
+            {/*<div style={{padding: '0 20px', display: 'flex'}}>*/}
+              {/*<Link to="/" style={{display: 'flex', textDecoration: 'none'}}>*/}
+                {/*<Logo color="#f56455"/>*/}
+                {/*<span style={{color: '#f56455'}}>右括号</span>*/}
+              {/*</Link>*/}
+            {/*</div>*/}
+            <Title color="#f56455" title="右括号" style={{textDecoration: 'none', marginRight: 10}}/>
             <div>
 
             </div>
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
     height: 56,
     // borderBottom: '1px solid #e2e2e2',
     backgroundColor: '#FFF',
+    padding: '0 20px',
     lineHeight: `${56}px`,
     marginBottom: 10,
   },
