@@ -5,50 +5,28 @@ import path from 'path'
 import IntegrateApp from "../IntegrateApp"
 // import Modal from "react-modal"
 // import utf8 from 'utf8'
-
-const matchAppByPathname = (pathname) => {
-  const extname = path.extname(pathname);
-  const all = [
-    {appName: 'preview', type: 'image', support: ['.png', '.jpg', '.gif', '.jpeg']},
-    {appName: 'familytree', type: 'graph', prettyName: 'Family Tree', support: ['.familytree']},
-    {appName: 'smile-text-editor', type: 'code', prettyName: 'Ace', support: ['.js', '.html', '.css', '.json', '.xml', '']}
-  ];
-  const result = [];
-  all.forEach(item => {
-    if (item.support.indexOf(extname) > -1 ) {
-      result.push(item)
-    }
-  });
-  return result;
-};
+import {appmeta, matchAppByPathname} from './appmeta'
 
 class FileInfo extends Component {
 
   state = {
     infoState: 0, // 0 preview, 1 edit, 2, edit in full screen
-    showModal: false
   };
 
   _open = (appName) => {
+    const {pathname, hostname} = this.props;
+    this.integrateApp.open({
+      hostname, pathname, appName
+    });
     this.setState({
       infoState: 1,
       appName,
-      showModal: true
     })
   };
 
-  toggleFullScreen = () => {
-    const {infoState} = this.state;
+  handleCloseIntegrateApp = () => {
     this.setState({
-      infoState: infoState == 0? 0: infoState==1?2:1
-    })
-  };
-
-  closeEdit = () => {
-    this.setState({
-      infoState: 0,
-      appName: null,
-      showModal: false,
+      infoState: 0
     })
   };
 
@@ -99,26 +77,11 @@ class FileInfo extends Component {
           </div>
 
         </div>
-        {
-          infoState == 0 ? null:
-            <div className={css(styles.edit, infoState == 2 && styles.edit_fullScreen)}>
-              {/*<a*/}
-              {/*href={`${THIS_HOST}/#/integrateapp/smile-text-editor?hostname=${host.hostname}&path=${pathname}`}*/}
-              {/*target="_blank">text editor</a>*/}
-
-              <div className={css(styles.appToolBar)} style={infoState==2?{position: 'absolute'}:{}}>
-                <div onClick={this.toggleFullScreen} className={css(styles.appToolBar__btn)}>全屏</div>
-                <div onClick={this.closeEdit} className={css(styles.appToolBar__btn)}>关闭应用</div>
-              </div>
-              <IntegrateApp
-                pathname={pathname}
-                hostname={hostname}
-                injectAsyncReducer={injectAsyncReducer}
-                appName={this.state.appName}
-              />
-            </div>
-
-        }
+          <IntegrateApp
+            ref={ref => this.integrateApp = ref}
+            injectAsyncReducer={injectAsyncReducer}
+            onClose={this.handleCloseIntegrateApp}
+          />
       </div>
 
     )
@@ -162,35 +125,6 @@ const styles = StyleSheet.create({
   },
 
 
-  edit: {
-    display: 'block'
-  },
-
-  edit_fullScreen: {
-    position: 'fixed',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: '#FFF',
-    zIndex: 2000,
-  },
-
-  ///////////
-
-  appToolBar: {
-    display: 'flex',
-    flexDirection: 'flex-end',
-    alignItems: 'center',
-    zIndex: 1001
-  },
-
-  appToolBar__btn: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    color: '#FFF',
-    padding: '4px 10px',
-    cursor: 'pointer'
-  },
 
   // modal
   modal__content: {

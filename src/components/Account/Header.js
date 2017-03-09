@@ -41,7 +41,7 @@ class Header extends Component {
 
     return (
       <div className={css(styles.headerBar)}>
-        <Title title="账号" />
+        <Title color="rgb(255, 145, 0)" title="账号" />
         {/*<div>{nav.title}</div>*/}
         <div style={{display: 'flex'}}>
           <Link to="/account">我</Link>

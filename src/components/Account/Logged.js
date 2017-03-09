@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   },
 
   itemContent: {
-    display: 'inline-block',
     maxWidth: 450,
     lineHeight: '30px'
   },

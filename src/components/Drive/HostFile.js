@@ -10,6 +10,7 @@ import urlencode from "form-urlencoded"
 import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
+import CreateFileModal from './CreateFileModal'
 
 class HostFile extends Component {
 
@@ -62,6 +63,9 @@ class HostFile extends Component {
     setTitle(`${host.hostname} - 文件`);
   };
 
+  openCreateFileModal = () => {
+    this.createFileModal.open();
+  };
 
   render() {
     const {selected} = this.state;
@@ -98,33 +102,36 @@ class HostFile extends Component {
                   hrefPrefix={hrefPrefix}
                   pathname={path} />
                 <div className={css(styles.headerBar__tools)} style={isFile?{display: 'none'}:{}}>
-                  {/*展示样式*/}
+                  {/*选中操作*/}
                   {
                     selected.length == 0 ? null:
-                      <div>
-                        <div>删除</div>
-                        <div>移动</div>
+                      <div className={css(styles.headerBar__toolItem)}>
+                        <span>删除</span>
+                        <span>移动</span>
                       </div>
                   }
-                  <div>
-                    <span>列表</span>
+                  {/*展示样式*/}
+                  <div className={css(styles.headerBar__toolItem)} style={{border: '1px solid #AAA'}}>
+                    <span>列表</span>|
                     <span>图标</span>
                   </div>
                   {/*剪贴板*/}
-                  <div>
-                    <span>剪贴板</span>
+                  <div className={css(styles.headerBar__toolItem)} style={{border: '1px solid #AAA'}}>
+                    <span>添加到剪贴板</span>
+                    <span>v</span>
                   </div>
                   {/*上传*/}
-                  <div>
+                  <div className={css(styles.headerBar__toolItem)}>
                     <Upload
                       onSuccess={this._handleUploadSuccess}
                       action={uploadAction}>
-                      <div style={{width: 80}}>
-                        <Button type="primary" size="small">上传文件</Button>
-                      </div>
+                      <Button type="primary" size="small">上传文件</Button>
                     </Upload>
                   </div>
-                  {/*选中操作*/}
+                  {/*新建文件*/}
+                  <div className={css(styles.headerBar__toolItem)}>
+                    <Button onClick={this.openCreateFileModal} type="primary" size="small">新建文件</Button>
+                  </div>
                 </div>
               </div>
               {
@@ -161,6 +168,7 @@ class HostFile extends Component {
                           </div>
                         </div>
                     }
+                    <CreateFileModal ref={ref => this.createFileModal = ref}/>
                   </div>
               }
             </div>
@@ -180,7 +188,13 @@ const styles = StyleSheet.create({
   },
 
   headerBar__tools: {
-    display: 'flex'
+    display: 'flex',
+    flexDirection: 'row',
+  },
+
+  headerBar__toolItem: {
+    flex: 1,
+    whiteSpace: 'nowrap'
   },
 
   listViewBar: {

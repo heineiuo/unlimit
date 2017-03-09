@@ -47,7 +47,6 @@ class Home extends Component {
             </div>
             <div style={{padding: '12px 20px 0', display: 'flex'}}>
               {/*<Link className={css(styles.navItem)} to="/post">写文章</Link>*/}
-              <Link className={css(styles.navItem)} to="/drive">空间</Link>
               <DropDown className={css(styles.navItem)}>
                 <DropDownTrigger>
                   <div className={css(styles.avatar)}>我</div>
