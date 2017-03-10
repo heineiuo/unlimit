@@ -36,10 +36,6 @@ export default handleActions({
     return Object.assign({}, state, {hostList: nextHostList})
   },
 
-  HOST_DEFAULT_UPDATE (state, action) {
-
-  },
-
   HOST_REMOVE (state, action) {
     const nextHostList = state.hostList.filter(item => {
       return item.hostname != action.payload.hostname
@@ -47,7 +43,6 @@ export default handleActions({
     return Object.assign({}, state, {hostList: nextHostList})
 
   },
-
 
   HOST_LOCATION_UPDATE (state, action) {
     return Object.assign({}, state, action.payload, {
@@ -76,13 +71,6 @@ export default handleActions({
     })
   },
 
-  HOST_LOCATION_SORT_UPDATE (state, action) {
-
-  },
-
-  HOST_LOCATION_REMOVE (state, action) {
-
-  }
 }, initialState)
 
 
@@ -266,109 +254,3 @@ export const commitLocations = (hostname, locations) => async(dispatch, getState
   }
 };
 
-
-/**
- * 排序,设置优先级
- * @returns {function()}
- */
-export const editLocationSort = (hostname, location, arrow) => async(dispatch, getState) => {
-  try {
-    const {token} = getState().account;
-    const {sort, pathname} = location;
-    const nextSort = sort + (arrow=='up'?-1:1);
-    if (nextSort < 1) return false;
-    const response = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      reducerName: 'Location',
-      action: 'UpdateSort',
-      token,
-      hostname,
-      pathname,
-      nextSort
-    });
-    if (response.error) throw new Error(response.error);
-
-    // 直接获取一下新的列表
-    const data = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'location',
-      action: 'list',
-      token,
-      hostname
-    });
-    if (data.error) throw data.error;
-    dispatch({
-      type: "HOST_LOCATION_UPDATE",
-      payload: {
-        hostname,
-        locations: data.location.locations
-      }
-    })
-  } catch(e){
-    console.log(e.stack);
-    alert(e.message)
-  }
-};
-
-
-/**
- * 新建路由
- * @param hostname
- * @param nextLocation
- * @returns {function()}
- */
-export const createLocation = (hostname, nextLocation) => async(dispatch, getState) => {
-  try {
-    const {token} = getState().account;
-    const {pathname, cors, type, contentType, content} = nextLocation;
-    const response = await POSTRawJSON( `${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'location',
-      action: 'New',
-      token, hostname, pathname, cors, type, contentType, content
-    });
-    if (response.error) throw new Error(response.error);
-    dispatch({
-      type: 'HOST_LOCATION_ADD',
-      payload: {
-        nextLocation: nextLocation
-      }
-    })
-  } catch (e) {
-    console.log(e)
-  }
-};
-
-/**
- * 编辑路由
- * @param hostname
- * @param nextLocation
- * @returns {function()}
- */
-export const editLocation = (hostname, nextLocation) => async(dispatch, getState) => {
-  try {
-    const {token} = getState().account;
-    const {pathname, cors, type, contentType='text', content} = nextLocation;
-    const response = await POSTRawJSON( `${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'location',
-      action: 'edit',
-      token,
-      hostname,
-      pathname,
-      cors,
-      type,
-      contentType,
-      content
-    });
-
-    if (response.error) throw new Error(response.error);
-    dispatch({
-      type: 'HOST_LOCATION_EDIT',
-      payload: {
-        nextLocation: nextLocation
-      }
-    })
-  } catch(e){
-    console.log(e)
-  }
-};

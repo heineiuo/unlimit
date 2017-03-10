@@ -25,7 +25,7 @@ module.exports = (injectAsyncReducer) => {
 
   const asyncHome = (partialNextState, callback) => {
     require.ensure([], (require) => {
-      const Home = require('../components/Home');
+      const Home = require('../components/Home/Home');
       const HomeConnect = connect(
         (store) => ({
           account: store.account,

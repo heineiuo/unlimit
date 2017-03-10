@@ -5,9 +5,9 @@ import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown
 import {Logo} from 'react-sea/lib/Smile'
 import Background from 'react-sea/lib/Background'
 import {Link} from 'react-router'
-import Particle from './Particle'
-import Title from './common/Title'
-import ProfileDropDown from './common/ProfileDropDown'
+import Particle from '../common/Particle'
+import Title from '../common/Title'
+import ProfileDropDown from '../common/ProfileDropDown'
 import MessageList from './MessageList'
 
 class Home extends Component {

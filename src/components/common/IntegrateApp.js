@@ -5,7 +5,8 @@ import {appmeta} from '../Drive/appmeta'
 
 class IntegrateApp extends Component {
   static defaultProps = {
-    onClose: () => {}
+    onClose: () => {},
+    injectAsyncReducer: () => {}
   };
 
   state = {
@@ -13,21 +14,23 @@ class IntegrateApp extends Component {
     appName: '',
     hostname: '',
     pathname: '',
-    fullScreen: false
+    fullScreen: false,
+    isCreated: true
   };
 
   open = async (options) => {
-    const {hostname, pathname, appName} = options;
+    const {hostname, pathname, appName, isCreated=true} = options;
     const {injectAsyncReducer} = this.props;
-    const nextState = {appName, pathname, hostname, appState: 1};
+    const nextState = {appName, pathname, hostname, appState: 1, isCreated};
     if (appmeta.findIndex(app => app.appName == appName) == -1 || !SystemJS.map.hasOwnProperty(appName)) {
       nextState.appState = 3;
       return this.setState(nextState);
     }
     this.setState(nextState);
     try {
-      const app = await SystemJS.import(appName);
-      this.component = app(injectAsyncReducer);
+      const hoc = await SystemJS.import(appName);
+      // todo consider if  injectAsyncReducer is safety or need.
+      this.component = hoc(injectAsyncReducer);
       nextState.appState = 2
     } catch (e) {
       console.error(e);
@@ -53,7 +56,7 @@ class IntegrateApp extends Component {
   };
 
   render() {
-    const {fullScreen, appState, appName, hostname, pathname} = this.state;
+    const {fullScreen, appState, appName, hostname, pathname, isCreated} = this.state;
     return appState == 4 ? (
         <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>{`app(${appName})加载失败:(`}</div>
       ) :
@@ -75,7 +78,8 @@ class IntegrateApp extends Component {
                       appState,
                       appName,
                       hostname,
-                      pathname
+                      pathname,
+                      isCreated
                     })
                   }
               </div>
