@@ -4,8 +4,10 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import { push } from 'react-router-redux'
 
-import host, {createHost, getHostList, deleteHost, editLocation, createLocation,
-  switchHost, getLocation, editLocationSort} from '../store/host'
+import host, {
+  createHost, getHostList, deleteHost,
+  getLocations, commitLocations
+} from '../store/host'
 import file, {restoreFileList, getFileList, deleteFile} from '../store/file'
 import nav, {setTitle} from '../store/nav'
 
@@ -14,7 +16,6 @@ module.exports = (injectAsyncReducer) => {
   injectAsyncReducer('host', host);
   injectAsyncReducer('file', file);
   injectAsyncReducer('nav', nav);
-
 
   const connectDriveMaster = connect(
     (store) => ({
@@ -29,24 +30,6 @@ module.exports = (injectAsyncReducer) => {
     }, dispatch)
   );
 
-  const asyncLocationDetail = (partialNextState, callback) => {
-    require.ensure([], (require) => {
-      const Component = require('../components/Drive/LocationDetail');
-      const ConnectedComponent = connect(
-        (state) => ({
-          host: state.host,
-        }),
-        (dispatch) => bindActionCreators({
-          push,
-          setTitle,
-          editLocation,
-          createLocation
-        }, dispatch)
-      )(Component);
-      callback(null, ConnectedComponent)
-    })
-  };
-
   const asyncHostList = (nextRoute, callback) => {
     const Component = require('../components/Drive/HostList');
     const ConnectedComponent = connect(
@@ -56,7 +39,6 @@ module.exports = (injectAsyncReducer) => {
       (dispatch) => bindActionCreators({
         push,
         setTitle,
-        switchHost,
         getHostList,
         restoreFileList
       }, dispatch)
@@ -73,7 +55,6 @@ module.exports = (injectAsyncReducer) => {
       (dispatch) => bindActionCreators({
         push,
         setTitle,
-        switchHost,
         getHostList,
         restoreFileList
       }, dispatch)
@@ -91,7 +72,6 @@ module.exports = (injectAsyncReducer) => {
       }),
       (dispatch) => bindActionCreators({
         push,
-        switchHost,
         getFileList,
         deleteFile,
         setTitle,
@@ -117,11 +97,13 @@ module.exports = (injectAsyncReducer) => {
         (dispatch) => bindActionCreators({
           push,
           setTitle,
-          getLocation,
-          switchHost,
+          getLocations,
           getHostList,
-          editLocationSort,
-          restoreFileList
+          commitLocations,
+          restoreFileList,
+          //editLocationSort,
+          // editLocation,
+          // createLocation
         }, dispatch)
       )(Component);
       callback(null, ConnectedComponent)
@@ -136,11 +118,7 @@ module.exports = (injectAsyncReducer) => {
         <IndexRedirect to="file" />
         <Route path="file**" getComponent={asyncHostFile}/>
         <Route path="setting" component={require('../components/Drive/Setting')}/>
-        <Route path="location">
-          <IndexRoute getComponent={asyncLocation}/>
-          <Route path="new" getComponent={asyncLocationDetail}/>
-          <Route path="pathname" getComponent={asyncLocationDetail}/>
-        </Route>
+        <Route path="location" getComponent={asyncLocation} />
       </Route>
     </Route>
   )

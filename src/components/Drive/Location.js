@@ -1,97 +1,119 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import Paper from 'react-sea/lib/Paper'
-import Button from 'react-sea/lib/Button'
 import Input from 'react-sea/lib/Input'
 import MdArrowUpward from 'react-sea/lib/Icons/arrow-upward'
 import MdArrowDownward from 'react-sea/lib/Icons/arrow-downward'
 import { StyleSheet, css } from 'aphrodite'
+import Button from 'react-sea/lib/Button'
 import Spin from 'react-spin'
+import LocationItem from './LocationItem'
 
 class Location extends Component {
 
-  componentWillMount = () => {
-    const {getLocation, setTitle, params, host} = this.props;
-    getLocation(host.hostname);
-    setTitle(`${host.hostname} - 路由列表`);
+  state = {
+    locations: []
+  };
+
+  componentDidMount = () => {
+    const {getLocations, params: {hostname}} = this.props;
+    getLocations(hostname);
   };
 
   componentWillReceiveProps = (nextProps) => {
-    const {getLocation, setTitle, params, host} = this.props;
-    if (nextProps.host.locationState == 0) getLocation(host.hostname)
+    const {locations} = nextProps.host;
+    this.setState({
+      locations: Object.values(locations).map(location => {
+        delete location.sort;
+        return location
+      })
+    })
+  };
+
+  saveLocation = () => {
+    const {params: {hostname}} = this.props;
+    const {locations} = this.state;
+    console.log(JSON.stringify(this.state.locations));
+    this.props.commitLocations(hostname, locations)
+  };
+
+  handleItemChange = (item) => {
+    const {location, changePart} = item;
+    const {locations} = this.state;
+    // console.log(location.pathname, changePart);
+    const nextLocations = locations.slice();
+    nextLocations.splice(location.sort - 1, 1, Object.assign({}, locations[location.sort - 1], changePart));
+    // console.log(nextLocations);
+    this.setState({
+      locations: nextLocations
+    })
+  };
+
+  // 先把原来位置的删掉，再在目标位置添加
+  editLocationSort = (location, nextSort) => {
+    const {locations} = this.state;
+    const nextLocations = locations.slice();
+    if (nextSort < 1 || nextSort > locations.length) return false;
+    nextLocations.splice(location.sort - 1 , 1);
+    nextLocations.splice(nextSort - 1, 0, location);
+    this.setState({
+      locations: nextLocations
+    })
+  };
+
+  addLocation = () => {
+    this.setState({
+      locations: this.state.locations.slice().concat({
+        pathname: '/^.*$/',
+        type: 'HTML',
+        content: ''
+      })
+    })
   };
 
   render () {
-    const {editLocationSort, host} = this.props;
-    const {hostname} = host;
+    const {host: {locationState}, params: {hostname}} = this.props;
+    const {locations} = this.state;
+
     return (
       <div style={{padding: '20px 0', margin: '0 auto', maxWidth: 1000}}>
         {
-          host.locationState < 2?
+          locationState < 2?
             <Spin />:
             <div>
-              <div className={css(styles.titlebar, styles.clearfix)}>
-                {/*<Link to={`/drive/${host.hostname}`} style={{float: 'left'}}>{host.hostname}</Link>*/}
-                <a href={`http://${host.hostname}`} target="_blank">预览</a>
-              </div>
-              <div className={css(styles.titlebar, styles.clearfix)}>
-                <div style={{float: 'left'}}>路由列表</div>
-                <Link to={`/drive/${host.hostname}/location/new`}  style={{float: 'left'}}>
-                  <Button type="primary" size="small">新建</Button>
-                </Link>
+              <div className={css(styles.titleBar)}>
+                <div>路由列表</div>
+                <div>
+                  <Button onClick={this.saveLocation}>保存</Button>
+                </div>
               </div>
               <div className={css(styles.locationList)}>
-                { (() => {
-                  if (host.locations.length==0) return <div>路由列表为空</div>
-                  return (
-                    <table>
-                      <thead>
-                      <tr>
-                        <th>路由</th>
-                        <th>优先级</th>
-                        <th>类型</th>
-                        <th>操作</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {(() => {
-                        return Object.values(host.locations).sort((a,b) => a.sort - b.sort).map((location, index)=>{
-                          return (
-                            <tr key={location.pathname}>
-                              <td><code>{location.pathname}</code></td>
-                              <td>
-                                <div>
-                                  <button
-                                    disabled={location.sort==1}
-                                    onClick={() => location.sort!=1 & editLocationSort(hostname, location, 'up')}>
-                                    <MdArrowUpward />
-                                  </button>
-                                  <button>{location.sort}</button>
-                                  <button
-                                    disabled={location.sort==Object.values(host.locations).length}
-                                    onClick={() => location.sort!=Object.values(host.locations).length & editLocationSort(hostname, location, 'down')}>
-                                    <MdArrowDownward />
-                                  </button>
-                                </div>
-                              </td>
-                              <td><code>{location.type}</code></td>
-                              <td>
-                                <div className="btn-group">
-                                  <Link to={`/drive/${host.hostname}/location/pathname?pathname=${location.pathname}`}>详情</Link>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        })
-                      })()}
-                      </tbody>
-                    </table>
-                  )
-                })()}
+                <div className={css(styles.table)}>
+                  <div className={css(styles.table__head)}>
+                    <div style={{width: 100}}>优先级</div>
+                    <div style={{flex: 1}}>路由</div>
+                    <div style={{flex: 1}}>类型</div>
+                    <div style={{flex: 1}}>操作</div>
+                  </div>
+                  <div className={css(styles.table__body)}>
+                    {
+                      locations.length==0 ? <div>路由列表为空</div>:
+                        locations.map((location, index) => (
+                          <LocationItem
+                            locationLength={locations.length}
+                            location={Object.assign({}, location, {sort: index+1})}
+                            onChange={this.handleItemChange}
+                            editLocationSort={this.editLocationSort}
+                            key={`${index}`} />
+                        ))
+                    }
+                  </div>
+                </div>
+                <div>
+                  <Button onClick={this.addLocation} style={{width: 100}} type="primary" size="small">增加</Button>
+                </div>
               </div>
             </div>
         }
-
       </div>
 
     )
@@ -99,19 +121,27 @@ class Location extends Component {
 }
 
 const styles = StyleSheet.create({
-  titlebar: {
+  titleBar: {
     marginBottom: 20,
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: '5px 0',
   },
+  locationList: {
 
-  clearfix: {
-    ':after': {
-      clear: 'both',
-      fontSize: 0,
-      height: 0,
-      content: '""',
-      display: 'table'
-    }
+  },
+  table__head: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: '#F1F1F5',
+    padding: '5px 10px',
+
+  },
+  table__body: {
+
   }
+
 
 });
 

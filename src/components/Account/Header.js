@@ -6,7 +6,8 @@ import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
-import Title from '../Title'
+import Title from '../common/Title'
+import ProfileDropDown from '../common/ProfileDropDown'
 
 class Header extends Component {
 
@@ -43,9 +44,7 @@ class Header extends Component {
       <div className={css(styles.headerBar)}>
         <Title color="rgb(255, 145, 0)" title="账号" />
         {/*<div>{nav.title}</div>*/}
-        <div style={{display: 'flex'}}>
-          <Link to="/account">我</Link>
-        </div>
+        <ProfileDropDown />
 
       </div>
     )

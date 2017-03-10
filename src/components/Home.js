@@ -6,7 +6,9 @@ import {Logo} from 'react-sea/lib/Smile'
 import Background from 'react-sea/lib/Background'
 import {Link} from 'react-router'
 import Particle from './Particle'
-import Title from './Title'
+import Title from './common/Title'
+import ProfileDropDown from './common/ProfileDropDown'
+import MessageList from './MessageList'
 
 class Home extends Component {
 
@@ -45,33 +47,10 @@ class Home extends Component {
             <div>
 
             </div>
-            <div style={{padding: '12px 20px 0', display: 'flex'}}>
-              {/*<Link className={css(styles.navItem)} to="/post">写文章</Link>*/}
-              <DropDown className={css(styles.navItem)}>
-                <DropDownTrigger>
-                  <div className={css(styles.avatar)}>我</div>
-                </DropDownTrigger>
-                <DropDownContent>
-                  <Link to="/account">账号</Link>
-                </DropDownContent>
-              </DropDown>
-            </div>
+            <ProfileDropDown />
           </div>
 
-          <div style={{paddingTop: 76, margin: '0 auto', width: '100%', maxWidth: 1000}}>
-            {
-              postList.list.map(item => (
-                <div key={item._key} className={css(styles.item)}>
-                  <Link to={`/post/${item._key}`}>
-                    <div>
-                      <div className="title">{item.title}</div>
-                      <div>{String(new Date(item.time||Date.now()))}</div>
-                    </div>
-                  </Link>
-                </div>
-              ))
-            }
-          </div>
+          <MessageList postList={postList} />
         </div>
       )
   }
@@ -97,34 +76,6 @@ const styles = StyleSheet.create({
     lineHeight: `${56}px`,
     marginBottom: 10,
   },
-
-  navItem: {
-    padding: '0 12px',
-    textDecoration: 'none',
-    lineHeight: `${32}px`,
-    color: 'rgba(103,103,139,.8)'
-  },
-
-  navItem_active: {
-    color: '#1185fe'
-  },
-
-  avatar: {
-    borderRadius: 20,
-    width: 32,
-    height: 32,
-    backgroundColor: '#83121a',
-    lineHeight: `${32}px`,
-    textAlign: 'center',
-    color: '#FFF'
-  },
-
-  item: {
-    backgroundColor: '#FFF',
-    minHeight: 80,
-    borderBottom: '1px solid #D9D9D9'
-  }
-
 
 });
 

@@ -33,7 +33,7 @@ class CreateFileModal extends Component {
         <div>
           {
             pickoutPreview(appmeta).map(app => (
-              <div className={css(styles.appTypeItem)}>
+              <div key={app.appName} className={css(styles.appTypeItem)}>
                 <div>{app.type}</div>
                 <div>{app.prettyName}</div>
               </div>

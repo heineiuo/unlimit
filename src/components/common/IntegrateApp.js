@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import Spin from "react-spin"
 import {css, StyleSheet} from "aphrodite/no-important"
-import {appmeta} from './Drive/appmeta'
+import {appmeta} from '../Drive/appmeta'
 
 class IntegrateApp extends Component {
   static defaultProps = {

@@ -28,7 +28,7 @@ class HostFile extends Component {
     const nextPath = nextProps.params.splat;
 
     if (nextProps.file.fileState == 0) {
-      setTitle(`${nextProps.host.hostname} - 文件`);
+      setTitle(`${nextProps.params.hostname} - 文件`);
       return getFileList(params.hostname, '/');
     }
 
@@ -60,7 +60,7 @@ class HostFile extends Component {
   _handleUploadSuccess = () => {
     const {setTitle, getFileList, host, params: {hostname, splat}} = this.props;
     getFileList(hostname, splat);
-    setTitle(`${host.hostname} - 文件`);
+    setTitle(`${hostname} - 文件`);
   };
 
   openCreateFileModal = () => {

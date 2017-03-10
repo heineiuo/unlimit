@@ -6,7 +6,7 @@ import { push } from 'react-router-redux'
 
 import {checkLogin} from '../store/account'
 import {getPostList} from '../store/feed/postList'
-import Title from '../components/Title'
+import Title from '../components/common/Title'
 
 
 module.exports = (injectAsyncReducer) => {

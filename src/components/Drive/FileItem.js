@@ -6,15 +6,9 @@ import {Link} from "react-router"
 
 class FileItem extends Component {
 
-
   state = {
     selectState: 0,
     mouseOver: false
-  };
-
-  deleteFile = () => {
-    const {deleteFile, item} = this.props;
-
   };
 
   onMouseOver = () => {
@@ -27,6 +21,11 @@ class FileItem extends Component {
     this.setState({
       mouseOver: false
     })
+  };
+
+  deleteFile = () => {
+    const {deleteFile, item} = this.props;
+
   };
 
   _toggleSelect = (state) => {

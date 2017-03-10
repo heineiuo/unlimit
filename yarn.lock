@@ -3064,6 +3064,10 @@ slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
 
+smile-web@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/smile-web/-/smile-web-0.0.4.tgz#d05e225e5ffe5f3b6fc6e90b7109e27d2653f729"
+
 sntp@1.x.x:
   version "1.0.9"
   resolved "https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz#6541184cc90aeea6c6e7b35e2659082443c66198"

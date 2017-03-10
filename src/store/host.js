@@ -88,7 +88,7 @@ export default handleActions({
 
 
 /**
- * 渲染我的app列表
+ * 更新我的app列表
  */
 export const getHostList = (currentHostname=null) => async (dispatch, getState) => {
   try {
@@ -200,14 +200,11 @@ export const deleteHost = (hostname) => async (dispatch, getState) =>{
   }
 };
 
-
-export const switchHost = (hostname) => ({
-  type: 'HOST_SWITCH',
-  payload: {hostname}
-});
-
-
-export const getLocation = (hostname) => async (dispatch, getState) => {
+/**
+ * 更新location列表
+ * @param hostname
+ */
+export const getLocations = (hostname) => async (dispatch, getState) => {
   try {
 
     dispatch({
@@ -239,6 +236,36 @@ export const getLocation = (hostname) => async (dispatch, getState) => {
     console.log(e.stack)
   }
 };
+
+
+
+export const commitLocations = (hostname, locations) => async(dispatch, getState) => {
+  try {
+    const {token} = getState().account;
+    const response = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
+      importAppName: 'gateway',
+      reducerName: 'Location',
+      action: 'commitLocations',
+      token,
+      hostname,
+      locations
+    });
+    if (response.error) throw new Error(response.error);
+
+    dispatch({
+      type: "HOST_LOCATION_UPDATE",
+      payload: {
+        hostname,
+        locations
+      }
+    })
+
+  } catch(e){
+    console.log(e.stack);
+    alert(e.message)
+  }
+};
+
 
 /**
  * 排序,设置优先级

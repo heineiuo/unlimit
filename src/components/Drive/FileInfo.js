@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite/no-important"
 import Button from "react-sea/lib/Button"
 import path from 'path'
-import IntegrateApp from "../IntegrateApp"
+import IntegrateApp from "../common/IntegrateApp"
 // import Modal from "react-modal"
 // import utf8 from 'utf8'
 import {appmeta, matchAppByPathname} from './appmeta'
