@@ -2,7 +2,6 @@ import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite/no-important"
 import Button from "react-sea/lib/Button"
 import path from 'path'
-import IntegrateApp from "../common/IntegrateApp"
 // import Modal from "react-modal"
 // import utf8 from 'utf8'
 import {appmeta, matchAppByPathname} from './appmeta'
@@ -10,37 +9,25 @@ import {appmeta, matchAppByPathname} from './appmeta'
 class FileInfo extends Component {
 
   state = {
-    infoState: 0, // 0 preview, 1 edit, 2, edit in full screen
   };
 
   _open = (appName) => {
-    const {pathname, hostname} = this.props;
-    this.integrateApp.open({
+    const {pathname, hostname, openIntegrateApp} = this.props;
+    openIntegrateApp({
       hostname, pathname, appName
-    });
-    this.setState({
-      infoState: 1,
-      appName,
-    })
-  };
-
-  handleCloseIntegrateApp = () => {
-    this.setState({
-      infoState: 0
     })
   };
 
   render(){
-    const {pathname, injectAsyncReducer, hostname, cat} = this.props;
+    const {pathname, hostname, cat, isIntegrateAppOpen} = this.props;
     const matchApp = matchAppByPathname(pathname);
-    const {infoState} = this.state;
 
     const buffer = new Buffer(cat);
     const blobUrl = 'data:image;base64,'+buffer.toString('base64');
 
     return (
       <div style={{paddingTop: 10}}>
-        <div className={css(styles.fileInfo, infoState == 0 && styles.fileInfo_show)}>
+        <div className={css(styles.fileInfo, !isIntegrateAppOpen && styles.fileInfo_show)}>
           <div className={css(styles.info)}>
             <div>
               <div>文件名：{path.basename(pathname)}</div>
@@ -77,11 +64,6 @@ class FileInfo extends Component {
           </div>
 
         </div>
-          <IntegrateApp
-            ref={ref => this.integrateApp = ref}
-            injectAsyncReducer={injectAsyncReducer}
-            onClose={this.handleCloseIntegrateApp}
-          />
       </div>
 
     )

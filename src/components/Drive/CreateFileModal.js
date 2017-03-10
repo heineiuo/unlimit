@@ -22,6 +22,17 @@ class CreateFileModal extends Component {
     })
   };
 
+  openApp = (app) => {
+    const {appName} = app;
+    const {openIntegrateApp, hostname, pathname} = this.props;
+    openIntegrateApp({
+      appName,
+      isCreated: false,
+      hostname,
+      pathname
+    })
+  };
+
   render(){
     return (
       <Modal
@@ -29,13 +40,16 @@ class CreateFileModal extends Component {
         onRequestClose={this.closeModal}
         style={modalStyle}
         isOpen={this.state.isOpen}>
-        <div>新建文件</div>
+        <div className={css(styles.title)}>选择App创建文件</div>
         <div>
           {
             pickoutPreview(appmeta).map(app => (
-              <div key={app.appName} className={css(styles.appTypeItem)}>
-                <div>{app.type}</div>
+              <div
+                onClick={() => this.openApp(app)}
+                key={app.appName}
+                className={css(styles.appTypeItem)}>
                 <div>{app.prettyName}</div>
+                <div style={{color: '#999'}}>支持: {app.support.join(', ')}</div>
               </div>
             ))
           }
@@ -71,10 +85,25 @@ const modalStyle = {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    backgroundColor: 'rgb(82, 89, 103)',
+    padding: '10px 30px',
+    textAlign: 'center',
+    color: '#FFF'
+  },
   appTypeItem: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    padding: '0px 20px',
+    height: '50px',
+    boxSizing: 'border-box',
+    lineHeight: '50px',
+    cursor: 'pointer',
+    borderBottom: '1px solid #EEE',
+    justifyContent: 'space-between',
+    ":hover": {
+      backgroundColor: '#F8F8F8'
+    }
   }
 });
 

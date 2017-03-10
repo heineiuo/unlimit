@@ -44,8 +44,11 @@ class IntegrateApp extends Component {
     this.setState({
       appState: 0,
       appName: null,
-      fullScreen: false
+      fullScreen: false,
+      hostname: null,
+      pathname: null
     });
+    this.component = null;
     this.props.onClose()
   };
 
@@ -58,7 +61,10 @@ class IntegrateApp extends Component {
   render() {
     const {fullScreen, appState, appName, hostname, pathname, isCreated} = this.state;
     return appState == 4 ? (
-        <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>{`app(${appName})加载失败:(`}</div>
+        <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>
+          <div onClick={this.close} className={css(styles.appToolBar__btn)} style={{width: 100}}>关闭应用</div>
+          <div>{`app(${appName})加载失败:(`}</div>
+        </div>
       ) :
         appState == 3 ? (
           <div>

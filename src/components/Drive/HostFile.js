@@ -11,11 +11,13 @@ import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
+import IntegrateApp from "../common/IntegrateApp"
 
 class HostFile extends Component {
 
   state = {
-    selected: []
+    selected: [],
+    isIntegrateAppOpen: false,
   };
 
   componentWillMount = () => {
@@ -67,8 +69,21 @@ class HostFile extends Component {
     this.createFileModal.open();
   };
 
+  openIntegrateApp = (options) => {
+    this.integrateApp.open(options);
+    this.setState({
+      isIntegrateAppOpen: true
+    })
+  };
+
+  handleCloseIntegrateApp = () => {
+    this.setState({
+      isIntegrateAppOpen: false
+    })
+  };
+
   render() {
-    const {selected} = this.state;
+    const {selected, isIntegrateAppOpen} = this.state;
     const {
       file,
       file: {isFile, cat, ls},
@@ -93,7 +108,9 @@ class HostFile extends Component {
       <div>
         {
           file.fileState < 2 ?
-            <Spin /> :
+            <div style={{height: 300}}>
+              <Spin />
+            </div> :
             <div>
               <div className={css(styles.headerBar)}>
                 <FilePathBar
@@ -101,13 +118,12 @@ class HostFile extends Component {
                   driveName={hostname}
                   hrefPrefix={hrefPrefix}
                   pathname={path} />
-                <div className={css(styles.headerBar__tools)} style={isFile?{display: 'none'}:{}}>
+                <div className={css(styles.headerBar__tools)} style={(isFile || isIntegrateAppOpen)?{display: 'none'}:{}}>
                   {/*选中操作*/}
                   {
                     selected.length == 0 ? null:
                       <div className={css(styles.headerBar__toolItem)}>
-                        <span>删除</span>
-                        <span>移动</span>
+                        <span>批量删除</span>
                       </div>
                   }
                   {/*展示样式*/}
@@ -135,42 +151,55 @@ class HostFile extends Component {
                 </div>
               </div>
               {
-                isFile ?
-                  <FileInfo
-                    cat={cat}
-                    pathname={path}
-                    injectAsyncReducer={injectAsyncReducer}
-                    hostname={hostname}
-                  /> :
-                  <div className={css(styles.fileList)}>
-                    {
-                      !ls.length ?
-                        <div>目录为空</div> :
-                        <div>
-                          <div className={css(styles.listViewBar)}>
-                            <div className={css(styles.listViewBar__index)}>选中</div>
-                            <div className={css(styles.listViewBar__name)}>名称</div>
-                            <div className={css(styles.listViewBar__size)}>大小</div>
-                            <div className={css(styles.listViewBar__options)}>操作</div>
-                          </div>
+                isIntegrateAppOpen ? null:
+                  isFile ?
+                    <FileInfo
+                      cat={cat}
+                      pathname={path}
+                      isIntegrateAppOpen={isIntegrateAppOpen}
+                      openIntegrateApp={this.openIntegrateApp}
+                      hostname={hostname}
+                    /> :
+                    <div className={css(styles.fileList)}>
+                      {
+                        !ls.length ?
+                          <div>目录为空</div> :
                           <div>
-                            {
-                              file.ls.map((item, index) => (
-                                <FileItem
-                                  onToggleSelect={this.handleFileToggleSelect}
-                                  hrefPrefix={hrefPrefix}
-                                  key={item.name}
-                                  index={index}
-                                  path={path}
-                                  item={item} />
-                              ))
-                            }
+                            <div className={css(styles.listViewBar)}>
+                              <div className={css(styles.listViewBar__index)}>选中</div>
+                              <div className={css(styles.listViewBar__name)}>名称</div>
+                              <div className={css(styles.listViewBar__size)}>大小</div>
+                              <div className={css(styles.listViewBar__options)}>操作</div>
+                            </div>
+                            <div>
+                              {
+                                file.ls.map((item, index) => (
+                                  <FileItem
+                                    onToggleSelect={this.handleFileToggleSelect}
+                                    hrefPrefix={hrefPrefix}
+                                    key={item.name}
+                                    index={index}
+                                    path={path}
+                                    item={item} />
+                                ))
+                              }
+                            </div>
                           </div>
-                        </div>
-                    }
-                    <CreateFileModal ref={ref => this.createFileModal = ref}/>
-                  </div>
+                      }
+                      <CreateFileModal
+                        ref={ref => this.createFileModal = ref}
+                        pathname={path}
+                        isIntegrateAppOpen={isIntegrateAppOpen}
+                        openIntegrateApp={this.openIntegrateApp}
+                        hostname={hostname}
+                      />
+                    </div>
               }
+              <IntegrateApp
+                ref={ref => this.integrateApp = ref}
+                injectAsyncReducer={injectAsyncReducer}
+                onClose={this.handleCloseIntegrateApp}
+              />
             </div>
         }
       </div>
