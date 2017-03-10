@@ -51,16 +51,15 @@ module.exports = (config) => {
 
 const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
   try {
-    const sortedLocations = Object.values(locations).sort((a, b) => a.sort > b.sort);
+    // const sortedLocations = Object.values(locations).sort((a, b) => a.sort > b.sort);
     const url = Url.parse(requrl);
 
-    // console.log(sortedLocations);
+    console.log(locations);
 
     /**
      * 通过比对pathname, 找到路由
      */
-
-    const targetLocation = sortedLocations.find(item => {
+    const targetLocation = locations.find(item => {
       const reg = new RegExp(
         item.pathname.substr(1, item.pathname.length - 2).replace('\\\\','\\')
       );

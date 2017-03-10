@@ -5,11 +5,6 @@ import filesystem from 'level-filesystem'
 
 class File extends Model {
 
-  constructor (props) {
-    super();
-    this.fs = filesystem(props.db);
-  }
-
   /**
    * @api {POST} /File/mv 移动、重命名文件
    * @apiGroup File
@@ -34,6 +29,7 @@ class File extends Model {
    */
   mkdir = (req) => new Promise(async (resolve, reject) => {
     try {
+      console.log(this);
       const {hostname, pathname} = req;
       const fs = filesystem(this.props.db);
       await new Promise((resolve, reject) => {
@@ -80,7 +76,7 @@ class File extends Model {
   ls = (req) => new Promise(async (resolve, reject) => {
     try {
       const {pathname, hostname} = req;
-      const fs = this.fs;
+      const fs = filesystem(this.props.db);
       const directory = `${hostname}${pathname}`;
       const files = await new Promise((resolve, reject) => {
         fs.readdir(directory, (err, files) => {
@@ -137,11 +133,12 @@ class File extends Model {
   cat = (req) => new Promise(async (resolve, reject) => {
     try {
       const {hostname, pathname} = req;
-      this.fs.readFile(`${hostname}${pathname}`, (err, cat) => {
+      const fs = filesystem(this.props.db);
+      fs.readFile(`${hostname}${pathname}`, (err, cat) => {
         if (err) {
           const lastParam = pathname.split('/').pop();
           if (lastParam.length =="" || !/\./.test(lastParam)) {
-            this.fs.readFile(path.join(`${hostname}${pathname}`, 'index.html'), (err, cat) => {
+            fs.readFile(path.join(`${hostname}${pathname}`, 'index.html'), (err, cat) => {
               if (err) return reject(err);
               resolve({
                 isFile: true,
@@ -196,8 +193,9 @@ class File extends Model {
   writeFile = (req) => new Promise(async (resolve, reject) => {
     try {
       const {hostname, pathname, filename, content} = req;
-      const {fs} = this;
-      fs.writeFile(`${hostname}${pathname}/${filename}`, content, (err) => {
+      const fs = filesystem(this.props.db);
+
+      fs.writeFile(`${hostname}${pathname}`, content, (err) => {
         if (err) return reject(err);
         resolve({})
       })
@@ -208,6 +206,7 @@ class File extends Model {
   });
 
   resolve(req){
+    console.log(this.props);
 
     const {action} = req;
     if (action == 'cat') return this.cat(req);

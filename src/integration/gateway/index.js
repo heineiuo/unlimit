@@ -48,6 +48,7 @@ const createApp = (db) => {
 
   app.use((err, req, res, next) => {
 
+    console.error(err);
     if (err.name == 'ValidationError') return res.error('PARAM_ILLEGAL');
     if (err.message == 'Command failed') return res.error('COMMAND_FAILED');
 

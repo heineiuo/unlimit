@@ -1,4 +1,3 @@
-
 export default (hub, config) => new Promise(async(resolve, reject) => {
   try {
 
@@ -8,73 +7,65 @@ export default (hub, config) => new Promise(async(resolve, reject) => {
     const {gateway} = hub.integrations;
     const {domain} = config.production.init;
 
-    await gateway.request('gateway', {
+    const step1 = await gateway.request('gateway', {
       reducerName: 'host',
       action: 'Delete',
       hostname: domain
     });
+    if (step1.body.error) throw new Error(step1.body.error);
 
-
-    await gateway.request('gateway', {
+    const step2 = await gateway.request('gateway', {
       reducerName: 'host',
       action: 'New',
       hostname: domain
     });
+    if (step2.body.error) throw new Error(step2.body.error);
 
 
-    await gateway.request('gateway',{
+    const step3 = await gateway.request('gateway', {
       reducerName: 'location',
-      action: 'New',
+      action: 'commitLocations',
       hostname: domain,
-      pathname:'/^\/api\/account.*$/',
-      cors: true,
-      sort: 1,
-      type: 'SEASHELL',
-      contentType: 'TEXT',
-      content: 'account'
-    });
+      locations: [{
+        "pathname": "/^/api/account.*$/",
+        "cors": true,
+        "type": "SEASHELL",
+        "contentType": "TEXT",
+        "content": "account"
+      }, {
+        "pathname": "/^/api/gateway.*$/",
+        "cors": true,
+        "type": "SEASHELL",
+        "contentType": "TEXT",
+        "content": "gateway"
+      }, {
+        "pathname": "/^/api/service.*$/",
+        "cors": true,
+        "type": "SEASHELL",
+        "contentType": "TEXT",
+        "content": "service"
+      }]
 
-    await gateway.request('gateway',{
-      reducerName: 'location',
-      action: 'New',
-      hostname: domain,
-      pathname:'/^\/api\/gateway.*$/',
-      cors: true,
-      sort: 1,
-      type: 'SEASHELL',
-      contentType: 'TEXT',
-      content: 'gateway'
     });
+    if (step3.body.error) throw new Error(step3.body.error);
 
-    await gateway.request('gateway',{
-      reducerName: 'location',
-      action: 'New',
-      hostname: domain,
-      pathname:'/^\/api\/service.*$/',
-      cors: true,
-      sort: 1,
-      type: 'SEASHELL',
-      contentType: 'TEXT',
-      content: 'service'
-    });
-
-    await gateway.request('gateway', {
+    const step4 = await gateway.request('gateway', {
       reducerName: 'file',
       action: 'mkdir',
       hostname: domain,
-      pathname:'/',
+      pathname: '/',
     });
 
-    await gateway.request('gateway',{
+    const step5 = await gateway.request('gateway', {
       reducerName: 'file',
       action: 'mkdir',
       hostname: domain,
-      pathname:'/public',
+      pathname: '/public',
     });
 
     console.log('[gateway] init success');
     resolve()
-  } catch(e){
+  } catch (e) {
     console.log(e.stack);
     reject(e)
   }

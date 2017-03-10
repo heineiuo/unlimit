@@ -93,6 +93,23 @@ class Location extends Model {
 
   });
 
+  commitLocations = (req) => new Promise(async (resolve, reject) => {
+    try {
+      Joi.validate(req, Joi.object().keys({
+        hostname: Joi.string().required(),
+        locations: Joi.array().required(),
+      }), {allowUnknown: true});
+      const {db, reducers} = this.props;
+      const {locations, hostname} = req;
+      const location = await db.get(hostname);
+      location.hostname = hostname;
+      location.locations = locations;
+      await db.put(hostname, location);
+      resolve({success:1});
+    } catch(e){
+      reject(e)
+    }
+  });
 
   edit = (req) => new Promise(async (resolve, reject) => {
     try {
@@ -253,6 +270,7 @@ class Location extends Model {
     if (action == 'Delete') return this.Delete(req);
     if (action == 'edit') return this.edit(req);
     if (action == 'list') return this.list(req);
+    if (action == 'commitLocations') return this.commitLocations(req);
     if (action == 'New') return this.New(req);
     return new Promise((resolve, reject) => reject(new Error('NOT_FOUND')))
 

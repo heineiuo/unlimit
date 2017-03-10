@@ -46,8 +46,7 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
           reducerName: 'file',
           action: 'writeFile',
           hostname,
-          pathname,
-          filename,
+          pathname: pathname + '/' + filename,
           content
         });
         if (transferResult.body.error) throw new Error(transferResult.body.error);

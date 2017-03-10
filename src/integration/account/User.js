@@ -2,6 +2,14 @@
 import uuid from 'uuid'
 import {Model} from 'sprucejs'
 
+/**
+ * @schema
+ * key: userId
+ * value:
+ *  id,
+ *  email,
+ *  role
+ */
 class User extends Model {
 
   _createUser = (options) => new Promise(async (resolve, reject) => {
@@ -29,14 +37,15 @@ class User extends Model {
   userList = (query, ctx) => new Promise(async (resolve,reject) => {
     try {
       const {db} = this.props;
-      const result = db.find({});
-      resolve(result)
+      const list = await db.find({});
+      resolve({list})
     } catch(e){
       reject(e)
     }
   });
 
-  resolve(){
+  resolve(req){
+    if (req.action == 'getList') return this.userList(req);
     return new Promise((resolve, reject) => reject(new Error('ACTION_NOT_FOUND')))
   }
 
