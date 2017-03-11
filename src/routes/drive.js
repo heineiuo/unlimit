@@ -63,7 +63,7 @@ module.exports = (injectAsyncReducer) => {
   };
 
   const asyncHostFile = (partialNextState, callback) => {
-    const Component = require('../components/Drive/HostFile');
+    const Component = require('../components/Drive/File');
     const ConnectedComponent = connect(
       (state) => ({
         account: state.account,

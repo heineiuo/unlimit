@@ -22,10 +22,7 @@ class Location extends Component {
   componentWillReceiveProps = (nextProps) => {
     const {locations} = nextProps.host;
     this.setState({
-      locations: Object.values(locations).map(location => {
-        delete location.sort;
-        return location
-      })
+      locations
     })
   };
 
@@ -37,15 +34,22 @@ class Location extends Component {
   };
 
   handleItemChange = (item) => {
-    const {location, changePart} = item;
+    const {type, location, changePart} = item;
     const {locations} = this.state;
-    // console.log(location.pathname, changePart);
     const nextLocations = locations.slice();
-    nextLocations.splice(location.sort - 1, 1, Object.assign({}, locations[location.sort - 1], changePart));
-    // console.log(nextLocations);
+
+    if (type == 'UPDATE') {
+      // console.log(location.pathname, changePart);
+      nextLocations.splice(location.sort - 1, 1, Object.assign({}, locations[location.sort - 1], changePart));
+      // console.log(nextLocations);
+    } else if (type == 'DELETE') {
+      nextLocations.splice(location.sort - 1, 1)
+    }
+
     this.setState({
       locations: nextLocations
     })
+
   };
 
   // 先把原来位置的删掉，再在目标位置添加

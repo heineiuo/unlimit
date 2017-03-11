@@ -13,7 +13,7 @@ import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
 import IntegrateApp from "../common/IntegrateApp"
 
-class HostFile extends Component {
+class File extends Component {
 
   state = {
     selected: [],
@@ -40,7 +40,7 @@ class HostFile extends Component {
   };
 
   componentWillUnmount = () => {
-    console.error('\<HostFile \/\> will unmounted')
+    console.error('\<File \/\> will unmounted')
   };
 
   handleFileToggleSelect = (toggle, file) => {
@@ -82,6 +82,16 @@ class HostFile extends Component {
     })
   };
 
+  deleteFile = (item) => {
+    const {name} = item;
+    const {params: {hostname, splat}} = this.props;
+    const pathname = splat || '/';
+    const willDeletePathname = `${pathname=="/"?'':pathname}/${item.name}`;
+    if (window.confirm(`是否删除${willDeletePathname}`)){
+      this.props.deleteFile(hostname, willDeletePathname)
+    }
+  };
+
   render() {
     const {selected, isIntegrateAppOpen} = this.state;
     const {
@@ -91,7 +101,7 @@ class HostFile extends Component {
       params: {hostname, splat},
       injectAsyncReducer
     } = this.props;
-    const path = splat || '/';
+    const pathname = splat || '/';
     const hrefPrefix = `/drive/${hostname}`;
 
     const uploadAction = `/api/gateway?${urlencode({
@@ -100,7 +110,7 @@ class HostFile extends Component {
       reducerName: 'file',
       action: 'upload',
       hostname,
-      pathname: path
+      pathname
     })}`;
 
     return (
@@ -117,7 +127,7 @@ class HostFile extends Component {
                   isFile={isFile}
                   driveName={hostname}
                   hrefPrefix={hrefPrefix}
-                  pathname={path} />
+                  pathname={pathname} />
                 <div className={css(styles.headerBar__tools)} style={(isFile || isIntegrateAppOpen)?{display: 'none'}:{}}>
                   {/*选中操作*/}
                   {
@@ -155,7 +165,7 @@ class HostFile extends Component {
                   isFile ?
                     <FileInfo
                       cat={cat}
-                      pathname={path}
+                      pathname={pathname}
                       isIntegrateAppOpen={isIntegrateAppOpen}
                       openIntegrateApp={this.openIntegrateApp}
                       hostname={hostname}
@@ -178,8 +188,9 @@ class HostFile extends Component {
                                     onToggleSelect={this.handleFileToggleSelect}
                                     hrefPrefix={hrefPrefix}
                                     key={item.name}
+                                    deleteFile={this.deleteFile}
                                     index={index}
-                                    path={path}
+                                    pathname={pathname}
                                     item={item} />
                                 ))
                               }
@@ -188,7 +199,7 @@ class HostFile extends Component {
                       }
                       <CreateFileModal
                         ref={ref => this.createFileModal = ref}
-                        pathname={path}
+                        pathname={pathname}
                         isIntegrateAppOpen={isIntegrateAppOpen}
                         openIntegrateApp={this.openIntegrateApp}
                         hostname={hostname}
@@ -254,4 +265,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default module.exports = HostFile
+export default module.exports = File

@@ -55,16 +55,17 @@ export const uploadFileToPath = () => async (dispatch, getState) => {
 
 
 
-export const deleteFile = (filename) => async (dispatch, getState) => {
+export const deleteFile = (hostname, pathname) => async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
     const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
       importAppName: 'gateway',
       reducerName: 'file',
-      action: 'del',
+      action: 'unlink',
       token,
-      filename
+      hostname,
+      pathname
     });
     if (result.error) throw result.error
 

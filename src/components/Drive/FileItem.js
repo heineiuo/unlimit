@@ -2,7 +2,7 @@ import filesize from "filesize"
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite/no-important"
 import {Link} from "react-router"
-
+import Button from 'react-sea/lib/Button'
 
 class FileItem extends Component {
 
@@ -23,9 +23,11 @@ class FileItem extends Component {
     })
   };
 
-  deleteFile = () => {
+  deleteFile = (e) => {
     const {deleteFile, item} = this.props;
-
+    deleteFile(item);
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   _toggleSelect = (state) => {
@@ -48,7 +50,7 @@ class FileItem extends Component {
   };
 
   render() {
-    const {index, item, hrefPrefix, path} = this.props;
+    const {index, item, hrefPrefix, pathname} = this.props;
     const {mouseOver, selectState} = this.state;
 
     return (
@@ -64,14 +66,14 @@ class FileItem extends Component {
         <div className={css(styles.name)}>
           <Link
             className={css(styles.name__text)}
-            to={`${hrefPrefix}/file${path=="/"?'':path}/${item.name}`}>{item.name}</Link>
+            to={`${hrefPrefix}/file${pathname=="/"?'':pathname}/${item.name}`}>{item.name}</Link>
         </div>
         <div className={css(styles.size)}>
           {filesize(item.stat.size)}
         </div>
         <div className={css(styles.options, mouseOver && styles.options_show)}>
-          <span onClick={this.deleteFile}>删除</span>
-          <span>重命名</span>
+          <Button style={{width: 60, transition: 'none'}} size="small" type="danger" onClick={this.deleteFile}>删除</Button>
+          <Button style={{width: 60, transition: 'none'}} size="small" >重命名</Button>
         </div>
       </div>
     )
@@ -122,6 +124,7 @@ const styles = StyleSheet.create({
   },
   options: {
     flex: 1,
+    display: 'flex',
     visibility: 'hidden'
   },
   options_show: {

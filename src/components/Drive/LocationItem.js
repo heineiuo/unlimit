@@ -17,13 +17,13 @@ class LocationItem extends Component {
     showDetail: false,
   };
 
-  onMouseOver = () => {
+  handleMouseOver = () => {
     this.setState({
       mouseOver: true
     })
   };
 
-  onMouseOut = () => {
+  handleMouseOut = () => {
     this.setState({
       mouseOver: false
     })
@@ -37,9 +37,19 @@ class LocationItem extends Component {
 
   handleDetailChange = (changePart) => {
     this.props.onChange({
+      type: 'UPDATE',
       location: this.props.location,
-      changePart
+      changePart,
     })
+  };
+
+  handleDelete = (e) => {
+    this.props.onChange({
+      type: 'DELETE',
+      location: this.props.location,
+    });
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   editLocationSortUp = (e) => {
@@ -62,28 +72,35 @@ class LocationItem extends Component {
     const {showDetail, mouseOver} = this.state;
     return (
       <div
-        className={css(styles.locationItem, mouseOver && styles.item_hover, showDetail && styles.item_opened)}
-        onMouseOut={this.onMouseOut}
-        onMouseOver={this.onMouseOver}>
+        className={css( mouseOver && styles.item_hover, showDetail && styles.item_opened)}
+        onMouseOut={this.handleMouseOut}
+        onMouseOver={this.handleMouseOver}>
         <div className={css(styles.item)} onClick={this.toggleDetail}>
           <div style={{width: 100}}>{location.sort}</div>
           <div style={{flex: 1}}><code>{location.pathname}</code></div>
           <div style={{flex: 1}}><code>{location.type}</code></div>
-          <div className={css(styles.item__sort)}>
-            <Button
-              type="secondary"
-              size="small"
-              className={css(styles.arrow && location.sort == 1 && styles.arrow_disabled)}
-              onClick={this.editLocationSortUp}>
-              上移
-            </Button>
-            <Button
-              type="secondary"
-              size="small"
-              className={css(styles.arrow && location.sort == locationLength && styles.arrow_disabled)}
-              onClick={this.editLocationSortDown}>
-              下移
-            </Button>
+          <div style={{flex: 1}}>
+            <div className={css(styles.item__sort, mouseOver && styles.item__sort_show)}>
+              <Button
+                type="danger"
+                size="small"
+                onClick={this.handleDelete}
+              >删除</Button>
+              <Button
+                type="secondary"
+                size="small"
+                className={css(styles.arrow && location.sort == 1 && styles.arrow_disabled)}
+                onClick={this.editLocationSortUp}>
+                上移
+              </Button>
+              <Button
+                type="secondary"
+                size="small"
+                className={css(styles.arrow && location.sort == locationLength && styles.arrow_disabled)}
+                onClick={this.editLocationSortDown}>
+                下移
+              </Button>
+            </div>
           </div>
         </div>
         <div className={css(styles.detail)}>
@@ -115,9 +132,13 @@ const styles = StyleSheet.create({
 
   item__sort: {
     flex: 1,
-    display: 'flex',
+    display: 'none',
     flexDirection: 'row',
     backgroundColor: '#fff'
+  },
+
+  item__sort_show: {
+    display: 'flex'
   },
 
   arrow: {

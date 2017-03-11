@@ -226,7 +226,11 @@ export const getLocations = (hostname) => async (dispatch, getState) => {
 };
 
 
-
+/**
+ * 更新locations
+ * @param hostname
+ * @param locations
+ */
 export const commitLocations = (hostname, locations) => async(dispatch, getState) => {
   try {
     const {token} = getState().account;
@@ -236,7 +240,11 @@ export const commitLocations = (hostname, locations) => async(dispatch, getState
       action: 'commitLocations',
       token,
       hostname,
-      locations
+      locations: locations.map(location => {
+        delete location.sort;
+        delete location.contentType;
+        return location
+      })
     });
     if (response.error) throw new Error(response.error);
 
