@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite/no-important'
 import Paper from 'react-sea/lib/Paper'

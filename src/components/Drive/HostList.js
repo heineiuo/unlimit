@@ -1,9 +1,21 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Card from 'react-sea/lib/Card'
 import Button from 'react-sea/lib/Button'
 import { StyleSheet, css } from 'aphrodite'
 import Spin from 'react-spin'
+
+import {push} from 'react-router-redux'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+
+import  {
+  createHost, getHostList, deleteHost,
+  getLocations, commitLocations
+} from '../../store/host'
+import {restoreFileList, getFileList, deleteFile} from '../../store/file'
+import {setTitle} from '../../store/nav'
+
 
 class HostList extends Component {
 
@@ -87,4 +99,16 @@ const styles = StyleSheet.create({
 
 });
 
-export default module.exports = HostList
+export default module.exports = connect(
+  (state) => ({
+    host: state.host,
+  }),
+  (dispatch) => bindActionCreators({
+    push,
+    setTitle,
+    getHostList,
+    restoreFileList
+  }, dispatch)
+)(HostList);
+
+

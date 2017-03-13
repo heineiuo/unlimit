@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite/no-important'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 
 
 class MessageList extends Component {

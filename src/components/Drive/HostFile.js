@@ -1,10 +1,8 @@
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite/no-important"
-import {Link} from "react-router"
+import {Link} from "react-router-dom"
 import Button from "react-sea/lib/Button"
 import Upload from "rc-upload"
-import {setTitle} from "../../store/nav"
-import {getFileList} from "../../store/file"
 import Spin from "react-spin"
 import urlencode from "form-urlencoded"
 import FileItem from './FileItem'
@@ -12,29 +10,49 @@ import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
 import IntegrateApp from "../common/IntegrateApp"
+import {injectAsyncReducer} from '../../store'
 
-class HostFile extends Component {
+import {connect} from 'react-redux'
+import {push} from 'react-router-redux'
+import {bindActionCreators} from 'redux'
+import {
+  createHost, getHostList, deleteHost,
+  getLocations, commitLocations
+} from '../../store/host'
+import {restoreFileList, getFileList, deleteFile} from '../../store/file'
+import {setTitle} from '../../store/nav'
+
+
+class File extends Component {
 
   state = {
     selected: [],
     isIntegrateAppOpen: false,
   };
 
+  getSplat = (props) => {
+    const {location: {pathname}, match: {url}} = props || this.props;
+    return pathname.substring(url.length)
+  };
+
   componentWillMount = () => {
-    const {setTitle, getFileList, params: {hostname, splat}} = this.props;
-    getFileList(hostname, splat);
+    const {setTitle, getFileList, match, match: {params: {hostname}}} = this.props;
+    console.log(match);
+    getFileList(hostname, this.getSplat());
   };
 
   componentWillReceiveProps = (nextProps) => {
-    const {getFileList, setTitle, params: {hostname, splat}, host} = this.props;
-    const nextPath = nextProps.params.splat;
+    const {getFileList, setTitle, match, host} = this.props;
+    const {params, params: {hostname}} = match;
+
+    const nextPath = this.getSplat(nextProps);
 
     if (nextProps.file.fileState == 0) {
       setTitle(`${nextProps.params.hostname} - 文件`);
-      return getFileList(params.hostname, '/');
+      return getFileList(nextProps.params.hostname, '/');
     }
 
-    if (nextPath != splat) {
+    if (nextPath != this.getSplat()) {
       getFileList(hostname, nextPath)
     }
   };
@@ -60,8 +78,10 @@ class HostFile extends Component {
   };
 
   _handleUploadSuccess = () => {
-    const {setTitle, getFileList, host, params: {hostname, splat}} = this.props;
-    getFileList(hostname, splat);
+    const {setTitle, getFileList, host, match} = this.props;
+    const {params: {hostname}} = match;
+
+    getFileList(hostname, this.getSplat());
     setTitle(`${hostname} - 文件`);
   };
 
@@ -88,10 +108,9 @@ class HostFile extends Component {
       file,
       file: {isFile, cat, ls},
       account,
-      params: {hostname, splat},
-      injectAsyncReducer
+      match: {params: {hostname}},
     } = this.props;
-    const path = splat || '/';
+    const path = this.getSplat() || '/';
     const hrefPrefix = `/drive/${hostname}`;
 
     const uploadAction = `/api/gateway?${urlencode({
@@ -254,4 +273,20 @@ const styles = StyleSheet.create({
 });
 
 
-export default module.exports = HostFile
+const connectedFile = connect(
+  (state) => ({
+    account: state.account,
+    host: state.host,
+    file: state.file,
+  }),
+  (dispatch) => bindActionCreators({
+    push,
+    getFileList,
+    deleteFile,
+    setTitle,
+    getHostList,
+    restoreFileList,
+  }, dispatch)
+)(File);
+
+export default module.exports = connectedFile

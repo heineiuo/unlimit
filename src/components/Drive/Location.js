@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import Input from 'react-sea/lib/Input'
 import MdArrowUpward from 'react-sea/lib/Icons/arrow-upward'
 import MdArrowDownward from 'react-sea/lib/Icons/arrow-downward'
@@ -8,6 +8,18 @@ import Button from 'react-sea/lib/Button'
 import Spin from 'react-spin'
 import LocationItem from './LocationItem'
 
+import {connect} from 'react-redux'
+import {push} from 'react-router-redux'
+import {bindActionCreators} from 'redux'
+import {
+  createHost, getHostList, deleteHost,
+  getLocations, commitLocations
+} from '../../store/host'
+import {restoreFileList, getFileList, deleteFile} from '../../store/file'
+import {setTitle} from '../../store/nav'
+
+
+
 class Location extends Component {
 
   state = {
@@ -15,7 +27,7 @@ class Location extends Component {
   };
 
   componentDidMount = () => {
-    const {getLocations, params: {hostname}} = this.props;
+    const {getLocations, match: {params: {hostname}}} = this.props;
     getLocations(hostname);
   };
 
@@ -30,7 +42,7 @@ class Location extends Component {
   };
 
   saveLocation = () => {
-    const {params: {hostname}} = this.props;
+    const {match: {params: {hostname}}} = this.props;
     const {locations} = this.state;
     console.log(JSON.stringify(this.state.locations));
     this.props.commitLocations(hostname, locations)
@@ -71,7 +83,7 @@ class Location extends Component {
   };
 
   render () {
-    const {host: {locationState}, params: {hostname}} = this.props;
+    const {host: {locationState}, match: {params: {hostname}}} = this.props;
     const {locations} = this.state;
 
     return (
@@ -147,4 +159,19 @@ const styles = StyleSheet.create({
 
 
 
-export default module.exports = Location
+export default module.exports = connect(
+  (state) => ({
+    host: state.host,
+  }),
+  (dispatch) => bindActionCreators({
+    push,
+    setTitle,
+    getLocations,
+    getHostList,
+    commitLocations,
+    restoreFileList,
+    //editLocationSort,
+    // editLocation,
+    // createLocation
+  }, dispatch)
+)(Location)
