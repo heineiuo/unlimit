@@ -20,8 +20,8 @@
     "react-lang": "^0.1.2",
     "react-modal": "^1.6.5",
     "react-redux": "^5.0.2",
-    "react-router": "3.0.2",
-    "react-router-redux": "^4.0.8",
+    "react-router": "^4.0.0",
+    "react-router-redux": "next",
     "react-sea": "^0.1.5",
     "react-sh": "^0.6.3",
     "react-spin": "^0.6.2",
@@ -34,6 +34,7 @@
     "smile-web": "^0.0.4",
     "systemjs": "^0.20.7",
     "utf8": "^2.1.2",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "react-router-dom": "^4.0.0"
   }
 }

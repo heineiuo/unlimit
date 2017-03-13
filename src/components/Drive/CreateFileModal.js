@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite/no-important"
-import {Link} from "react-router"
+import {Link} from "react-router-dom"
 import Modal from 'react-modal'
 import {appmeta, pickoutPreview} from './appmeta'
 

@@ -4,11 +4,14 @@ import Body from 'react-sea/lib/Body'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import {Logo} from 'react-sea/lib/Smile'
 import Background from 'react-sea/lib/Background'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import Particle from '../common/Particle'
 import Title from '../common/Title'
 import ProfileDropDown from '../common/ProfileDropDown'
 import MessageList from './MessageList'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {getPostList} from '../../store/feed/postList'
 
 class Home extends Component {
 
@@ -80,4 +83,12 @@ const styles = StyleSheet.create({
 });
 
 
-export default Home;
+export default module.exports = connect(
+  (store) => ({
+    account: store.account,
+    postList: store.postList,
+  }),
+  (dispatch) => bindActionCreators({
+    getPostList
+  }, dispatch)
+)(Home);

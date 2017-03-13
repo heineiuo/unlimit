@@ -1,8 +1,8 @@
 import filesize from "filesize"
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite/no-important"
-import {Link} from "react-router"
 import Button from 'react-sea/lib/Button'
+import {Link} from "react-router-dom"
 
 class FileItem extends Component {
 

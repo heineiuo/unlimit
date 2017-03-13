@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite/no-important'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 
 class ProfileDropDown extends Component {
   static defaultProps = {

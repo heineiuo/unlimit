@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Card from 'react-sea/lib/Card'
 import Button from 'react-sea/lib/Button'
 import { StyleSheet, css } from 'aphrodite'

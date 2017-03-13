@@ -6,7 +6,7 @@ import UnLogged from './Unlogged'
 import Spin from 'react-spin'
 import Header from './Header'
 import Body from 'react-sea/lib/Body'
-import {checkLogin, getAuthCodeAndRedirect} from '../../store/account'
+import {logout, checkLogin, sendVerifyCode, getAuthCodeAndRedirect} from '../../store/account'
 
 class Check extends Component {
 
@@ -85,4 +85,11 @@ class Check extends Component {
 }
 
 
-export default module.exports = Check
+export default module.exports = connect(
+  (store) => ({
+    account: store.account,
+    postList: store.postList,
+  }),
+  (dispatch) => bindActionCreators({
+  }, dispatch)
+)(Check)

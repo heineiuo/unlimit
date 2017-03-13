@@ -24,10 +24,10 @@
           "amd": "react-dom",
           "commonjs": "react-dom"
         },
-        "react-router": {
-          "root": "ReactRouter",
-          "amd": "react-router",
-          "commonjs": "react-router"
+        "react-router-dom": {
+          "root": "ReactRouterDOM",
+          "amd": "react-router-dom",
+          "commonjs": "react-router-dom"
         },
         "redux": {
           "root": "Redux",

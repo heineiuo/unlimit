@@ -1,8 +1,20 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router'
+import {Switch, Route, Redirect, Link} from 'react-router-dom'
 import Header from './Header'
 import Body from 'react-sea/lib/Body'
 import {StyleSheet, css} from 'aphrodite'
+import {connect} from 'react-redux'
+import {push} from 'react-router-redux'
+import {bindActionCreators} from 'redux'
+import HostList from './HostList'
+
+import  {
+  createHost, getHostList, deleteHost,
+  getLocations, commitLocations
+} from '../../store/host'
+import {restoreFileList, getFileList, deleteFile} from '../../store/file'
+import {setTitle} from '../../store/nav'
+
 
 class Master extends Component {
 
@@ -24,8 +36,8 @@ class Master extends Component {
   // };
 
   componentWillMount = () => {
-    const {getHostList, params, host} = this.props;
-    if (host.hostListState == 0) getHostList(params.hostname);
+    const {getHostList, match, host} = this.props;
+    if (host.hostListState == 0) getHostList(match.params.hostname);
   };
 
   componentWillUnmount = () => {
@@ -37,7 +49,7 @@ class Master extends Component {
   // };
 
   render(){
-    const { account, children, nav, createHost, host, getHostList, deleteHost} = this.props;
+    const { account, children, match, nav, createHost, host, getHostList, deleteHost} = this.props;
 
     return (
       <div>
@@ -60,7 +72,10 @@ class Master extends Component {
                   deleteHost={deleteHost}
                   nav={nav}
                   createHost={createHost}/>
-                {children}
+                <Switch>
+                  <Route exact path={`${match.url}`} component={HostList}/>
+                  <Route path={`${match.url}/:hostname`} component={require('./HostWrapper')} />
+                </Switch>
               </div>
         }
       </div>
@@ -75,4 +90,21 @@ const styles = StyleSheet.create({
   }
 });
 
-export default module.exports = Master
+export default module.exports = connect(
+  (store) => ({
+    account: store.account,
+    host: store.host,
+    nav: store.nav
+  }),
+  (dispatch) => bindActionCreators({
+    getHostList,
+    deleteHost,
+    createHost
+  }, dispatch),
+  (stateProps, dispatchProps, ownProps) => {
+    return Object.assign({}, stateProps, dispatchProps, ownProps, {
+    })
+  }
+)(Master)
+
+
