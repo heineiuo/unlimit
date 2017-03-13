@@ -9,8 +9,8 @@ class NotFound extends Component {
   render () {
     return (
       <div>
-        <Background bgColor="#666" />
-        <div>404</div>
+        <Background bgColor="#000" />
+        <div style={{fontSize: 40, color: '#FFF', textAlign: 'center', marginTop: '20%'}}>404</div>
       </div>
     )
   }

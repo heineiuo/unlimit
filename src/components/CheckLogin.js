@@ -32,7 +32,7 @@ class CheckLogin extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={AsyncHome} />
+          <Route exact path="/" render={AsyncHome} />
           <Route path="/drive" render={AsyncDrive} />
           <Route path="/auth" render={AsyncAuth} />
           <Route path="/account" render={AsyncAccount} />

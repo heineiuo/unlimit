@@ -73,8 +73,8 @@ class Master extends Component {
                   nav={nav}
                   createHost={createHost}/>
                 <Switch>
-                  <Route exact path={`${match.url}`} component={HostList}/>
-                  <Route path={`${match.url}/:hostname`} component={require('./HostWrapper')} />
+                  <Route exact path={`${match.path}`} component={HostList}/>
+                  <Route path={`${match.path}/:hostname`} component={require('./HostWrapper')} />
                 </Switch>
               </div>
         }
