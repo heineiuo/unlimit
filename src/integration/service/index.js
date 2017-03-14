@@ -1,8 +1,15 @@
 import {Router} from 'seashell-client-node'
+import {combineReducers} from 'sprucejs'
 
-export default (db, handler) => {
+export default (name, db) => {
 
   const router = new Router();
+
+  const handler = combineReducers([
+    require('./App'),
+    require('./Group'),
+    require('./Socket')
+  ])(db);
 
   /**
    * add `res.json` method
@@ -38,5 +45,7 @@ export default (db, handler) => {
     res.error('ROUTER_NOT_FOUND')
   });
 
-  return router
+  return {
+    name, router, handler
+  }
 }

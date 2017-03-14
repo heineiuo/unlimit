@@ -2,7 +2,7 @@ import {Router} from 'seashell-client-node'
 import config from '../../utils/config'
 import {combineReducers} from 'sprucejs'
 
-const createApp = (db) => {
+const createApp = (name, db) => {
 
   const app = new Router();
 
@@ -59,7 +59,11 @@ const createApp = (db) => {
     res.error('NOT_FOUND')
   });
 
-  return app;
+  return {
+    name,
+    handler: handleRequest,
+    router: app
+  };
 };
 
 export default module.exports = createApp

@@ -2,7 +2,7 @@ import {Router} from 'seashell-client-node'
 import {combineReducers} from 'sprucejs'
 
 
-export default module.exports = (db) => {
+export default module.exports = (name, db) => {
 
   const app = new Router();
   const handler = combineReducers([
@@ -64,5 +64,9 @@ export default module.exports = (db) => {
     res.json({error: 'NOT_FOUND'})
   });
 
-  return app
+  return {
+    name,
+    router: app,
+    handler,
+  }
 }

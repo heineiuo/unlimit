@@ -53,7 +53,7 @@ class File extends Model {
       const fs = filesystem(this.props.db);
       await new Promise((resolve, reject) => {
         fs.unlink(`${hostname}${pathname}`, (err) => {
-          if (err) return reject(err)
+          if (err) return reject(err);
           resolve()
         })
       });
@@ -192,10 +192,19 @@ class File extends Model {
    */
   writeFile = (req) => new Promise(async (resolve, reject) => {
     try {
-      const {hostname, pathname, filename, content} = req;
+      const {hostname, pathname, content='', noConflict=false} = req;
       const fs = filesystem(this.props.db);
+      const realPath = `${hostname}${pathname}`;
 
-      fs.writeFile(`${hostname}${pathname}`, content, (err) => {
+      if (noConflict) {
+        await new Promise((resolve, reject) => {
+          fs.readFile(realPath, err => {
+            if (err) return resolve();
+            reject(new Error('FILE_EXIST'))
+          })
+        })
+      }
+      fs.writeFile(realPath, content, (err) => {
         if (err) return reject(err);
         resolve({})
       })

@@ -1,7 +1,7 @@
 import Url from 'url'
 import {Router} from 'express'
 
-module.exports = (config) => {
+module.exports = () => {
 
   return async (req, res, next) => {
 
@@ -13,17 +13,17 @@ module.exports = (config) => {
        */
       const {host} = req.headers;
       // console.log('[gateway] searching host');
-      const requestHost = await gateway.request('gateway', { reducerName: 'host', hostname: host, action: 'Get'});
+      const requestHost = await gateway.handler({reducerName: 'host', hostname: host, action: 'Get'});
       // console.log(requestHost.body);
-      if (requestHost.body.error) throw new Error(requestHost.body.error);
-      const requestLocations = await gateway.request('gateway', { reducerName: 'location', hostname: host, action: 'list'});
+      if (requestHost.error) throw new Error(requestHost.error);
+      const requestLocations = await gateway.handler({reducerName: 'location', hostname: host, action: 'list'});
       // console.log(requestLocations.body);
-      const {locations} = requestLocations.body.location;
+      const {locations} = requestLocations.location;
       // console.log('locations: '+JSON.stringify(locations));
       const {location, url} = await pickLocation(locations, req.url);
 
       // console.log(location);
-      res.locals.host = requestHost.body;
+      res.locals.host = requestHost;
       res.locals.url = url;
       // res.locals.location = location;
       res.locals.location = Object.assign({}, location, {content: location.content});
