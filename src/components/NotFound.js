@@ -10,7 +10,7 @@ class NotFound extends Component {
     return (
       <div>
         <Background bgColor="#000" />
-        <div style={{fontSize: 40, color: '#FFF', textAlign: 'center', marginTop: '20%'}}>404</div>
+        <div className={css(styles.notFound)}>404</div>
       </div>
     )
   }
@@ -21,7 +21,10 @@ class NotFound extends Component {
 const styles = StyleSheet.create({
 
   notFound: {
-
+    fontSize: 40,
+    color: '#FFF',
+    textAlign: 'center',
+    marginTop: '20%'
   }
 
 
