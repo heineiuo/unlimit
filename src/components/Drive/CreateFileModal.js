@@ -42,6 +42,11 @@ class CreateFileModal extends Component {
         isOpen={this.state.isOpen}>
         <div className={css(styles.title)}>选择App创建文件</div>
         <div>
+          <div className={css(styles.appTypeItem)}>
+            <div>创建文件夹</div>
+          </div>
+        </div>
+        <div>
           {
             pickoutPreview(appmeta).map(app => (
               <div

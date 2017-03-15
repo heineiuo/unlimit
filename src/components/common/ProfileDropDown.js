@@ -19,7 +19,7 @@ class ProfileDropDown extends Component {
           <DropDownTrigger>
             <div className={css(styles.avatar)}>我</div>
           </DropDownTrigger>
-          <DropDownContent>
+          <DropDownContent className={css(styles.panel)}>
             <Link to="/account">账号</Link>
           </DropDownContent>
         </DropDown>
@@ -51,6 +51,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFF'
   },
+
+  panel: {
+    backgroundColor: '#FFF',
+  }
 
 });
 

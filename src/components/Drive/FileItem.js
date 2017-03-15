@@ -46,7 +46,7 @@ class FileItem extends Component {
   };
 
   select = () => {
-    this._toggleSelect(2)
+    if (this.state.selectState != 2) this._toggleSelect(2)
   };
 
   render() {

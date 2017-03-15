@@ -8,6 +8,7 @@ const initialState = {
   // isDirectory: true,
   cat: '',
   fileState: 0,
+  clipboard: []
 };
 
 export default handleActions({
@@ -18,9 +19,18 @@ export default handleActions({
 
   FILE_LIST_UPDATE (state, action) {
     return Object.assign({}, state, action.payload, {fileState: 2})
+  },
+  FILE_CLIPBOARD_UPDATE (state, action) {
+    return Object.assign({}, state, {clipboard: action.payload.clipboard})
+  },
+
+  FILE_CLIPBOARD_EMPTY (state, action) {
+    return Object.assign({}, state, {clipboard: []})
   }
 
 }, initialState)
+
+export const reducerName = 'file';
 
 /**
  * 重命名文件
@@ -137,3 +147,35 @@ export const restoreFileList = () => ({
   type: 'FILE_STATE_UPDATE',
   payload: {fileState: 0}
 });
+
+/**
+ * 将文件添加到剪贴板
+ */
+export const pushFileToClipboard = (files) => (dispatch, getState) => {
+  const {clipboard} = getState().file;
+  const nextClipboard = clipboard.slice().filter(item => {
+    return files.indexOf(item) == -1
+  }).concat(files);
+  dispatch({
+    type: 'FILE_CLIPBOARD_UPDATE',
+    payload: {
+      clipboard: nextClipboard
+    }
+  })
+};
+
+/**
+ * 清空剪贴板
+ */
+export const emptyClipboard = () => ({
+  type: 'FILE_CLIPBOARD_EMPTY',
+});
+
+/**
+ * 将剪贴板里的文件拷贝到当前目录
+ * @param targetPathname 目标目录
+ * @param keepOrigin true保留文件，false删除源文件
+ */
+export const copyFilesFromClipboard = (targetPathname, keepOrigin=true) => (dispatch, getState) => {
+
+};

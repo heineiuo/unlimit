@@ -55,7 +55,7 @@ class HostWrapper extends Component {
             <div>{params.hostname}</div>
             <div style={{position: 'relative', height: 40, width: 320}}>
               <TabBar
-                style={{}}
+                //style={{}}
                 underlineStyle={{borderBottomWidth: 2}}
                 activeKey={this.state.activeTab}
                 onSwitchKey={this.handleSwitchKey}>

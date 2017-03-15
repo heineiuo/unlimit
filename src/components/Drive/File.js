@@ -11,6 +11,8 @@ import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
 import IntegrateApp from "../common/IntegrateApp"
 import {injectAsyncReducer} from '../../store'
+import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
+import IconArrowDropdown from '../common/IconArrowDropdown'
 
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
@@ -19,7 +21,11 @@ import {
   createHost, getHostList, deleteHost,
   getLocations, commitLocations
 } from '../../store/host'
-import {restoreFileList, getFileList, deleteFile} from '../../store/file'
+import {
+  restoreFileList, getFileList, deleteFile,
+  pushFileToClipboard,
+  emptyClipboard,
+} from '../../store/file'
 import {setTitle} from '../../store/nav'
 
 
@@ -32,7 +38,7 @@ class File extends Component {
 
   getSplat = (props) => {
     const {location: {pathname}, match: {url}} = props || this.props;
-    return pathname.substring(url.length)
+    return pathname.substring(url.length) || '/'
   };
 
   componentWillMount = () => {
@@ -62,6 +68,7 @@ class File extends Component {
   };
 
   handleFileToggleSelect = (toggle, file) => {
+    console.log(toggle, this.state.selected, file)
     const {selected} = this.state;
     if (toggle == 0) {
       this.setState({
@@ -102,17 +109,23 @@ class File extends Component {
     })
   };
 
-  deleteFile = (item) => {
-    const {name} = item;
+  deleteFile = ({name}) => {
     const {match: {params: {hostname}}} = this.props;
     const pathname = this.getSplat(this.props) || '/';
-    const willDeletePathname = `${pathname=="/"?'':pathname}/${item.name}`;
+    const willDeletePathname = `${pathname=="/"?'':pathname}/${name}`;
     if (window.confirm(`是否删除${willDeletePathname}`)){
       this.props.deleteFile(hostname, willDeletePathname)
     }
   };
 
+  pushSelectedFileToClipboard = () => {
+    const files = this.state.selected.map(file => `${this.getSplat(this.props)}/${file.name}`);
+    // return console.log(files)
+    this.props.pushFileToClipboard(files)
+  };
+
   render() {
+    const {file: {clipboard}, emptyClipboard} = this.props;
     const {selected, isIntegrateAppOpen} = this.state;
     const {
       file,
@@ -133,7 +146,6 @@ class File extends Component {
     })}`;
 
     return (
-
       <div>
         {
           file.fileState < 2 ?
@@ -142,32 +154,77 @@ class File extends Component {
             </div> :
             <div>
               <div className={css(styles.headerBar)}>
+                {/*路径栏*/}
                 <FilePathBar
                   isFile={isFile}
                   driveName={hostname}
                   hrefPrefix={hrefPrefix}
                   pathname={pathname} />
+                {/*工具栏*/}
                 <div className={css(styles.headerBar__tools)} style={(isFile || isIntegrateAppOpen)?{display: 'none'}:{}}>
                   {/*选中操作*/}
                   {
                     selected.length == 0 ? null:
                       <div className={css(styles.headerBar__toolItem)}>
-                        <span>批量删除</span>
+                        <span style={{color: '#666', fontSize: 13}}>{`已选中${selected.length}个文件`}</span>
+                        <Button type="danger" size="small">删除</Button>
                       </div>
                   }
                   {/*展示样式*/}
-                  <div className={css(styles.headerBar__toolItem)} style={{border: '1px solid #AAA'}}>
-                    <span>列表</span>|
-                    <span>图标</span>
-                  </div>
+                  {/*<div className={css(styles.headerBar__toolItem)}>*/}
+                    {/*<span>列表</span>|*/}
+                    {/*<span>图标</span>*/}
+                  {/*</div>*/}
                   {/*剪贴板*/}
-                  <div className={css(styles.headerBar__toolItem)} style={{border: '1px solid #AAA'}}>
-                    <span>添加到剪贴板</span>
-                    <span>v</span>
+                  <div className={css(styles.headerBar__toolItem)}>
+                    <DropDown ref={ref => this.dropDown = ref} className={css(styles.clipboard)}>
+                      <DropDownTrigger style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
+                        <Button type="primary" size="small" style={{userSelect: 'none'}}>
+                          {`剪贴板`}
+                          <IconArrowDropdown />
+                        </Button>
+                      </DropDownTrigger>
+                      <DropDownContent className={css(styles.clipboard__content)}>
+                        <div className={css(styles.triangle)}></div>
+                        <div className={css(styles.clipboard__info)}>
+                          {
+                            clipboard.length == 0 ? (
+                              <div>剪贴板为空</div>
+                            ) :
+                              clipboard.map(filename => (
+                                <div key={filename}>{filename}</div>
+                              ))
+                          }
+                        </div>
+                        {
+                          selected.length == 0? null:(
+                            <span
+                              style={{borderBottom: '1px solid #DDD'}}
+                              className={css(styles.clipboard__item)}
+                              onClick={this.pushSelectedFileToClipboard}>
+                              将选中的文件添加到剪贴板
+                            </span>
+                          )
+                        }
+                        {
+                          clipboard.length == 0 ? null: (
+                            <div style={{display: 'flex', flexDirection: 'column'}}>
+                              <span className={css(styles.clipboard__item)}>复制到此</span>
+                              <span className={css(styles.clipboard__item)}>移动到此</span>
+                              <span
+                                className={css(styles.clipboard__item)}
+                                onClick={emptyClipboard}
+                              >清空剪贴板</span>
+                            </div>
+                          )
+                        }
+                      </DropDownContent>
+                    </DropDown>
                   </div>
                   {/*上传*/}
                   <div className={css(styles.headerBar__toolItem)}>
                     <Upload
+                      style={{display: 'flex'}}
                       onSuccess={this._handleUploadSuccess}
                       action={uploadAction}>
                       <Button type="primary" size="small">上传文件</Button>
@@ -175,7 +232,7 @@ class File extends Component {
                   </div>
                   {/*新建文件*/}
                   <div className={css(styles.headerBar__toolItem)}>
-                    <Button onClick={this.openCreateFileModal} type="primary" size="small">新建文件</Button>
+                    <Button onClick={this.openCreateFileModal} type="primary" size="small">创建</Button>
                   </div>
                 </div>
               </div>
@@ -253,7 +310,9 @@ const styles = StyleSheet.create({
 
   headerBar__toolItem: {
     flex: 1,
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    marginLeft: 2,
+    display: 'flex'
   },
 
   listViewBar: {
@@ -280,6 +339,48 @@ const styles = StyleSheet.create({
 
   },
 
+  clipboard: {
+    display: 'flex',
+    cursor: 'pointer'
+  },
+
+  clipboard__content: {
+    display: 'flex',
+    position: 'absolute',
+    marginTop: 14,
+    flexDirection: 'column',
+    backgroundColor: '#FFF',
+    border: '1px solid #DDD',
+    borderRadius: 2,
+  },
+  triangle: {
+    position: 'absolute',
+    left: '50%',
+    width: 0,
+    height: 0,
+    marginLeft: '-10px',
+    marginTop: '-20px',
+    border: '10px solid transparent',
+    borderBottomColor: '#FFF'
+  },
+
+  clipboard__info: {
+    padding: '5px 20px',
+    borderBottom: '1px solid #EEE'
+  },
+
+  clipboard__item: {
+    padding: '0 20px',
+    height: '30px',
+    color: '#665445',
+    lineHeight: '30px',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    ':hover': {
+      backgroundColor: '#1077ff',
+      color: '#FFF'
+    }
+  }
 
 });
 
@@ -297,6 +398,8 @@ const connectedFile = connect(
     setTitle,
     getHostList,
     restoreFileList,
+    pushFileToClipboard,
+    emptyClipboard
   }, dispatch)
 )(File);
 

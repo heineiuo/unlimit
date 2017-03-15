@@ -21,6 +21,7 @@
     "react-modal": "^1.6.5",
     "react-redux": "^5.0.2",
     "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "react-router-redux": "next",
     "react-sea": "^0.1.5",
     "react-sh": "^0.6.3",
@@ -34,7 +35,10 @@
     "smile-web": "^0.0.4",
     "systemjs": "^0.20.7",
     "utf8": "^2.1.2",
-    "uuid": "^3.0.1",
-    "react-router-dom": "^4.0.0"
+    "uuid": "^3.0.1"
+  },
+  "dependencies": {
+    "form-urlencoded": "^1.5.0",
+    "rc-upload": "^2.3.4"
   }
 }
