@@ -5,11 +5,11 @@ import AsyncComponent from '../common/AsyncComponent'
 import {getPostList} from '../../store/feed/postList'
 
 const Async = (props) => (
-  <AsyncComponent load={(callback) => require.ensure([], (require) => callback(require('./index')))}>
-    {(Auth) => {
-      if (!Auth) return null;
-      return <Auth {...props}/>
-    }}
+  <AsyncComponent load={(callback) => require.ensure([], (require) => callback(null, require('./index')))}>
+    {(state, Auth) => (
+      state < 2 ? null:
+        <Auth {...props}/>
+    )}
   </AsyncComponent>
 );
 

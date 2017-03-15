@@ -71,7 +71,6 @@ export const deleteFile = (hostname, pathname) => async (dispatch, getState) => 
 
   } catch(e){
     console.log(e);
-    console.log()
   }
 };
 
@@ -87,7 +86,6 @@ export const downloadFile = (path)=> async (dispatch, getState) => {
 
   } catch(e){
     console.log(e);
-    console.log()
   }
 };
 

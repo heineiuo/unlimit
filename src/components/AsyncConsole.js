@@ -11,20 +11,18 @@ const Async = (props) => {
     <AsyncComponent load={
       (callback) => {
         //callback(require('./Master'));
-        SystemJS.import('smile-admin').then(admin => {
-          console.log(admin);
-          callback(admin({injectAsyncReducer, getTitle}))
-        });
-
         //require.ensure([], (require) => callback(require('./Master')))
+        SystemJS.import('smile-admin').then(admin => {
+          const Admin = admin({injectAsyncReducer});
+          callback(null, Admin)
+        }).catch(e => callback(e));
       }
     }>
-      {(Console) => {
-        if (!Console) return null;
-        return (
-          <Console {...props}/>
-        )
-      }}
+      {(state, Console) => (
+        state < 2 ? null:
+          state == 3 ? <div>加载控制台出错</div>:
+            <Console {...props} getTitle={getTitle} />
+      )}
     </AsyncComponent>
   );
 };

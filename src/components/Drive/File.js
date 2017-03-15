@@ -37,7 +37,7 @@ class File extends Component {
 
   componentWillMount = () => {
     const {setTitle, getFileList, match, match: {params: {hostname}}} = this.props;
-    console.log(match);
+    // console.log(match);
     getFileList(hostname, this.getSplat());
   };
 
@@ -104,8 +104,8 @@ class File extends Component {
 
   deleteFile = (item) => {
     const {name} = item;
-    const {match: {params: {hostname, splat}}} = this.props;
-    const pathname = splat || '/';
+    const {match: {params: {hostname}}} = this.props;
+    const pathname = this.getSplat(this.props) || '/';
     const willDeletePathname = `${pathname=="/"?'':pathname}/${item.name}`;
     if (window.confirm(`是否删除${willDeletePathname}`)){
       this.props.deleteFile(hostname, willDeletePathname)

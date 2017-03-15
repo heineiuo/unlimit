@@ -37,7 +37,7 @@ class CheckLogin extends Component {
           <Route path="/auth" render={AsyncAuth} />
           <Route path="/account" render={AsyncAccount} />
           <Route path="/console" render={AsyncConsole} />
-          <Route path="*" component={require('./NotFound')}/>
+          <Route component={require('./NotFound')}/>
         </Switch>
       </Router>
     )

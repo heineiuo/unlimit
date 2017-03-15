@@ -13,6 +13,12 @@ const appmeta = [
     support: ['.familytree']
   },
   {
+    appName: 'smile-draft',
+    type: 'blog',
+    prettyName: 'Smile Draft',
+    support: ['.blog']
+  },
+  {
     appName: 'smile-text-editor',
     type: 'code',
     prettyName: 'Ace',

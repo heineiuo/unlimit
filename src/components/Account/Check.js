@@ -27,7 +27,7 @@ class Check extends Component {
   componentWillMount = () => {
     const {checkLogin, location} = this.props;
     // console.log(location);
-    checkLogin(location.search.redirectUrl)
+    // checkLogin(location.search.redirectUrl)
   };
 
   componentWillUpdate = () => {
@@ -91,5 +91,9 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
+    logout,
+    checkLogin,
+    sendVerifyCode,
+    getAuthCodeAndRedirect
   }, dispatch)
 )(Check)

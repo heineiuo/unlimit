@@ -14,15 +14,12 @@ const AsyncDrive = (props) => {
     <AsyncComponent load={
       (callback) => {
         //callback(require('./Master'));
-        require.ensure([], (require) => callback(require('./Master')))
+        require.ensure([], (require) => callback(null, require('./Master')))
       }
     }>
-      {(Master) => {
-        if (!Master) return null;
-        return (
-          <Master {...props}/>
-        )
-      }}
+      {(state, Master) => (
+        state < 2 ? null: <Master {...props}/>
+      )}
     </AsyncComponent>
   );
 };

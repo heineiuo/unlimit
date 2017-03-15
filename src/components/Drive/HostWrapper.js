@@ -46,7 +46,7 @@ class HostWrapper extends Component {
 
   render (){
     const {children, host, match, match: {params}} = this.props;
-    console.log(host.hostListState);
+    // console.log(host.hostListState);
 
     return (
       <div className={css(styles.wrapper)}>

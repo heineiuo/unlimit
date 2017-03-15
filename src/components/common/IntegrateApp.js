@@ -30,7 +30,7 @@ class IntegrateApp extends Component {
     try {
       const hoc = await SystemJS.import(appName);
       // todo consider if  injectAsyncReducer is safety or need.
-      this.component = hoc(injectAsyncReducer);
+      this.component = hoc({injectAsyncReducer});
       nextState.appState = 2
     } catch (e) {
       console.error(e);
