@@ -14,8 +14,9 @@ const start = async () => {
     if (config.init) await init(hub, config);
 
     // start with https server or only start WebSocket server
-    hub.io.attach(createServer(config, hub.integrations.gateway));
-    // hub.io.listen(3443)
+    // also can be used standalone like `hub.io.listen(3443)`
+    const server = createServer(config.production.https, hub.integrations.gateway);
+    hub.io.attach(server);
 
   } catch(e){
     console.log(e.stack);

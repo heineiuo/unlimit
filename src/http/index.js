@@ -3,7 +3,31 @@ import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
 
+import {redirectToHttpsMiddleware} from './redirectToHttps'
+import {pickLocationMiddleware} from './pickLocation'
+import {httpProxyMiddleware} from './httpProxy'
+import {seashellProxyMiddleware} from './seashellProxy'
+import {handler} from './handler'
+
+/**
+ * @param config
+ *   "agreeTos": true,
+ *    "debug": false,
+ *    "email": "heineiuo@gmail.com",
+ *    "approvedDomains": [
+ *    ],
+ *    "domains": [
+ *       []
+ *    ]
+ * @param gateway
+ *  {
+ *    handler: () => promise,
+ *    request: () => promise
+ *  }
+ * @returns {*}
+ */
 export default (config, gateway) => {
+  const {email, debug, domains, approvedDomains} = config;
 
   const app = express();
 
@@ -15,17 +39,17 @@ export default (config, gateway) => {
     next()
   });
 
-  app.use(require('./redirectToHttps')(config));
-  app.use(require('./pickLocation')());
+  app.use(redirectToHttpsMiddleware(approvedDomains));
+  app.use(pickLocationMiddleware());
 
   /**
    * 先判断是否需要经过seashell请求，如果是，则等待seashell请求，请求结果如果是继续操作，则修改res.locals.location等
    * 对象，并交给handler处理，如果请求结果是直接返回结果，则直接返回，不经过handler。
    * handler处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  app.use(require('./seashellProxy')(config));
-  app.use(require('./handler')(config));
-  app.use(require('./httpProxy')(config, app));
+  app.use(seashellProxyMiddleware());
+  app.use(handler());
+  app.use(httpProxyMiddleware(app));
 
 
   /**
@@ -50,11 +74,12 @@ export default (config, gateway) => {
     res.end('NOT FOUND \n SEASHELL SERVER.')
   });
 
+
   const server = createServer({
-    email: config.production.https.email,
+    email,
+    debug,
+    domains,
     agreeTos: true,
-    debug: config.production.https.debug,
-    domains: config.production.https.domains,
     forceSSL: false,
     redirectCode: 301,
     ports: {

@@ -21,7 +21,6 @@ const SeashellDebug = (type, ...logs) => {
     }
   });
 
-  console.log(result)
 };
 
 class Seashell {

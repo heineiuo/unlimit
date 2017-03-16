@@ -29,7 +29,7 @@ class File extends Model {
    */
   mkdir = (req) => new Promise(async (resolve, reject) => {
     try {
-      console.log(this);
+      // console.log(this);
       const {hostname, pathname} = req;
       const fs = filesystem(this.props.db);
       await new Promise((resolve, reject) => {
@@ -215,7 +215,7 @@ class File extends Model {
   });
 
   resolve(req){
-    console.log(this.props);
+    // console.log(this.props);
 
     const {action} = req;
     if (action == 'cat') return this.cat(req);

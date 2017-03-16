@@ -14,7 +14,7 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
      **/
     const {uploadKey='file', uploadDir, hostname, pathname, uploadLocation, isPublic, isHashName} = options;
 
-    console.log(uploadKey, uploadDir, uploadLocation);
+    // console.log(uploadKey, uploadDir, uploadLocation);
 
     /**
      * 设置上传参数, 处理上传, 返回上传结果 {fields, files}

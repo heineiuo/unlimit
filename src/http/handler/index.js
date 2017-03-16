@@ -6,7 +6,7 @@ import handleDOWNLOAD from './download'
 import handleUPLOAD from './upload'
 import {Router} from 'express'
 
-module.exports = (config) => {
+const handler = () => {
   const router = Router();
 
   router.use(async (req, res, next) => {
@@ -52,3 +52,6 @@ module.exports = (config) => {
   return router;
 };
 
+export {
+  handler
+}

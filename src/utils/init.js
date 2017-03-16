@@ -27,23 +27,11 @@ export default (hub, config) => new Promise(async(resolve, reject) => {
       action: 'commitLocations',
       hostname: domain,
       locations: [{
-        "pathname": "/^/api/account.*$/",
-        "cors": true,
-        "type": "SEASHELL",
-        "contentType": "TEXT",
-        "content": "account"
-      }, {
-        "pathname": "/^/api/gateway.*$/",
+        "pathname": "/api/:service",
         "cors": true,
         "type": "SEASHELL",
         "contentType": "TEXT",
         "content": "gateway"
-      }, {
-        "pathname": "/^/api/service.*$/",
-        "cors": true,
-        "type": "SEASHELL",
-        "contentType": "TEXT",
-        "content": "service"
       }]
 
     });

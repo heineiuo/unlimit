@@ -30,7 +30,7 @@ class EmailCode extends Model {
     try {
       const {email} = query;
       const {db} = this.props;
-      console.log(email);
+      // console.log(email);
       const code = createNumberCode();
       await db.put(email, {code, createTime: Date.now()});
 

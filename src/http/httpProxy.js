@@ -3,7 +3,7 @@ import httpProxy from 'http-proxy'
 /**
  * 反向代理
  */
-module.exports = (config, app) => {
+const httpProxyMiddleware = (app) => {
 
   const proxy = httpProxy.createProxyServer({
     // protocolRewrite: 'http'
@@ -45,3 +45,6 @@ module.exports = (config, app) => {
   };
 };
 
+export {
+  httpProxyMiddleware
+}

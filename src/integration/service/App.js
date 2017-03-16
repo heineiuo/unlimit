@@ -65,7 +65,7 @@ class App extends Model {
     try {
       const group = await reducers.Group.detail(service.appName);
       const index = group.list.findIndex(item => {
-        console.log(item.appId, service.appId);
+        // console.log(item.appId, service.appId);
         return item.appId == service.appId
       });
 

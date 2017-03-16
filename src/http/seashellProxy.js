@@ -12,7 +12,7 @@ const JSONSafeParse = (content, schema) => {
   }
 };
 
-module.exports = (config) => {
+const seashellProxyMiddleware = () => {
 
   const router = Router();
 
@@ -68,7 +68,7 @@ module.exports = (config) => {
       next()
 
     } catch(e){
-      if (config.debug) console.log(e.stack||e);
+      if (process.env.development) console.log(e.stack||e);
       next(e)
     }
 
@@ -77,7 +77,7 @@ module.exports = (config) => {
   router.use((err, req, res, next) => {
     if (!err) return next();
     if (err.message == 'NOT_SEASHELL') return next();
-    if (config.debug) console.log(err.stack||err);
+    if (process.env.development) console.log(err.stack||err);
     next(err)
   });
 
@@ -85,3 +85,7 @@ module.exports = (config) => {
 
 };
 
+
+export {
+  seashellProxyMiddleware
+}

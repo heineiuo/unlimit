@@ -86,8 +86,8 @@ class Host extends Model {
       await this.ShouldNotFound(hostname);
       await db.put(hostname, {hostname});
       await reducers.Location.batch({hostname, locations: {}, reset: true});
-      console.log('===========reducers===========');
-      console.log(reducers);
+      // console.log('===========reducers===========');
+      // console.log(reducers);
       resolve({hostname})
     } catch (e) {
       reject(e)
