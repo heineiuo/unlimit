@@ -96,11 +96,13 @@ class Location extends Component {
           locationState < 2?
             <Spin />:
             <div>
+              <div>
+                <div>域名绑定</div>
+                <div>{hostname}</div>
+              </div>
               <div className={css(styles.titleBar)}>
-                <div>路由列表</div>
-                <div>
-                  <Button onClick={this.saveLocation}>保存</Button>
-                </div>
+                <div style={{width: 100}}>路由列表</div>
+                <Button size="small" style={{width: 50}} onClick={this.saveLocation}>保存</Button>
               </div>
               <div className={css(styles.locationList)}>
                 <div className={css(styles.table)}>
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   titleBar: {
     marginBottom: 20,
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     flexDirection: 'row',
     padding: '5px 0',
   },

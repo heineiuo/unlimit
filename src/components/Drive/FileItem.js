@@ -7,7 +7,7 @@ import {Link} from "react-router-dom"
 class FileItem extends Component {
 
   state = {
-    selectState: 0,
+    selectState: 0, // 0未选中  2选中
     mouseOver: false
   };
 
@@ -67,13 +67,16 @@ class FileItem extends Component {
           <Link
             className={css(styles.name__text)}
             to={`${hrefPrefix}/file${pathname=="/"?'':pathname}/${item.name}`}>{item.name}</Link>
+          <div>
+            <Button style={{width: 60, transition: 'none'}} size="small" type="secondary" onClick={this.deleteFile}>删除</Button>
+            <Button style={{width: 60, transition: 'none'}} size="small" type="secondary" >重命名</Button>
+          </div>
         </div>
         <div className={css(styles.size)}>
           {filesize(item.stat.size)}
         </div>
         <div className={css(styles.options, mouseOver && styles.options_show)}>
-          <Button style={{width: 60, transition: 'none'}} size="small" type="danger" onClick={this.deleteFile}>删除</Button>
-          <Button style={{width: 60, transition: 'none'}} size="small" >重命名</Button>
+
         </div>
       </div>
     )
@@ -106,10 +109,12 @@ const styles = StyleSheet.create({
     width: 40
   },
   name: {
-    flex: 1,
+    flex: 2,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     color: '#1077ff',
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   name__text: {
     color: '#1077ff',

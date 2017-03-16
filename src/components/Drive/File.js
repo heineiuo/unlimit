@@ -35,10 +35,11 @@ class File extends Component {
     selected: [],
     isIntegrateAppOpen: false,
   };
+  fileRefs = {};
 
   getSplat = (props) => {
     const {location: {pathname}, match: {url}} = props || this.props;
-    return pathname.substring(url.length) || '/'
+    return pathname.substring(url.length)
   };
 
   componentWillMount = () => {
@@ -81,7 +82,17 @@ class File extends Component {
         selected: selected.slice().concat(file)
       })
     }
+  };
 
+  unSelectAll = () => {
+    const {selected} = this.state;
+    selected.forEach(file => {
+      this.fileRefs[file.name]._toggleSelect(0)
+    });
+    this.selectorDropDown.hide();
+    this.setState({
+      selected: []
+    });
   };
 
   _handleUploadSuccess = () => {
@@ -94,6 +105,10 @@ class File extends Component {
 
   openCreateFileModal = () => {
     this.createFileModal.open();
+  };
+
+  openCreateDirectoryModal = () => {
+
   };
 
   openIntegrateApp = (options) => {
@@ -119,7 +134,10 @@ class File extends Component {
   };
 
   pushSelectedFileToClipboard = () => {
-    const files = this.state.selected.map(file => `${this.getSplat(this.props)}/${file.name}`);
+    const files = this.state.selected.map(file => {
+      console.log(this.getSplat(this.props), file.name);
+      return `${this.getSplat(this.props)}/${file.name}`;
+    })
     // return console.log(files)
     this.props.pushFileToClipboard(files)
   };
@@ -161,26 +179,50 @@ class File extends Component {
                   hrefPrefix={hrefPrefix}
                   pathname={pathname} />
                 {/*工具栏*/}
+
                 <div className={css(styles.headerBar__tools)} style={(isFile || isIntegrateAppOpen)?{display: 'none'}:{}}>
-                  {/*选中操作*/}
-                  {
-                    selected.length == 0 ? null:
-                      <div className={css(styles.headerBar__toolItem)}>
-                        <span style={{color: '#666', fontSize: 13}}>{`已选中${selected.length}个文件`}</span>
-                        <Button type="danger" size="small">删除</Button>
-                      </div>
-                  }
                   {/*展示样式*/}
                   {/*<div className={css(styles.headerBar__toolItem)}>*/}
                     {/*<span>列表</span>|*/}
                     {/*<span>图标</span>*/}
                   {/*</div>*/}
+
+                  {/*选中操作*/}
+                  <div className={css(styles.headerBar__toolItem)}>
+                    <DropDown ref={ref => this.selectorDropDown = ref} className={css(styles.clipboard)}>
+                      <DropDownTrigger style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
+                        <Button type="primary" size="small" style={{userSelect: 'none'}}>
+                          {
+                            selected.length > 0 ? `选中文件(${selected.length})`
+                              : '选中文件'
+                          }
+                          <IconArrowDropdown />
+                        </Button>
+                      </DropDownTrigger>
+                      <DropDownContent className={css(styles.clipboard__content)}>
+                        {
+                          selected.length == 0 ? <div>未选择文件</div>: (
+                            <div>
+                              <div className={css(styles.clipboard__info)} onClick={this.unSelectAll}>取消选择</div>
+                              <div className={css(styles.clipboard__info)} style={{color: '#EE2222'}}>删除</div>
+                              <div
+                                onClick={this.pushSelectedFileToClipboard}
+                                className={css(styles.clipboard__info)}>添加到剪贴板</div>
+                            </div>
+                          )
+                        }
+                      </DropDownContent>
+                    </DropDown>
+                  </div>
+
                   {/*剪贴板*/}
                   <div className={css(styles.headerBar__toolItem)}>
                     <DropDown ref={ref => this.dropDown = ref} className={css(styles.clipboard)}>
                       <DropDownTrigger style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
                         <Button type="primary" size="small" style={{userSelect: 'none'}}>
-                          {`剪贴板`}
+                          {
+                            clipboard.length > 0 ? `剪贴板(${clipboard.length})`: '剪贴板'
+                          }
                           <IconArrowDropdown />
                         </Button>
                       </DropDownTrigger>
@@ -197,16 +239,6 @@ class File extends Component {
                           }
                         </div>
                         {
-                          selected.length == 0? null:(
-                            <span
-                              style={{borderBottom: '1px solid #DDD'}}
-                              className={css(styles.clipboard__item)}
-                              onClick={this.pushSelectedFileToClipboard}>
-                              将选中的文件添加到剪贴板
-                            </span>
-                          )
-                        }
-                        {
                           clipboard.length == 0 ? null: (
                             <div style={{display: 'flex', flexDirection: 'column'}}>
                               <span className={css(styles.clipboard__item)}>复制到此</span>
@@ -221,20 +253,27 @@ class File extends Component {
                       </DropDownContent>
                     </DropDown>
                   </div>
-                  {/*上传*/}
+                  {/*创建文件、文件夹以及上传文件*/}
                   <div className={css(styles.headerBar__toolItem)}>
-                    <Upload
-                      style={{display: 'flex'}}
-                      onSuccess={this._handleUploadSuccess}
-                      action={uploadAction}>
-                      <Button type="primary" size="small">上传文件</Button>
-                    </Upload>
-                  </div>
-                  {/*新建文件*/}
-                  <div className={css(styles.headerBar__toolItem)}>
-                    <Button onClick={this.openCreateFileModal} type="primary" size="small">创建</Button>
+                    <DropDown ref={ref => this.dropDown = ref} className={css(styles.clipboard)}>
+                      <DropDownTrigger style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
+                        <Button type="primary" size="small" style={{userSelect: 'none'}}>
+                          {`创建`}
+                          <IconArrowDropdown />
+                        </Button>
+                      </DropDownTrigger>
+                      <DropDownContent className={css(styles.clipboard__content)}>
+                        <div onClick={this.openCreateFileModal}>文件</div>
+                        <div onClick={this.openCreateDirectoryModal}>文件夹</div>
+                        <Upload
+                          style={{display: 'flex'}}
+                          onSuccess={this._handleUploadSuccess}
+                          action={uploadAction}>上传文件</Upload>
+                      </DropDownContent>
+                    </DropDown>
                   </div>
                 </div>
+                {/*end of tools*/}
               </div>
               {
                 isIntegrateAppOpen ? null:
@@ -261,6 +300,7 @@ class File extends Component {
                               {
                                 file.ls.map((item, index) => (
                                   <FileItem
+                                    ref={ref => this.fileRefs[item.name] = ref}
                                     onToggleSelect={this.handleFileToggleSelect}
                                     hrefPrefix={hrefPrefix}
                                     key={item.name}
@@ -326,7 +366,7 @@ const styles = StyleSheet.create({
     width: 40
   },
   listViewBar__name: {
-    flex: 1
+    flex: 2
   },
   listViewBar__size: {
     flex: 1,
