@@ -1,0 +1,39 @@
+{
+  "body": {
+    "importAppName": "account",
+    "reducerName": "token",
+    "action": "session",
+    "token": "f81da9590d1ab9ec28ca68deecaad5a82d77ffbb6287fc089d9e4c04cc66f1811e015f896e0b9efaa6a938bfc5d97446",
+    "__GATEWAY_META": {
+      "ip": "127.0.0.1",
+      "method": "POST",
+      "originalUrl": "/api/account",
+      "protocol": "http",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+      "host": {
+        "hostname": "local.youkuohao.com"
+      },
+      "url": {
+        "protocol": null,
+        "slashes": null,
+        "auth": null,
+        "host": null,
+        "port": null,
+        "hostname": null,
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/api/account",
+        "path": "/api/account",
+        "href": "/api/account"
+      }
+    }
+  },
+  "headers": {
+    "appName": "gateway",
+    "callbackId": "5b5a7550-ff6a-11e6-b26f-3dde33407303",
+    "importAppName": "account",
+    "originUrl": "/",
+    "__SEASHELL_START": 1488474294566
+  }
+}

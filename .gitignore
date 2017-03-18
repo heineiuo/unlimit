@@ -10,7 +10,6 @@ Thumb.db
 .grunt-cache
 .grunt
 docs/apidoc
-dist
 
 *.log*
 

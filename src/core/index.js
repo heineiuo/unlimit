@@ -1,5 +1,5 @@
 import SocketIO from 'socket.io'
-import {SeashellDebug} from './seashell-debug'
+import {SeashellDebug} from './debug'
 import {integrate} from './integrate'
 import {onRegister} from './onRegister'
 import {onRequest} from './onRequest'

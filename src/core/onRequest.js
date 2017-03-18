@@ -1,4 +1,4 @@
-import {SeashellDebug} from './seashell-debug'
+import {SeashellDebug} from './debug'
 
 
 const onRequest =  async function(socket, req) {
