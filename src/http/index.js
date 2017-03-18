@@ -1,4 +1,4 @@
-import createServer from 'auto-sni'
+import createAutoSNIServer from 'auto-sni'
 import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
@@ -26,8 +26,8 @@ import {handler} from './handler'
  *  }
  * @returns {*}
  */
-export default (config, gateway) => {
-  const {email, debug, domains, approvedDomains} = config;
+const createServer = (config, gateway) => {
+  const {email, debug, domains, approvedDomains, useSeashell=true} = config;
 
   const app = express();
 
@@ -47,7 +47,7 @@ export default (config, gateway) => {
    * 对象，并交给handler处理，如果请求结果是直接返回结果，则直接返回，不经过handler。
    * handler处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  app.use(seashellProxyMiddleware());
+  if (useSeashell) app.use(seashellProxyMiddleware());
   app.use(handler());
   app.use(httpProxyMiddleware(app));
 
@@ -75,7 +75,7 @@ export default (config, gateway) => {
   });
 
 
-  const server = createServer({
+  const server = createAutoSNIServer({
     email,
     debug,
     domains,
@@ -91,3 +91,5 @@ export default (config, gateway) => {
   return server
 
 };
+
+export default createServer

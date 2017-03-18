@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run server",
+    "test": "jest __tests__",
     "server": "sudo nodemon --watch ./src --exec babel-node ./src --init",
     "build-server": "seashell-dev --build --compress"
   },

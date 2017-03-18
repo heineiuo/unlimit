@@ -1,15 +1,20 @@
-
 import config from './utils/config'
 import {opendb, promisifydb, subdb} from './utils/db'
 import init from './utils/init'
-import createHub from './integration'
 import createServer from './http'
+import Seashell from './core'
+import service from './integration/service'
+import account from './integration/account'
+import gateway from './integration/gateway'
 
 const start = async () => {
 
   try {
     const db = opendb(`${config.datadir}/db`);
-    const hub = createHub(db);
+    const hub = new Seashell();
+    hub.integrate(gateway('gateway', subdb(db, 'gateway')));
+    hub.integrate(service('service', subdb(db, 'service')));
+    hub.integrate(account('account', subdb(db, 'account')));
 
     if (config.init) await init(hub, config);
 

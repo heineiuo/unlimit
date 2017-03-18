@@ -2,7 +2,6 @@
 import {Model} from 'sprucejs'
 import Joi from 'joi'
 import ent from 'ent'
-import config from '../../utils/config'
 
 class Location extends Model {
 

@@ -1,5 +1,4 @@
 import {Router} from 'seashell-client-node'
-import config from '../../utils/config'
 import {combineReducers} from 'sprucejs'
 
 const createApp = (name, db) => {
@@ -25,10 +24,8 @@ const createApp = (name, db) => {
   // app.use(async (req, res, next) => {
   //
   //   const {token} = req.body;
-  //   if (config.debug) console.log(token);
   //   if (!token) throw new Error('PERMISSION_DENIED');
   //   const {body} = await app.request('/account/session', {token});
-  //   if (config.debug) console.log(body);
   //   if (body.error || body.user == null) throw new Error('PERMISSION_DENIED');
   //   res.session = body;
   //   next()
@@ -41,7 +38,6 @@ const createApp = (name, db) => {
     req.body.setHeader = (header) => {
       Object.assign(res.headers, header);
     };
-    req.body.__config = config;
     const result = await handleRequest(req.body);
     res.json(result)
   });
