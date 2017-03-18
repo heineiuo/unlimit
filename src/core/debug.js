@@ -18,6 +18,8 @@ const SeashellDebug = (type, ...logs) => {
     }
   });
 
+  console.log(result)
+
 };
 
 export {

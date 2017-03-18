@@ -125,6 +125,7 @@ class Group extends Model {
     const {action} = query;
     if (action == 'list') return this.list();
     if (action == 'detail') return this.detail(query);
+    if (action == 'Get') return this.Get(query);
     if (action == 'remove') return this.remove(query);
 
     return new Promise((resolve, reject) => reject(new Error('ACTION_NOT_FOUND')))

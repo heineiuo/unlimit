@@ -2,7 +2,7 @@ import uuid from 'uuid'
 import {Model} from 'sprucejs'
 import crypto from 'crypto'
 
-const createSecret = () => crypto.randomBytes(512);
+const createSecret = () => crypto.randomBytes(512).toString('hex');
 
 
 class App extends Model {
@@ -26,16 +26,27 @@ class App extends Model {
     appSecret: String
   };
 
+  Get = (appId) => new Promise(async (resolve, reject) => {
+    try {
+      const {db, reducers} = this.props;
+      const app = await db.get(appId);
+      resolve(app)
+    } catch(e){
+      reject(new Error('App Not Found'))
+    }
+  });
+
   /**
    * app create
    */
-  create = (appName) => new Promise(async (resolve, reject) => {
+  create = (query) => new Promise(async (resolve, reject) => {
     try {
+      const {appName} = query;
       const {db, reducers} = this.props;
       const nextService = {
-        appId: uuid.v4(),
+        appId: uuid.v1(),
         appName: appName,
-        appSecret: createSecret()
+        appSecret: createSecret().toString(10)
       };
 
       const group = await reducers.Group.detail(appName);
@@ -94,12 +105,41 @@ class App extends Model {
     }
   });
 
+  list = () => new Promise(async (resolve, reject) => {
+    try {
+      const {db} = this.props;
+      const list = [];
+      db.createReadStream({})
+        .on('data', (data) => {
+          list.push(data)
+        })
+        .on('end', () => {
+          resolve({list})
+        });
+    } catch(e){
+      reject(e)
+    }
+  });
+
+  remove = (context) => new Promise(async (resolve, reject) => {
+    try {
+      const {appId} = context;
+      const {db} = this.props;
+      await db.del(appId);
+      resolve({})
+    } catch(e){
+      reject(e)
+    }
+  });
+
   resolve(query) {
     const {action} = query;
+    if (action == 'Get') return this.Get(query);
+    if (action == 'list') return this.list(query);
     if (action == 'create') return this.create(query);
+    if (action == 'remove') return this.remove(query);
     if (action == 'importFromConfig') return this.importFromConfig(query);
     return new Promise((resolve, reject) => reject(new Error('ACTION_NOT_FOUND')))
-
   }
 
 }

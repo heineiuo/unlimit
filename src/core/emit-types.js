@@ -1,4 +1,3 @@
-export const ExceptionError = 'ExceptionError';
 export const YOUR_REGISTER_HAS_RESPONSE = 'YOUR_REGISTER_HAS_RESPONSE';
 export const RESPONSE = 'RESPONSE';
 export const YOUR_REQUEST_HAS_RESPONSE = 'YOUR_REQUEST_HAS_RESPONSE';

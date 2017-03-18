@@ -1,7 +1,7 @@
 import {SeashellDebug} from './debug'
 
 
-const onRequest = async function(socket, req) {
+const onSend = async function(socket, req) {
 
   const {io, integrations, integrations: {service}, requestIntegration, integrationEmitterStack} = this;
 
@@ -45,7 +45,7 @@ const onRequest = async function(socket, req) {
       io.sockets.connected[resServiceId].emit('PLEASE_HANDLE_THIS_REQUEST', req)
     }
   } catch(e) {
-    SeashellDebug('ERROR', 'request failed', e);
+    SeashellDebug('ERROR', 'send failed', e);
     const res = {
       headers: {
         callbackId: req.headers.callbackId
@@ -54,10 +54,9 @@ const onRequest = async function(socket, req) {
         error: e.message
       }
     };
-    socket.emit('YOUR_REQUEST_HAS_RESPONSE', res);
   }
 };
 
 export {
-  onRequest
+  onSend
 }

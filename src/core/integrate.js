@@ -53,7 +53,7 @@ const integrate = function(integration){
           onRequest({integration: true}, req);
           SeashellDebug('INFO', `Integration ${name} Start request: ${url}`);
         } catch(e){
-          SeashellDebug(e, 'ERROR');
+          SeashellDebug('ERROR', e);
           reject(e)
         }
       })
@@ -62,23 +62,6 @@ const integrate = function(integration){
 
   router.request = integrations[name].request;
   this.integrations = integrations;
-  if (name == 'service') {
-
-    const createQuery = (action) => (params) => handler({
-      reducerName: 'socket',
-      action,
-      ...params
-    });
-
-    this.Socket = {
-      detail: createQuery('detail'),
-      remove: createQuery('remove'),
-      findByAppId: createQuery('findByAppId'),
-      balance: createQuery('balance'),
-      bindApp: createQuery('bindApp')
-    };
-  }
-
   return integrations[name]
 };
 

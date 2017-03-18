@@ -1,8 +1,8 @@
 import config from './utils/config'
 import {opendb, promisifydb, subdb} from './utils/db'
 import init from './utils/init'
-import createServer from './http'
-import Seashell from './core'
+
+import Seashell, {createServer} from '../../../seashell'
 import service from './integration/service'
 import account from './integration/account'
 import gateway from './integration/gateway'
