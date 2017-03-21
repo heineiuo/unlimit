@@ -1,4 +1,6 @@
-export default (hub, config) => new Promise(async(resolve, reject) => {
+import config from './config'
+
+export default (hub) => new Promise(async(resolve, reject) => {
   try {
 
 
@@ -12,41 +14,34 @@ export default (hub, config) => new Promise(async(resolve, reject) => {
       action: 'Delete',
       hostname: domain
     });
-    if (step1.body.error) throw new Error(step1.body.error);
+    // if (step1.body.error) throw new Error(step1.body.error);
 
     const step2 = await gateway.request('gateway', {
       reducerName: 'host',
       action: 'New',
       hostname: domain
     });
-    if (step2.body.error) throw new Error(step2.body.error);
 
+    // if (step2.body.error) throw new Error(step2.body.error);
 
-    const step3 = await gateway.request('gateway', {
-      reducerName: 'location',
-      action: 'commitLocations',
+    const step3 = await gateway.request('gateway/location/commitLocations', {
       hostname: domain,
       locations: [{
-        "pathname": "/api/:service",
+        "pathname": "/api/*",
         "cors": true,
         "type": "SEASHELL",
-        "contentType": "TEXT",
-        "content": "gateway"
+        "content": "/api/"
       }]
 
     });
-    if (step3.body.error) throw new Error(step3.body.error);
+    // if (step3.body.error) throw new Error(step3.body.error);
 
-    const step4 = await gateway.request('gateway', {
-      reducerName: 'file',
-      action: 'mkdir',
+    const step4 = await gateway.request('gateway/fs/mkdir', {
       hostname: domain,
       pathname: '/',
     });
 
-    const step5 = await gateway.request('gateway', {
-      reducerName: 'file',
-      action: 'mkdir',
+    const step5 = await gateway.request('gateway/fs/mkdir', {
       hostname: domain,
       pathname: '/public',
     });
@@ -54,7 +49,7 @@ export default (hub, config) => new Promise(async(resolve, reject) => {
     console.log('[gateway] init success');
     resolve()
   } catch (e) {
-    console.log(e.stack);
+    console.log('INIT FAIL \n' + e.stack||e);
     reject(e)
   }
 

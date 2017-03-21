@@ -1,72 +1,64 @@
-import {Router} from 'seashell-client-node'
-import {combineReducers} from 'sprucejs'
+import {App} from 'seashell'
+import {bindActionCreators, makeSubLevels} from '../tools'
 
 
-export default module.exports = (name, db) => {
+const actionCreators = bindActionCreators({
+  session: require('./actions/session'),
+  userList: require('./actions/userList'),
+  checkCode: require('./actions/checkCode'),
+  createCode: require('./actions/createCode'),
+  createLoginCode: require('./actions/createLoginCode'),
+  createToken: require('./actions/createToken'),
+  getSSOCode: require('./actions/getSsoCode'),
+  getTokenByEmailCode: require('./actions/getTokenByEmailCode'),
+  getTokenBySSOCode: require('./actions/getTokenBySSOCode'),
+  getUser: require('./actions/getUser'), // dev
+  getUserIdWithUpset: require('./actions/getUserIdWithUpset'),
+  logout: require('./actions/logout'),
+  ssocodeGet: require('./actions/ssocodeGet')
+});
 
-  const app = new Router();
-  const handler = combineReducers([
-    require('./Email'),
-    require('./EmailCode'),
-    require('./SSOCode'),
-    require('./Token'),
-    require('./User')
-  ])(db);
+export default module.exports = (db) => {
 
-  app.use((req, res, next) => {
-    res.app = app;
-    res.json = (data) => {
-      res.body = data;
-      res.end()
+  const app = new App();
+  const sublevels = makeSubLevels(db, ['Email', 'EmailCode', 'SSOCode', 'Token', 'User']);
+
+  app.use((ctx, next) => {
+    ctx.app = app;
+    ctx.db = sublevels;
+    ctx.json = (data) => {
+      ctx.response.body = data;
+      ctx.response.end()
     };
+    ctx.setHeader = (header) => {
+      Object.assign(ctx.response.headers, header);
+    };
+    ctx.error = (error) => ctx.json({error});
+
+    ctx.on('error', (err) => {
+      if (err.name == 'ValidationError') return ctx.error('PARAM_ILLEGAL');
+      if (err.message == 'Command failed') return ctx.error('COMMAND_FAILED');
+
+      return ctx.error(err.message);
+    });
+
+    ctx.on('end', () => {
+      if (!ctx.state.isHandled) ctx.error('NOT_FOUND')
+    });
     next()
   });
 
-
-  /**
-   * 通用中间件
-   * 检查session, 并把session传递给下面的中间件
-   */
-  app.use(async(req, res, next) => {
-    req.body.session = {
-      user: null
-    };
-
-    try {
-      if (!req.body.hasOwnProperty('token')) return next();
-      const user = await handler({
-        reducerName: 'token',
-        action: 'session',
-        token: req.body.token
-      });
-      req.body.session = {user};
-      next()
-    } catch(e){
-      if (e.message == 'SESSION_EMPTY') return next();
-      next(e)
+  app.use('/:actionName', async ctx => {
+    const actions = actionCreators(ctx);
+    const {actionName} = ctx.request.params;
+    if (!actions.hasOwnProperty(actionName)) {
+      return ctx.error('NOT_FOUND')
     }
-  });
-
-  app.use(async (req, res, next) => {
-    if (!req.body.hasOwnProperty('reducerName')) throw new Error('PARAM_ILLEGAL');
-    const result = await handler(req.body);
-    res.json(result)
+    const action = actions[actionName];
+    const result = await action(ctx.request.body);
+    ctx.json(result)
   });
 
 
-  app.use((err, req, res, next) => {
-    if (err.name == 'ValidationError') return res.json({error: 'PARAM_ILLEGAL'});
-    if (err.message == 'Command failed') return res.json({error: 'COMMAND_FAILED'});
-    return res.json({error: err.message});
-  });
-
-  app.use((req, res, next) => {
-    res.json({error: 'NOT_FOUND'})
-  });
-
-  return {
-    name,
-    router: app,
-    handler,
-  }
+  return app
 }

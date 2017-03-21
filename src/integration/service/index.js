@@ -1,51 +1,72 @@
-import {Router} from 'seashell-client-node'
-import {combineReducers} from 'sprucejs'
+import {App} from 'seashell'
+import chalk from 'chalk'
+import {bindActionCreators, makeSubLevels} from '../tools'
 
-export default (name, db) => {
+const createService = (db) => {
 
-  const router = new Router();
+  const app = new App();
 
-  const handler = combineReducers([
-    require('./App'),
-    require('./Group'),
-    require('./Socket')
-  ])(db);
+  const allActionCreators = {
+    group: bindActionCreators({
+      detail: require('./actions/group/detail'),
+      list: require('./actions/group/list'),
+      remove: require('./actions/group/remove'),
+      update: require('./actions/group/update'),
+    }),
+    socket: bindActionCreators({
+      balance: require('./actions/socket/balance'),
+      bindApp: require('./actions/socket/bindApp'),
+      detail: require('./actions/socket/detail'),
+      empty: require('./actions/socket/empty'),
+      findAll: require('./actions/socket/list'),
+      findByAppId: require('./actions/socket/get'),
+      remove: require('./actions/socket/remove'),
+    }),
+    app: bindActionCreators({
+      create: require('./actions/app/create'),
+      list: require('./actions/app/list'),
+      remove: require('./actions/app/remove'),
+    })
+  };
 
-  /**
-   * add `res.json` method
-   */
-  router.use((req, res, next) => {
-    res.json = (body) => {
-      res.body = body;
-      res.end()
+  const levels = makeSubLevels(db, ['App', 'Group', 'Socket']);
+
+  app.use((ctx, next) => {
+    ctx.db = levels;
+    ctx.json = (data) => {
+      ctx.response.body = data;
+      ctx.response.end()
     };
-    res.error = (errCode) => {
-      res.json({error: errCode})
+    ctx.setHeader = (header) => {
+      Object.assign(ctx.response.headers, header);
     };
+    ctx.error = (error) => ctx.json({error});
+
+    ctx.on('error', (err) => {
+      console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message));
+      if (err.name == 'ValidationError') return ctx.error('PARAM_ILLEGAL');
+      if (err.message == 'Command failed') return ctx.error('COMMAND_FAILED');
+
+      return ctx.error(err.message);
+    });
+
+    ctx.on('end', () => {
+      if (!ctx.state.isHandled) ctx.error('NOT_FOUND')
+    });
     next()
   });
 
-  router.use(async (req, res, next) => {
-    if (!req.body.hasOwnProperty('reducerName')) throw new Error('ILLEGAL_PARAMS');
-    const result = await handler(req.body);
-    res.json(result)
+  app.use('/:moduleName/:actionName', async ctx => {
+    const {moduleName, actionName} = ctx.request.params;
+    if (!allActionCreators.hasOwnProperty(moduleName)) return ctx.error('NOT_FOUND');
+    const actionCreators = allActionCreators[moduleName];
+    const actions = actionCreators(ctx);
+    if (!actions.hasOwnProperty(actionName)) return ctx.error('NOT_FOUND');
+    const result = await actions[actionName](ctx.request.body);
+    ctx.json(result)
   });
 
-  /**
-   * error handle
-   */
-  router.use((err, req, res, next) => {
-    res.error(err.message)
-  });
+  return app
+};
 
-  /**
-   * 404 handle
-   */
-  router.use((req, res) => {
-    res.error('ROUTER_NOT_FOUND')
-  });
-
-  return {
-    name, router, handler
-  }
-}
+export default createService;

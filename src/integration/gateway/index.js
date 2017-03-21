@@ -1,65 +1,73 @@
-import {Router} from 'seashell-client-node'
-import {combineReducers} from 'sprucejs'
+import {App} from 'seashell'
+import {bindActionCreators, makeSubLevels} from '../tools'
+import createServer from './http'
 
-const createApp = (name, db) => {
+const createApp = (db) => {
 
-  const app = new Router();
+  const app = new App();
+  const levels = makeSubLevels(db, ['File', 'Host', 'Location']);
+  const allActionCreators = {
+    fs: bindActionCreators({
+      cat: require('./actions/fs/cat'),
+      ls: require('./actions/fs/ls'),
+      mkdir: require('./actions/fs/mkdir'),
+      rename: require('./actions/fs/rename'),
+      unlink: require('./actions/fs/unlink'),
+      upload: require('./actions/fs/upload'),
+      writeFile: require('./actions/fs/writeFile'),
+    }),
+    host: bindActionCreators({
+      detail: require('./actions/host/detail'),
+      get: require('./actions/host/get'),
+      list: require('./actions/host/list'),
+      new: require('./actions/host/new'),
+      remove: require('./actions/host/remove'),
+    }),
+    location: bindActionCreators({
+      batchLocations: require('./actions/location/batchLocation'),
+      commitLocations: require('./actions/location/commitLocations'),
+      list: require('./actions/location/list'),
+      new: require('./actions/location/new')
+    })
+  };
 
-  const handleRequest = combineReducers([
-    require('./File'),
-    require('./Host'),
-    require('./Location')
-  ])(db);
-
-  app.use((req, res, next) => {
-    res.app = app;
-    res.json = (data) => {
-      res.body = data;
-      res.end()
+  app.use((ctx, next) => {
+    ctx.app = app;
+    ctx.db = levels;
+    ctx.json = (data) => {
+      ctx.response.body = data;
+      ctx.response.end()
     };
-    res.error = (error) => res.json({error});
+    ctx.setHeader = (header) => {
+      Object.assign(ctx.response.headers, header);
+    };
+    ctx.error = (error) => ctx.json({error});
+
+    ctx.on('error', (err) => {
+      if (err.name == 'ValidationError') return ctx.error('PARAM_ILLEGAL');
+      if (err.message == 'Command failed') return ctx.error('COMMAND_FAILED');
+
+      return ctx.error(err.message);
+    });
+
+    ctx.on('end', () => {
+      if (!ctx.state.isHandled) ctx.error('NOT_FOUND')
+    });
     next()
   });
 
-  // app.use(async (req, res, next) => {
-  //
-  //   const {token} = req.body;
-  //   if (!token) throw new Error('PERMISSION_DENIED');
-  //   const {body} = await app.request('/account/session', {token});
-  //   if (body.error || body.user == null) throw new Error('PERMISSION_DENIED');
-  //   res.session = body;
-  //   next()
-  // });
-
-  app.use(async (req, res, next) => {
-
-    const {reducerName} = req.body;
-    if (!reducerName) return next(new Error('PARAM_ILLEGAL'));
-    req.body.setHeader = (header) => {
-      Object.assign(res.headers, header);
-    };
-    const result = await handleRequest(req.body);
-    res.json(result)
+  app.use('/:moduleName/:actionName', async ctx => {
+    const {moduleName, actionName} = ctx.request.params;
+    if (!allActionCreators.hasOwnProperty(moduleName)) return ctx.error('NOT_FOUND');
+    const actionCreators = allActionCreators[moduleName];
+    const actions = actionCreators(ctx);
+    if (!actions.hasOwnProperty(actionName)) return ctx.error('NOT_FOUND');
+    const result = await actions[actionName](ctx.request.body);
+    ctx.json(result)
   });
 
-  app.use((err, req, res, next) => {
-
-    console.error(err);
-    if (err.name == 'ValidationError') return res.error('PARAM_ILLEGAL');
-    if (err.message == 'Command failed') return res.error('COMMAND_FAILED');
-
-    return res.error(err.message);
-  });
-
-  app.use((req, res) => {
-    res.error('NOT_FOUND')
-  });
-
-  return {
-    name,
-    handler: handleRequest,
-    router: app
-  };
+  return app
 };
 
-export default module.exports = createApp
+export default createApp
+export {createServer}
