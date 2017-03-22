@@ -8,9 +8,9 @@ import morgan from 'morgan'
 import compression from 'compression'
 import bodyParser from 'body-parser'
 import Hub from '../src/server/ServiceServer'
-import gateway from '../src/server/integration/gateway'
-import service from '../src/server/integration/service'
-import account from '../src/server/integration/account'
+import gateway from '../src/server/actions/gateway'
+import service from '../src/server/actions/service'
+import account from '../src/server/actions/account2'
 import config from '../src/server/utils/config'
 
 
@@ -21,7 +21,7 @@ const hub = new Hub(server);
 
 hub.integrate({name: 'gateway', router: gateway});
 hub.integrate({name: 'service', router: service});
-hub.integrate({name: 'account', router: account});
+hub.integrate({name: 'account2', router: account});
 
 app.use((req, res, next) => {
   res.hub = hub;
