@@ -35,8 +35,7 @@ const seashellProxyMiddleware = () => {
       const {host, url, location} = res.locals;
 
       const data = Object.assign({}, req.query, req.body, {
-        __GATEWAY_META: Object.assign(
-          {},
+        __GATEWAY_META: Object.assign({},
           pick(req, ['ip', 'method', 'originalUrl', 'protocol']),
           pick(req.headers, ['user-agent', 'host'])
         )
@@ -44,11 +43,13 @@ const seashellProxyMiddleware = () => {
 
       const content = location.content;
       const requestUrl = url.pathname.substring(content.length);
+
       let result = null;
-      if (requestUrl.search('seashell') == 0) {
+      if (requestUrl.search(seashell.__SEASHELL_NAME) == 0) {
+        const originUrl = requestUrl.substring(seashell.__SEASHELL_NAME.length);
         result = await seashell.requestSelf({
           headers: {
-            originUrl: requestUrl.substring(8)
+            originUrl
           },
           body: data
         })

@@ -40,7 +40,7 @@ const createServer = (config, seashell) => {
 
   const app = express();
 
-  app.use(morgan('[SEASHELL][:req[host]:url][:status][:res[content-length]][:response-time ms]', {}));
+  app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
   app.use(compression());
   app.use((req, res, next) => {
     res.seashell = seashell;
@@ -96,7 +96,7 @@ const createServer = (config, seashell) => {
       http: 80,
       https: 443
     }
-  }, app).once("listening", () => console.log("[Seashell] Listening on port 443 and 80."));
+  }, app).once("listening", () => console.log("[SEASHELL] Listening on port 443 and 80."));
 
   return server
 

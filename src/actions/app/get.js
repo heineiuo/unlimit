@@ -12,6 +12,7 @@ const get = ({appName}) => (ctx) => new Promise(async (resolve, reject) => {
     resolve(detail)
   } catch(e){
     if (e.name != 'NotFoundError') return reject('APP_NOT_CREATED');
+    reject(e)
   }
 });
 

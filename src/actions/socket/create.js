@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import {connect, bindActionCreators} from "../../utils/tools"
 import getApp from "../app/get"
 import updateApp from "../app/update"
@@ -8,8 +9,15 @@ import updateApp from "../app/update"
  * @param query.registerInfo
  * @returns {Promise}
  */
-const add = (query) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const create = (query) => (ctx, getAction) => new Promise(async(resolve, reject) => {
   try {
+    const validate = Joi.validate(query, Joi.object().keys({
+      socketId: Joi.string().required(),
+      registerInfo: Joi.object().required(),
+    }), {allowUnknown: true});
+
+    if (validate.error) return reject(validate.error);
+
     const db = ctx.db.socket;
     const {socketId, registerInfo: {appName, appId, appSecret}} = query;
     const {getApp, updateApp} = getAction();
@@ -18,13 +26,14 @@ const add = (query) => (ctx, getAction) => new Promise(async(resolve, reject) =>
       return item.appId == appId && item.appSecret == appSecret
     });
     if (targetAppIndex == -1) throw new Error('ERROR_REGISTER_INFO');
-    const targetApp = Object.assign({}, app.list[targetAppIndex], {
-      socketId: socketId,
-      status: 1
-    });
-    await db.put(socketId, targetApp);
+    const targetApp = app.list[targetAppIndex];
+    targetApp.status = 1;
+    targetApp.socketId = socketId;
     app.list.splice(targetAppIndex, 1, targetApp);
-    await updateApp({appName: app.appName, app});
+    await Promise.all([
+      db.put(socketId, Object.assign({}, targetApp, {appName: appName})),
+      updateApp({appName: app.appName, app})
+    ]);
     const socketData = Object.assign({}, targetApp, {appName});
     resolve(socketData)
   } catch (e) {
@@ -36,4 +45,4 @@ export default module.exports = connect(
   bindActionCreators({
      getApp, updateApp
   })
-)(add)
+)(create)

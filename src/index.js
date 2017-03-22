@@ -15,6 +15,7 @@ const start = async () => {
     const db = levelSubLevel(level(`${config.datadir}/db`), {valueEncoding:'json'});
 
     const app = new Seashell();
+    // app.__SEASHELL_NAME = 'gateway';
 
     const allActionCreators = {
       email: bindActionCreators({
@@ -99,6 +100,12 @@ const start = async () => {
         if (err.name == 'ValidationError') return ctx.error('PARAM_ILLEGAL');
         if (err.message == 'Command failed') return ctx.error('COMMAND_FAILED');
         return ctx.error(err.message);
+      });
+      ctx.on('end', () => {
+        if (!ctx.state.isHandled) {
+          ctx.response.body = {error: 'CAN_NOT_HANDLE_TIS_REQUEST'};
+          ctx.response.end()
+        }
       });
       next()
     });
