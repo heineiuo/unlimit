@@ -1,4 +1,4 @@
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 import removeSocket from '../socket/remove'
 
 const remove = ({appName}) => (ctx) => new Promise(async (resolve, reject) => {

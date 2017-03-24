@@ -1,5 +1,5 @@
 import getUser from "../user/getUser"
-import {connect, bindActionCreators} from "../../utils/tools"
+import {connect, bindActionCreators} from "action-creator"
 
 /**
  * @api {POST} /account2/session 获取session信息

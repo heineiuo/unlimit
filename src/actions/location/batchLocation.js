@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import ent from 'ent'
 import getHost from '../host/get'
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 
 /**
  * @api {POST} /location/batch 批量设置

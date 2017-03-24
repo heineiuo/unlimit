@@ -1,7 +1,7 @@
 
 import {
   connect, bindActionCreators
-} from '../../utils/tools'
+} from 'action-creator'
 
 import createCode from './createCode'
 

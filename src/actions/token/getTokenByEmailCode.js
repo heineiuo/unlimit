@@ -1,4 +1,4 @@
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 
 import getUserIdWithUpset from '../email/getUserIdWithUpset'
 import checkCode from '../emailcode/checkCode'

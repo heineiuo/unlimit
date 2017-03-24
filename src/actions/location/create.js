@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 import shouldNotFound from './shouldNotFound'
 import commitLocations from './commitLocations'
 

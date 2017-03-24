@@ -1,5 +1,5 @@
 import AliPush from 'ali-push'
-import config from '../../utils/config'
+import config from '../../config'
 
 const client = new AliPush({
   AccessKeyId: config.production.aliyun.accessid,

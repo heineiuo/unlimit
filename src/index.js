@@ -1,13 +1,22 @@
-import Seashell, {uuid} from '../../../seashell'
+import Seashell, {uuid} from 'seashell'
 import chalk from 'chalk'
 import level from 'levelup'
 import levelSubLevel from 'level-sublevel'
+import ql from 'q-level'
+import {bindActionCreators} from 'action-creator'
 
-import config from './utils/config'
-import init from './utils/init'
+import config from './config'
+import init from './init'
 import createServer from './http'
-import {bindActionCreators, makeSubLevels} from './utils/tools'
 
+const makeSubLevels = (db, list) => {
+  const result = {};
+  list.forEach(name => {
+    result[name] = result[name.toLowerCase()] = ql(db.sublevel(name.toLowerCase()));
+  });
+
+  return result;
+};
 
 const start = async () => {
 

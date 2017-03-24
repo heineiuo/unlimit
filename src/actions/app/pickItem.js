@@ -1,4 +1,4 @@
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 
 /**
  * 获取处理请求的app, 并作负载均衡

@@ -1,4 +1,4 @@
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 import ShouldNotFound from './shouldNotFound'
 
 const create = ({appName}) => (ctx, getAction) => new Promise(async (resolve, reject) => {

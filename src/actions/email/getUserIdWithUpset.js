@@ -1,7 +1,4 @@
-import {
-  bindActionCreators,
-  connect
-} from '../../utils/tools'
+import {connect, bindActionCreators } from 'action-creator'
 
 import createUser from '../user/createUser'
 

@@ -1,6 +1,6 @@
 import uuid from 'uuid'
 import crypto from 'crypto'
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 
 import getApp from './get'
 import updateApp from './update'

@@ -1,5 +1,5 @@
 import Table from 'cli-table2'
-import config from '../src/utils/config'
+import config from '../src/config'
 import Host from '../src/actions/gateway/Host'
 import Location from '../src/actions/gateway/Location'
 

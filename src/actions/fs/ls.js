@@ -1,6 +1,6 @@
 import path from 'path'
 import filesystem from 'level-filesystem'
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 import cat from './cat'
 
 /**

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import {connect, bindActionCreators} from '../../utils/tools'
+import {connect, bindActionCreators} from 'action-creator'
 
 /**
  * @api {POST} /Host/detail 获取域名详情
