@@ -7,7 +7,6 @@
 const logout = ({token}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
     const db = ctx.db.token;
-
     if (ctx.request.headers.session.user) {
       await db.del(token)
     }

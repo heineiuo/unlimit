@@ -1,4 +1,4 @@
-import Seashell, {uuid} from 'seashell'
+import Seashell, {uuid} from '../../../seashell'
 import chalk from 'chalk'
 import level from 'levelup'
 import levelSubLevel from 'level-sublevel'
@@ -80,13 +80,13 @@ const start = async () => {
         get: require('./actions/app/get'),
         list: require('./actions/app/list'),
         addItem: require('./actions/app/addItem'),
-        pickItem: require('./actions/app/pickItem'),
+        find: require('./actions/app/find'),
         removeItem: require('./actions/app/removeItem'),
       }),
       socket: bindActionCreators({
-        create: require('./actions/socket/create'),
-        remove: require('./actions/socket/remove'),
-        get: require('./actions/socket/get'),
+        bind: require('./actions/socket/bind'),
+        unbind: require('./actions/socket/unbind'),
+        session: require('./actions/socket/session'),
         emptyAll: require('./actions/socket/empty'),
         findByAppId: require('./actions/socket/findByAppId'),
       })
@@ -105,7 +105,7 @@ const start = async () => {
       };
       ctx.error = (error) => ctx.json({error});
       ctx.on('error', (err) => {
-        console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message));
+        console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
         if (err.name == 'ValidationError') return ctx.error('PARAM_ILLEGAL');
         if (err.message == 'Command failed') return ctx.error('COMMAND_FAILED');
         return ctx.error(err.message);
@@ -119,6 +119,13 @@ const start = async () => {
       next()
     });
 
+    app.use('/account/session', async ctx => {
+      if (ctx.request.headers.session) {
+        ctx.json(ctx.request.headers.session)
+      } else {
+        ctx.error('NOT_LOGGED')
+      }
+    });
 
     app.use('/:moduleName/:actionName', async ctx => {
       const {moduleName, actionName} = ctx.request.params;

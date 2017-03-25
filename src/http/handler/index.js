@@ -6,7 +6,7 @@ import handleDOWNLOAD from "./download"
 import handleUPLOAD from "./upload"
 import {Router} from "express"
 
-const handler = () => {
+const handler = (seashell) => {
   const router = Router();
 
   router.use(async(req, res, next) => {
@@ -25,7 +25,7 @@ const handler = () => {
         }),
         HTML: () => handleHTML(res, content),
         BLOCK: () => handleBLOCK(res, content),
-        FILE: () => handleFILE(res, host, url.pathname, req.path),
+        FILE: () => handleFILE(seashell, res, host, url.pathname, req.path),
         REDIRECT: () => handleREDIRECT(res, content),
         DOWNLOAD: () => handleDOWNLOAD(res, req.query.path),
         UPLOAD: () => handleUPLOAD(req, res, content),

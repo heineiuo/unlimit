@@ -1,11 +1,11 @@
 /**
  * 文件下载代理
  */
-const handleFILE = (res, hostname, pathname, reqpath) => new Promise(async(resolve, reject) => {
+const handleFILE = (seashell, res, hostname, pathname, reqpath) => new Promise(async(resolve, reject) => {
 
   try {
 
-    const result = await res.seashell.requestSelf({
+    const result = await seashell.requestSelf({
       headers: {
         originUrl: '/fs/cat'
       },

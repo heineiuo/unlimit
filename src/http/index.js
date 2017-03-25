@@ -36,28 +36,27 @@ import {handler} from './handler'
  * @returns {*}
  */
 const createServer = (config, seashell) => {
-  const {email, debug, domains, approvedDomains, useSeashell=true} = config;
+  const {email, debug, domains, approvedDomains} = config;
 
   const app = express();
 
   app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
   app.use(compression());
   app.use((req, res, next) => {
-    res.seashell = seashell;
     res.removeHeader("x-powered-by");
     next()
   });
 
   app.use(redirectToHttpsMiddleware(approvedDomains));
-  app.use(pickLocationMiddleware());
+  app.use(pickLocationMiddleware(seashell));
 
   /**
    * 先判断是否需要经过seashell请求，如果是，则等待seashell请求，请求结果如果是继续操作，则修改res.locals.location等
    * 对象，并交给handler处理，如果请求结果是直接返回结果，则直接返回，不经过handler。
    * handler处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  if (useSeashell) app.use(seashellProxyMiddleware());
-  app.use(handler());
+  app.use(seashellProxyMiddleware(seashell));
+  app.use(handler(seashell));
   app.use(httpProxyMiddleware(app));
 
 

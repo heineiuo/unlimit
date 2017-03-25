@@ -2,13 +2,11 @@ import Url from 'url'
 import {Router} from 'express'
 import pathToRegexp from 'path-to-regexp'
 
-const pickLocationMiddleware = () => {
+const pickLocationMiddleware = (seashell) => {
 
   return async (req, res, next) => {
 
     try {
-      const {seashell} = res;
-
       /**e
        * 查找host及其location列表
        */

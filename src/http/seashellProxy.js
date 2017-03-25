@@ -12,7 +12,7 @@ const JSONSafeParse = (content, schema) => {
   }
 };
 
-const seashellProxyMiddleware = () => {
+const seashellProxyMiddleware = (seashell) => {
 
   const router = Router();
 
@@ -31,7 +31,6 @@ const seashellProxyMiddleware = () => {
   router.use(async (req, res, next) => {
 
     try {
-      const {seashell} = res;
       const {host, url, location} = res.locals;
 
       const data = Object.assign({}, req.query, req.body, {
@@ -47,14 +46,34 @@ const seashellProxyMiddleware = () => {
       let result = null;
       if (requestUrl.search(seashell.__SEASHELL_NAME) == 0) {
         const originUrl = requestUrl.substring(seashell.__SEASHELL_NAME.length);
+        let session = null;
+        try {
+          session = await seashell.requestSession({
+            headers: {
+              'switch-identity': {
+                appName: 'user',
+                appSecret: data.token
+              }
+            }
+          });
+        } catch(e){}
+
         result = await seashell.requestSelf({
           headers: {
-            originUrl
+            originUrl,
+            session
           },
           body: data
         })
       } else {
-        result = await seashell.requestChild(requestUrl, data);
+        result = await seashell.requestChild(requestUrl, data, {
+          headers: {
+            'switch-identity': {
+              appName: 'user',
+              appSecret: data.token
+            }
+          }
+        });
       }
 
       if (result.headers.hasOwnProperty('__HTML')) {
