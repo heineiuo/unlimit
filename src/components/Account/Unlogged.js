@@ -4,7 +4,8 @@ import commonStyles from '../common/styles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import {login, sendVerifyCode} from '../../store/account'
-
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 const codeInputStyle = Object.assign({}, commonStyles.input, {
   width: '164px',
@@ -119,4 +120,14 @@ const styles = StyleSheet.create({
   ...commonStyles
 });
 
-export default UnLogged
+
+export default module.exports = connect(
+  (store) => ({
+    account: store.account,
+    postList: store.postList,
+  }),
+  (dispatch) => bindActionCreators({
+    login,
+    sendVerifyCode
+  }, dispatch)
+)(UnLogged)

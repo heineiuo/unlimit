@@ -103,6 +103,9 @@ class File extends Component {
     setTitle(`${hostname} - 文件`);
   };
 
+  /**
+   * 打开创建文件弹窗
+   */
   openCreateFileModal = () => {
     this.createFileModal.open();
   };
@@ -111,6 +114,10 @@ class File extends Component {
 
   };
 
+  /**
+   * 打开集成app
+   * @param options
+   */
   openIntegrateApp = (options) => {
     this.integrateApp.open(options);
     this.setState({
@@ -118,6 +125,9 @@ class File extends Component {
     })
   };
 
+  /**
+   * 处理集成app关闭事件
+   */
   handleCloseIntegrateApp = () => {
     this.setState({
       isIntegrateAppOpen: false
@@ -164,10 +174,10 @@ class File extends Component {
     })}`;
 
     return (
-      <div>
+      <div style={{minHeight: 160}}>
         {
           file.fileState < 2 ?
-            <div style={{height: 300}}>
+            <div>
               <Spin />
             </div> :
             <div>
@@ -294,7 +304,7 @@ class File extends Component {
                               <div className={css(styles.listViewBar__index)}>选中</div>
                               <div className={css(styles.listViewBar__name)}>名称</div>
                               <div className={css(styles.listViewBar__size)}>大小</div>
-                              <div className={css(styles.listViewBar__options)}>操作</div>
+                              <div className={css(styles.listViewBar__options)}>标签</div>
                             </div>
                             <div>
                               {

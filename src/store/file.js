@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 import { GETJSON, POSTRawJSON, Mock, Urlencode } from 'fetch-tools'
-import {ORIGIN_HOST} from '../constants'
+import {API_HOST} from '../constants'
 
 const initialState = {
   ls: [],
@@ -40,9 +40,7 @@ export const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
-    const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'file', action: 'mv',
+    const result = await POSTRawJSON(`${API_HOST}/seashell/fs/mv`, {
       token, prevName, nextName
     });
     if (result.error) throw new Error(result.error);
@@ -69,9 +67,7 @@ export const deleteFile = (hostname, pathname) => async (dispatch, getState) => 
   try {
     const {token} = getState().account;
 
-    const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'file',
+    const result = await POSTRawJSON(`${API_HOST}/seashell/fs/unlink`, {
       action: 'unlink',
       token,
       hostname,
@@ -88,9 +84,7 @@ export const downloadFile = (path)=> async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
-    const url = POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'file', action: 'download',
+    const url = POSTRawJSON(`${API_HOST}/seashell/fs/download`, {
       token, path});
     window.open(url)
 
@@ -104,9 +98,7 @@ export const getDirInfo = (path) => async (dispatch, getState) => {
     const {token} = getState().account;
 
     path = decodeURI(path);
-    const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'file', action: 'ls',
+    const result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
       token, path});
     result.parentPath = path + ( path =='/'?'':'/')
 
@@ -125,9 +117,7 @@ export const getFileList = (hostname, pathname='/') => async (dispatch, getState
     });
 
     const {token} = getState().account;
-    const result = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'file', action: 'ls',
+    const result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
       hostname, pathname, token
     });
 

@@ -13,7 +13,7 @@ class ProfileDropDown extends Component {
   render(){
     const {style} = this.props;
     return (
-      <div style={Object.assign({padding: '12px 0', display: 'flex'}, style)}>
+      <div style={Object.assign({alignSelf: 'center', display: 'flex'}, style)}>
         {/*<Link className={css(styles.navItem)} to="/post">写文章</Link>*/}
         <DropDown className={css(styles.navItem)}>
           <DropDownTrigger>
@@ -53,7 +53,9 @@ const styles = StyleSheet.create({
   },
 
   panel: {
+    position: 'absolute',
     backgroundColor: '#FFF',
+    marginTop: 10,
   }
 
 });

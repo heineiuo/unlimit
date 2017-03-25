@@ -52,11 +52,10 @@ class HostWrapper extends Component {
       <div className={css(styles.wrapper)}>
         <Paper style={{boxShadow: 'none', padding: 0}} >
           <div className={css(styles.wrapper__header)}>
-            <div>{params.hostname}</div>
             <div style={{position: 'relative', height: 40, width: 320}}>
               <TabBar
                 //style={{}}
-                underlineStyle={{borderBottomWidth: 2}}
+                underlineStyle={{borderBottomWidth: 2, borderColor: '#e36209'}}
                 activeKey={this.state.activeTab}
                 onSwitchKey={this.handleSwitchKey}>
                 <TabPane key="file" style={styles.tabPane._definition}>文件</TabPane>
@@ -64,6 +63,7 @@ class HostWrapper extends Component {
                 <TabPane key="setting" style={styles.tabPane._definition}>设置</TabPane>
               </TabBar>
             </div>
+            <div style={{lineHeight: '40px'}}>{params.hostname}</div>
           </div>
           <div className={css(styles.wrapper__body)}>
             {host.hostListState < 2?<Spin />: (
@@ -93,6 +93,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderBottom: '1px solid #EFEFF9',
     padding: '20px 20px 0',
+    display: 'flex',
+    justifyContent: 'space-between',
   },
 
   wrapper__body: {

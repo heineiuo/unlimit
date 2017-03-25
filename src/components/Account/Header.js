@@ -8,6 +8,7 @@ import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import Title from '../common/Title'
 import ProfileDropDown from '../common/ProfileDropDown'
+import commonStyles from '../common/styles'
 
 class Header extends Component {
 
@@ -41,7 +42,7 @@ class Header extends Component {
     const {nav, host, getHostList, deleteHost} = this.props;
 
     return (
-      <div className={css(styles.headerBar)}>
+      <div className={css(styles.globalHeaderBar)}>
         <Title color="rgb(255, 145, 0)" title="账号" />
         {/*<div>{nav.title}</div>*/}
         <ProfileDropDown />
@@ -76,23 +77,7 @@ const customStyles = {
 };
 
 const styles = StyleSheet.create({
-  headerBar: {
-    position: 'fixed',
-    padding: '0 20px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    zIndex: 100,
-    top: 0,
-    left: 0,
-    width: '100%',
-    boxSizing: 'border-box',
-    height: 56,
-    // borderBottom: '1px solid #e2e2e2',
-    backgroundColor: '#FFF',
-    // backgroundColor: '#212a2d',
-    lineHeight: `${56}px`,
-    marginBottom: 10,
-  }
+  ...commonStyles
 });
 
 export default module.exports = Header

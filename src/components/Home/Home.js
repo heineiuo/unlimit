@@ -12,6 +12,7 @@ import MessageList from './MessageList'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {getPostList} from '../../store/feed/postList'
+import commonStyles from '../common/styles'
 
 class Home extends Component {
 
@@ -39,7 +40,7 @@ class Home extends Component {
         <div>
           <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
           <Background bgColor="#efeff4" />
-          <div className={css(styles.headerBar)}>
+          <div className={css(styles.globalHeaderBar)}>
             {/*<div style={{padding: '0 20px', display: 'flex'}}>*/}
               {/*<Link to="/" style={{display: 'flex', textDecoration: 'none'}}>*/}
                 {/*<Logo color="#f56455"/>*/}
@@ -48,12 +49,13 @@ class Home extends Component {
             {/*</div>*/}
             <Title color="#f56455" title="右括号" style={{textDecoration: 'none', marginRight: 10}}/>
             <div>
-
             </div>
             <ProfileDropDown />
           </div>
-
           <MessageList postList={postList} />
+          <div>
+
+          </div>
         </div>
       )
   }
@@ -62,23 +64,7 @@ class Home extends Component {
 
 
 const styles = StyleSheet.create({
-
-  headerBar: {
-    position: 'fixed',
-    display: 'flex',
-    justifyContent: 'space-between',
-    zIndex: 100,
-    top: 0,
-    left: 0,
-    width: '100%',
-    boxSizing: 'border-box',
-    height: 56,
-    // borderBottom: '1px solid #e2e2e2',
-    backgroundColor: '#FFF',
-    padding: '0 20px',
-    lineHeight: `${56}px`,
-    marginBottom: 10,
-  },
+  ...commonStyles
 
 });
 

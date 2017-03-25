@@ -74,7 +74,7 @@ class Check extends Component {
               {
                 account.logged ?
                   <Logged logout={logout} account={account}/> :
-                  <UnLogged sendVerifyCode={sendVerifyCode} account={account}/>
+                  <UnLogged />
               }
             </div>
           )

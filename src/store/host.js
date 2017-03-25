@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions'
 import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
-import {ORIGIN_HOST} from '../constants'
+import {API_HOST} from '../constants'
 import {push} from 'react-router-redux'
 import {restoreFileList} from './file'
 
@@ -88,10 +88,7 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
     });
 
     const {token} = getState().account;
-    const hostListResult = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      importAppName: 'gateway',
-      reducerName: 'host',
-      action: 'list',
+    const hostListResult = await POSTRawJSON(`${API_HOST}/seashell/host/list`,{
       limit: 0, token
     });
 
@@ -143,10 +140,7 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
  */
 export const createHost = (form) => async (dispatch, getState) => {
   try {
-    const data = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'host',
-      action: 'New',
+    const data = await POSTRawJSON(`${API_HOST}/seashell/host/new`, {
       hostname: form.hostname
     });
     if (data.error) throw new Error(data.error);
@@ -172,10 +166,7 @@ export const createHost = (form) => async (dispatch, getState) => {
 export const deleteHost = (hostname) => async (dispatch, getState) =>{
   try {
     const {token} = getState().account;
-    await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`, {
-      importAppName: 'gateway',
-      reducerName: 'host',
-      action: 'Delete',
+    await POSTRawJSON(`${API_HOST}/seashell/host/remove`, {
       hostname,
       token
     });
@@ -203,10 +194,7 @@ export const getLocations = (hostname) => async (dispatch, getState) => {
     });
 
     const {token} = getState().account;
-    const hostDetailResult = await await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      importAppName: 'gateway',
-      reducerName: 'location',
-      action: 'list',
+    const hostDetailResult = await await POSTRawJSON(`${API_HOST}/seashell/location/get`,{
       hostname,
       token
     });
@@ -234,10 +222,7 @@ export const getLocations = (hostname) => async (dispatch, getState) => {
 export const commitLocations = (hostname, locations) => async(dispatch, getState) => {
   try {
     const {token} = getState().account;
-    const response = await POSTRawJSON(`${ORIGIN_HOST}/api/gateway`,{
-      importAppName: 'gateway',
-      reducerName: 'Location',
-      action: 'commitLocations',
+    const response = await POSTRawJSON(`${API_HOST}/seashell/location/commitLocations`,{
       token,
       hostname,
       locations: locations.map(location => {

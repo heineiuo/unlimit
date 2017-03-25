@@ -51,7 +51,7 @@ export const checkLogin = () =>  async (dispatch, getState) => {
       })
     }
 
-    const session = await POSTUrlencodeJSON(`${API_HOST}/api/account`, signature({
+    const session = await POSTUrlencodeJSON(`${API_HOST}/seashell/token/session`, signature({
       importAppName: 'account',
       reducerName: 'token',
       action: 'session',

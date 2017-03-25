@@ -1,4 +1,24 @@
+const globalHeaderBarHeight = 50;
+
 export default {
+  globalHeaderBar: {
+    position: 'fixed',
+    display: 'flex',
+    justifyContent: 'space-between',
+    zIndex: 100,
+    top: 0,
+    left: 0,
+    width: '100%',
+    boxSizing: 'border-box',
+    height: globalHeaderBarHeight,
+    // borderBottom: '1px solid #e2e2e2',
+    // backgroundColor: '#FFF',
+    backgroundColor: '#24292e',
+    padding: '0 20px',
+    lineHeight: `${globalHeaderBarHeight}px`,
+    marginBottom: 10,
+  },
+
   card: {
     width: '100%',
     maxWidth: 480,

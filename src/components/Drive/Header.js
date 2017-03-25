@@ -9,6 +9,7 @@ import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import Title from '../common/Title'
 import ProfileDropDown from '../common/ProfileDropDown'
+import commonStyles from '../common/styles'
 
 class Header extends Component {
 
@@ -39,12 +40,12 @@ class Header extends Component {
   };
 
   render(){
-    const {nav, host, getHostList, deleteHost} = this.props;
+    const {nav, host, getHostList, deleteHost, selectedHostName} = this.props;
 
     return (
-      <div className={css(styles.headerBar)}>
+      <div className={css(styles.globalHeaderBar)}>
         <div style={{display: 'flex'}}>
-          <Title color='rgb(0, 68, 119)' title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
+          <Title color='#EEE' title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
           <span>
             <DropDown ref={dropdown => this.dropdown=dropdown}>
               <DropDownTrigger>
@@ -87,7 +88,8 @@ class Header extends Component {
                 </Modal>
           </span>
         </div>
-        {/*<div>{nav.title}</div>*/}
+        <div>
+        </div>
         <ProfileDropDown />
       </div>
     )
@@ -119,23 +121,7 @@ const customStyles = {
 };
 
 const styles = StyleSheet.create({
-  headerBar: {
-    position: 'fixed',
-    padding: '0 20px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    zIndex: 100,
-    top: 0,
-    left: 0,
-    width: '100%',
-    boxSizing: 'border-box',
-    height: 56,
-    // borderBottom: '1px solid #e2e2e2',
-    backgroundColor: '#FFF',
-    // backgroundColor: '#212a2d',
-    lineHeight: `${56}px`,
-    marginBottom: 10,
-  }
+  ...commonStyles
 });
 
 export default module.exports = Header

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   title__content: {
     display: 'flex',
     position: 'relative',
-    marginTop: 14,
+    alignSelf: 'center',
     flexDirection: 'column',
     backgroundColor: '#FFF',
   },

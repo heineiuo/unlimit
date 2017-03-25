@@ -1,57 +1,37 @@
-
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang=zh-CN>
 <head>
-  <meta charset="utf-8">
+  <meta charset=utf-8>
   <title></title>
-  <meta name="description" content="Family-tree">
-  <meta name="author" content="Heineiuo">
-  <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-  <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1" media="(device-height: 568px)">
-  <meta name="apple-mobile-web-app-title" content="Material Console">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="HandheldFriendly" content="True">
-  <meta http-equiv="cleartype" content="on">
-</head>
+  <meta name=description content=Family-tree>
+  <meta name=author content=Heineiuo>
+  <meta name=viewport content='initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width'>
+  <meta name=viewport content='initial-scale=1,user-scalable=no,maximum-scale=1' media='(device-height: 568px)'>
+  <meta name=apple-mobile-web-app-title content='Material Console'>
+  <meta name=apple-mobile-web-app-capable content=yes>
+  <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+  <meta name=format-detection content='telephone=no'>
+  <meta name=HandheldFriendly content=True>
+  <meta http-equiv=cleartype content=on>
 <body>
-<div id="app"></div>
-<!--<script src="/babel-polyfill@6.23.0/dist/polyfill.min.js"></script>-->
-<!--<script src="/systemjs@0.20.9/dist/system.src.js"></script>-->
-
-<script src="//unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js"></script>
-<script src="//unpkg.com/systemjs@0.20.9/dist/system.src.js"></script>
-
+<div id=app></div>
+<script src=https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js></script>
+<script src=https://unpkg.com/systemjs@0.20.9/dist/system.src.js></script>
 <script>
+
   System.config({
-    baseUrl: '//unpkg.com',
-//    baseUrl: '/',
-    meta: {
-      "*.js": {
-        format: 'amd'
-      }
-    },
-    map: {
-      'react': '/react@15.4.2/dist/react.js',
-      'react-dom': '/react-dom@15.4.2/dist/react-dom.js',
-      'react-router': '/react-router@3.0.2/umd/ReactRouter.js',
-      'redux': '/redux@3.6.0/dist/redux.js',
-      'react-redux': '/react-redux@5.0.2/dist/react-redux.js',
-
-//      'familytree': 'http://127.0.0.1:8084/dist/familytree.js',
-//      'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
-//      'smile-admin': 'http://127.0.0.1:8088/dist/smile-admin.js',
-//      'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js',
-
-      'familytree': 'familytree@0.0.1/dist/familytree.js',
-      'smile-text-editor': 'smile-text-editor@0.0.1/dist/smile-text-editor.js',
-      'smile-admin': 'smile-admin@0.0.1/dist/smile-admin.js',
-      'smile-web': 'smile-web@0.0.2/dist/smile-web.js'
-    }
-  });
-
-  System.import('smile-web');
+  baseUrl: '/',
+  meta: {'*.js': {format: 'amd'}},
+  map: {
+    react: 'https://unpkg.com/react@15.4.2/dist/react.js',
+    'react-dom': 'https://unpkg.com/react-dom@15.4.2/dist/react-dom.js',
+    'react-router-dom': 'https://unpkg.com/react-router-dom@4.0.0/umd/react-router-dom.js',
+    redux: 'https://unpkg.com/redux@3.6.0/dist/redux.js',
+    'react-redux': 'https://unpkg.com/react-redux@5.0.2/dist/react-redux.js',
+    familytree: 'http://127.0.0.1:8084/dist/familytree.js',
+    'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
+    'smile-admin': 'http://127.0.0.1:8088/dist/smile-admin.js',
+    'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js'
+  }
+}), System.import('smile-web');
 </script>
-</body>
-</html>

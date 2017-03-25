@@ -93,10 +93,7 @@ export default handleActions({
 
 export const login = (formData) => async (dispatch, getState) => {
   try {
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
-      importAppName: 'account',
-      reducerName: 'Token',
-      action: 'getTokenByEmailCode',
+    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/token/getTokenByEmailCode`, signature({
       email: formData.email,
       code: formData.code
     }));
@@ -124,10 +121,7 @@ export const login = (formData) => async (dispatch, getState) => {
 export const logout = () => async (dispatch, getState) => {
   try {
     console.log('正在登出系统...');
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
-      importAppName: 'account',
-      reducerName: 'Token',
-      action: 'logout',
+    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/token/logout`, signature({
       token: localStorage.userToken
     }));
     if (result.error) throw result.error;
@@ -151,10 +145,7 @@ export const sendVerifyCode = (form) => async (dispatch, getState) => {
     const {registerVerifyCodeCount} = getState().account;
     if (registerVerifyCodeCount>0) return console.log('count not finish.');
 
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
-      importAppName: 'account',
-      action: "createLoginCode",
-      reducerName: 'EmailCode',
+    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/emailcode/createLoginCode`, signature({
       email: form.email
     }));
     if (result.error) throw result.error;
@@ -192,10 +183,7 @@ export const checkLogin = () => async (dispatch, getState) => {
       })
     }
 
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
-      importAppName: 'account',
-      reducerName: 'token',
-      action: 'session',
+    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, signature({
       token: userToken
     }));
 
@@ -230,10 +218,7 @@ export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   try {
     const {userToken=null} = localStorage;
     const {redirectUrl} = getState().account;
-    const res = await POSTUrlencodeJSON(API_HOST, signature({
-      importAppName: 'account',
-      action: 'getTokenBySSOCode',
-      reducerName: 'token',
+    const res = await POSTUrlencodeJSON(`${API_HOST}/seashell/ssocode/getTokenBySSOCode`, signature({
       token: userToken
     }));
     if (res.error) return console.log(res.error);

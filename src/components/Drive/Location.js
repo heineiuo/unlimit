@@ -96,7 +96,7 @@ class Location extends Component {
           locationState < 2?
             <Spin />:
             <div>
-              <div>
+              <div className={css(styles.domains)}>
                 <div>域名绑定</div>
                 <div>{hostname}</div>
               </div>
@@ -158,6 +158,12 @@ const styles = StyleSheet.create({
   },
   table__body: {
 
+  },
+
+  domains: {
+    marginBottom: 20,
+    paddingBottom: 20,
+    borderBottom: '1px solid #eaeaf1'
   }
 
 

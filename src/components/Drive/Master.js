@@ -49,7 +49,7 @@ class Master extends Component {
   // };
 
   render(){
-    const { account, children, match, nav, createHost, host, getHostList, deleteHost} = this.props;
+    const { account, children, match, match: {params}, nav, createHost, host, getHostList, deleteHost} = this.props;
 
     return (
       <div>
