@@ -1,4 +1,4 @@
-import Seashell, {uuid} from '../../../seashell'
+import Seashell, {uuid} from '../../../git/seashell'
 import chalk from 'chalk'
 import level from 'levelup'
 import levelSubLevel from 'level-sublevel'
@@ -10,9 +10,17 @@ import init from './init'
 import createServer from './http'
 
 const makeSubLevels = (db, list) => {
-  const result = {};
+  const result = {
+    sub: (subname) => {
+      const lowerName = subname.toLowerCase();
+      if (result.hasOwnProperty(lowerName)) return result[lowerName];
+      return ql(db.sublevel(lowerName))
+    }
+  };
   list.forEach(name => {
-    result[name] = result[name.toLowerCase()] = ql(db.sublevel(name.toLowerCase()));
+    const lowerName = name.toLowerCase();
+    if (lowerName == 'sub') throw new Error('sublevel name could not be {sub}');
+    result[name] = result[lowerName] = result.sub(name)
   });
 
   return result;
@@ -21,10 +29,6 @@ const makeSubLevels = (db, list) => {
 const start = async () => {
 
   try {
-    const db = levelSubLevel(level(`${config.datadir}/db`), {valueEncoding:'json'});
-
-    const app = new Seashell();
-    // app.__SEASHELL_NAME = 'gateway';
 
     const allActionCreators = {
       email: bindActionCreators({
@@ -49,7 +53,7 @@ const start = async () => {
       user: bindActionCreators({
         createUser: require('./actions/user/createUser'),
         getUser: require('./actions/user/getUser'),
-        userList: require('./actions/user/userList')
+        list: require('./actions/user/list')
       }),
       fs: bindActionCreators({
         cat: require('./actions/fs/cat'),
@@ -60,19 +64,14 @@ const start = async () => {
         upload: require('./actions/fs/upload'),
         writeFile: require('./actions/fs/writeFile'),
       }),
-      host: bindActionCreators({
-        detail: require('./actions/host/detail'),
-        get: require('./actions/host/get'),
-        list: require('./actions/host/list'),
-        new: require('./actions/host/new'),
-        remove: require('./actions/host/remove'),
-      }),
       location: bindActionCreators({
-        batchLocations: require('./actions/location/batchLocation'),
-        commitLocations: require('./actions/location/commitLocations'),
-        get: require('./actions/location/get'),
-        create: require('./actions/location/create'),
-        remove: require('./actions/location/remove')
+        batchLocations: require('./actions/drive/batchLocation'),
+        commitLocations: require('./actions/drive/commitLocations'),
+        get: require('./actions/drive/get'),
+        list: require('./actions/drive/list'),
+        create: require('./actions/drive/create'),
+        permission: require('./actions/drive/permission'),
+        remove: require('./actions/drive/remove')
       }),
       app: bindActionCreators({
         create: require('./actions/app/create'),
@@ -91,6 +90,10 @@ const start = async () => {
         findByAppId: require('./actions/socket/findByAppId'),
       })
     };
+
+    const db = levelSubLevel(level(`${config.datadir}/db`), {valueEncoding:'json'});
+    const app = new Seashell();
+    // app.__SEASHELL_NAME = 'gateway';
 
     const levels = makeSubLevels(db, Object.keys(allActionCreators));
 

@@ -1,10 +1,14 @@
 import Joi from 'joi'
 import ent from 'ent'
-import getHost from '../host/get'
 import {connect, bindActionCreators} from 'action-creator'
 
+const validate = (query) => Joi.validate(query, Joi.object().keys({
+  hostname: Joi.string().required(),
+  locations: Joi.object().required()
+}), {allowUnknown: true});
+
 /**
- * @api {POST} /location/batch 批量设置
+ * @api {POST} /drive/batch 批量设置
  * @apiGroup Location
  * @apiName LocationBatch
  * @apiParam {string} token 令牌
@@ -14,16 +18,11 @@ import {connect, bindActionCreators} from 'action-creator'
  */
 const batch = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
-      locations: Joi.object().required()
-    }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
+    const validated = validate(query);
+    if (validated.error) return reject(validated.error);
 
     const db = ctx.db.location;
     const {hostname, locations, reset=false} = query;
-    const {getHost} = getAction();
-    await getHost(hostname);
     if (reset) {
       await db.put(hostname, {hostname, locations});
     } else {
@@ -37,8 +36,4 @@ const batch = (query) => (ctx, getAction) => new Promise(async (resolve, reject)
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    getHost
-  })
-)(batch)
+export default batch

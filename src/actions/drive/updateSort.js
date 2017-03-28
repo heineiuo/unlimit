@@ -6,7 +6,7 @@ import ent from 'ent'
 
 
 /**
- * @api {POST} /location/updatesort 修改排序
+ * @api {POST} /drive/updatesort 修改排序
  * @apiGroup Location
  * @apiName LocationUpdateSort
  * @apiParam {string} token 令牌

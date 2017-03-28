@@ -3,8 +3,13 @@ import {connect, bindActionCreators} from 'action-creator'
 import shouldNotFound from './shouldNotFound'
 import commitLocations from './commitLocations'
 
+const validate = (query) => Joi.validate(query, Joi.object().keys({
+  hostname: Joi.string().required(),
+  locations: Joi.array().required()
+}), {allowUnknown: true});
+
 /**
- * @api {POST} /Host/new 创建新的域名
+ * @api {POST} /drive/create 创建新的域名
  * @apiGroup Host
  * @apiName HostNew
  * @apiParam {string} hostname
@@ -12,13 +17,9 @@ import commitLocations from './commitLocations'
  */
 const create = (query) => (ctx, getAction) => new Promise(async(resolve, reject) => {
   try {
-    const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
-      locations: Joi.array().required()
-    }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
-
-    const db = ctx.db.location;
+    const validated = validate(query);
+    if (validated.error) return reject(validated.error);
+    const db = ctx.db.sub('location');
     const {shouldNotFound, commitLocations} = getAction();
     const {hostname, locations} = query;
     await shouldNotFound({hostname});

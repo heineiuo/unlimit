@@ -12,9 +12,7 @@ const pickLocationMiddleware = (seashell) => {
        */
       const {host} = req.headers;
       // console.log('[gateway] searching host');
-      // const requestHost = await gateway.request('gateway', {reducerName: 'host', hostname: host, action: 'Get'});
       // console.log(requestHost.body);
-      // if (requestHost.body.error) throw new Error(requestHost.body.error);
       // console.log('START REQUEST GATEWAY FOR LOCATION INFOMATION')
       const requestLocations = await seashell.requestSelf({
         headers: {
@@ -27,10 +25,10 @@ const pickLocationMiddleware = (seashell) => {
       // console.log('locations: '+JSON.stringify(locations));
       const {location, url} = await pickLocation(locations, req.url);
 
-      // console.log(location);
+      // console.log(drive);
       res.locals.host = host;
       res.locals.url = url;
-      // res.locals.location = location;
+      // res.locals.drive = drive;
       res.locals.location = Object.assign({}, location, {content: location.content});
 
       if (location.cors) {

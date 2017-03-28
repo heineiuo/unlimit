@@ -4,7 +4,7 @@ import ent from 'ent'
 
 
 /**
- * @api {POST} /location/new 创建一条location记录
+ * @api {POST} /drive/new 创建一条location记录
  * @apiGroup Location
  * @apiName LocationNew
  * @apiParam {string} token 令牌

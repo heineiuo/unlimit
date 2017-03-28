@@ -1,7 +1,7 @@
 
 const request = require('request');
 var Datastore = require('nedb-promise');
-const LevelLocation = require('.././location');
+const LevelLocation = require('.././drive');
 const LevelHost = require('.././host');
 
 var Location = module.exports = new Datastore({

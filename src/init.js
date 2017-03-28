@@ -9,13 +9,13 @@ export default (app) => new Promise(async(resolve, reject) => {
 
     console.log(2, (await app.requestSelf({
       headers: {
-        originUrl: '/location/remove',
+        originUrl: '/drive/remove',
       },
       body: {hostname: domain}
     })).body.error);
 
     console.log(3, (await app.requestSelf({
-      headers: {originUrl: '/location/create'},
+      headers: {originUrl: '/drive/create'},
       body: {
         hostname: domain,
         locations: [{

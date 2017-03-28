@@ -171,12 +171,12 @@ export const help = () => {
 
   table.push(['help', '', 'show commands'])
   table.push(['listhost', '', 'list all hosts'])
-  table.push(['listLocationByHost', 'hostname', 'list all location of one host'])
+  table.push(['listLocationByHost', 'hostname', 'list all drive of one host'])
   table.push(['createHost', 'hostname', 'create a host'])
-  table.push(['createLocation', 'hostname, pathname, type, sort, content', 'create a location'])
+  table.push(['createLocation', 'hostname, pathname, type, sort, content', 'create a drive'])
   table.push(['deleteHost', 'hostname', 'delete a host'])
-  table.push(['updateLocation', 'id, pathname, type, sort, content', 'update a location'])
-  table.push(['deleteLocation', 'id', 'delete a location'])
+  table.push(['updateLocation', 'id, pathname, type, sort, content', 'update a drive'])
+  table.push(['deleteLocation', 'id', 'delete a drive'])
 
   console.log(table.toString())
 };
