@@ -12,14 +12,14 @@ class FileInfo extends Component {
   };
 
   _open = (appName) => {
-    const {pathname, hostname, openIntegrateApp} = this.props;
+    const {pathname, driveId, openIntegrateApp} = this.props;
     openIntegrateApp({
-      hostname, pathname, appName
+      driveId, pathname, appName
     })
   };
 
   render(){
-    const {pathname, hostname, cat, isIntegrateAppOpen} = this.props;
+    const {pathname, driveId, cat, isIntegrateAppOpen} = this.props;
     const matchApp = matchAppByPathname(pathname);
 
     const buffer = new Buffer(cat);

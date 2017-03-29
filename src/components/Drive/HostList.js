@@ -30,7 +30,7 @@ class HostList extends Component {
 
   _deleteHost = (host) => {
     console.log(host);
-    this.props.deleteHost(host.hostname)
+    this.props.deleteHost(host.driveId)
   };
 
   render(){
@@ -47,8 +47,8 @@ class HostList extends Component {
                   {
                     hostList.map((item, index)=> (
                       <div className={css(styles.hostItem)} key={index}>
-                        <Link to={`/drive/${item.hostname}`} style={{float: 'left'}} onClick={closeDropdown}>
-                          <div>{item.hostname}</div>
+                        <Link to={`/drive/${item.driveId}`} style={{float: 'left'}} onClick={closeDropdown}>
+                          <div>{item.hostname||item.hostnames[0]}{item.driveId}</div>
                         </Link>
                         <div className={css(styles.buttons)} style={{float: 'left'}}>
                           <Button onClick={(e) => this._deleteHost(item)} type="danger" size="small">删除</Button>

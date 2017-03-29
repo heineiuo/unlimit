@@ -40,7 +40,7 @@ class HostWrapper extends Component {
 
   handleSwitchKey = (activeTab) => {
     const {match: {params}} = this.props;
-    this.context.router.history.push(`/drive/${params.hostname}/${activeTab}`);
+    this.context.router.history.push(`/drive/${params.driveId}/${activeTab}`);
     this.setState({activeTab});
   };
 
@@ -63,12 +63,12 @@ class HostWrapper extends Component {
                 <TabPane key="setting" style={styles.tabPane._definition}>设置</TabPane>
               </TabBar>
             </div>
-            <div style={{lineHeight: '40px'}}>{params.hostname}</div>
+            <div style={{lineHeight: '40px'}}>{params.driveId}</div>
           </div>
           <div className={css(styles.wrapper__body)}>
             {host.hostListState < 2?<Spin />: (
               <Switch>
-                <Route exact path={'/drive/:hostname'} component={require('./File')}/>
+                <Route exact path={'/drive/:driveId'} component={require('./File')}/>
                 <Route path={`${match.path}/file`} component={require('./File')}/>
                 <Route path={`${match.path}/location`} component={require('./Location')}/>
                 <Route path={`${match.path}/setting`} component={require('./Setting')}/>

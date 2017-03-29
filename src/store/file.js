@@ -63,14 +63,14 @@ export const uploadFileToPath = () => async (dispatch, getState) => {
 
 
 
-export const deleteFile = (hostname, pathname) => async (dispatch, getState) => {
+export const deleteFile = (driveId, pathname) => async (dispatch, getState) => {
   try {
     const {token} = getState().account;
 
     const result = await POSTRawJSON(`${API_HOST}/seashell/fs/unlink`, {
       action: 'unlink',
       token,
-      hostname,
+      driveId,
       pathname
     });
     if (result.error) throw result.error
@@ -107,7 +107,7 @@ export const getDirInfo = (path) => async (dispatch, getState) => {
   }
 };
 
-export const getFileList = (hostname, pathname='/') => async (dispatch, getState) => {
+export const getFileList = (driveId, pathname='/') => async (dispatch, getState) => {
   try {
     dispatch({
       type: 'FILE_STATE_UPDATE',
@@ -118,7 +118,7 @@ export const getFileList = (hostname, pathname='/') => async (dispatch, getState
 
     const {token} = getState().account;
     const result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
-      hostname, pathname, token
+      driveId, pathname, token
     });
 
     if (result.error) throw new Error(result.error);

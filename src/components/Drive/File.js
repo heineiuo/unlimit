@@ -43,24 +43,24 @@ class File extends Component {
   };
 
   componentWillMount = () => {
-    const {setTitle, getFileList, match, match: {params: {hostname}}} = this.props;
+    const {setTitle, getFileList, match, match: {params: {driveId}}} = this.props;
     // console.log(match);
-    getFileList(hostname, this.getSplat());
+    getFileList(driveId, this.getSplat());
   };
 
   componentWillReceiveProps = (nextProps) => {
     const {getFileList, setTitle, match, host} = this.props;
-    const {params, params: {hostname}} = match;
+    const {params, params: {driveId}} = match;
 
     const nextPath = this.getSplat(nextProps);
 
     if (nextProps.file.fileState == 0) {
-      setTitle(`${nextProps.params.hostname} - 文件`);
-      return getFileList(nextProps.params.hostname, '/');
+      setTitle(`${nextProps.params.driveId} - 文件`);
+      return getFileList(nextProps.params.driveId, '/');
     }
 
     if (nextPath != this.getSplat()) {
-      getFileList(hostname, nextPath)
+      getFileList(driveId, nextPath)
     }
   };
 
@@ -97,10 +97,10 @@ class File extends Component {
 
   _handleUploadSuccess = () => {
     const {setTitle, getFileList, host, match} = this.props;
-    const {params: {hostname}} = match;
+    const {params: {driveId}} = match;
 
-    getFileList(hostname, this.getSplat());
-    setTitle(`${hostname} - 文件`);
+    getFileList(driveId, this.getSplat());
+    setTitle(`${driveId} - 文件`);
   };
 
   /**
@@ -135,11 +135,11 @@ class File extends Component {
   };
 
   deleteFile = ({name}) => {
-    const {match: {params: {hostname}}} = this.props;
+    const {match: {params: {driveId}}} = this.props;
     const pathname = this.getSplat(this.props) || '/';
     const willDeletePathname = `${pathname=="/"?'':pathname}/${name}`;
     if (window.confirm(`是否删除${willDeletePathname}`)){
-      this.props.deleteFile(hostname, willDeletePathname)
+      this.props.deleteFile(driveId, willDeletePathname)
     }
   };
 
@@ -159,17 +159,17 @@ class File extends Component {
       file,
       file: {isFile, cat, ls},
       account,
-      match: {params: {hostname}},
+      match: {params: {driveId}},
     } = this.props;
     const pathname = this.getSplat() || '/';
-    const hrefPrefix = `/drive/${hostname}`;
+    const hrefPrefix = `/drive/${driveId}`;
 
     const uploadAction = `/api/gateway?${urlencode({
       importAppName: 'gateway',
       token: account.token,
       reducerName: 'file',
       action: 'upload',
-      hostname,
+      driveId,
       pathname
     })}`;
 
@@ -185,7 +185,7 @@ class File extends Component {
                 {/*路径栏*/}
                 <FilePathBar
                   isFile={isFile}
-                  driveName={hostname}
+                  driveName={driveId}
                   hrefPrefix={hrefPrefix}
                   pathname={pathname} />
                 {/*工具栏*/}
@@ -293,7 +293,7 @@ class File extends Component {
                       pathname={pathname}
                       isIntegrateAppOpen={isIntegrateAppOpen}
                       openIntegrateApp={this.openIntegrateApp}
-                      hostname={hostname}
+                      driveId={driveId}
                     /> :
                     <div className={css(styles.fileList)}>
                       {
@@ -328,7 +328,7 @@ class File extends Component {
                         pathname={pathname}
                         isIntegrateAppOpen={isIntegrateAppOpen}
                         openIntegrateApp={this.openIntegrateApp}
-                        hostname={hostname}
+                        driveId={driveId}
                       />
                     </div>
               }

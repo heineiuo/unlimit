@@ -37,7 +37,7 @@ class Master extends Component {
 
   componentWillMount = () => {
     const {getHostList, match, host} = this.props;
-    if (host.hostListState == 0) getHostList(match.params.hostname);
+    if (host.hostListState == 0) getHostList(match.params.driveId);
   };
 
   componentWillUnmount = () => {
@@ -74,7 +74,7 @@ class Master extends Component {
                   createHost={createHost}/>
                 <Switch>
                   <Route exact path={`${match.path}`} component={HostList}/>
-                  <Route path={`${match.path}/:hostname`} component={require('./HostWrapper')} />
+                  <Route path={`${match.path}/:driveId`} component={require('./HostWrapper')} />
                 </Switch>
               </div>
         }

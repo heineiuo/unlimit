@@ -24,11 +24,11 @@ class CreateFileModal extends Component {
 
   openApp = (app) => {
     const {appName} = app;
-    const {openIntegrateApp, hostname, pathname} = this.props;
+    const {openIntegrateApp, driveId, pathname} = this.props;
     openIntegrateApp({
       appName,
       isCreated: false,
-      hostname,
+      driveId,
       pathname
     })
   };

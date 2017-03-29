@@ -14,7 +14,7 @@ import commonStyles from '../common/styles'
 class Header extends Component {
 
   state = {
-    hostName: '',
+    driveId: '',
     modalOpen: false,
   };
 

@@ -37,10 +37,10 @@ class HostSelector extends Component {
               hostList.map((item, index) => (
                 <div className={css(styles.hostItem)} key={index}>
                   <Link
-                    to={`/drive/${item.hostname}`}
+                    to={`/drive/${item.driveId}`}
                     style={{float: 'left'}}
                     onClick={this.props.closeDropdown}>
-                    <div>{item.hostname}</div>
+                    <div>{item.driveId}</div>
                   </Link>
                   <div className={css(styles.buttons)} style={{float: 'left'}}>
                     <Button onClick={(e) => this._deleteHost(item)} type="danger" size="small">删除</Button>

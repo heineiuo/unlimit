@@ -27,8 +27,8 @@ class Location extends Component {
   };
 
   componentDidMount = () => {
-    const {getLocations, match: {params: {hostname}}} = this.props;
-    getLocations(hostname);
+    const {getLocations, match: {params: {driveId}}} = this.props;
+    getLocations(driveId);
   };
 
   componentWillReceiveProps = (nextProps) => {
@@ -39,10 +39,10 @@ class Location extends Component {
   };
 
   saveLocation = () => {
-    const {match: {params: {hostname}}} = this.props;
+    const {match: {params: {driveId}}} = this.props;
     const {locations} = this.state;
     console.log(JSON.stringify(this.state.locations));
-    this.props.commitLocations(hostname, locations)
+    this.props.commitLocations(driveId, locations)
   };
 
   handleItemChange = (item) => {
@@ -87,7 +87,7 @@ class Location extends Component {
   };
 
   render () {
-    const {host: {locationState}, match: {params: {hostname}}} = this.props;
+    const {host: {locationState}, match: {params: {driveId}}} = this.props;
     const {locations} = this.state;
 
     return (
@@ -98,7 +98,7 @@ class Location extends Component {
             <div>
               <div className={css(styles.domains)}>
                 <div>域名绑定</div>
-                <div>{hostname}</div>
+                <div></div>
               </div>
               <div className={css(styles.titleBar)}>
                 <div style={{width: 100}}>路由列表</div>

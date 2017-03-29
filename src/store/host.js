@@ -88,7 +88,7 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
     });
 
     const {token} = getState().account;
-    const hostListResult = await POSTRawJSON(`${API_HOST}/seashell/host/list`,{
+    const hostListResult = await POSTRawJSON(`${API_HOST}/seashell/drive/list`,{
       limit: 0, token
     });
 
@@ -140,8 +140,9 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
  */
 export const createHost = (form) => async (dispatch, getState) => {
   try {
-    const data = await POSTRawJSON(`${API_HOST}/seashell/host/new`, {
-      hostname: form.hostname
+    const data = await POSTRawJSON(`${API_HOST}/seashell/drive/create`, {
+      hostnames: [form.hostname],
+      locations: []
     });
     if (data.error) throw new Error(data.error);
     dispatch({
@@ -151,7 +152,7 @@ export const createHost = (form) => async (dispatch, getState) => {
       }
     });
 
-    dispatch(push(`/${form.hostname}`))
+    dispatch(push(`/${form.driveId}`))
   } catch(e){
     console.log(`${e}${JSON.stringify(e.stack||{})}`)
   }
@@ -163,16 +164,16 @@ export const createHost = (form) => async (dispatch, getState) => {
  * 删除host
  * @returns {function()}
  */
-export const deleteHost = (hostname) => async (dispatch, getState) =>{
+export const deleteHost = (driveId) => async (dispatch, getState) =>{
   try {
     const {token} = getState().account;
-    await POSTRawJSON(`${API_HOST}/seashell/host/remove`, {
-      hostname,
+    await POSTRawJSON(`${API_HOST}/seashell/drive/remove`, {
+      driveId,
       token
     });
     dispatch({
       type: 'HOST_REMOVE',
-      payload: {hostname}
+      payload: {driveId}
     })
   }catch(e){
     console.log(e.stack)
@@ -181,9 +182,9 @@ export const deleteHost = (hostname) => async (dispatch, getState) =>{
 
 /**
  * 更新location列表
- * @param hostname
+ * @param driveId
  */
-export const getLocations = (hostname) => async (dispatch, getState) => {
+export const getLocations = (driveId) => async (dispatch, getState) => {
   try {
 
     dispatch({
@@ -194,8 +195,8 @@ export const getLocations = (hostname) => async (dispatch, getState) => {
     });
 
     const {token} = getState().account;
-    const hostDetailResult = await await POSTRawJSON(`${API_HOST}/seashell/location/get`,{
-      hostname,
+    const hostDetailResult = await await POSTRawJSON(`${API_HOST}/seashell/drive/get`,{
+      driveId,
       token
     });
 
@@ -203,7 +204,7 @@ export const getLocations = (hostname) => async (dispatch, getState) => {
     dispatch({
       type: "HOST_LOCATION_UPDATE",
       payload: {
-        hostname,
+        driveId,
         locations: hostDetailResult.location.locations
       }
     })
@@ -216,15 +217,15 @@ export const getLocations = (hostname) => async (dispatch, getState) => {
 
 /**
  * 更新locations
- * @param hostname
+ * @param driveId
  * @param locations
  */
-export const commitLocations = (hostname, locations) => async(dispatch, getState) => {
+export const commitLocations = (driveId, locations) => async(dispatch, getState) => {
   try {
     const {token} = getState().account;
-    const response = await POSTRawJSON(`${API_HOST}/seashell/location/commitLocations`,{
+    const response = await POSTRawJSON(`${API_HOST}/seashell/drive/commitLocations`,{
       token,
-      hostname,
+      driveId,
       locations: locations.map(location => {
         delete location.sort;
         delete location.contentType;
@@ -236,7 +237,7 @@ export const commitLocations = (hostname, locations) => async(dispatch, getState
     dispatch({
       type: "HOST_LOCATION_UPDATE",
       payload: {
-        hostname,
+        driveId,
         locations
       }
     })
