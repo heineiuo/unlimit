@@ -4,11 +4,11 @@ import filesystem from 'level-filesystem'
 /**
  * 创建文件夹
  */
-const mkdir = ({hostname, pathname}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const mkdir = ({driveId, pathname}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(ctx.db.fs);
     await new Promise((resolve, reject) => {
-      fs.mkdir(`${hostname}${pathname}`, (err) => {
+      fs.mkdir(`${driveId}${pathname}`, (err) => {
         if (err) return reject(err);
         resolve()
       })

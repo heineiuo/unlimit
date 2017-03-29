@@ -1,26 +1,26 @@
 import Joi from 'joi'
 import ent from 'ent'
+import bindDomain from './bindDomain'
+import {connect, bindActionCreators} from 'action-creator'
 
 const edit = (query) => (ctx) => new Promise(async (resolve, reject) => {
   try {
 
-    const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
+    const validated = Joi.validate(query, Joi.object().keys({
+      driveId: Joi.string().required(),
       pathname: Joi.string().required(),
       cors: Joi.boolean(),
       type: Joi.string(),
       contentType: Joi.string(),
       content: Joi.string(),
     }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
+    if (validated.error) return reject(validated.error);
 
+    const db = ctx.db.sub('location');
 
-    const db = ctx.db.location;
-
-    const {cors, hostname, type, content, contentType, pathname} = query;
+    const {cors, driveId, type, content, contentType, pathname} = validated.value;
     const nextContent = (type == 'html' && contentType == 'text')?ent.encode(content):content;
-
-    const location = await db.get(hostname);
+    const location = await db.get(driveId);
     location.locations[pathname] = {
       pathname,
       cors,
@@ -29,7 +29,7 @@ const edit = (query) => (ctx) => new Promise(async (resolve, reject) => {
       contentType,
       content: nextContent
     };
-    await db.put(hostname, location);
+    await db.put(driveId, location);
     resolve({success:1});
   } catch(e){
     reject(e)
@@ -37,4 +37,8 @@ const edit = (query) => (ctx) => new Promise(async (resolve, reject) => {
 
 });
 
-export default module.exports = edit;
+export default module.exports = connect(
+  bindActionCreators({
+    bindDomain
+  })
+)(edit);

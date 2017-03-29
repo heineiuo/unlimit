@@ -10,7 +10,7 @@ import ent from 'ent'
  * @apiGroup Location
  * @apiName LocationUpdateSort
  * @apiParam {string} token 令牌
- * @apiParam {string} hostname
+ * @apiParam {string} driveId
  * @apiParam {string} pathname
  * @apiParam {number} nextSort
  * @apiSuccess {number} success
@@ -18,16 +18,16 @@ import ent from 'ent'
 const UpdateSort = (query) => (ctx) => new Promise(async (resolve, reject) => {
   try {
     const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
+      driveId: Joi.string().required(),
       pathname: Joi.string().required(),
       nextSort: Joi.number().required()
     }), {allowUnknown: true});
     if (validate.error) return reject(validate.error);
 
     const db = ctx.db.location;
-    const {nextSort, pathname, hostname} = query;
+    const {nextSort, pathname, driveId} = query;
     if (nextSort < 1) return reject('PARAMS_ILLEGAL');
-    const location = await db.get(hostname);
+    const location = await db.get(driveId);
     const targetPath = location.locations[pathname];
     const prevSort = targetPath.sort;
     if (nextSort == prevSort) return reject(new Error('NOT_CHANGED'));
@@ -48,7 +48,7 @@ const UpdateSort = (query) => (ctx) => new Promise(async (resolve, reject) => {
         return location.locations[item.pathname].sort ++;
       }
     });
-    await db.put(hostname, location);
+    await db.put(driveId, location);
     resolve({success: 1});
   } catch(e){
     reject(e);

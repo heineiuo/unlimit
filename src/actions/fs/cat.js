@@ -12,19 +12,19 @@ import Joi from 'joi'
  */
 const cat = (query) => (ctx) => new Promise(async (resolve, reject) => {
   try {
-    const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
+    const validated = Joi.validate(query, Joi.object().keys({
+      driveId: Joi.string().required(),
       pathname: Joi.string().required(),
     }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
+    if (validated.error) return reject(validated.error);
 
-    const {hostname, pathname} = query;
+    const {driveId, pathname} = validated.value;
     const fs = filesystem(ctx.db.fs);
-    fs.readFile(`${hostname}${pathname}`, (err, cat) => {
+    fs.readFile(`${driveId}${pathname}`, (err, cat) => {
       if (err) {
         const lastParam = pathname.split('/').pop();
         if (lastParam.length =="" || !/\./.test(lastParam)) {
-          fs.readFile(path.join(`${hostname}${pathname}`, 'index.html'), (err, cat) => {
+          fs.readFile(path.join(`${driveId}${pathname}`, 'index.html'), (err, cat) => {
             if (err) return reject(err);
             resolve({
               isFile: true,

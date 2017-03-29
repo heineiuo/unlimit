@@ -9,10 +9,10 @@ import filesystem from 'level-filesystem'
  * @apiParam {string} file
  * @apiParam {string} content
  */
-const writeFile = ({hostname, pathname, content='', noConflict=false}) => (ctx) => new Promise(async (resolve, reject) => {
+const writeFile = ({driveId, pathname, content='', noConflict=false}) => (ctx) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(ctx.db.fs);
-    const realPath = `${hostname}${pathname}`;
+    const realPath = `${driveId}${pathname}`;
 
     if (noConflict) {
       await new Promise((resolve, reject) => {

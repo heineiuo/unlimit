@@ -9,10 +9,10 @@ import filesystem from 'level-filesystem'
  * @apiParam {string} prevFile
  * @apiParam {string} nextFile
  */
-const rename = ({hostname, prevFile, nextFile}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const rename = ({driveId, prevFile, nextFile}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(ctx.db.fs);
-    await fs.rename(`${hostname}${prevFile}`, `${hostname}${nextFile}`);
+    await fs.rename(`${driveId}${prevFile}`, `${driveId}${nextFile}`);
     resolve({})
   } catch(e){
     reject(e)

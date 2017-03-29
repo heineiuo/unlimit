@@ -8,13 +8,13 @@ import cat from './cat'
  * @apiGroup File
  * @apiName FileLs
  * @apiParam {string} token 令牌
- * @apiParam {string} hostname
+ * @apiParam {string} driveId
  * @apiParam {string} pathname
  */
-const ls = ({pathname, hostname}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const ls = ({pathname, driveId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(ctx.db.fs);
-    const directory = `${hostname}${pathname}`;
+    const directory = `${driveId}${pathname}`;
     const files = await new Promise((resolve, reject) => {
       fs.readdir(directory, (err, files) => {
         if (err) return reject(err);
@@ -46,7 +46,7 @@ const ls = ({pathname, hostname}) => (ctx, getAction) => new Promise(async (reso
     if (e.message.search('ENOTDIR') == 0 || e.message.search('ENOENT') == 0) {
       try {
         const {cat} = getAction();
-        const file = await cat({hostname, pathname});
+        const file = await cat({driveId, pathname});
         resolve(file)
       } catch(e){
         reject(e)

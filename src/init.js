@@ -7,43 +7,51 @@ export default (app) => new Promise(async(resolve, reject) => {
 
     const {domain} = config.production.init;
 
-    console.log(2, (await app.requestSelf({
-      headers: {
-        originUrl: '/drive/remove',
-      },
-      body: {hostname: domain}
-    })).body.error);
+    let driveId = null;
+    try {
+      const result = await app.requestSelf({
+        headers: {originUrl: '/drive/create'},
+        body: {hostnames: [domain], locations: [{
+            "pathname": "/api/*",
+            "cors": true,
+            "type": "SEASHELL",
+            "content": "/api/"
+          }]}
+      });
+      driveId = result.body.driveId;
+    } catch(e){
+      console.log(e)
+    }
 
-    console.log(3, (await app.requestSelf({
-      headers: {originUrl: '/drive/create'},
-      body: {
-        hostname: domain,
-        locations: [{
-          "pathname": "/api/*",
-          "cors": true,
-          "type": "SEASHELL",
-          "content": "/api/"
-        }]
-      }
-    })).body.error);
+    if (!driveId) {
+      console.log('域名已存在！');
+      const result = await app.requestSelf({
+        headers: {originUrl: '/drive/bindDomain'},
+        body: {hostname: domain}
+      });
+      driveId = result.body.driveId;
+      console.log('磁盘id： '+driveId)
 
-    console.log(4, (await app.requestSelf({
-      headers: {originUrl: '/fs/mkdir'},
-      body: {
-        hostname: domain,
-        pathname: '/',
-      }
-    })).body.error);
+      const drive = await app.requestSelf({
+        headers: {originUrl: '/drive/get'},
+        body: {driveId}
+      });
 
-    console.log(5, (await app.requestSelf({
-      headers: {
-        originUrl: '/fs/mkdir',
-      },
-      body: {
-        hostname: domain,
-        pathname: '/public',
+      if (drive.body.error) {
+        console.log(drive.body.error)
       }
-    })).body.error);
+    } else {
+
+      await app.requestSelf({
+        headers: {originUrl: '/fs/mkdir'},
+        body: {driveId, pathname: '/'}
+      });
+
+      await app.requestSelf({
+        headers: {originUrl: '/fs/mkdir'},
+        body: {driveId, pathname: '/public'}
+      });
+    }
 
     console.log('[gateway] init success');
     resolve()

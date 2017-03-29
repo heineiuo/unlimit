@@ -15,9 +15,7 @@ const pickLocationMiddleware = (seashell) => {
       // console.log(requestHost.body);
       // console.log('START REQUEST GATEWAY FOR LOCATION INFOMATION')
       const requestLocations = await seashell.requestSelf({
-        headers: {
-          originUrl: '/location/get'
-        },
+        headers: {originUrl: '/drive/getByHostname'},
         body: { hostname: host}
       });
       if (requestLocations.body.error) throw new Error(requestLocations.body.error);

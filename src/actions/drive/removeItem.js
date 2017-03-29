@@ -10,23 +10,23 @@ import ent from 'ent'
  * @apiGroup Location
  * @apiName LocationDelete
  * @apiParam {string} token 令牌
- * @apiParam {string} hostname
+ * @apiParam {string} driveId
  * @apiParam {string} pathname
  */
 const removeItem = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
 
-    const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
+    const validated = Joi.validate(query, Joi.object().keys({
+      driveId: Joi.string().required(),
       pathname: Joi.string().required()
     }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
+    if (validated.error) return reject(validated.error);
 
     const db = ctx.db.location;
-    const {hostname, pathname} = query;
-    const location = await db.get(hostname);
+    const {driveId, pathname} = validated.value;
+    const location = await db.get(driveId);
     delete location.locations[pathname];
-    await db.put(hostname, location);
+    await db.put(driveId, location);
     resolve({})
   } catch(e){
     reject(e)

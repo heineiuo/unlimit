@@ -3,7 +3,7 @@ import ent from 'ent'
 import {connect, bindActionCreators} from 'action-creator'
 
 const validate = (query) => Joi.validate(query, Joi.object().keys({
-  hostname: Joi.string().required(),
+  driveId: Joi.string().required(),
   locations: Joi.object().required()
 }), {allowUnknown: true});
 
@@ -12,7 +12,7 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * @apiGroup Location
  * @apiName LocationBatch
  * @apiParam {string} token 令牌
- * @apiParam {string} hostname
+ * @apiParam {string} driveId
  * @apiParam {string} locations
  * @apiSuccess {number} success
  */
@@ -22,13 +22,13 @@ const batch = (query) => (ctx, getAction) => new Promise(async (resolve, reject)
     if (validated.error) return reject(validated.error);
 
     const db = ctx.db.location;
-    const {hostname, locations, reset=false} = query;
+    const {driveId, locations, reset=false} = validated.value;
     if (reset) {
-      await db.put(hostname, {hostname, locations});
+      await db.put(driveId, {locations});
     } else {
-      const location = await db.get(hostname);
+      const location = await db.get(driveId);
       location.locations = locations;
-      await db.put(hostname, location);
+      await db.put(driveId, location);
     }
     resolve({})
   } catch(e){

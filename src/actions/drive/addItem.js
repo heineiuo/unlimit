@@ -8,7 +8,7 @@ import ent from 'ent'
  * @apiGroup Location
  * @apiName LocationNew
  * @apiParam {string} token 令牌
- * @apiParam {string} hostname
+ * @apiParam {string} driveId
  * @apiParam {string} pathname
  * @apiParam {boolean} cors
  * @apiParam {string} type
@@ -18,7 +18,7 @@ import ent from 'ent'
 const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
     const validate = Joi.validate(query, Joi.object().keys({
-      hostname: Joi.string().required(),
+      driveId: Joi.string().required(),
       pathname: Joi.string().required(),
       cors: Joi.boolean(),
       type: Joi.string().required(),
@@ -29,9 +29,9 @@ const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
 
 
     const db = ctx.db.location;
-    const {hostname, type, cors=false, pathname, content, contentType='text'} = query;
+    const {driveId, type, cors=false, pathname, content, contentType='text'} = query;
     const encodedContent = type == 'html'? ent.encode(content) :content;
-    const location = await db.get(hostname);
+    const location = await db.get(driveId);
     const nextLocation = {
       pathname,
       cors,
@@ -42,7 +42,7 @@ const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
     };
 
     location.locations[pathname] = nextLocation;
-    await db.put(hostname, location);
+    await db.put(driveId, location);
     resolve({nextLocation})
   } catch(e){
     reject(e);

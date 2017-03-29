@@ -64,13 +64,16 @@ const start = async () => {
         upload: require('./actions/fs/upload'),
         writeFile: require('./actions/fs/writeFile'),
       }),
-      location: bindActionCreators({
+      drive: bindActionCreators({
         batchLocations: require('./actions/drive/batchLocation'),
         commitLocations: require('./actions/drive/commitLocations'),
         get: require('./actions/drive/get'),
+        getByHostname: require('./actions/drive/getByHostname'),
         list: require('./actions/drive/list'),
         create: require('./actions/drive/create'),
         permission: require('./actions/drive/permission'),
+        unbindDomain: require('./actions/drive/unbindDomain'),
+        bindDomain: require('./actions/drive/bindDomain'),
         remove: require('./actions/drive/remove')
       }),
       app: bindActionCreators({
