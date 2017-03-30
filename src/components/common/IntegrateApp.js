@@ -12,17 +12,17 @@ class IntegrateApp extends Component {
   state = {
     appState: 0, // 0未初始化， 1正在加载，2加载成功，3，app不存在，4加载失败
     appName: '',
-    hostname: '',
+    driveId: '',
     pathname: '',
     fullScreen: false,
     isCreated: true
   };
 
   open = async (options) => {
-    const {hostname, pathname, appName, isCreated=true} = options;
+    const {driveId, pathname, appName, isCreated=true} = options;
     const {injectAsyncReducer} = this.props;
-    const nextState = {appName, pathname, hostname, appState: 1, isCreated};
-    if (appmeta.findIndex(app => app.appName == appName) == -1 || !SystemJS.map.hasOwnProperty(appName)) {
+    const nextState = {appName, pathname, driveId, appState: 1, isCreated};
+    if (appmeta.findIndex(app => app.appName === appName) === -1 || !SystemJS.map.hasOwnProperty(appName)) {
       nextState.appState = 3;
       return this.setState(nextState);
     }
@@ -45,7 +45,7 @@ class IntegrateApp extends Component {
       appState: 0,
       appName: null,
       fullScreen: false,
-      hostname: null,
+      driveId: null,
       pathname: null
     });
     this.component = null;
@@ -59,21 +59,21 @@ class IntegrateApp extends Component {
   };
 
   render() {
-    const {fullScreen, appState, appName, hostname, pathname, isCreated} = this.state;
-    return appState == 4 ? (
+    const {fullScreen, appState, appName, driveId, pathname, isCreated} = this.state;
+    return appState === 4 ? (
         <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>
           <div onClick={this.close} className={css(styles.appToolBar__btn)} style={{width: 100}}>关闭应用</div>
           <div>{`app(${appName})加载失败:(`}</div>
         </div>
       ) :
-        appState == 3 ? (
+        appState === 3 ? (
           <div>
             <div>{`app(${appName}）不存在:( `}</div>
             <a href="/">回到首页</a>
           </div>
         ) :
-          appState == 1 ? <Spin /> :
-            appState == 2? (
+          appState === 1 ? <Spin /> :
+            appState === 2? (
               <div className={css(styles.edit, fullScreen && styles.edit_fullScreen)}>
                 <div className={css(styles.appToolBar)} style={fullScreen?{position: 'absolute'}:{}}>
                   <div onClick={this.toggleFullScreen} className={css(styles.appToolBar__btn)}>全屏</div>
@@ -83,7 +83,7 @@ class IntegrateApp extends Component {
                     React.createElement(this.component, {
                       appState,
                       appName,
-                      hostname,
+                      driveId,
                       pathname,
                       isCreated
                     })
