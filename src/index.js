@@ -10,20 +10,24 @@ import init from './init'
 import createServer from './http'
 
 const makeSubLevels = (db, list) => {
-  const result = {
+  const collections = {
     sub: (subname) => {
       const lowerName = subname.toLowerCase();
-      if (result.hasOwnProperty(lowerName)) return result[lowerName];
+      if (collections.hasOwnProperty(lowerName)) return collections[lowerName];
       return ql(db.sublevel(lowerName))
     }
   };
   list.forEach(name => {
     const lowerName = name.toLowerCase();
-    if (lowerName == 'sub') throw new Error('sublevel name could not be {sub}');
-    result[name] = result[lowerName] = result.sub(name)
+    if (['collection', 'sub'].indexOf(lowerName) > -1) {
+      throw new Error('sublevel name could not be {sub, collection}');
+    }
+    collections[name] = collections[lowerName] = collections.sub(name)
   });
 
-  return result;
+  collections.collection = collections.sub;
+
+  return collections;
 };
 
 const start = async () => {

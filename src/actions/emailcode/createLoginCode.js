@@ -24,7 +24,7 @@ export const createNumberCode = function(length=6){
  */
 const createLoginCode = ({email}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.emailcode;
+    const db = ctx.db.sub('emailcode');
     // console.log(email);
     const code = createNumberCode();
     await db.put(email, {code, createTime: Date.now()});

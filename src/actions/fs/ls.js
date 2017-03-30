@@ -13,8 +13,9 @@ import cat from './cat'
  */
 const ls = ({pathname, driveId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(ctx.db.fs);
+    const fs = filesystem(ctx.db.sub('fs'));
     const directory = `${driveId}${pathname}`;
+    if (!directory) return reject(new Error('READDIR_FAIL'));
     const files = await new Promise((resolve, reject) => {
       fs.readdir(directory, (err, files) => {
         if (err) return reject(err);

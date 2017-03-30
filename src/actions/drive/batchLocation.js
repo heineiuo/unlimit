@@ -21,7 +21,7 @@ const batch = (query) => (ctx, getAction) => new Promise(async (resolve, reject)
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.location;
+    const db = ctx.db.sub('location');
     const {driveId, locations, reset=false} = validated.value;
     if (reset) {
       await db.put(driveId, {locations});

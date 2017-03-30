@@ -5,7 +5,7 @@
  * @returns {Promise}
  */
 const get = ({appName}) => (ctx) => new Promise(async (resolve, reject) => {
-  const db = ctx.db.app;
+  const db = ctx.db.sub('app');
 
   try {
     const detail = await db.get(appName);

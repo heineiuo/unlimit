@@ -6,7 +6,7 @@ import filesystem from 'level-filesystem'
  */
 const mkdir = ({driveId, pathname}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(ctx.db.fs);
+    const fs = filesystem(ctx.db.sub('fs'));
     await new Promise((resolve, reject) => {
       fs.mkdir(`${driveId}${pathname}`, (err) => {
         if (err) return reject(err);

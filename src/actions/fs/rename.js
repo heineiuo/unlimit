@@ -11,7 +11,7 @@ import filesystem from 'level-filesystem'
  */
 const rename = ({driveId, prevFile, nextFile}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(ctx.db.fs);
+    const fs = filesystem(ctx.db.sub('fs'));
     await fs.rename(`${driveId}${prevFile}`, `${driveId}${nextFile}`);
     resolve({})
   } catch(e){

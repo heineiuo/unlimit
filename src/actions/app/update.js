@@ -11,9 +11,9 @@ const update = (query) => (ctx) => {
       }), {allowUnknown: true});
       if (validate.error) return reject(validate.error);
       const {appName, app} = query;
-
-      await ctx.db.app.put(appName, app);
-      resolve();
+      const db = ctx.db.sub('app');
+      await db.put(appName, app);
+      resolve({success: 1});
 
     } catch(e){
       reject(e)

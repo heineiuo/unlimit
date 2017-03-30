@@ -5,7 +5,7 @@
  */
 const list = ({limit=20}) => (ctx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.app;
+    const db = ctx.db.sub('app');
     const list = [];
     db.createReadStream({limit:null})
       .on('data', (data) => {

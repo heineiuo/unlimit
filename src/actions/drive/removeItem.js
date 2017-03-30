@@ -22,7 +22,7 @@ const removeItem = (query) => (ctx, getAction) => new Promise(async (resolve, re
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.location;
+    const db = ctx.db.sub('location');
     const {driveId, pathname} = validated.value;
     const location = await db.get(driveId);
     delete location.locations[pathname];

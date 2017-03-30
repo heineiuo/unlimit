@@ -13,7 +13,7 @@ const getByHostname = (query) => (ctx, getAction) => new Promise(async (resolve,
     const {bindDomain, getDrive} = getAction();
     const {driveId} = await bindDomain({hostname});
     const drive = await getDrive({driveId});
-    resolve(drive)
+    resolve({driveId, ...drive})
   } catch(e){
     reject(e)
   }

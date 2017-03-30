@@ -8,7 +8,7 @@
  */
 const getTokenBySSOCode = ({code}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
   try {
-    const SSOCode = ctx.db.ssocode;
+    const SSOCode = ctx.db.sub('ssocode');
     const result = await SSOCode.get(code);
     resolve({token: result.token});
   } catch(e){

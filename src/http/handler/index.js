@@ -13,7 +13,7 @@ const handler = (seashell) => {
 
     try {
 
-      const {host, url, location, location: {type, content}} = res.locals;
+      const {host, driveId, url, location, location: {type, content}} = res.locals;
       const handles = {
         JSON: () => new Promise((resolve, reject) => {
           try {
@@ -25,7 +25,7 @@ const handler = (seashell) => {
         }),
         HTML: () => handleHTML(res, content),
         BLOCK: () => handleBLOCK(res, content),
-        FILE: () => handleFILE(seashell, res, host, url.pathname, req.path),
+        FILE: () => handleFILE(seashell, res, driveId, url.pathname, req.path),
         REDIRECT: () => handleREDIRECT(res, content),
         DOWNLOAD: () => handleDOWNLOAD(res, req.query.path),
         UPLOAD: () => handleUPLOAD(req, res, content),

@@ -1,5 +1,5 @@
 import {connect, bindActionCreators} from 'action-creator'
-import updateGroup from './update'
+import updateApp from './update'
 
 /**
  * delete a app and all related sockets
@@ -10,11 +10,11 @@ import updateGroup from './update'
  */
 const removeItem = ({appId, appName}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.app;
+    const db = ctx.db.sub('app');
     const app = await db.get(appName);
-    const {updateGroup} = getAction();
+    const {updateApp} = getAction();
     app.list = app.list.filter(item => item.appId != appId);
-    await updateGroup({appName, app});
+    await updateApp({appName, app});
     resolve({})
   } catch(e){
     reject(e)
@@ -23,6 +23,6 @@ const removeItem = ({appId, appName}) => (ctx, getAction) => new Promise(async (
 
 export default module.exports = connect(
   bindActionCreators({
-    updateGroup
+    updateApp
   })
 )(removeItem)

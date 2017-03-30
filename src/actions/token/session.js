@@ -11,7 +11,7 @@ import {connect, bindActionCreators} from "action-creator"
  */
 const session = ({token}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
   try {
-    const db = ctx.db.token;
+    const db = ctx.db.sub('token');
     const result = await db.get(token);
     const {getUser} = getAction();
     resolve(await getUser({userId: result.userId}));

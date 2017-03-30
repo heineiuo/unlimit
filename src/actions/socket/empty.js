@@ -11,7 +11,7 @@ import updateApp from '../app/update'
  */
 const empty = () => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.socket;
+    const db = ctx.db.sub('socket');
     const {listSocket, listApp} = getAction();
     const sockets = await listSocket({limit: null});
     await Promise.all(sockets.map(item => db.del(item._key)));

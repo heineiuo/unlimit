@@ -18,7 +18,7 @@ import getApp from '../app/get'
  */
 const findByAppId = ({appName, appId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.socket;
+    const db = ctx.db.sub('socket');
     const { getApp} = getAction();
     const app = await getApp({appName: appName});
     const targetAppIndex = app.list.findIndex(item => item.appId == appId);

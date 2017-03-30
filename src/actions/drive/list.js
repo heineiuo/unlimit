@@ -13,7 +13,7 @@ const list = (query) => (ctx) => new Promise(async(resolve, reject) => {
     const list = [];
     db.createReadStream()
       .on('data', (item) => {
-        list.push(item.value)
+        list.push({driveId: item.key, ...item.value})
       })
       .on('end', () => {
         resolve({list})

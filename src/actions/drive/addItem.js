@@ -17,7 +17,7 @@ import ent from 'ent'
  */
 const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const validate = Joi.validate(query, Joi.object().keys({
+    const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
       pathname: Joi.string().required(),
       cors: Joi.boolean(),
@@ -25,11 +25,10 @@ const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
       contentType: Joi.string(),
       content: Joi.string().required()
     }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
+    if (validated.error) return reject(validated.error);
 
-
-    const db = ctx.db.location;
-    const {driveId, type, cors=false, pathname, content, contentType='text'} = query;
+    const db = ctx.db.sub('location');
+    const {driveId, type, cors=false, pathname, content, contentType='text'} = validated.value;
     const encodedContent = type == 'html'? ent.encode(content) :content;
     const location = await db.get(driveId);
     const nextLocation = {

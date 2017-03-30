@@ -19,7 +19,7 @@ const cat = (query) => (ctx) => new Promise(async (resolve, reject) => {
     if (validated.error) return reject(validated.error);
 
     const {driveId, pathname} = validated.value;
-    const fs = filesystem(ctx.db.fs);
+    const fs = filesystem(ctx.db.sub('fs'));
     fs.readFile(`${driveId}${pathname}`, (err, cat) => {
       if (err) {
         const lastParam = pathname.split('/').pop();

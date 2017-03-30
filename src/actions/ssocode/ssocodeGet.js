@@ -8,7 +8,7 @@ import createCode from './createCode'
  * @apiParam {string} token
  * @apiSuccess {string} code
  */
-const ssocodeGet = () => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const ssocodeGet = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   const {token} = query;
   const {createCode} = getAction();
   if (!ctx.res.session.user) reject(new Error('ERR_NOT_LOGGED'));

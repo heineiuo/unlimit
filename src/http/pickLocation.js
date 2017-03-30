@@ -19,12 +19,13 @@ const pickLocationMiddleware = (seashell) => {
         body: { hostname: host}
       });
       if (requestLocations.body.error) throw new Error(requestLocations.body.error);
-      const {hostname, locations} = requestLocations.body.location;
+      const {location: {locations}, driveId} = requestLocations.body;
       // console.log('locations: '+JSON.stringify(locations));
       const {location, url} = await pickLocation(locations, req.url);
 
       // console.log(drive);
       res.locals.host = host;
+      res.locals.driveId = driveId;
       res.locals.url = url;
       // res.locals.drive = drive;
       res.locals.location = Object.assign({}, location, {content: location.content});

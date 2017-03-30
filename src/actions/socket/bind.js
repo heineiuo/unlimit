@@ -19,7 +19,7 @@ const bind = (query) => (ctx, getAction) => new Promise(async(resolve, reject) =
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.socket;
+    const db = ctx.db.sub('socket');
     const {socketId, registerInfo: {appName, appId, appSecret}} = query;
     const {getApp, updateApp} = getAction();
     const app = await getApp({appName});

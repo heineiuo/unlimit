@@ -17,8 +17,8 @@ const session = (query) => (ctx, getAction) => new Promise(async (resolve, rejec
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const {headers, socketId} = query;
-    const db = ctx.db.socket;
+    const {headers, socketId} = validated.value;
+    const db = ctx.db.sub('socket');
     const {getUserSession, getApp} = getAction();
 
     let session = null;

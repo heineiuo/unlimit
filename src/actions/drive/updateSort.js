@@ -24,7 +24,7 @@ const UpdateSort = (query) => (ctx) => new Promise(async (resolve, reject) => {
     }), {allowUnknown: true});
     if (validate.error) return reject(validate.error);
 
-    const db = ctx.db.location;
+    const db = ctx.db.sub('location');
     const {nextSort, pathname, driveId} = query;
     if (nextSort < 1) return reject('PARAMS_ILLEGAL');
     const location = await db.get(driveId);

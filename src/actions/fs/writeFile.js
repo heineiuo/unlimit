@@ -1,4 +1,5 @@
 import path from 'path'
+import Joi from 'joi'
 import filesystem from 'level-filesystem'
 
 /**
@@ -9,9 +10,17 @@ import filesystem from 'level-filesystem'
  * @apiParam {string} file
  * @apiParam {string} content
  */
-const writeFile = ({driveId, pathname, content='', noConflict=false}) => (ctx) => new Promise(async (resolve, reject) => {
+const writeFile = (query) => (ctx) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(ctx.db.fs);
+    const validated = Joi.validate(query, Joi.object().keys({
+      driveId: Joi.string().required(),
+      pathname: Joi.string().required(),
+      content: Joi.string().required(),
+      noConflict: Joi.boolean()
+    }), {allowUnknown: true});
+    if (validated.error) return reject(validated.error);
+    const {driveId, pathname, content, noConflict=false} = validated.value;
+    const fs = filesystem(ctx.db.sub('fs'));
     const realPath = `${driveId}${pathname}`;
 
     if (noConflict) {
@@ -24,7 +33,7 @@ const writeFile = ({driveId, pathname, content='', noConflict=false}) => (ctx) =
     }
     fs.writeFile(realPath, content, (err) => {
       if (err) return reject(err);
-      resolve({})
+      resolve({success: 1})
     })
   } catch(e){
     console.log('WRITE FILE ERROR \n'+e.stack);

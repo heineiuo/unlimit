@@ -9,7 +9,7 @@ const normalCode = () => crypto.randomBytes(32).toString('hex');
  */
 const createCode = ({token}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
   try {
-    const db = ctx.db.ssocode;
+    const db = ctx.db.sub('ssocode');
     const code = normalCode();
     await db.put(code, {token, code});
     resolve(code)

@@ -4,7 +4,7 @@ import createUser from '../user/createUser'
 
 const getUserIdWithUpset = ({email, userId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.email;
+    const db = ctx.db.sub('email');
     const {createUser} = getAction();
 
     try {

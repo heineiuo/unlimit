@@ -5,7 +5,7 @@ import {connect, bindActionCreators} from 'action-creator'
  */
 const pick = ({appName, appId, filter}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.app;
+    const db = ctx.db.sub('app');
     const app = await db.get(appName);
     const onlineItems = app.list.filter(service => service.status == 1);
     if (onlineItems.length == 0) return reject(new Error('TARGET_SERVICE_OFFLINE'));

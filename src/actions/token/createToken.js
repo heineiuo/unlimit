@@ -16,7 +16,7 @@ const normalToken = () => crypto.randomBytes(48).toString('hex');
  */
 const createToken = ({userId}) => (ctx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.token;
+    const db = ctx.db.sub('token');
     const newToken = normalToken();
     const value = {token: newToken, userId};
     await db.put(newToken, value);

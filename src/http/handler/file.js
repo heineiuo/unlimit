@@ -1,18 +1,12 @@
 /**
  * 文件下载代理
  */
-const handleFILE = (seashell, res, hostname, pathname, reqpath) => new Promise(async(resolve, reject) => {
+const handleFILE = (seashell, res, driveId, pathname, reqpath) => new Promise(async(resolve, reject) => {
 
   try {
-
     const result = await seashell.requestSelf({
-      headers: {
-        originUrl: '/fs/cat'
-      },
-      body: {
-        hostname,
-          pathname: `/public${reqpath}`
-      }
+      headers: {originUrl: '/fs/cat'},
+      body: {driveId, pathname: `/public${reqpath}`}
     });
 
     if (result.body.error) throw new Error(result.body.error);

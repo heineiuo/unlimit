@@ -1,7 +1,7 @@
 
 const list = ({limit=20}) => (ctx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.socket;
+    const db = ctx.db.sub('socket');
     const list = [];
     db.createReadStream({limit})
       .on('data', (data) => {
