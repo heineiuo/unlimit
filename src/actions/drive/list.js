@@ -7,9 +7,9 @@ import Joi from 'joi'
  * @apiParam {number} limit 个数限制
  * @apiSuccess {string} list
  */
-const list = (query) => (ctx) => new Promise(async(resolve, reject) => {
+const list = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = ctx.db.sub('location');
+    const db = getCtx().db.sub('location');
     const list = [];
     db.createReadStream()
       .on('data', (item) => {

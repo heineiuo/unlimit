@@ -1,17 +1,16 @@
-import {connect, bindActionCreators} from 'action-creator'
 import removeSocket from '../socket/unbind'
 
-const remove = ({appName}) => (ctx) => new Promise(async (resolve, reject) => {
-  const db = ctx.db.sub('app');
+const remove = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const db = getCtx().db.sub('app');
 
   try {
     const detail = await db.del(appName);
 
     await Promise.all(detail.list.map(item => {
       return new Promise(async (resolve, reject) => {
-        if (item.socketId == '') return resolve();
+        if (item.socketId === '') return resolve();
         try {
-          await removeSocket({socketId: item.socketId});
+          await dispatch(removeSocket)({socketId: item.socketId});
           resolve()
         } catch(e){
           reject(e)
@@ -25,8 +24,4 @@ const remove = ({appName}) => (ctx) => new Promise(async (resolve, reject) => {
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    removeSocket
-  })
-)(remove)
+export default module.exports = remove

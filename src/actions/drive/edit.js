@@ -1,9 +1,7 @@
 import Joi from 'joi'
 import ent from 'ent'
-import bindDomain from './bindDomain'
-import {connect, bindActionCreators} from 'action-creator'
 
-const edit = (query) => (ctx) => new Promise(async (resolve, reject) => {
+const edit = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
 
     const validated = Joi.validate(query, Joi.object().keys({
@@ -16,10 +14,10 @@ const edit = (query) => (ctx) => new Promise(async (resolve, reject) => {
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.sub('location');
+    const db = getCtx().db.sub('location');
 
     const {cors, driveId, type, content, contentType, pathname} = validated.value;
-    const nextContent = (type == 'html' && contentType == 'text')?ent.encode(content):content;
+    const nextContent = (type === 'html' && contentType === 'text')?ent.encode(content):content;
     const location = await db.get(driveId);
     location.locations[pathname] = {
       pathname,
@@ -37,8 +35,4 @@ const edit = (query) => (ctx) => new Promise(async (resolve, reject) => {
 
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    bindDomain
-  })
-)(edit);
+export default module.exports = edit

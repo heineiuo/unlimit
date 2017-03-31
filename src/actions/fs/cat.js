@@ -10,7 +10,7 @@ import Joi from 'joi'
  * @apiParam {string} filename 文件路径
  * @apiSuccess {string} cat 内容
  */
-const cat = (query) => (ctx) => new Promise(async (resolve, reject) => {
+const cat = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
@@ -19,7 +19,7 @@ const cat = (query) => (ctx) => new Promise(async (resolve, reject) => {
     if (validated.error) return reject(validated.error);
 
     const {driveId, pathname} = validated.value;
-    const fs = filesystem(ctx.db.sub('fs'));
+    const fs = filesystem(getCtx().db.sub('fs'));
     fs.readFile(`${driveId}${pathname}`, (err, cat) => {
       if (err) {
         const lastParam = pathname.split('/').pop();

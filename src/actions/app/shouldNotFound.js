@@ -1,11 +1,11 @@
 
-const ShouldNotFound = ({appName}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const ShouldNotFound = ({appName}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = ctx.db.sub('app');
+    const db = getCtx().db.sub('app');
     await db.get(appName);
     reject(new Error('APP_HAS_EXIST'));
   } catch (e) {
-    if (e.name == 'NotFoundError') return resolve();
+    if (e.name === 'NotFoundError') return resolve();
     reject(e)
   }
 });

@@ -53,9 +53,9 @@ acorn@^4.0.4:
   version "4.0.11"
   resolved "https://registry.npmjs.org/acorn/-/acorn-4.0.11.tgz#edcda3bd937e7556410d42ed5860f67399c794c0"
 
-action-creator@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/action-creator/-/action-creator-0.2.2.tgz#9fcfd5c01f080065ea472a2aebecd505b3c56687"
+action-creator@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/action-creator/-/action-creator-0.3.0.tgz#aa1c3a368044ff3caa2fafad183ccb715c26e41f"
 
 after@0.8.2:
   version "0.8.2"

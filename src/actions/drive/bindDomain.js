@@ -5,13 +5,13 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
   driveId: Joi.string()
 }), {allowUnknown: true});
 
-const bindDomain = (query) => ctx => new Promise(async (resolve, reject) => {
+const bindDomain = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
     const {hostname} = validated.value;
     let driveId = validated.value.driveId || null;
-    const db = ctx.db.sub('domain');
+    const db = getCtx().db.sub('domain');
     if (!driveId) {
       driveId = await db.get(hostname);
     } else {

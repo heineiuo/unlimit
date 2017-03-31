@@ -4,10 +4,10 @@
  * @apiGroup Account
  * @apiParam {string} token token
  */
-const logout = ({token}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const logout = ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('token');
-    if (ctx.request.headers.session.user) {
+    const db = getCtx().db.sub('token');
+    if (getCtx().request.headers.session.user) {
       await db.del(token)
     }
     resolve({})

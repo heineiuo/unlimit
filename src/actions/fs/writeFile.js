@@ -10,17 +10,19 @@ import filesystem from 'level-filesystem'
  * @apiParam {string} file
  * @apiParam {string} content
  */
-const writeFile = (query) => (ctx) => new Promise(async (resolve, reject) => {
+const writeFile = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
       pathname: Joi.string().required(),
-      content: Joi.string().required(),
+      content: Joi.string().allow(''),
       noConflict: Joi.boolean()
     }), {allowUnknown: true});
+    console.log(validated);
     if (validated.error) return reject(validated.error);
-    const {driveId, pathname, content, noConflict=false} = validated.value;
-    const fs = filesystem(ctx.db.sub('fs'));
+
+    const {driveId, pathname, content='', noConflict=false} = validated.value;
+    const fs = filesystem(getCtx().db.sub('fs'));
     const realPath = `${driveId}${pathname}`;
 
     if (noConflict) {

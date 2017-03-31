@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import {connect, bindActionCreators} from "action-creator"
 import getApp from "../app/get"
 import updateApp from "../app/update"
 
@@ -14,27 +13,25 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * @param query.registerInfo
  * @returns {Promise}
  */
-const bind = (query) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const bind = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.sub('socket');
+    const db = getCtx().db.sub('socket');
     const {socketId, registerInfo: {appName, appId, appSecret}} = query;
-    const {getApp, updateApp} = getAction();
-    const app = await getApp({appName});
+    const app = await dispatch(getApp)({appName});
     const targetAppIndex = app.list.findIndex(item => {
-      return item.appId == appId && item.appSecret == appSecret
+      return item.appId === appId && item.appSecret === appSecret
     });
-    console.log(query);
-    if (targetAppIndex == -1) return reject(new Error('ERROR_REGISTER_INFO'));
+    if (targetAppIndex === -1) return reject(new Error('ERROR_REGISTER_INFO'));
     const targetApp = app.list[targetAppIndex];
     targetApp.status = 1;
     targetApp.socketId = socketId;
     app.list.splice(targetAppIndex, 1, targetApp);
     await Promise.all([
       db.put(socketId, Object.assign({}, targetApp, {appName: appName})),
-      updateApp({appName: app.appName, app})
+      dispatch(updateApp)({appName: app.appName, app})
     ]);
     const socketData = Object.assign({}, targetApp, {appName});
     resolve(socketData)
@@ -43,8 +40,4 @@ const bind = (query) => (ctx, getAction) => new Promise(async(resolve, reject) =
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-     getApp, updateApp
-  })
-)(bind)
+export default module.exports = bind

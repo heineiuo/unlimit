@@ -1,7 +1,5 @@
-import {connect, bindActionCreators} from 'action-creator'
 import Joi from 'joi'
 import ent from 'ent'
-import bindDomain from './bindDomain'
 
 
 /**
@@ -13,7 +11,7 @@ import bindDomain from './bindDomain'
  * @apiSuccess {object} host
  * @apiSuccess {object} drive
  */
-const get = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const get = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
 
   try {
     const validated = Joi.validate(query, Joi.object().keys({
@@ -21,7 +19,7 @@ const get = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
     const {driveId} = validated.value;
-    const db = ctx.db.sub('location');
+    const db = getCtx().db.sub('location');
     const location = await db.get(driveId);
     resolve({location})
   } catch(e){
@@ -30,8 +28,4 @@ const get = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
 
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    bindDomain
-  })
-)(get)
+export default module.exports = get

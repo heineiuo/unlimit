@@ -1,6 +1,5 @@
 import Joi from 'joi'
 import ent from 'ent'
-import {connect, bindActionCreators} from 'action-creator'
 
 const validate = (query) => Joi.validate(query, Joi.object().keys({
   driveId: Joi.string().required(),
@@ -16,12 +15,12 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * @apiParam {string} locations
  * @apiSuccess {number} success
  */
-const batch = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const batch = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.sub('location');
+    const db = getCtx().db.sub('location');
     const {driveId, locations, reset=false} = validated.value;
     if (reset) {
       await db.put(driveId, {locations});

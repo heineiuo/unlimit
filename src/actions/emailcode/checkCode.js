@@ -1,9 +1,9 @@
 /**
  * 检查code
  */
-const checkCode = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const checkCode = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('emailcode');
+    const db = getCtx().db.sub('emailcode');
     const {email, code} = query;
     const result = await db.get(email);
     if (result.code != code) return reject(new Error('ILLEGAL_CODE'));

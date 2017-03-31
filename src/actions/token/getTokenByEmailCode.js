@@ -1,4 +1,3 @@
-import {connect, bindActionCreators} from 'action-creator'
 
 import getUserIdWithUpset from '../email/getUserIdWithUpset'
 import checkCode from '../emailcode/checkCode'
@@ -12,13 +11,12 @@ import createToken from './createToken'
  * @apiParam {string} email
  * @apiSuccess {string} token
  */
-const getTokenByEmailCode = (query) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const getTokenByEmailCode = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const {code, email} = query;
-    const {checkCode, createToken, getUserIdWithUpset} = getAction();
-    await checkCode({email, code});
-    const userId = await getUserIdWithUpset({email});
-    const token = await createToken({userId});
+    await dispatch(checkCode)({email, code});
+    const userId = await dispatch(getUserIdWithUpset)({email});
+    const token = await dispatch(createToken)({userId});
     resolve(token)
 
   } catch(e) {
@@ -27,10 +25,4 @@ const getTokenByEmailCode = (query) => (ctx, getAction) => new Promise(async(res
 
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    getUserIdWithUpset,
-    checkCode,
-    createToken
-  })
-)(getTokenByEmailCode)
+export default module.exports = getTokenByEmailCode

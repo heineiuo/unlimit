@@ -1,4 +1,3 @@
-import {connect, bindActionCreators} from 'action-creator'
 import Joi from 'joi'
 import ent from 'ent'
 
@@ -15,7 +14,7 @@ import ent from 'ent'
  * @apiParam {string} [contentType]
  * @apiParam {string} content
  */
-const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const New = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
@@ -27,9 +26,9 @@ const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
 
-    const db = ctx.db.sub('location');
+    const db = getCtx().db.sub('location');
     const {driveId, type, cors=false, pathname, content, contentType='text'} = validated.value;
-    const encodedContent = type == 'html'? ent.encode(content) :content;
+    const encodedContent = type === 'html'? ent.encode(content) :content;
     const location = await db.get(driveId);
     const nextLocation = {
       pathname,
@@ -48,7 +47,4 @@ const New = (query) => (ctx, getAction) => new Promise(async (resolve, reject) =
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-  })
-)(New)
+export default module.exports = New

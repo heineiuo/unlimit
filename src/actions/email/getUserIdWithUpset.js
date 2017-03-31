@@ -1,19 +1,16 @@
-import {connect, bindActionCreators } from 'action-creator'
 
 import createUser from '../user/createUser'
 
-const getUserIdWithUpset = ({email, userId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const getUserIdWithUpset = ({email, userId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('email');
-    const {createUser} = getAction();
+    const db = getCtx().db.sub('email');
 
     try {
       const result = await db.get(email);
-      resolve(result)
     } catch(e){
-      if (e.name != 'NotFoundError') return reject(e);
+      if (e.name !== 'NotFoundError') return reject(e);
       try {
-        const user = await createUser({email});
+        const user = await dispatch(createUser)({email});
         await db.put(email, user.id);
         resolve(user.id)
       } catch(e){
@@ -25,8 +22,4 @@ const getUserIdWithUpset = ({email, userId}) => (ctx, getAction) => new Promise(
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    createUser
-  })
-)(getUserIdWithUpset);
+export default module.exports = getUserIdWithUpset

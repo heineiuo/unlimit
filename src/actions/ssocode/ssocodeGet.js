@@ -1,4 +1,3 @@
-import {connect, bindActionCreators} from 'action-creator'
 import createCode from './createCode'
 
 /**
@@ -8,14 +7,11 @@ import createCode from './createCode'
  * @apiParam {string} token
  * @apiSuccess {string} code
  */
-const ssocodeGet = (query) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const ssocodeGet = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const {token} = query;
-  const {createCode} = getAction();
-  if (!ctx.res.session.user) reject(new Error('ERR_NOT_LOGGED'));
-  const code = await createCode({token});
+  if (!getCtx().res.session.user) reject(new Error('ERR_NOT_LOGGED'));
+  const code = await dispatch(createCode)({token});
   resolve({code})
 });
 
-export default module.exports = connect(bindActionCreators({
-  createCode
-}))(ssocodeGet)
+export default module.exports = ssocodeGet

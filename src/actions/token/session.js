@@ -1,5 +1,4 @@
 import getUser from "../user/getUser"
-import {connect, bindActionCreators} from "action-creator"
 
 /**
  * @api {POST} /account2/session 获取session信息
@@ -9,20 +8,15 @@ import {connect, bindActionCreators} from "action-creator"
  * @apiParam {string} token 令牌
  * @apiSuccess {object} user
  */
-const session = ({token}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const session = ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = ctx.db.sub('token');
+    const db = getCtx().db.sub('token');
     const result = await db.get(token);
-    const {getUser} = getAction();
-    resolve(await getUser({userId: result.userId}));
+    resolve(await dispatch(getUser)({userId: result.userId}));
   } catch (e) {
-    if (e.name == 'NotFoundError') return reject(new Error('EMPTY_SESSION'));
+    if (e.name === 'NotFoundError') return reject(new Error('EMPTY_SESSION'));
     reject(e)
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    getUser
-  })
-)(session);
+export default module.exports = session

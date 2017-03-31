@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import level from 'levelup'
 import levelSubLevel from 'level-sublevel'
 import ql from 'q-level'
-import {bindActionCreators} from 'action-creator'
+import {createDispatch} from 'action-creator'
 
 import config from './config'
 import init from './init'
@@ -35,31 +35,31 @@ const start = async () => {
   try {
 
     const allActionCreators = {
-      email: bindActionCreators({
+      email: {
         getUserIdWithUpset: require('./actions/email/getUserIdWithUpset')
-      }),
-      emailcode: bindActionCreators({
+      },
+      emailcode: {
         checkCode: require('./actions/emailcode/checkCode'),
         createLoginCode: require('./actions/emailcode/createLoginCode')
-      }),
-      ssocode: bindActionCreators({
+      },
+      ssocode: {
         createCode: require('./actions/ssocode/createCode'),
         getSsoCode: require('./actions/ssocode/getSsoCode'),
         getTokenBySSOCode: require('./actions/ssocode/getTokenBySSOCode'),
         ssocodeGet: require('./actions/ssocode/ssocodeGet')
-      }),
-      token: bindActionCreators({
+      },
+      token: {
         createToken: require('./actions/token/createToken'),
         getTokenByEmailCode: require('./actions/token/getTokenByEmailCode'),
         logout: require('./actions/token/logout'),
         session: require('./actions/token/session')
-      }),
-      user: bindActionCreators({
+      },
+      user: {
         createUser: require('./actions/user/createUser'),
         getUser: require('./actions/user/getUser'),
         list: require('./actions/user/list')
-      }),
-      fs: bindActionCreators({
+      },
+      fs: {
         cat: require('./actions/fs/cat'),
         ls: require('./actions/fs/ls'),
         mkdir: require('./actions/fs/mkdir'),
@@ -67,8 +67,8 @@ const start = async () => {
         unlink: require('./actions/fs/unlink'),
         upload: require('./actions/fs/upload'),
         writeFile: require('./actions/fs/writeFile'),
-      }),
-      drive: bindActionCreators({
+      },
+      drive: {
         batchLocations: require('./actions/drive/batchLocation'),
         commitLocations: require('./actions/drive/commitLocations'),
         get: require('./actions/drive/get'),
@@ -79,8 +79,8 @@ const start = async () => {
         unbindDomain: require('./actions/drive/unbindDomain'),
         bindDomain: require('./actions/drive/bindDomain'),
         remove: require('./actions/drive/remove')
-      }),
-      app: bindActionCreators({
+      },
+      app: {
         create: require('./actions/app/create'),
         remove: require('./actions/app/remove'),
         get: require('./actions/app/get'),
@@ -88,14 +88,14 @@ const start = async () => {
         addItem: require('./actions/app/addItem'),
         find: require('./actions/app/find'),
         removeItem: require('./actions/app/removeItem'),
-      }),
-      socket: bindActionCreators({
+      },
+      socket: {
         bind: require('./actions/socket/bind'),
         unbind: require('./actions/socket/unbind'),
         session: require('./actions/socket/session'),
         emptyAll: require('./actions/socket/empty'),
         findByAppId: require('./actions/socket/findByAppId'),
-      })
+      }
     };
 
     const db = levelSubLevel(level(`${config.datadir}/db`), {valueEncoding:'json'});
@@ -116,8 +116,8 @@ const start = async () => {
       ctx.error = (error) => ctx.json({error});
       ctx.on('error', (err) => {
         console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
-        if (err.name == 'ValidationError') return ctx.error('PARAM_ILLEGAL');
-        if (err.message == 'Command failed') return ctx.error('COMMAND_FAILED');
+        if (err.name === 'ValidationError') return ctx.error('PARAM_ILLEGAL');
+        if (err.message === 'Command failed') return ctx.error('COMMAND_FAILED');
         return ctx.error(err.message);
       });
       ctx.on('end', () => {
@@ -141,11 +141,11 @@ const start = async () => {
       const {moduleName, actionName} = ctx.request.params;
       if (!allActionCreators.hasOwnProperty(moduleName)) return ctx.error('NOT_FOUND');
       const actionCreators = allActionCreators[moduleName];
-      const actions = actionCreators(ctx);
-      if (!actions.hasOwnProperty(actionName)) return ctx.error('NOT_FOUND');
-      const action = actions[actionName](ctx.request.body);
-      if (action instanceof Promise) {
-        const result = await action;
+      if (!actionCreators.hasOwnProperty(actionName)) return ctx.error('NOT_FOUND');
+      const dispatch = createDispatch(ctx);
+      const actionType = dispatch(actionCreators[actionName])(ctx.request.body);
+      if (actionType instanceof Promise) {
+        const result = await actionType;
         ctx.json(result)
       } else {
         ctx.json({})

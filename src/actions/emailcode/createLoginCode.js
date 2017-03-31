@@ -22,9 +22,9 @@ export const createNumberCode = function(length=6){
  * @apiName EmailCodeForLogin
  * @apiParam {string} email 邮箱
  */
-const createLoginCode = ({email}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const createLoginCode = ({email}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('emailcode');
+    const db = getCtx().db.sub('emailcode');
     // console.log(email);
     const code = createNumberCode();
     await db.put(email, {code, createTime: Date.now()});

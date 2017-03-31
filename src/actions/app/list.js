@@ -3,9 +3,9 @@
  * get app list
  * @returns {Promise}
  */
-const list = ({limit=20}) => (ctx) => new Promise(async (resolve, reject) => {
+const list = ({limit=20}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('app');
+    const db = getCtx().db.sub('app');
     const list = [];
     db.createReadStream({limit:null})
       .on('data', (data) => {

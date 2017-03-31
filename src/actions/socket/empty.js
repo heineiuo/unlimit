@@ -1,7 +1,5 @@
-import {connect, bindActionCreators} from 'action-creator'
 
-import getApp from '../app/get'
-import list from './list'
+import listSocket from './list'
 import listApp from '../app/list'
 import updateApp from '../app/update'
 
@@ -9,13 +7,12 @@ import updateApp from '../app/update'
  * empty all sockets records
  * @returns {Promise}
  */
-const empty = () => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const empty = () => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('socket');
-    const {listSocket, listApp} = getAction();
-    const sockets = await listSocket({limit: null});
+    const db = getCtx().db.sub('socket');
+    const sockets = await dispatch(listSocket)({limit: null});
     await Promise.all(sockets.map(item => db.del(item._key)));
-    const appList = await listApp({limit: null});
+    const appList = await dispatch(listApp)({limit: null});
     await Promise.all(appList.map(app => {
       app.list = app.list.map(item => {
         return Object.assign({}, item, {
@@ -23,7 +20,7 @@ const empty = () => (ctx, getAction) => new Promise(async (resolve, reject) => {
           status: 0
         })
       });
-      return updateApp({appName: app.appName, app})
+      return dispatch(updateApp)({appName: app.appName, app})
     }));
     resolve()
   } catch(e){
@@ -32,11 +29,4 @@ const empty = () => (ctx, getAction) => new Promise(async (resolve, reject) => {
 });
 
 
-export default module.exports = connect(
-  bindActionCreators({
-    getApp,
-    updateApp,
-    list,
-    listApp
-  })
-)(empty)
+export default module.exports = empty

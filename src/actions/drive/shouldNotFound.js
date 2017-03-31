@@ -4,9 +4,9 @@
  * @param hostname
  * @constructor
  */
-const ShouldNotFound = ({hostname}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const ShouldNotFound = ({hostname}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = ctx.db.sub('domain');
+    const db = getCtx().db.sub('domain');
     await db.get(hostname);
     reject(new Error('HOST_EXIST'));
   } catch (e) {

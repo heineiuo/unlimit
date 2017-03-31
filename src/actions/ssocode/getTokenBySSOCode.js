@@ -6,9 +6,9 @@
  * @apiParam {string} code code
  * @apiSuccess {string} token token
  */
-const getTokenBySSOCode = ({code}) => (ctx, getAction) => new Promise(async(resolve, reject) => {
+const getTokenBySSOCode = ({code}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const SSOCode = ctx.db.sub('ssocode');
+    const SSOCode = getCtx().db.sub('ssocode');
     const result = await SSOCode.get(code);
     resolve({token: result.token});
   } catch(e){

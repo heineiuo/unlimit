@@ -4,9 +4,9 @@
  * @apiGroup Account
  * @apiParam {string} model model名, user
  */
-const userList = (query) => (ctx, getAction) => new Promise(async (resolve,reject) => {
+const userList = (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
   try {
-    const db = ctx.db.sub('user');
+    const db = getCtx().db.sub('user');
     const limit = query.limit || 20;
     const list = [];
     db.createReadStream({limit})

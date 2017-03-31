@@ -1,6 +1,5 @@
 import path from 'path'
 import filesystem from 'level-filesystem'
-import {connect, bindActionCreators} from 'action-creator'
 import cat from './cat'
 
 /**
@@ -11,9 +10,9 @@ import cat from './cat'
  * @apiParam {string} driveId
  * @apiParam {string} pathname
  */
-const ls = ({pathname, driveId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const ls = ({pathname, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(ctx.db.sub('fs'));
+    const fs = filesystem(getCtx().db.sub('fs'));
     const directory = `${driveId}${pathname}`;
     if (!directory) return reject(new Error('READDIR_FAIL'));
     const files = await new Promise((resolve, reject) => {
@@ -44,10 +43,9 @@ const ls = ({pathname, driveId}) => (ctx, getAction) => new Promise(async (resol
       ls
     })
   } catch(e){
-    if (e.message.search('ENOTDIR') == 0 || e.message.search('ENOENT') == 0) {
+    if (e.message.search('ENOTDIR') === 0 || e.message.search('ENOENT') === 0) {
       try {
-        const {cat} = getAction();
-        const file = await cat({driveId, pathname});
+        const file = await dispatch(cat)({driveId, pathname});
         resolve(file)
       } catch(e){
         reject(e)
@@ -60,8 +58,4 @@ const ls = ({pathname, driveId}) => (ctx, getAction) => new Promise(async (resol
 });
 
 
-export default module.exports = connect(
-  bindActionCreators({
-    cat
-  })
-)(ls);
+export default module.exports = ls

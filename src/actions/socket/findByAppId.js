@@ -1,4 +1,3 @@
-import {connect, bindActionCreators} from 'action-creator'
 import getApp from '../app/get'
 /**
  * Socket
@@ -16,11 +15,10 @@ import getApp from '../app/get'
  * get socket by appId
  * @returns {Promise}
  */
-const findByAppId = ({appName, appId}) => (ctx, getAction) => new Promise(async (resolve, reject) => {
+const findByAppId = ({appName, appId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = ctx.db.sub('socket');
-    const { getApp} = getAction();
-    const app = await getApp({appName: appName});
+    const db = getCtx().db.sub('socket');
+    const app = await dispatch(getApp)({appName: appName});
     const targetAppIndex = app.list.findIndex(item => item.appId == appId);
     if (targetAppIndex < 0) throw new Error('APP_NOT_FOUND');
     const socket = await db.get(app.list[targetAppIndex].socketId);
@@ -30,8 +28,4 @@ const findByAppId = ({appName, appId}) => (ctx, getAction) => new Promise(async 
   }
 });
 
-export default module.exports = connect(
-  bindActionCreators({
-    getApp
-  })
-)(findByAppId)
+export default module.exports = findByAppId

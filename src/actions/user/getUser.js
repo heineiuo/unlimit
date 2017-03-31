@@ -1,5 +1,5 @@
-const Get = ({userId}) => (ctx, getAction) => {
-  const db = ctx.db.sub('user');
+const Get = ({userId}) => (dispatch, getCtx) => {
+  const db = getCtx().db.sub('user');
   return db.get(userId)
 };
 

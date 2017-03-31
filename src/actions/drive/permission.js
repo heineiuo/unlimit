@@ -14,7 +14,7 @@ const permission = (query) => (ctx, getActions) => new Promise(async (resolve, r
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
     const {userId, driveId} = query;
-    const db = ctx.db.sub('location');
+    const db = getCtx().db.sub('location');
     const location = await db.get(driveId);
 
     if (!location.hasOwnProperty('users') || location.users instanceof Array) {
