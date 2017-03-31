@@ -12,9 +12,9 @@ import {connect} from 'react-redux'
 import  {
   createHost, getHostList, deleteHost,
   getLocations, commitLocations
-} from '../../store/host'
-import {restoreFileList, getFileList, deleteFile} from '../../store/file'
-import {setTitle} from '../../store/nav'
+} from '../../reducers/host'
+import {restoreFileList, getFileList, deleteFile} from '../../reducers/file'
+import {setTitle} from '../../reducers/nav'
 
 
 class HostList extends Component {

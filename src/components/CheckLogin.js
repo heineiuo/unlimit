@@ -4,12 +4,12 @@ import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
-import {checkLogin} from '../store/account'
+import {checkLogin} from '../reducers/account'
 import AsyncDrive from './Drive/AsyncDrive'
 import AsyncHome from './Home/AsyncHome'
 import AsyncConsole from './AsyncConsole'
 import AsyncAccount from './Account/AsyncAccount'
-import AsyncAuth from './Auth/AsyncAuth'
+import AsyncOAuth from './OAuth/AsyncOAuth'
 import {injectAsyncReducer} from '../store'
 
 // import Home from './Home/Home'
@@ -34,7 +34,7 @@ class CheckLogin extends Component {
         <Switch>
           <Route exact path="/" render={AsyncHome} />
           <Route path="/drive" render={AsyncDrive} />
-          <Route path="/auth" render={AsyncAuth} />
+          <Route path="/oauth" render={AsyncOAuth} />
           <Route path="/account" render={AsyncAccount} />
           <Route path="/console" render={AsyncConsole} />
           <Route component={require('./NotFound')}/>

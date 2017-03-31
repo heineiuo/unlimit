@@ -209,21 +209,3 @@ export const checkLogin = () => async (dispatch, getState) => {
     console.log(e.stack)
   }
 };
-
-/**
- * 获取授权码
- * @returns {function()}
- */
-export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
-  try {
-    const {userToken=null} = localStorage;
-    const {redirectUrl} = getState().account;
-    const res = await POSTUrlencodeJSON(`${API_HOST}/seashell/ssocode/getTokenBySSOCode`, signature({
-      token: userToken
-    }));
-    if (res.error) return console.log(res.error);
-    location.href = `${redirectUrl}?code=${res.code}`
-  } catch(e){
-    console.log(e.stack||e)
-  }
-};

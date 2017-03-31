@@ -3,9 +3,8 @@ import {routerReducer, routerMiddleware} from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 import createHashHistory from 'history/createHashHistory'
 
-import notice from './store/feed/notice'
-import postList from './store/feed/postList'
-import account from './store/account'
+import notice from './reducers/feed/notice'
+import account from './reducers/account'
 
 const history = createHashHistory();
 
@@ -31,7 +30,6 @@ const createReducer = (asyncReducers) => {
   return combineReducers({
     router: routerReducer,
     notice,
-    postList,
     account,
     ...asyncReducers
   });

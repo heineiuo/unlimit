@@ -3,7 +3,7 @@ import {StyleSheet, css} from 'aphrodite/no-important'
 import commonStyles from '../common/styles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
-import {login, sendVerifyCode} from '../../store/account'
+import {login, sendVerifyCode} from '../../reducers/account'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 

@@ -5,4 +5,4 @@ const start = () => {
   const app = new RenderApp(App, document.getElementById('app'));
 };
 
-start();
+export default module.exports = start;

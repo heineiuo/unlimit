@@ -19,9 +19,15 @@
 <script src=https://unpkg.com/systemjs@0.20.9/dist/system.src.js></script>
 <script>
 
-  System.config({
+  SystemJS.config({
     baseUrl: '/',
-    meta: {'*.js': {format: 'amd'}},
+    meta: {
+      '*.js': {format: 'amd'},
+      'smile-web': {
+        format: 'amd',
+        deps: ['react', 'react-dom', 'react-router-dom', 'redux', 'react-redux']
+      }
+    },
     map: {
       react: 'https://unpkg.com/react@15.4.2/dist/react.js',
       'react-dom': 'https://unpkg.com/react-dom@15.4.2/dist/react-dom.js',
@@ -34,5 +40,7 @@
       'smile-admin': 'http://127.0.0.1:8088/dist/smile-admin.js',
       'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js'
     }
-  }), System.import('smile-web');
+  });
+
+  SystemJS.import('smile-web').then(start => start());
 </script>

@@ -16,7 +16,7 @@ class MessageList extends Component {
         MessageList
         <div style={{paddingTop: 76, margin: '0 auto', width: '100%', maxWidth: 1000}}>
           {
-            postList.list.map(item => (
+            postList.map(item => (
               <div key={item._key} className={css(styles.item)}>
                 <Link to={`/post/${item._key}`}>
                   <div>

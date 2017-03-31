@@ -20,13 +20,13 @@ import {bindActionCreators} from 'redux'
 import {
   createHost, getHostList, deleteHost,
   getLocations, commitLocations
-} from '../../store/host'
+} from '../../reducers/host'
 import {
   restoreFileList, getFileList, deleteFile,
   pushFileToClipboard,
   emptyClipboard,
-} from '../../store/file'
-import {setTitle} from '../../store/nav'
+} from '../../reducers/file'
+import {setTitle} from '../../reducers/nav'
 
 
 class File extends Component {

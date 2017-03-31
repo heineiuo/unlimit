@@ -6,7 +6,7 @@ import UnLogged from './Unlogged'
 import Spin from 'react-spin'
 import Header from './Header'
 import Body from 'react-sea/lib/Body'
-import {logout, checkLogin, sendVerifyCode, getAuthCodeAndRedirect} from '../../store/account'
+import {logout, checkLogin, sendVerifyCode} from '../../reducers/account'
 
 class Check extends Component {
 
@@ -94,6 +94,6 @@ export default module.exports = connect(
     logout,
     checkLogin,
     sendVerifyCode,
-    getAuthCodeAndRedirect
+    getAuthCodeAndRedirect: require('../../actions/getAuthCodeAndRedirect')
   }, dispatch)
 )(Check)
