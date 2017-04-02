@@ -9,19 +9,18 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * 获取空间和用户的权限关系
  * @param query
  */
-const permission = (query) => (ctx, getActions) => new Promise(async (resolve, reject) => {
+const permission = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
     const {userId, driveId} = query;
     const db = getCtx().db.sub('location');
-    const location = await db.get(driveId);
+    const drive = await db.get(driveId);
 
-    if (!location.hasOwnProperty('users') || location.users instanceof Array) {
+    if (!drive.hasOwnProperty('users') || !drive.users instanceof Array) {
       return reject(new Error('PERMISSION_DENIED'))
     }
-    const userIndex = location.users.findIndex(item => item == userId);
-    if (userIndex < 0) return reject(new Error('PERMISSION_DENIED'));
+    if (drive.users.indexOf(userId) === -1) return reject(new Error('PERMISSION_DENIED'));
     resolve({success: 1})
 
   } catch(e){

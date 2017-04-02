@@ -32,24 +32,24 @@ const seashellProxyMiddleware = (seashell) => {
 
     try {
       const {host, url, location} = res.locals;
+      const __GATEWAY_META = Object.assign({},
+        pick(req, ['ip', 'method', 'originalUrl', 'protocol']),
+        pick(req.headers, ['user-agent', 'host'])
+      );
 
-      const data = Object.assign({}, req.query, req.body, {
-        __GATEWAY_META: Object.assign({},
-          pick(req, ['ip', 'method', 'originalUrl', 'protocol']),
-          pick(req.headers, ['user-agent', 'host'])
-        )
-      });
+      const data = Object.assign({}, req.query, req.body);
 
       const content = location.content;
       const requestUrl = url.pathname.substring(content.length);
 
       let result = null;
-      if (requestUrl.search(seashell.__SEASHELL_NAME) == 0) {
+      if (requestUrl.search(seashell.__SEASHELL_NAME) === 0) {
         const originUrl = requestUrl.substring(seashell.__SEASHELL_NAME.length);
         let session = null;
         try {
           session = await seashell.requestSession({
             headers: {
+              __GATEWAY_META,
               'switch-identity': {
                 appName: 'user',
                 appSecret: data.token
@@ -58,8 +58,11 @@ const seashellProxyMiddleware = (seashell) => {
           });
         } catch(e){}
 
+        delete data.token;
+
         result = await seashell.requestSelf({
           headers: {
+            __GATEWAY_META,
             originUrl,
             session
           },
@@ -68,6 +71,7 @@ const seashellProxyMiddleware = (seashell) => {
       } else {
         result = await seashell.requestChild(requestUrl, data, {
           headers: {
+            __GATEWAY_META,
             'switch-identity': {
               appName: 'user',
               appSecret: data.token

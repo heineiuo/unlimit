@@ -71,7 +71,8 @@ const start = async () => {
       drive: {
         batchLocations: require('./actions/drive/batchLocation'),
         commitLocations: require('./actions/drive/commitLocations'),
-        get: require('./actions/drive/get'),
+        getMeta: require('./actions/drive/getMeta'),
+        editUsers: require('./actions/drive/editUsers'),
         getByHostname: require('./actions/drive/getByHostname'),
         list: require('./actions/drive/list'),
         create: require('./actions/drive/create'),

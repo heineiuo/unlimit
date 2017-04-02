@@ -1,5 +1,5 @@
 import bindDomain from './bindDomain'
-import getDrive from './get'
+import getDrive from './getMeta'
 import Joi from 'joi'
 
 const getByHostname = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
