@@ -89,14 +89,14 @@ class LocationItem extends Component {
               <Button
                 type="secondary"
                 size="small"
-                className={css(styles.arrow && location.sort == 1 && styles.arrow_disabled)}
+                className={css(styles.arrow && location.sort === 1 && styles.arrow_disabled)}
                 onClick={this.editLocationSortUp}>
                 上移
               </Button>
               <Button
                 type="secondary"
                 size="small"
-                className={css(styles.arrow && location.sort == locationLength && styles.arrow_disabled)}
+                className={css(styles.arrow && location.sort === locationLength && styles.arrow_disabled)}
                 onClick={this.editLocationSortDown}>
                 下移
               </Button>

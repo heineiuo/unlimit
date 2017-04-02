@@ -144,7 +144,7 @@ export const restoreFileList = () => ({
 export const pushFileToClipboard = (files) => (dispatch, getState) => {
   const {clipboard} = getState().file;
   const nextClipboard = clipboard.slice().filter(item => {
-    return files.indexOf(item) == -1
+    return files.indexOf(item) === -1
   }).concat(files);
   dispatch({
     type: 'FILE_CLIPBOARD_UPDATE',

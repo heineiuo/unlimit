@@ -56,7 +56,7 @@ class FileInfo extends Component {
             <div>预览：</div>
             <div className={css(styles.preview__box)}>
               {
-                (matchApp.length == 0 || matchApp[0].type != 'image')?
+                (matchApp.length === 0 || matchApp[0].type != 'image')?
                   <div className={css(styles.preview__normal)}>{matchApp[0].type}</div>:
                   <img className={css(styles.preview__img)} src={blobUrl} alt=""/>
               }

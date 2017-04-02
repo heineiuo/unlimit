@@ -13,7 +13,7 @@
   <meta name=format-detection content='telephone=no'>
   <meta name=HandheldFriendly content=True>
   <meta http-equiv=cleartype content=on>
-<body>
+<body style="margin: 0px; background-color: rgb(239, 239, 244);">
 <div id=app></div>
 <script src=https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js></script>
 <script src=https://unpkg.com/systemjs@0.20.9/dist/system.src.js></script>
@@ -22,19 +22,15 @@
   SystemJS.config({
     baseUrl: '/',
     meta: {
-      '*.js': {format: 'amd'},
-      'smile-web': {
-        format: 'amd',
-        deps: ['react', 'react-dom', 'react-router-dom', 'redux', 'react-redux']
-      }
+      '*.js': {format: 'amd'}
     },
     map: {
-      react: 'https://unpkg.com/react@15.4.2/dist/react.js',
+      'react': 'https://unpkg.com/react@15.4.2/dist/react.js',
       'react-dom': 'https://unpkg.com/react-dom@15.4.2/dist/react-dom.js',
       'react-router-dom': 'https://unpkg.com/react-router-dom@4.0.0/umd/react-router-dom.js',
-      redux: 'https://unpkg.com/redux@3.6.0/dist/redux.js',
+      'redux': 'https://unpkg.com/redux@3.6.0/dist/redux.js',
       'react-redux': 'https://unpkg.com/react-redux@5.0.2/dist/react-redux.js',
-      familytree: 'http://127.0.0.1:8084/dist/familytree.js',
+      'familytree': 'http://127.0.0.1:8084/dist/familytree.js',
       'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
       'smile-draft': 'http://127.0.0.1:8085/dist/smile-draft.js',
       'smile-admin': 'http://127.0.0.1:8088/dist/smile-admin.js',
@@ -42,5 +38,10 @@
     }
   });
 
+  SystemJS.import('react');
+  SystemJS.import('react-dom');
+  SystemJS.import('react-router-dom');
+  SystemJS.import('react-redux');
+  SystemJS.import('redux');
   SystemJS.import('smile-web').then(start => start());
 </script>

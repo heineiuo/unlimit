@@ -94,7 +94,7 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
 
     if (hostListResult.error) throw new Error(hostListResult.error);
 
-    if (hostListResult.list.length == 0) {
+    if (hostListResult.list.length === 0) {
       // todo
       throw new Error('空间数量为零！')
 
@@ -103,7 +103,7 @@ export const getHostList = (currentHostname=null) => async (dispatch, getState) 
 
       if (currentHostname) {
         const currentHostnameIndex = hostListResult.list.findIndex(item => {
-          return item.hostname == currentHostname
+          return item.hostname === currentHostname
         });
         if (currentHostnameIndex) {
 
@@ -195,7 +195,7 @@ export const getLocations = (driveId) => async (dispatch, getState) => {
     });
 
     const {token} = getState().account;
-    const hostDetailResult = await await POSTRawJSON(`${API_HOST}/seashell/drive/get`,{
+    const hostDetailResult = await await POSTRawJSON(`${API_HOST}/seashell/drive/getMeta`,{
       driveId,
       token
     });

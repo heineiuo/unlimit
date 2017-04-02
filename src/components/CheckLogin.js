@@ -4,7 +4,6 @@ import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
-import {checkLogin} from '../reducers/account'
 import AsyncDrive from './Drive/AsyncDrive'
 import AsyncHome from './Home/AsyncHome'
 import AsyncConsole from './AsyncConsole'
@@ -52,7 +51,7 @@ const ConnectCheckLogin = connect(
     postList: store.postList
   }),
   (dispatch) => bindActionCreators({
-    checkLogin,
+    checkLogin: require('../actions/checkLogin'),
   }, dispatch)
 )(CheckLogin);
 

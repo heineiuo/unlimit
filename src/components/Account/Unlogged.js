@@ -3,7 +3,6 @@ import {StyleSheet, css} from 'aphrodite/no-important'
 import commonStyles from '../common/styles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
-import {login, sendVerifyCode} from '../../reducers/account'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
@@ -36,7 +35,7 @@ class UnLogged extends Component {
   };
 
   handleKeyPress = (e) => {
-    if (e.key == 'Enter') this.submit()
+    if (e.key === 'Enter') this.submit()
   };
 
   submit = () => {
@@ -127,7 +126,7 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    login,
-    sendVerifyCode
+    login: require('../../actions/login'),
+    sendVerifyCode: require('../../actions/sendVerifyCode')
   }, dispatch)
 )(UnLogged)

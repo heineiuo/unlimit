@@ -50,11 +50,11 @@ class Location extends Component {
     const {locations} = this.state;
     const nextLocations = locations.slice();
 
-    if (type == 'UPDATE') {
+    if (type === 'UPDATE') {
       // console.log(location.pathname, changePart);
       nextLocations.splice(location.sort - 1, 1, Object.assign({}, locations[location.sort - 1], changePart));
       // console.log(nextLocations);
-    } else if (type == 'DELETE') {
+    } else if (type === 'DELETE') {
       nextLocations.splice(location.sort - 1, 1)
     }
 

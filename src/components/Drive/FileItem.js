@@ -31,7 +31,7 @@ class FileItem extends Component {
   };
 
   _toggleSelect = (state) => {
-    const selectState = state || (this.state.selectState == 2?0:2);
+    const selectState = state || (this.state.selectState === 2?0:2);
     this.setState({
       selectState,
     });
@@ -56,12 +56,12 @@ class FileItem extends Component {
     return (
       <div
         onClick={this.select}
-        className={css(styles.fileItem, mouseOver && styles.fileItem_hover, selectState == 2 && styles.fileItem_selected)}
+        className={css(styles.fileItem, mouseOver && styles.fileItem_hover, selectState === 2 && styles.fileItem_selected)}
         onMouseOut={this.onMouseOut}
         onMouseOver={this.onMouseOver}>
         {/*<div className={css(styles.index)}>{index + 1}</div>*/}
         <div className={css(styles.index)} onClick={this.toggleSelect}>
-          {selectState == 2?1:0}
+          {selectState === 2?1:0}
         </div>
         <div className={css(styles.name)}>
           <Link

@@ -1,5 +1,6 @@
 import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
 import {API_HOST} from '../constants'
+import signature from './signature'
 
 /**
  * 获取授权码

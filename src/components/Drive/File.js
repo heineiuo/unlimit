@@ -54,7 +54,7 @@ class File extends Component {
 
     const nextPath = this.getSplat(nextProps);
 
-    if (nextProps.file.fileState == 0) {
+    if (nextProps.file.fileState === 0) {
       setTitle(`${nextProps.params.driveId} - 文件`);
       return getFileList(nextProps.params.driveId, '/');
     }
@@ -71,7 +71,7 @@ class File extends Component {
   handleFileToggleSelect = (toggle, file) => {
     console.log(toggle, this.state.selected, file)
     const {selected} = this.state;
-    if (toggle == 0) {
+    if (toggle === 0) {
       this.setState({
         selected: selected.slice().filter(item => {
           return item.name != file.name
@@ -211,7 +211,7 @@ class File extends Component {
                       </DropDownTrigger>
                       <DropDownContent className={css(styles.clipboard__content)}>
                         {
-                          selected.length == 0 ? <div>未选择文件</div>: (
+                          selected.length === 0 ? <div>未选择文件</div>: (
                             <div>
                               <div className={css(styles.clipboard__info)} onClick={this.unSelectAll}>取消选择</div>
                               <div className={css(styles.clipboard__info)} style={{color: '#EE2222'}}>删除</div>
@@ -240,7 +240,7 @@ class File extends Component {
                         <div className={css(styles.triangle)}></div>
                         <div className={css(styles.clipboard__info)}>
                           {
-                            clipboard.length == 0 ? (
+                            clipboard.length === 0 ? (
                               <div>剪贴板为空</div>
                             ) :
                               clipboard.map(filename => (
@@ -249,7 +249,7 @@ class File extends Component {
                           }
                         </div>
                         {
-                          clipboard.length == 0 ? null: (
+                          clipboard.length === 0 ? null: (
                             <div style={{display: 'flex', flexDirection: 'column'}}>
                               <span className={css(styles.clipboard__item)}>复制到此</span>
                               <span className={css(styles.clipboard__item)}>移动到此</span>

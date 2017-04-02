@@ -20,7 +20,7 @@ const Async = (props) => {
     }>
       {(state, Console) => (
         state < 2 ? null:
-          state == 3 ? <div>加载控制台出错</div>:
+          state === 3 ? <div>加载控制台出错</div>:
             <Console {...props} getTitle={getTitle} />
       )}
     </AsyncComponent>

@@ -24,7 +24,7 @@ class FilePathBar extends Component {
                 <span className={css(styles.separator)}>/</span>
                 <span>
                   {
-                    index == parsed.length - 1 ?
+                    index === parsed.length - 1 ?
                       <span className={css(styles.dirname)}>{dirname}</span> :
                       <Link className={linkClass} to={currentLink}>{dirname}</Link>
                   }

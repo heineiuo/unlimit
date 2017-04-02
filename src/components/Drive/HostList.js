@@ -42,7 +42,7 @@ class HostList extends Component {
         <div className={css(styles.list)}>
           <Card style={{boxShadow: 'none'}}>
             {
-              host.hostListState == 2 ?
+              host.hostListState === 2 ?
                 <div className={css(styles.hostList)}>
                   {
                     hostList.map((item, index)=> (

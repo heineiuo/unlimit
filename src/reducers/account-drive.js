@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions'
 
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {API_HOST} from '../constants'
-import signature from './common/signature'
+import signature from '../actions/signature'
 
 const initialState = {
   loginCheckState: 0,

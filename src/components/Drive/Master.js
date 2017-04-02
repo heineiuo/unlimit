@@ -37,7 +37,7 @@ class Master extends Component {
 
   componentWillMount = () => {
     const {getHostList, match, host} = this.props;
-    if (host.hostListState == 0) getHostList(match.params.driveId);
+    if (host.hostListState === 0) getHostList(match.params.driveId);
   };
 
   componentWillUnmount = () => {
