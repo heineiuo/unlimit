@@ -6,7 +6,7 @@ const initialState = {
 
 export default handleActions({
 
-  NAV_TITLE_UPDATE (state, action) {
+  nav__titleUpdate (state, action) {
     return Object.assign({}, state, {
       title: action.payload.title
     })
@@ -14,10 +14,4 @@ export default handleActions({
 
 }, initialState)
 
-export const setTitle = (title) => {
-  document.title = title;
-  return {
-    type: 'NAV_TITLE_UPDATE',
-      payload: {title}
-  }
-};
+

@@ -18,51 +18,51 @@ const initialState = {
 
 export default handleActions({
 
-  ACCOUNT_LOGOUT (state, action) {
+  account__logout (state, action) {
     return Object.assign({}, initialState, {
       loginChecked: true
     })
   },
 
-  CHECKED_LOGIN (state, action ) {
+  account__checkedLogin (state, action ) {
     return Object.assign({}, state, action.payload, {
       loginChecked: true
     })
   },
 
-  RESET_PASSWORD_ERROR (state,action) {
+  account__resetPasswordError (state,action) {
     return Object.assign({},state,{
       resetPasswordError:action.error
     })
   },
 
-  REST_PASSWORD_SUCCESS (state,action) {
+  account__resetPasswordSuccess (state,action) {
     return Object.assign({},state,{
       resetPasswordError:'',
       logged: true
     })
   },
 
-  REGISTER_ERROR (state, action) {
+  account__registerError (state, action) {
     return Object.assign({}, state, {
       registerError: action.error
     })
   },
 
-  REGISTER_SUCCESS (state, action) {
+  account__registerSuccess (state, action) {
     return Object.assign({}, state, {
       registerError: '',
       logged: true
     })
   },
 
-  LOGIN_ERROR (state, action) {
+  account__loginError (state, action) {
     return Object.assign({}, state, {
       loginError: action.error
     })
   },
 
-  LOGIN_SUCCESS (state, action) {
+  account__loginSuccess (state, action) {
     return Object.assign({}, state, {
       loginError:'',
       email: action.payload.email,
@@ -71,13 +71,13 @@ export default handleActions({
     })
   },
 
-  UPDATE_REGISTER_VERIFY_CODE_COUNT (state, action) {
+  account__updateRegisterVerifyCodeCount (state, action) {
     return Object.assign({}, state, {
       registerVerifyCodeCount: action.count
     })
   },
 
-  HELP_QUESTION (state, action) {
+  account__helpQuestionUpdate (state, action) {
     return Object.assign({}, state, {
       questions: action.questions || []
     })

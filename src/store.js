@@ -3,7 +3,7 @@ import {routerReducer, routerMiddleware} from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 import createHashHistory from 'history/createHashHistory'
 
-import notice from './reducers/feed/notice'
+import notice from './reducers/notice'
 import account from './reducers/account'
 
 const history = createHashHistory();

@@ -11,14 +11,6 @@ import LocationItem from './LocationItem'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
-import {
-  createHost, getHostList, deleteHost,
-  getLocations, commitLocations
-} from '../../reducers/host'
-import {restoreFileList, getFileList, deleteFile} from '../../reducers/file'
-import {setTitle} from '../../reducers/nav'
-
-
 
 class Location extends Component {
 
@@ -170,20 +162,16 @@ const styles = StyleSheet.create({
 });
 
 
-
 export default module.exports = connect(
   (state) => ({
     host: state.host,
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle,
-    getLocations,
-    getHostList,
-    commitLocations,
-    restoreFileList,
-    //editLocationSort,
-    // editLocation,
-    // createLocation
+    setTitle: require('../../actions/setNavTitle'),
+    getLocations: require('../../actions/host/getLocations'),
+    getHostList: require('../../actions/host/getHostList'),
+    commitLocations: require('../../actions/host/commitLocations'),
+    restoreFileList: require('../../actions/file/restoreFileList'),
   }, dispatch)
 )(Location)

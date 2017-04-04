@@ -1,5 +1,5 @@
 
-var target = {
+const target = {
   source: null,
   origin: null
 };
@@ -15,7 +15,7 @@ window.addEventListener("storage", function (e) {
 });
 
 window.addEventListener("message", function (e) {
-  var {data, source, origin} = e;
+  const {data, source, origin} = e;
   target.source = source;
   target.origin = origin;
   if (data.key === 'messageReadState') {

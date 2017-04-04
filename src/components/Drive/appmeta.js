@@ -27,7 +27,7 @@ const appmeta = [
 ];
 
 const pickoutPreview = (appmeta) => {
-  return appmeta.filter(app => app.appName != 'preview')
+  return appmeta.filter(app => app.appName !== 'preview')
 };
 
 

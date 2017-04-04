@@ -1,11 +1,10 @@
-// dataflow/reducer/error.js
-import uuid from 'uuid'
-
 /**
  * 全局通知
  */
 
+import uuid from 'uuid'
 import { handleActions } from 'redux-actions'
+
 
 const initialState = {
   stack: []
@@ -16,13 +15,13 @@ export default  handleActions({
   /**
    * 初始化
    */
-  NOTICE_INIT (state, action) {
+  notice__init (state, action) {
     return Object.assign({}, initialState)
   },
 
   /**
    */
-  NOTICE_ERROR_PUSH (state, action) {
+  notice__pushError (state, action) {
     const nextStack = state.stack.slice();
     const id = uuid.v4();
     nextStack.push(Object.assign({}, action.notice, {
@@ -34,7 +33,7 @@ export default  handleActions({
 
   /**
    */
-  NOTICE_CLEAR (state, action) {
+  notice__clear (state, action) {
     return Object.assign({}, state, {
       stack: []
     })
@@ -43,13 +42,3 @@ export default  handleActions({
 }, initialState)
 
 
-export const showError = (error) => (dispatch, getState) => {
-  dispatch({
-    type: 'NOTICE_ERROR_PUSH',
-    payload: {
-      type: 'error',
-      notice: error
-    }
-  })
-
-};

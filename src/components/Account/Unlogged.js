@@ -126,7 +126,7 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    login: require('../../actions/login'),
-    sendVerifyCode: require('../../actions/sendVerifyCode')
+    login: require('../../actions/account/login'),
+    sendVerifyCode: require('../../actions/account/sendVerifyCode')
   }, dispatch)
 )(UnLogged)

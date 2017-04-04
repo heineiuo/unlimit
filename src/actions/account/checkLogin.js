@@ -1,7 +1,7 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../constants'
-import signature from './signature'
+import {API_HOST} from '../../constants'
+import signature from '../common/signature'
 
 /**
  * 检查登录
@@ -12,7 +12,7 @@ const checkLogin = () => async (dispatch, getState) => {
     const userToken = localStorage.userToken || null;
     if (!userToken) {
       return dispatch({
-        type: "CHECKED_LOGIN",
+        type: "account__checkedLogin",
         payload: {
           logged: false
         }
@@ -25,7 +25,7 @@ const checkLogin = () => async (dispatch, getState) => {
 
     if (result.error || !result.hasOwnProperty('id')) {
       return dispatch({
-        type: 'CHECKED_LOGIN',
+        type: 'account__checkedLogin',
         payload: {
           logged: false
         }
@@ -33,7 +33,7 @@ const checkLogin = () => async (dispatch, getState) => {
     }
 
     dispatch({
-      type: 'CHECKED_LOGIN',
+      type: 'account__checkedLogin',
       payload: {
         logged: true,
         email: result.email,

@@ -1,7 +1,7 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../constants'
-import signature from './signature'
+import {API_HOST} from '../../constants'
+import signature from '../common/signature'
 
 const login = (formData) => async (dispatch, getState) => {
   try {
@@ -14,7 +14,7 @@ const login = (formData) => async (dispatch, getState) => {
     localStorage.userId = result.userId;
     localStorage.userToken = result.token;
     dispatch({
-      type: 'LOGIN_SUCCESS',
+      type: 'account__loginSuccess',
       payload: {
         token: result.token,
         email: result.email
@@ -24,7 +24,7 @@ const login = (formData) => async (dispatch, getState) => {
   } catch(e){
     console.log(e);
     dispatch({
-      type: "LOGIN_ERROR",
+      type: "account__loginError",
       error: e
     })
   }

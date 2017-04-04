@@ -8,12 +8,6 @@ import {css, StyleSheet} from 'aphrodite/no-important'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
-import {
-  createHost, getHostList, deleteHost,
-  getLocations, commitLocations
-} from '../../reducers/host'
-import {restoreFileList, getFileList, deleteFile} from '../../reducers/file'
-import {setTitle} from '../../reducers/nav'
 
 
 class HostWrapper extends Component {
@@ -115,9 +109,9 @@ const ConnectedWrapper = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle,
-    getHostList,
-    restoreFileList
+    setTitle: require('../../actions/setNavTitle'),
+    getHostList: require('../../actions/host/getHostList'),
+    restoreFileList: require('../../actions/file/restoreFileList'),
   }, dispatch)
 )(HostWrapper);
 

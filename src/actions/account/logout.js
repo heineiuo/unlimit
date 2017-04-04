@@ -1,7 +1,7 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../constants'
-import signature from './signature'
+import {API_HOST} from '../../constants'
+import signature from '../common/signature'
 
 const logout = () => async (dispatch, getState) => {
   try {
@@ -12,7 +12,7 @@ const logout = () => async (dispatch, getState) => {
     if (result.error) throw result.error;
     localStorage.clear();
     dispatch({
-      type: 'ACCOUNT_LOGOUT'
+      type: 'account__logout'
     });
     dispatch(push('/'));
   } catch (e) {

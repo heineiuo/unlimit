@@ -1,7 +1,7 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
-import {API_HOST } from '../constants'
-import signature from './signature'
+import {API_HOST } from '../../constants'
+import signature from '../common/signature'
 
 /**
  * 发送验证码
@@ -20,7 +20,7 @@ const sendVerifyCode = (form) => async (dispatch, getState) => {
 
     const countdown = (count) => {
       dispatch({
-        type: 'UPDATE_REGISTER_VERIFY_CODE_COUNT',
+        type: 'account__updateRegisterVerifyCodeCount',
         count: count
       });
       if (count > 0){

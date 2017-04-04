@@ -17,17 +17,6 @@ import IconArrowDropdown from '../common/IconArrowDropdown'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
-import {
-  createHost, getHostList, deleteHost,
-  getLocations, commitLocations
-} from '../../reducers/host'
-import {
-  restoreFileList, getFileList, deleteFile,
-  pushFileToClipboard,
-  emptyClipboard,
-} from '../../reducers/file'
-import {setTitle} from '../../reducers/nav'
-
 
 class File extends Component {
 
@@ -435,6 +424,7 @@ const styles = StyleSheet.create({
 });
 
 
+
 const connectedFile = connect(
   (state) => ({
     account: state.account,
@@ -443,13 +433,13 @@ const connectedFile = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    getFileList,
-    deleteFile,
-    setTitle,
-    getHostList,
-    restoreFileList,
-    pushFileToClipboard,
-    emptyClipboard
+    getFileList: require('../../actions/file/getFileList'),
+    deleteFile: require('../../actions/file/deleteFile'),
+    setTitle: require('../../actions/setNavTitle'),
+    getHostList: require('../../actions/host/getHostList'),
+    restoreFileList: require('../../actions/file/restoreFileList'),
+    pushFileToClipboard: require('../../actions/file/pushFileToClipboard'),
+    emptyClipboard: require('../../actions/file/emptyClipboard'),
   }, dispatch)
 )(File);
 

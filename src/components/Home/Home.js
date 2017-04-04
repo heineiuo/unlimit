@@ -11,7 +11,6 @@ import ProfileDropDown from '../common/ProfileDropDown'
 import MessageList from './MessageList'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {getPostList} from '../../reducers/feed/postList'
 import commonStyles from '../common/styles'
 
 class Home extends Component {
@@ -22,7 +21,6 @@ class Home extends Component {
   };
 
   componentWillMount = () => {
-    this.props.getPostList()
   };
 
   requestCloseFn = () => {
@@ -75,6 +73,5 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    getPostList
   }, dispatch)
 )(Home);

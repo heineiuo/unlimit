@@ -13,7 +13,7 @@ class Notice extends Component {
 
   timeToClearThisError = (id) => {
     setTimeout(() => {
-      const nextStack = this.state.stack.slice().filter(item => item.id != id )
+      const nextStack = this.state.stack.slice().filter(item => item.id !== id )
       this.setState({
         stack: nextStack,
         modalOpen: nextStack.length > 0

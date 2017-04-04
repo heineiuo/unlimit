@@ -9,13 +9,6 @@ import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
-import  {
-  createHost, getHostList, deleteHost,
-  getLocations, commitLocations
-} from '../../reducers/host'
-import {restoreFileList, getFileList, deleteFile} from '../../reducers/file'
-import {setTitle} from '../../reducers/nav'
-
 
 class HostList extends Component {
 
@@ -99,15 +92,17 @@ const styles = StyleSheet.create({
 
 });
 
+
 export default module.exports = connect(
   (state) => ({
     host: state.host,
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle,
-    getHostList,
-    restoreFileList
+    deleteHost: require('../../actions/host/deleteHost'),
+    setTitle: require('../../actions/setNavTitle'),
+    getHostList: require('../../actions/host/getHostList'),
+    restoreFileList: require('../../actions/file/restoreFileList'),
   }, dispatch)
 )(HostList);
 

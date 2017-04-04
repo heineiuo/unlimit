@@ -51,7 +51,7 @@ const ConnectCheckLogin = connect(
     postList: store.postList
   }),
   (dispatch) => bindActionCreators({
-    checkLogin: require('../actions/checkLogin'),
+    checkLogin: require('../actions/account/checkLogin'),
   }, dispatch)
 )(CheckLogin);
 

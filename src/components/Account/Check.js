@@ -90,9 +90,9 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    logout: require('../../actions/logout'),
-    checkLogin: require('../../actions/checkLogin'),
-    sendVerifyCode: require('../../actions/sendVerifyCode'),
-    getAuthCodeAndRedirect: require('../../actions/getAuthCodeAndRedirect')
+    logout: require('../../actions/account/logout'),
+    checkLogin: require('../../actions/account/checkLogin'),
+    sendVerifyCode: require('../../actions/account/sendVerifyCode'),
+    getAuthCodeAndRedirect: require('../../actions/account/getAuthCodeAndRedirect')
   }, dispatch)
 )(Check)
