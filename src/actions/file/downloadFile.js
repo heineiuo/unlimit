@@ -15,4 +15,4 @@ const downloadFile = (path)=> async (dispatch, getState) => {
   }
 };
 
-export default module.exports = downloadFile
+export default module.exports = downloadFile;

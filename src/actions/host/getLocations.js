@@ -38,4 +38,4 @@ const getLocations = (driveId) => async (dispatch, getState) => {
 };
 
 
-export default module.exports = getLocations
+export default module.exports = getLocations;

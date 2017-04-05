@@ -28,4 +28,4 @@ const getFileList = (driveId, pathname='/') => async (dispatch, getState) => {
   }
 };
 
-export default module.exports = getFileList
+export default module.exports = getFileList;

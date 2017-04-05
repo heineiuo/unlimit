@@ -9,4 +9,4 @@ const uploadFileToPath = () => async (dispatch, getState) => {
   }
 };
 
-export default module.exports = uploadFileToPath
+export default module.exports = uploadFileToPath;

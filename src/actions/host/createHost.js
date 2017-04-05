@@ -26,4 +26,4 @@ const createHost = (form) => async (dispatch, getState) => {
   }
 };
 
-export default module.exports = createHost
+export default module.exports = createHost;

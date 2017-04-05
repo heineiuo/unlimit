@@ -4,4 +4,4 @@ const restoreFileList = () => ({
   payload: {fileState: 0}
 });
 
-export default module.exports = restoreFileList
+export default module.exports = restoreFileList;

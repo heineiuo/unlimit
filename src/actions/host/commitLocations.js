@@ -37,4 +37,4 @@ const commitLocations = (driveId, locations) => async(dispatch, getState) => {
 };
 
 
-export default module.exports = commitLocations
+export default module.exports = commitLocations;

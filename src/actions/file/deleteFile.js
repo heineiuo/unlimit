@@ -19,4 +19,4 @@ const deleteFile = (driveId, pathname) => async (dispatch, getState) => {
   }
 };
 
-export default module.exports = deleteFile
+export default module.exports = deleteFile;

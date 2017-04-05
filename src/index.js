@@ -1,4 +1,3 @@
-
 const start = () => {
   const RenderApp = require('react-sea/lib/RenderApp');
   const App = require('./App');

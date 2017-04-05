@@ -19,4 +19,4 @@ const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
   }
 };
 
-export default module.exports = renameFile
+export default module.exports = renameFile;

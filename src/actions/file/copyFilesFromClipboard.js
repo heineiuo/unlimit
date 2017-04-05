@@ -7,4 +7,4 @@ const copyFilesFromClipboard = (targetPathname, keepOrigin=true) => (dispatch, g
 
 };
 
-export default module.exports = copyFilesFromClipboard
+export default module.exports = copyFilesFromClipboard;
