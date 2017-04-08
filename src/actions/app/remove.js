@@ -1,7 +1,7 @@
 import removeSocket from '../socket/unbind'
 
 const remove = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const db = getCtx().db.sub('app');
+  const db = getCtx().leveldb.sub('app');
 
   try {
     const detail = await db.del(appName);
@@ -10,7 +10,7 @@ const remove = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, 
       return new Promise(async (resolve, reject) => {
         if (item.socketId === '') return resolve();
         try {
-          await dispatch(removeSocket)({socketId: item.socketId});
+          await dispatch(removeSocket({socketId: item.socketId}));
           resolve()
         } catch(e){
           reject(e)

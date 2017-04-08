@@ -11,7 +11,7 @@ const bindDomain = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
     if (validated.error) return reject(validated.error);
     const {hostname} = validated.value;
     let driveId = validated.value.driveId || null;
-    const db = getCtx().db.sub('domain');
+    const db = getCtx().leveldb.sub('domain');
     if (!driveId) {
       driveId = await db.get(hostname);
     } else {

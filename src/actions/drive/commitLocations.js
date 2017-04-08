@@ -8,7 +8,7 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
 
 const commitLocations = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 

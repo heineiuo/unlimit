@@ -6,10 +6,10 @@ const destroy = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required()
     }));
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const {driveId} = validated.value;
     const drive = await db.get(driveId);
-    await Promise.all(drive.hostnames.map(hostname => dispatch(unbindDomain)({hostname})));
+    await Promise.all(drive.hostnames.map(hostname => dispatch(unbindDomain({hostname}))));
     resolve({})
   } catch(e){
     reject(e)

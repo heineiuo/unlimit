@@ -9,10 +9,10 @@ import updateApp from '../app/update'
  */
 const empty = () => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('socket');
-    const sockets = await dispatch(listSocket)({limit: null});
+    const db = getCtx().leveldb.sub('socket');
+    const sockets = await dispatch(listSocket({limit: null}));
     await Promise.all(sockets.map(item => db.del(item._key)));
-    const appList = await dispatch(listApp)({limit: null});
+    const appList = await dispatch(listApp({limit: null}));
     await Promise.all(appList.map(app => {
       app.list = app.list.map(item => {
         return Object.assign({}, item, {

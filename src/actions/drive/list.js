@@ -9,7 +9,7 @@ import Joi from 'joi'
  */
 const list = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const list = [];
     db.createReadStream()
       .on('data', (item) => {

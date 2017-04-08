@@ -45,7 +45,7 @@ const handler = (seashell) => {
   });
 
   router.use((err, req, res, next) => {
-    if (err.message == 'USE_PROXY') return next();
+    if (err.message === 'USE_PROXY') return next();
     next(err)
   });
 

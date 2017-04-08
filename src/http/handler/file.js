@@ -9,8 +9,7 @@ const handleFILE = (seashell, res, driveId, pathname, reqpath) => new Promise(as
       body: {driveId, pathname: `/public${reqpath}`}
     });
 
-    if (result.body.error) throw new Error(result.body.error);
-
+    if (result.body.error) return reject(new Error('NOT_FOUND'));
     res.setHeader('CacheControl', true);
     res.setHeader('maxAge', 31536000000);
     res.setHeader('Expires', new Date(Date.now() + 31536000000));

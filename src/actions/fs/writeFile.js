@@ -18,11 +18,10 @@ const writeFile = (query) => (dispatch, getCtx) => new Promise(async (resolve, r
       content: Joi.string().allow(''),
       noConflict: Joi.boolean()
     }), {allowUnknown: true});
-    console.log(validated);
     if (validated.error) return reject(validated.error);
 
     const {driveId, pathname, content='', noConflict=false} = validated.value;
-    const fs = filesystem(getCtx().db.sub('fs'));
+    const fs = filesystem(getCtx().leveldb.sub('fs'));
     const realPath = `${driveId}${pathname}`;
 
     if (noConflict) {

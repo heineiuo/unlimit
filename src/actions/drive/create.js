@@ -18,12 +18,12 @@ const create = (query) => (dispatch, getCtx) => new Promise(async(resolve, rejec
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const {hostnames, locations} = validated.value;
     // await Promise.all(hostnames.map(hostname => shouldNotFound({hostname})));
     const driveId = uuid.v1();
     const {session} = getCtx().request.headers;
-    await Promise.all(hostnames.map(hostname => dispatch(bindDomain)({hostname, driveId})));
+    await Promise.all(hostnames.map(hostname => dispatch(bindDomain({hostname, driveId}))));
     await db.put(driveId, {
       hostnames: hostnames,
       locations,

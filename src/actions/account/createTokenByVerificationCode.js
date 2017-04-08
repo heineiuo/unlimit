@@ -1,6 +1,6 @@
 
-import getUserIdWithUpset from '../email/getUserIdWithUpset'
-import checkCode from '../emailcode/checkCode'
+import getUserIdWithUpset from './getUserIdByEmail'
+import checkCode from './checkVerificationCode'
 import createToken from './createToken'
 
 /**
@@ -14,15 +14,12 @@ import createToken from './createToken'
 const getTokenByEmailCode = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const {code, email} = query;
-    await dispatch(checkCode)({email, code});
-    const userId = await dispatch(getUserIdWithUpset)({email});
-    const token = await dispatch(createToken)({userId});
-    resolve(token)
-
+    await dispatch(checkCode({email, code}));
+    const {userId} = await dispatch(getUserIdWithUpset({email}));
+    resolve(await dispatch(createToken({userId})))
   } catch(e) {
     reject(e)
   }
-
 });
 
 export default module.exports = getTokenByEmailCode

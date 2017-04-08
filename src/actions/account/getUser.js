@@ -1,5 +1,5 @@
 const Get = ({userId}) => (dispatch, getCtx) => {
-  const db = getCtx().db.sub('user');
+  const db = getCtx().leveldb.sub('user');
   return db.get(userId)
 };
 

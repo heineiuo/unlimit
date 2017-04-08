@@ -23,7 +23,7 @@ const addItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
       appSecret: createSecret().toString(10)
     };
 
-    const app = await dispatch(getApp)({appName});
+    const app = await dispatch(getApp({appName}));
     app.list.push({
       appId: nextService.appId,
       appSecret: nextService.appSecret,
@@ -31,7 +31,7 @@ const addItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
       status: 0,
     });
 
-    await dispatch(updateApp)({appName, app});
+    await dispatch(updateApp({appName, app}));
     resolve(nextService)
   } catch(e) {
     reject(e)

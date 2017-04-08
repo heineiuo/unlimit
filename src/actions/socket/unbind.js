@@ -11,10 +11,10 @@ const remove = (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
     }));
     if (validated.error) return reject(validated.error);
     const {socketId} = validated.value;
-    const db = getCtx().db.sub('socket');
+    const db = getCtx().leveldb.sub('socket');
     const socketInfo = await db.get(socketId);
     await db.del(socketId);
-    const app = await dispatch(updateApp)({appName: socketInfo.appName});
+    const app = await dispatch(updateApp({appName: socketInfo.appName}));
     app.list = app.list.map(item => {
       if (item.appId === socketInfo.appId) {
         item.socketId = '';
@@ -22,7 +22,7 @@ const remove = (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
       }
       return item
     });
-    await dispatch(updateApp)({appName: socketInfo.appName, app});
+    await dispatch(updateApp({appName: socketInfo.appName, app}));
     resolve(1)
   } catch(e){
     reject(e)

@@ -79,7 +79,7 @@ const findTargetLocation = (locations, url) => {
   return locations.find(item => {
     const re = pathToRegexp(item.pathname);
     const matches = url.pathname.match(re);
-    return matches && matches[0] == url.pathname;
+    return matches && matches[0] === url.pathname;
   });
 };
 

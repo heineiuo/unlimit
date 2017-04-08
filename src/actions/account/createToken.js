@@ -16,11 +16,10 @@ const normalToken = () => crypto.randomBytes(48).toString('hex');
  */
 const createToken = ({userId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('token');
-    const newToken = normalToken();
-    const value = {token: newToken, userId};
-    await db.put(newToken, value);
-    resolve(value)
+    const db = getCtx().leveldb.sub('token');
+    const nextToken = {token: normalToken(), userId};
+    await db.put(nextToken.token, nextToken);
+    resolve(nextToken)
   } catch(e){
     reject(e)
   }

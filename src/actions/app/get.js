@@ -5,7 +5,7 @@
  * @returns {Promise}
  */
 const get = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const db = getCtx().db.sub('app');
+  const db = getCtx().leveldb.sub('app');
 
   try {
     const detail = await db.get(appName);

@@ -26,7 +26,7 @@ const New = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject)
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
 
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const {driveId, type, cors=false, pathname, content, contentType='text'} = validated.value;
     const encodedContent = type === 'html'? ent.encode(content) :content;
     const location = await db.get(driveId);

@@ -8,7 +8,7 @@
  */
 const getTokenBySSOCode = ({code}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const SSOCode = getCtx().db.sub('ssocode');
+    const SSOCode = getCtx().leveldb.sub('ssocode');
     const result = await SSOCode.get(code);
     resolve({token: result.token});
   } catch(e){

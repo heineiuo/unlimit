@@ -1,7 +1,7 @@
 
 const ShouldNotFound = ({appName}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = getCtx().db.sub('app');
+    const db = getCtx().leveldb.sub('app');
     await db.get(appName);
     reject(new Error('APP_HAS_EXIST'));
   } catch (e) {

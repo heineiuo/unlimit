@@ -9,10 +9,10 @@ import updateApp from './update'
  */
 const removeItem = ({appId, appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('app');
+    const db = getCtx().leveldb.sub('app');
     const app = await db.get(appName);
     app.list = app.list.filter(item => item.appId !== appId);
-    await dispatch(updateApp)({appName, app});
+    await dispatch(updateApp({appName, app}));
     resolve({})
   } catch(e){
     reject(e)

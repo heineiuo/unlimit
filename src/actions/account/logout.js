@@ -6,7 +6,7 @@
  */
 const logout = ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('token');
+    const db = getCtx().leveldb.sub('token');
     if (getCtx().request.headers.session.user) {
       await db.del(token)
     }

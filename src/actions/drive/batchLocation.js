@@ -20,7 +20,7 @@ const batch = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const {driveId, locations, reset=false} = validated.value;
     if (reset) {
       await db.put(driveId, {locations});

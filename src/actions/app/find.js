@@ -4,7 +4,7 @@
  */
 const pick = ({appName, appId, filter}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('app');
+    const db = getCtx().leveldb.sub('app');
     const app = await db.get(appName);
     const onlineItems = app.list.filter(service => service.status === 1);
     if (onlineItems.length === 0) return reject(new Error('TARGET_SERVICE_OFFLINE'));

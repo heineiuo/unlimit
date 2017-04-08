@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import getUserSession from '../token/session'
+import getUserSession from '../account/session'
 import getApp from '../app/get'
 
 const validate = (query) => Joi.validate(query, Joi.object().keys({
@@ -17,18 +17,18 @@ const session = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
     if (validated.error) return reject(validated.error);
 
     const {headers, socketId} = validated.value;
-    const db = getCtx().db.sub('socket');
+    const db = getCtx().leveldb.sub('socket');
 
     let session = null;
     if (headers.hasOwnProperty('switch-identity')) {
       const {appSecret, appId, appName} = headers['switch-identity'];
       if (appName === 'user') {
         try {
-          session = await dispatch(getUserSession)({token: appSecret});
+          session = await dispatch(getUserSession({token: appSecret}));
         } catch (e) {}
       } else {
         try {
-          const result = await dispatch(getApp)({appName, appId});
+          const result = await dispatch(getApp({appName, appId}));
           const targetApp = result.list.find(item => {
             return item.appId === appId && item.appSecret === appSecret
           });

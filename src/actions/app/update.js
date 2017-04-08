@@ -10,7 +10,7 @@ const update = (query) => (dispatch, getCtx) => new Promise(async(resolve, rejec
     }), {allowUnknown: true});
     if (validate.error) return reject(validate.error);
     const {appName, app} = query;
-    const db = getCtx().db.sub('app');
+    const db = getCtx().leveldb.sub('app');
     await db.put(appName, app);
     resolve({success: 1});
 

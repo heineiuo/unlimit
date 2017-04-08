@@ -1,4 +1,4 @@
-import getUser from "../user/getUser"
+import getUser from "./getUser"
 
 /**
  * @api {POST} /account2/session 获取session信息
@@ -10,9 +10,9 @@ import getUser from "../user/getUser"
  */
 const session = ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = getCtx().db.sub('token');
+    const db = getCtx().leveldb.sub('token');
     const result = await db.get(token);
-    resolve(await dispatch(getUser)({userId: result.userId}));
+    resolve(await dispatch(getUser({userId: result.userId})));
   } catch (e) {
     if (e.name === 'NotFoundError') return reject(new Error('EMPTY_SESSION'));
     reject(e)

@@ -9,8 +9,8 @@ const getByHostname = (query) => (dispatch, getCtx) => new Promise(async (resolv
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
     const {hostname} = validated.value;
-    const {driveId} = await dispatch(bindDomain)({hostname});
-    const drive = await dispatch(getDrive)({driveId});
+    const {driveId} = await dispatch(bindDomain({hostname}));
+    const drive = await dispatch(getDrive({driveId}));
     resolve({driveId, ...drive})
   } catch(e){
     reject(e)

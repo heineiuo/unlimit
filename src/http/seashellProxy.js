@@ -18,7 +18,7 @@ const seashellProxyMiddleware = (seashell) => {
 
   router.use((req, res, next) => {
     const {location} = res.locals;
-    if (location.type == 'SEASHELL') return next();
+    if (location.type === 'SEASHELL') return next();
     return next(new Error('NOT_SEASHELL'))
   });
 
@@ -98,7 +98,7 @@ const seashellProxyMiddleware = (seashell) => {
 
   router.use((err, req, res, next) => {
     if (!err) return next();
-    if (err.message == 'NOT_SEASHELL') return next();
+    if (err.message === 'NOT_SEASHELL') return next();
     console.log('SEASHELL PROXY FAIL: \n '+err.message||err);
     next(err)
   });

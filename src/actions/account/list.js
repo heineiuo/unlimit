@@ -6,7 +6,7 @@
  */
 const userList = (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
   try {
-    const db = getCtx().db.sub('user');
+    const db = getCtx().leveldb.sub('user');
     const limit = query.limit || 20;
     const list = [];
     db.createReadStream({limit})

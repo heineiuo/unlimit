@@ -70,11 +70,11 @@ const createServer = (config, seashell) => {
    */
   app.use((err, req, res, next) => {
     if (!err) return next();
-    console.log('HTTP EXCEPTION: \n' + err.stack||err.message||err);
-    if (err.message == 'HOST_NOT_FOUND') return next();
-    if (err.message == 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
-    if (err.message == 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
-    if (err.message == 'NOT_FOUND') return next();
+    if (config.debug) console.log('HTTP EXCEPTION: \n' + err.stack||err.message||err);
+    if (err.message === 'HOST_NOT_FOUND') return next();
+    if (err.message === 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
+    if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
+    if (err.message === 'NOT_FOUND') return next();
     return res.end(`${req.headers.host}: \n EXCEPTION ERROR`);
   });
 
@@ -87,6 +87,7 @@ const createServer = (config, seashell) => {
   const server = createAutoSNIServer({
     email,
     debug,
+    // domains: (hostname, callback) => callback(null, [hostname]),
     domains,
     agreeTos: true,
     forceSSL: false,

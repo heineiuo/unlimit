@@ -19,7 +19,7 @@ const get = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject)
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
     const {driveId} = validated.value;
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const location = await db.get(driveId);
     resolve({location})
   } catch(e){

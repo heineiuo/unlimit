@@ -12,7 +12,7 @@ import cat from './cat'
  */
 const ls = ({pathname, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(getCtx().db.sub('fs'));
+    const fs = filesystem(getCtx().leveldb.sub('fs'));
     const directory = `${driveId}${pathname}`;
     if (!directory) return reject(new Error('READDIR_FAIL'));
     const files = await new Promise((resolve, reject) => {
@@ -45,7 +45,7 @@ const ls = ({pathname, driveId}) => (dispatch, getCtx) => new Promise(async (res
   } catch(e){
     if (e.message.search('ENOTDIR') === 0 || e.message.search('ENOENT') === 0) {
       try {
-        const file = await dispatch(cat)({driveId, pathname});
+        const file = await dispatch(cat({driveId, pathname}));
         resolve(file)
       } catch(e){
         reject(e)

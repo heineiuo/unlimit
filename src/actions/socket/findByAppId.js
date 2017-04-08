@@ -17,9 +17,9 @@ import getApp from '../app/get'
  */
 const findByAppId = ({appName, appId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('socket');
-    const app = await dispatch(getApp)({appName: appName});
-    const targetAppIndex = app.list.findIndex(item => item.appId == appId);
+    const db = getCtx().leveldb.sub('socket');
+    const app = await dispatch(getApp({appName: appName}));
+    const targetAppIndex = app.list.findIndex(item => item.appId === appId);
     if (targetAppIndex < 0) throw new Error('APP_NOT_FOUND');
     const socket = await db.get(app.list[targetAppIndex].socketId);
     resolve(socket)

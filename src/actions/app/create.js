@@ -6,7 +6,7 @@ const create = (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
     appName: Joi.string().required()
   }), {allowUnknown: true});
   if (validated.error) return reject(validated.error);
-  const db = getCtx().db.sub('app');
+  const db = getCtx().leveldb.sub('app');
   const {appName} = validated.value;
 
   try {
@@ -15,7 +15,7 @@ const create = (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
       permission: [],
       list: []
     };
-    await dispatch(ShouldNotFound)({appName});
+    await dispatch(ShouldNotFound({appName}));
     await db.put(appName, app);
     resolve(app)
   } catch(e){

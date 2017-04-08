@@ -19,11 +19,11 @@ const cat = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject)
     if (validated.error) return reject(validated.error);
 
     const {driveId, pathname} = validated.value;
-    const fs = filesystem(getCtx().db.sub('fs'));
+    const fs = filesystem(getCtx().leveldb.sub('fs'));
     fs.readFile(`${driveId}${pathname}`, (err, cat) => {
       if (err) {
         const lastParam = pathname.split('/').pop();
-        if (lastParam.length =="" || !/\./.test(lastParam)) {
+        if (lastParam.length === "" || !/\./.test(lastParam)) {
           fs.readFile(path.join(`${driveId}${pathname}`, 'index.html'), (err, cat) => {
             if (err) return reject(err);
             resolve({

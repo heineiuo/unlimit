@@ -14,7 +14,7 @@ const edit = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
 
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
 
     const {cors, driveId, type, content, contentType, pathname} = validated.value;
     const nextContent = (type === 'html' && contentType === 'text')?ent.encode(content):content;

@@ -7,9 +7,10 @@ const normalCode = () => crypto.randomBytes(32).toString('hex');
  * @param token
  * @returns {Promise}
  */
-const createCode = ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+const createAuthCode = ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const db = getCtx().db.sub('ssocode');
+    if (!getCtx().request.headers.session) reject(new Error('ERR_NOT_LOGGED'));
+    const db = getCtx().leveldb.sub('ssocode');
     const code = normalCode();
     await db.put(code, {token, code});
     resolve(code)
@@ -18,4 +19,4 @@ const createCode = ({token}) => (dispatch, getCtx) => new Promise(async(resolve,
   }
 });
 
-export default module.exports = createCode
+export default module.exports = createAuthCode

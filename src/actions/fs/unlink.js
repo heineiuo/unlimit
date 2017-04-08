@@ -6,7 +6,7 @@ import filesystem from 'level-filesystem'
  */
 const unlink = ({driveId, pathname}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const fs = filesystem(getCtx().db.sub('fs'));
+    const fs = filesystem(getCtx().leveldb.sub('fs'));
     await new Promise((resolve, reject) => {
       fs.unlink(`${driveId}${pathname}`, (err) => {
         if (err) return reject(err);

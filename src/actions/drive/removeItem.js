@@ -21,7 +21,7 @@ const removeItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
     }), {allowUnknown: true});
     if (validated.error) return reject(validated.error);
 
-    const db = getCtx().db.sub('location');
+    const db = getCtx().leveldb.sub('location');
     const {driveId, pathname} = validated.value;
     const location = await db.get(driveId);
     delete location.locations[pathname];

@@ -1,10 +1,11 @@
-import config from './config'
+import getConfig from './config'
 
 export default (app) => new Promise(async(resolve, reject) => {
   try {
 
+    const config = await getConfig();
     console.log('[gateway] running init program...');
-    const {domain} = config.production.init;
+    const {domain} = config.production().init;
     let driveId = null;
     try {
       const result = await app.requestSelf({

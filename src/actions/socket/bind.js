@@ -18,9 +18,9 @@ const bind = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject)
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
 
-    const db = getCtx().db.sub('socket');
+    const db = getCtx().leveldb.sub('socket');
     const {socketId, registerInfo: {appName, appId, appSecret}} = query;
-    const app = await dispatch(getApp)({appName});
+    const app = await dispatch(getApp({appName}));
     const targetAppIndex = app.list.findIndex(item => {
       return item.appId === appId && item.appSecret === appSecret
     });
@@ -31,7 +31,7 @@ const bind = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject)
     app.list.splice(targetAppIndex, 1, targetApp);
     await Promise.all([
       db.put(socketId, Object.assign({}, targetApp, {appName: appName})),
-      dispatch(updateApp)({appName: app.appName, app})
+      dispatch(updateApp({appName: app.appName, app}))
     ]);
     const socketData = Object.assign({}, targetApp, {appName});
     resolve(socketData)

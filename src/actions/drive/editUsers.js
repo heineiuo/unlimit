@@ -13,7 +13,7 @@ const editUsers = (query) => (dispatch, getCtx) => new Promise(async (resolve, r
     const {driveId, add=[], remove=[]} = validated.value;
 
     if (add.length >0 || remove.length > 0) {
-      const db = getCtx().db.sub('location');
+      const db = getCtx().leveldb.sub('location');
       const drive = await db.get(driveId);
       const currentUsers = drive.users;
       const nextUsers = currentUsers

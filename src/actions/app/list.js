@@ -5,7 +5,7 @@
  */
 const list = ({limit=20}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db.sub('app');
+    const db = getCtx().leveldb.sub('app');
     const list = [];
     db.createReadStream({limit:null})
       .on('data', (data) => {

@@ -4,13 +4,13 @@ import filesystem from 'level-filesystem'
 
 const upload = ({driveId, pathname, isHashName=true}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const isPublic = pathname.search('/public') == 0;
+    const isPublic = pathname.search('/public') === 0;
     req.setHeader({
       __UPLOAD: true
     });
     let hostname = null;
     try {
-      hostname = (await getCtx().db.sub('location').get(driveId)).hostnames[0];
+      hostname = (await getCtx().leveldb.sub('location').get(driveId)).hostnames[0];
     } catch(e){}
     resolve({
       uploadDir: `${driveId}${pathname}`,
