@@ -3,7 +3,7 @@ import getConfig from './config'
 
 
 let isConnected = false;
-let isReconnecting = false;
+let isConnecting = false;
 let db = null;
 
 const connectPromise = (mongodbUrl) => {
@@ -15,22 +15,25 @@ const connectPromise = (mongodbUrl) => {
 }
 
 const reconnect = async () => {
-  isReconnecting = true;
+  console.log('mongodb reconnecting...')
   try {
     const {production: {mongodbUrl}} = await getConfig();
     db = await connectPromise(mongodbUrl)
+    isConnected = true
+    isConnecting = false
+    console.log('mongodb reconnect success')
     attach(db)
   } catch(e){
     setTimeout(reconnect, 3000)
-  } finally {
-    isReconnecting = false;
   }
 }
 
 const firstConnect = () => new Promise(async (resolve, reject) => {
   try {
+    isConnecting = true;
     const {production: {mongodbUrl}} = await getConfig();
     db = await connectPromise(mongodbUrl)
+    isConnected = true
     attach(db)
     resolve(db)
   } catch(e){
@@ -47,6 +50,7 @@ const attach = (db) => {
     console.log('mongodb close')
     db.removeAllListeners();
     isConnected = false;
+    isConnecting = true;
     process.nextTick(reconnect)
   })
 }
@@ -55,7 +59,7 @@ const attach = (db) => {
 const getMongodb = (options={customError: 'LOST_CONNECTION_TO_MONGODB'}) => new Promise(async (resolve, reject) => {
   try {
     if (isConnected) return resolve(db)
-    if (isReconnecting) return reject(options.customError)
+    if (isConnecting) return reject(options.customError)
     resolve(await firstConnect())
   } catch(e){
     console.error(e)
