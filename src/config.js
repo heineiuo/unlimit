@@ -15,7 +15,8 @@ const getConfig = (key = null) => new Promise(async (resolve, reject) => {
     configReady = true;
     resolve(config)
   } catch (e) {
-    configError = e
+    configError = e;
+    reject(configError)
   }
 })
 

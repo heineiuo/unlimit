@@ -17,7 +17,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
       const drive = await db.get(driveId);
       const currentUsers = drive.users;
       const nextUsers = currentUsers
-        .filter(item => (remove.indexOf(item) === -1 || add.indexOf(item) === -1))
+        .filter(item => !remove.includes(item))
         .concat(add);
       const nextDrive = Object.assign({}, drive, {
         users: nextUsers

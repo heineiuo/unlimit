@@ -4,7 +4,7 @@
 
 import createUser from './createUser'
 
-export default ({email, upset=true}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({email, upset=false}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   let result = null;
   try {
     const db = getCtx().leveldb.sub('email');

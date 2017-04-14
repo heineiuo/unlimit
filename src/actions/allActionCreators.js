@@ -5,6 +5,7 @@ const allActionCreators = {
     createAuthCode: require('./account/createAuthCode').default,
     createTokenByAuthCode: require('./account/createTokenByAuthCode').default,
     createTokenByVerificationCode: require('./account/createTokenByVerificationCode').default,
+    getUserIdByEmail: require('./account/getUserIdByEmail').default,
     logout: require('./account/logout').default,
     session: require('./account/session').default,
     list: require('./account/list').default
@@ -29,6 +30,7 @@ const allActionCreators = {
     permission: require('./drive/permission').default,
     unbindDomain: require('./drive/unbindDomain').default,
     bindDomain: require('./drive/bindDomain').default,
+    userList: require('./drive/userList').default,
     remove: require('./drive/remove')
   },
   app: {

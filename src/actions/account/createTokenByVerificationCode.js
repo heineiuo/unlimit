@@ -15,7 +15,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async(resolve, rejec
   try {
     const {code, email} = query;
     await dispatch(checkCode({email, code}));
-    const {userId} = await dispatch(getUserIdByEmail({email}));
+    const {userId} = await dispatch(getUserIdByEmail({email, upset: true}));
     resolve(await dispatch(createToken({userId})))
   } catch(e) {
     reject(e)
