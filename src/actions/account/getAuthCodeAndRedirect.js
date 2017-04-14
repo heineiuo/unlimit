@@ -10,7 +10,7 @@ const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   try {
     const {userToken=null} = localStorage;
     const {redirectUrl} = getState().account;
-    const res = await POSTRawJSON(`${API_HOST}/seashell/ssocode/getTokenBySSOCode`, signature({
+    const res = await POSTRawJSON(`${API_HOST}/seashell/account/createTokenByAuthCode`, signature({
       token: userToken
     }));
     if (res.error) return console.log(res.error);

@@ -3,29 +3,31 @@ import {API_HOST} from '../../constants'
 
 
 const getFileList = (driveId, pathname='/') => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: 'file__stateUpdate',
-      payload: {
-        fileState: 1
-      }
-    });
+  dispatch({
+    type: 'file__stateUpdate',
+    payload: {
+      fileState: 1
+    }
+  });
 
-    const {token} = getState().account;
-    const result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
+  const {account: {token}} = getState();
+  let result = null;
+
+  try {
+    result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
       driveId, pathname, token
     });
-
-    if (result.error) throw new Error(result.error);
-
-    dispatch({
-      type: 'file__listUpdate',
-      payload: result
-    })
-
   } catch(e){
     console.log(e.stack)
   }
+
+  if (result.error) return console.log(result.error)
+
+  dispatch({
+    type: 'file__listUpdate',
+    payload: result
+  })
+
 };
 
 export default module.exports = getFileList;

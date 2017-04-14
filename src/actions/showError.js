@@ -6,7 +6,6 @@ const showError = (error) => (dispatch, getState) => {
       notice: error
     }
   })
-
 };
 
 export default module.exports = showError;

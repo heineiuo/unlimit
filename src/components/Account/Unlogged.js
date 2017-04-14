@@ -28,6 +28,30 @@ class UnLogged extends Component {
     getAuthCodeAndRedirect: () => {}
   };
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
+
+  componentWillUpdate = () => {
+    const {account, getAuthCodeAndRedirect} = this.props;
+    if (account.logged && this.props.location.query.redirectTo > 0) {
+      // getAuthCodeAndRedirect();
+      this.props.push(this.props.location.query.redirectTo)
+    }
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    const {account, location} = this.props;
+    if (nextProps.account.logged && location.query.redirectTo) {
+      if (
+        (!account.loginChecked && nextProps.account.loginChecked) ||
+        !account.logged
+      ) {
+        window.location.href = location.query.redirectTo;
+      }
+    }
+  };
+
   state = {
     email: '',
     code: '',
@@ -39,23 +63,22 @@ class UnLogged extends Component {
   };
 
   submit = () => {
-    const {login} = this.props;
     const {email,  code} = this.state;
-    login({email, code})
+    this.props.login({email, code})
   };
 
   sendVerifyCode = () => {
-    const {sendVerifyCode} = this.props;
     const {email} = this.state;
-    sendVerifyCode({email});
+    this.props.sendVerifyCode({email});
   };
 
-  componentWillReceiveProps = (nextProps) => {
-    this.setState(Object.assign({}, this.state, nextProps))
-  };
+
+  componentWillUnmount = () => {
+    console.log('wtf, ')
+  }
+
 
   render (){
-    const {tab} = this.state;
     const {account} = this.props;
 
     return (
@@ -63,14 +86,6 @@ class UnLogged extends Component {
         <div className={css(styles.logo)}>
           右括号
         </div>
-        {/*<div className={css(styles.tabbar)}>*/}
-          {/*<div*/}
-            {/*className={css(styles.tab, tab=='phone' && styles['tab--active'])}*/}
-            {/*onClick={()=>{this.setState({tab: 'phone'})}}>手机注册</div>*/}
-          {/*<div*/}
-            {/*className={css(styles.tab, tab=='email' && styles['tab--active'])}*/}
-            {/*onClick={()=>{this.setState({tab: 'email'})}}>邮箱注册</div>*/}
-        {/*</div>*/}
         <div>
           <div>
             <Input
@@ -96,19 +111,11 @@ class UnLogged extends Component {
                   '发送验证码'}
               </Button>
             </div>
-           {/* <Input
-              style={inputStyle}
-              type="password"
-              value={this.state.password}
-              onChange={(e)=>this.setState({password: e.target.value})}
-              onKeyPress={this.handleKeyPress}
-              placeholder="密码(6-20位字母或数字)"/>*/}
-            <div className={css(styles.errorMsg, account.registerError != '' && styles['errorMsg--show'])}>
+            <div className={css(styles.errorMsg, account.registerError !== '' && styles['errorMsg--show'])}>
               {account.registerError}
             </div>
             <Button style={commonStyles.button} onClick={this.submit}>提交</Button>
           </div>
-          {/*<div className={css(styles.forgot)} onClick={() => switchPane({tab: 'login'})}>登录</div>*/}
         </div>
       </div>
     )

@@ -4,12 +4,13 @@ import thunkMiddleware from 'redux-thunk'
 import createHashHistory from 'history/createHashHistory'
 import notice from './reducers/notice'
 import account from './reducers/account'
+import {__SMILE_DEV} from './constants'
 
 const history = createHashHistory();
 const historyMiddleware = routerMiddleware(history);
 
 const loggerMiddleware = store => next => action => {
-  if (process.env.development) console.error(action);
+  if (__SMILE_DEV) console.error(action);
   return next(action)
 };
 

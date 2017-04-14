@@ -47,7 +47,7 @@ class LocationDetail extends Component {
           {/*类型*/}
           <div className="form-group">
             <label>类型</label>
-            <div style={{width: '100%', height: 50, position: 'relative'}}>
+            <div style={{width: '100%', height: '50px', position: 'relative'}}>
               <TabBar
                 activeKey={type.toUpperCase()}
                 onSwitchKey={(key) => this.changeState({type: key})}>

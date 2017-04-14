@@ -8,9 +8,8 @@ import nav from '../../reducers/nav'
 const AsyncDrive = (props) => {
 
   return (
-    <AsyncComponent load={
+    <AsyncComponent loadKey="drive" load={
       (callback) => {
-
         injectAsyncReducer('host', host);
         injectAsyncReducer('file', file);
         injectAsyncReducer('nav', nav);

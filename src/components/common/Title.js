@@ -25,7 +25,7 @@ class Title extends Component {
           <div style={{color, userSelect: 'none'}}>{title}</div>
         </DropDownTrigger>
         <DropDownContent className={css(styles.title__content)}>
-          <div className={css(styles.triangle)}></div>
+          <div className={css(styles.triangle)} />
           <Link onClick={this.closeContent} className={css(styles.link)} to="/">右括号</Link>
           <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">协作空间</Link>
           <Link onClick={this.closeContent} className={css(styles.link)} to="/account">账号</Link>

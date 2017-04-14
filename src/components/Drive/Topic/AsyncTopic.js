@@ -1,27 +1,24 @@
 import React, {Component} from 'react'
-import AsyncComponent from './common/AsyncComponent'
-import Title from './common/Title'
-import {injectAsyncReducer} from '../store'
-
-const getTitle = () => Title;
+import AsyncComponent from '../../common/AsyncComponent'
+import {injectAsyncReducer} from '../../../store'
 
 
 const Async = (props) => {
   return (
-    <AsyncComponent loadKey="admin" load={
+    <AsyncComponent load={
       (callback) => {
         //callback(require('./Master'));
         //require.ensure([], (require) => callback(require('./Master')))
-        SystemJS.import('smile-admin').then(admin => {
+        SystemJS.import('smile-topic').then(admin => {
           const Admin = admin({injectAsyncReducer});
           callback(null, Admin)
         }).catch(e => callback(e));
       }
     }>
-      {(state, Console) => (
+      {(state, Topic) => (
         state < 2 ? null:
-          state === 3 ? <div>加载控制台出错</div>:
-            <Console {...props} getTitle={getTitle} />
+          state === 3 ? <div>加载Topic模块出错</div>:
+            <Topic {...props} />
       )}
     </AsyncComponent>
   );

@@ -4,7 +4,7 @@ import Button from "react-sea/lib/Button"
 import path from 'path'
 // import Modal from "react-modal"
 // import utf8 from 'utf8'
-import {appmeta, matchAppByPathname} from './appmeta'
+import {appmeta, matchAppByPathname} from '../appmeta'
 
 class FileInfo extends Component {
 
@@ -36,7 +36,7 @@ class FileInfo extends Component {
               <div>打开方式：</div>
               <div style={{display: 'flex'}}>
                 {
-                  matchApp.filter(item => item.appName != 'preview').map(app => (
+                  matchApp.filter(item => item.appName !== 'preview').map(app => (
                     <div
                       style={{padding: 2}}
                       key={app.appName}>
@@ -56,7 +56,7 @@ class FileInfo extends Component {
             <div>预览：</div>
             <div className={css(styles.preview__box)}>
               {
-                (matchApp.length === 0 || matchApp[0].type != 'image')?
+                (matchApp.length === 0 || matchApp[0].type !== 'image')?
                   <div className={css(styles.preview__normal)}>{matchApp[0].type}</div>:
                   <img className={css(styles.preview__img)} src={blobUrl} alt=""/>
               }

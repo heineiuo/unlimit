@@ -5,7 +5,7 @@ import signature from '../common/signature'
 
 const login = (formData) => async (dispatch, getState) => {
   try {
-    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/token/getTokenByEmailCode`, signature({
+    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/createTokenByVerificationCode`, signature({
       email: formData.email,
       code: formData.code
     }));

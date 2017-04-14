@@ -8,11 +8,11 @@ import urlencode from "form-urlencoded"
 import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
-import CreateFileModal from './CreateFileModal'
-import IntegrateApp from "../common/IntegrateApp"
-import {injectAsyncReducer} from '../../store'
+import CreateFileModal from '../CreateFileModal'
+import IntegrateApp from "../../common/IntegrateApp"
+import {injectAsyncReducer} from '../../../store'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import IconArrowDropdown from '../common/IconArrowDropdown'
+import IconArrowDropdown from '../../common/IconArrowDropdown'
 
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
@@ -33,7 +33,6 @@ class File extends Component {
 
   componentWillMount = () => {
     const {setTitle, getFileList, match, match: {params: {driveId}}} = this.props;
-    // console.log(match);
     getFileList(driveId, this.getSplat());
   };
 
@@ -48,13 +47,9 @@ class File extends Component {
       return getFileList(nextProps.params.driveId, '/');
     }
 
-    if (nextPath != this.getSplat()) {
+    if (nextPath !== this.getSplat()) {
       getFileList(driveId, nextPath)
     }
-  };
-
-  componentWillUnmount = () => {
-    console.error('\<File \/\> will unmounted')
   };
 
   handleFileToggleSelect = (toggle, file) => {
@@ -63,7 +58,7 @@ class File extends Component {
     if (toggle === 0) {
       this.setState({
         selected: selected.slice().filter(item => {
-          return item.name != file.name
+          return item.name !== file.name
         })
       })
     } else {
@@ -126,7 +121,7 @@ class File extends Component {
   deleteFile = ({name}) => {
     const {match: {params: {driveId}}} = this.props;
     const pathname = this.getSplat(this.props) || '/';
-    const willDeletePathname = `${pathname=="/"?'':pathname}/${name}`;
+    const willDeletePathname = `${pathname === "/"?'':pathname}/${name}`;
     if (window.confirm(`是否删除${willDeletePathname}`)){
       this.props.deleteFile(driveId, willDeletePathname)
     }
@@ -163,7 +158,7 @@ class File extends Component {
     })}`;
 
     return (
-      <div style={{minHeight: 160}}>
+      <div style={{minHeight: '160px'}}>
         {
           file.fileState < 2 ?
             <div>
@@ -174,7 +169,7 @@ class File extends Component {
                 {/*路径栏*/}
                 <FilePathBar
                   isFile={isFile}
-                  driveName={driveId}
+                  driveName={'未命名空间'}
                   hrefPrefix={hrefPrefix}
                   pathname={pathname} />
                 {/*工具栏*/}
@@ -433,13 +428,13 @@ const connectedFile = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    getFileList: require('../../actions/file/getFileList'),
-    deleteFile: require('../../actions/file/deleteFile'),
-    setTitle: require('../../actions/setNavTitle'),
-    getHostList: require('../../actions/host/getHostList'),
-    restoreFileList: require('../../actions/file/restoreFileList'),
-    pushFileToClipboard: require('../../actions/file/pushFileToClipboard'),
-    emptyClipboard: require('../../actions/file/emptyClipboard'),
+    getFileList: require('../../../actions/file/getFileList'),
+    deleteFile: require('../../../actions/file/deleteFile'),
+    setTitle: require('../../../actions/setNavTitle'),
+    getHostList: require('../../../actions/host/getHostList'),
+    restoreFileList: require('../../../actions/file/restoreFileList'),
+    pushFileToClipboard: require('../../../actions/file/pushFileToClipboard'),
+    emptyClipboard: require('../../../actions/file/emptyClipboard'),
   }, dispatch)
 )(File);
 

@@ -168,10 +168,10 @@ export default module.exports = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle: require('../../actions/setNavTitle'),
-    getLocations: require('../../actions/host/getLocations'),
-    getHostList: require('../../actions/host/getHostList'),
-    commitLocations: require('../../actions/host/commitLocations'),
-    restoreFileList: require('../../actions/file/restoreFileList'),
+    setTitle: require('../../../actions/setNavTitle'),
+    getLocations: require('../../../actions/host/getLocations'),
+    getHostList: require('../../../actions/host/getHostList'),
+    commitLocations: require('../../../actions/host/commitLocations'),
+    restoreFileList: require('../../../actions/file/restoreFileList'),
   }, dispatch)
 )(Location)

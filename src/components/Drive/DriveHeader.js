@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import HostSelector from './HostSelector'
+import HostSelector from './DriveSelector'
 import {StyleSheet, css} from 'aphrodite/no-important'
 import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
@@ -40,30 +40,14 @@ class Header extends Component {
   };
 
   render(){
-    const {nav, host, getHostList, deleteHost, selectedHostName} = this.props;
-
     return (
       <div className={css(styles.globalHeaderBar)}>
         <div style={{display: 'flex'}}>
           <Title color='#EEE' title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
           <span>
-            <DropDown ref={dropdown => this.dropdown=dropdown}>
-              <DropDownTrigger>
-                <span style={{color: '#666', fontSize: 13}}>切换空间</span>
-              </DropDownTrigger>
-              <DropDownContent>
-                <HostSelector
-                  host={host}
-                  getHostList={getHostList}
-                  deleteHost={deleteHost}
-                  openHostCreateModal={this.handleClickOpenModal}
-                  style={{position: 'absolute', left: 120}}
-                  closeDropdown={this.closeDropdown}/>
-
-              </DropDownContent>
-            </DropDown>
+            <Link to='/drive' style={{color: '#666', fontSize: 13}}>全部空间</Link>
             <Modal
-              style={customStyles}
+              style={{overlay: commonStyles.modal__overlay, content: commonStyles.modal__content}}
               ref={(modal) => this.modal = modal}
               contentLabel="ADD_HOST"
               isOpen={this.state.modalOpen}>
@@ -96,29 +80,6 @@ class Header extends Component {
   }
 }
 
-const customStyles = {
-  overlay : {
-    position : 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
-
-  content : {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    width: '380px',
-    padding: '0px',
-    borderRadius: 0,
-    border:0,
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 const styles = StyleSheet.create({
   ...commonStyles

@@ -7,6 +7,8 @@ import commonStyles from '../common/styles'
 import ImageUpload from 'react-sea/lib/ImageUpload'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite/no-important'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 class Profile extends Component {
 
@@ -28,7 +30,6 @@ class Profile extends Component {
     })
   };
 
-
   handleLogout = () => {
     this.props.logout()
   };
@@ -43,7 +44,7 @@ class Profile extends Component {
           <div className={css(styles.itemInfo)}>
             <span className={css(styles.itemName)} >昵称</span>
             <span className={css(styles.itemContent)}>
-            <span className={css(styles.itemSpan)}></span>
+            <span className={css(styles.itemSpan)} />
              <a className={css(styles.itemEdit)}  onClick={(e) => this.openModal(e,'UserName')}>修改昵称</a>
           </span>
           </div>
@@ -276,4 +277,11 @@ const buttonStyle = {
 };
 
 
-export default Profile
+export default module.exports = connect(
+  (store) => ({
+    account: store.account,
+  }),
+  (dispatch) => bindActionCreators({
+    logout: require('../../actions/account/logout'),
+  }, dispatch)
+)(Profile)

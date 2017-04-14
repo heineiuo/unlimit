@@ -13,7 +13,7 @@ class AsyncComponent extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.load !== this.props.load) {
+    if (nextProps.loadKey !== this.props.loadKey) {
       this.load(nextProps)
     }
   };

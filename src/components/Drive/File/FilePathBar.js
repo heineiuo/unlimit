@@ -5,7 +5,7 @@ import {Link} from "react-router-dom"
 class FilePathBar extends Component {
   render() {
     const {pathname, hrefPrefix, driveName, isFile} = this.props;
-    const parsed = pathname.split('/').filter(item => item != '');
+    const parsed = pathname.split('/').filter(item => item !== '');
     let prevPath = '';
     const linkClass = css(
       styles.dirname,

@@ -10,13 +10,23 @@ export default {
     left: 0,
     width: '100%',
     boxSizing: 'border-box',
-    height: globalHeaderBarHeight,
+    height: `${globalHeaderBarHeight}px`,
     // borderBottom: '1px solid #e2e2e2',
     // backgroundColor: '#FFF',
     backgroundColor: '#24292e',
     padding: '0 20px',
     lineHeight: `${globalHeaderBarHeight}px`,
     marginBottom: 10,
+  },
+  link: {
+    textDecoration: 'none',
+    color: '#333',
+    ":hover": {
+      color: '#0366d6'
+    },
+    ":active": {
+      color: '#0366d6'
+    }
   },
 
   card: {
@@ -120,5 +130,27 @@ export default {
     // color: '#fff',
     cursor: 'pointer',
     borderRadius: '2px'
+  },
+
+  modal__overlay : {
+    position : 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+
+  modal__content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    width: '380px',
+    padding: '0px',
+    borderRadius: 0,
+    border:0,
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "smile-web",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "",
   "main": "dist/smile-web.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "react-sh --build --production --compress"
   },
   "author": "@heineiuo",
-  "license": "Common Public License 1.0",
+  "license": "MIT",
   "devDependencies": {
     "aphrodite": "^1.1.0",
     "babel-polyfill": "^6.22.0",

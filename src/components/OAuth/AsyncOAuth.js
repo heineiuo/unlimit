@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import AsyncComponent from '../common/AsyncComponent'
 
 const Async = (props) => (
-  <AsyncComponent load={(callback) => require.ensure([], (require) => callback(null, require('./index')))}>
+  <AsyncComponent loadKey="oauth" load={(callback) => require.ensure([], (require) => callback(null, require('./index')))}>
     {(state, Auth) => (
       state < 2 ? null:
         <Auth {...props}/>

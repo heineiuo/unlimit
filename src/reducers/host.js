@@ -2,11 +2,8 @@ import { handleActions } from 'redux-actions'
 
 
 const initialState = {
-  hostDefault: '',
   hostList: [],
-  hostname: '',
   locations: {},
-
   hostListState: 0, // 0=not init, 1=loading, 2=ready
   locationState: 0, // 0=not init, 1=loading, 2=ready
 };

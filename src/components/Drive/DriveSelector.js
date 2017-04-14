@@ -4,7 +4,7 @@ import Card from 'react-sea/lib/Card'
 import Button from 'react-sea/lib/Button'
 import { StyleSheet, css } from 'aphrodite'
 
-class HostSelector extends Component {
+class DriveSelector extends Component {
 
   static defaultProps = {
     style: {}
@@ -20,9 +20,9 @@ class HostSelector extends Component {
     this.props.openHostCreateModal()
   };
 
-  _deleteHost = (host) => {
-    console.log(host);
-    this.props.deleteHost(host.hostname)
+  _deleteHost = (item) => {
+    console.log(item);
+    this.props.deleteHost(item.hostname)
   };
 
   render(){
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default module.exports = HostSelector
+export default module.exports = DriveSelector
