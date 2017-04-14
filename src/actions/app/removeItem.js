@@ -7,7 +7,7 @@ import updateApp from './update'
  * @returns {Promise}
  * @constructor
  */
-const removeItem = ({appId, appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({appId, appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('app');
     const app = await db.get(appName);
@@ -18,5 +18,3 @@ const removeItem = ({appId, appName}) => (dispatch, getCtx) => new Promise(async
     reject(e)
   }
 });
-
-export default module.exports = removeItem

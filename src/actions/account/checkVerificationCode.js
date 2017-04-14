@@ -1,7 +1,9 @@
+/* @public */
+
 /**
  * 检查验证码
  */
-const checkVerificationCode = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('emailcode');
     const {email, code} = query;
@@ -15,5 +17,3 @@ const checkVerificationCode = (query) => (dispatch, getCtx) => new Promise(async
     reject(e)
   }
 });
-
-export default module.exports = checkVerificationCode

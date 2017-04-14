@@ -14,7 +14,7 @@ import ent from 'ent'
  * @apiParam {string} [contentType]
  * @apiParam {string} content
  */
-const New = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
@@ -46,5 +46,3 @@ const New = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject)
     reject(e);
   }
 });
-
-export default module.exports = New

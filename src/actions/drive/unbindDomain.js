@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const unbindDomain = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const {hostname} = query;
     const db = getCtx().leveldb.sub('domain');
@@ -10,5 +10,3 @@ const unbindDomain = (query) => (dispatch, getCtx) => new Promise(async (resolve
     reject(e)
   }
 });
-
-export default module.exports = unbindDomain

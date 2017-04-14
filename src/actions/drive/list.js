@@ -7,13 +7,16 @@ import Joi from 'joi'
  * @apiParam {number} limit 个数限制
  * @apiSuccess {string} list
  */
-const list = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('location');
+    const {userId} = getCtx().request.headers.session;
     const list = [];
     db.createReadStream()
       .on('data', (item) => {
-        list.push({driveId: item.key, ...item.value})
+        if (item.value.users.includes(userId)){
+          list.push({driveId: item.key, ...item.value})
+        }
       })
       .on('end', () => {
         resolve({list})
@@ -22,5 +25,3 @@ const list = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject)
     reject(e)
   }
 });
-
-export default module.exports = list;

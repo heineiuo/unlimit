@@ -1,13 +1,12 @@
+/**
+ * @public
+ */
+
 import crypto from 'crypto'
 
 const normalCode = () => crypto.randomBytes(32).toString('hex');
 
-/**
- *
- * @param token
- * @returns {Promise}
- */
-const createAuthCode = ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     if (!getCtx().request.headers.session) reject(new Error('ERR_NOT_LOGGED'));
     const db = getCtx().leveldb.sub('ssocode');
@@ -19,4 +18,3 @@ const createAuthCode = ({token}) => (dispatch, getCtx) => new Promise(async(reso
   }
 });
 
-export default module.exports = createAuthCode

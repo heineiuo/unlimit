@@ -4,7 +4,7 @@ import filesystem from 'level-filesystem'
 /**
  * 创建文件夹
  */
-const mkdir = ({driveId, pathname}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({driveId, pathname}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(getCtx().leveldb.sub('fs'));
     await new Promise((resolve, reject) => {
@@ -18,5 +18,3 @@ const mkdir = ({driveId, pathname}) => (dispatch, getCtx) => new Promise(async (
     reject(e)
   }
 });
-
-export default module.exports = mkdir;

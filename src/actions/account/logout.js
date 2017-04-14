@@ -4,7 +4,7 @@
  * @apiGroup Account
  * @apiParam {string} token token
  */
-const logout = ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('token');
     if (getCtx().request.headers.session.user) {
@@ -16,4 +16,3 @@ const logout = ({token}) => (dispatch, getCtx) => new Promise(async (resolve, re
   }
 });
 
-export default module.exports = logout

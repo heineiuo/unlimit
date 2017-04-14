@@ -2,7 +2,7 @@
 /**
  * 获取处理请求的app, 并作负载均衡
  */
-const pick = ({appName, appId, filter}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({appName, appId, filter}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('app');
     const app = await db.get(appName);
@@ -18,5 +18,3 @@ const pick = ({appName, appId, filter}) => (dispatch, getCtx) => new Promise(asy
     reject(e);
   }
 });
-
-export default module.exports = pick

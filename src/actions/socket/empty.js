@@ -7,7 +7,7 @@ import updateApp from '../app/update'
  * empty all sockets records
  * @returns {Promise}
  */
-const empty = () => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default () => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('socket');
     const sockets = await dispatch(listSocket({limit: null}));
@@ -28,5 +28,3 @@ const empty = () => (dispatch, getCtx) => new Promise(async (resolve, reject) =>
   }
 });
 
-
-export default module.exports = empty

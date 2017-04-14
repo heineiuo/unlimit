@@ -15,7 +15,7 @@ import getApp from '../app/get'
  * get socket by appId
  * @returns {Promise}
  */
-const findByAppId = ({appName, appId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({appName, appId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('socket');
     const app = await dispatch(getApp({appName: appName}));
@@ -27,5 +27,3 @@ const findByAppId = ({appName, appId}) => (dispatch, getCtx) => new Promise(asyn
     reject(e)
   }
 });
-
-export default module.exports = findByAppId

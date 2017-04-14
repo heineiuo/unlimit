@@ -1,7 +1,10 @@
+/**
+ * @private
+ */
 
 import createUser from './createUser'
 
-const getUserIdByEmail = ({email, upset=true}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({email, upset=true}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   let result = null;
   try {
     const db = getCtx().leveldb.sub('email');
@@ -30,4 +33,3 @@ const getUserIdByEmail = ({email, upset=true}) => (dispatch, getCtx) => new Prom
   resolve(result)
 });
 
-export default module.exports = getUserIdByEmail

@@ -10,7 +10,7 @@ import Joi from 'joi'
  * @apiParam {string} filename 文件路径
  * @apiSuccess {string} cat 内容
  */
-const cat = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
@@ -47,5 +47,3 @@ const cat = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject)
     reject(e)
   }
 });
-
-export default module.exports = cat;

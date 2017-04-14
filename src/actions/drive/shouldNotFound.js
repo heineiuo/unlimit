@@ -1,10 +1,12 @@
+// @private
+
 /**
  * domain should not found in db
  * only one driveId can be bind to one domain
  * @param hostname
  * @constructor
  */
-const ShouldNotFound = ({hostname}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default ({hostname}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('domain');
     await db.get(hostname);
@@ -14,5 +16,3 @@ const ShouldNotFound = ({hostname}) => (dispatch, getCtx) => new Promise(async(r
     reject(e)
   }
 });
-
-export default ShouldNotFound

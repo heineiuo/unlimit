@@ -1,8 +1,8 @@
+/* @public */
+
 import Joi from 'joi';
 
-
-
-const update = (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const validate = Joi.validate(query, Joi.object().keys({
       appName: Joi.string().required(),
@@ -19,5 +19,3 @@ const update = (query) => (dispatch, getCtx) => new Promise(async(resolve, rejec
   }
 })
 
-
-export default module.exports = update;

@@ -10,7 +10,7 @@ const createSecret = () => crypto.randomBytes(512).toString('hex');
 /**
  * app create
  */
-const addItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       appName: Joi.string().required()
@@ -38,4 +38,3 @@ const addItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
   }
 });
 
-export default module.exports = addItem

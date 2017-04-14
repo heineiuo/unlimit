@@ -1,12 +1,15 @@
+/**
+ * @public
+ */
 
 /**
- * @api {POST} /account2/token/gettokenbyssocode 根据ssocode获取token
+ * @api {POST} /account/createTokenByAuthCode 根据AuthCode获取token
  * @apiName TokenBySSOCode
  * @apiGroup Account
  * @apiParam {string} code code
  * @apiSuccess {string} token token
  */
-const getTokenBySSOCode = ({code}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default ({code}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const SSOCode = getCtx().leveldb.sub('ssocode');
     const result = await SSOCode.get(code);
@@ -16,4 +19,3 @@ const getTokenBySSOCode = ({code}) => (dispatch, getCtx) => new Promise(async(re
   }
 });
 
-export default module.exports = getTokenBySSOCode

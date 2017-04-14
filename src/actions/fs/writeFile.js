@@ -10,7 +10,7 @@ import filesystem from 'level-filesystem'
  * @apiParam {string} file
  * @apiParam {string} content
  */
-const writeFile = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
@@ -41,5 +41,3 @@ const writeFile = (query) => (dispatch, getCtx) => new Promise(async (resolve, r
     reject(e)
   }
 });
-
-export default module.exports = writeFile

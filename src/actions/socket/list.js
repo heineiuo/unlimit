@@ -1,5 +1,5 @@
 
-const list = ({limit=20}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({limit=20}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('socket');
     const list = [];
@@ -14,5 +14,3 @@ const list = ({limit=20}) => (dispatch, getCtx) => new Promise(async (resolve, r
     reject(e)
   }
 });
-
-export default module.exports = list

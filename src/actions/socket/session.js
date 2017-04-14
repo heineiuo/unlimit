@@ -11,7 +11,7 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * 根据socketId获取app信息
  * @returns {Promise}
  */
-const session = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
@@ -51,5 +51,3 @@ const session = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
   }
 });
 
-
-export default module.exports = session

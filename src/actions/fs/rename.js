@@ -9,7 +9,7 @@ import filesystem from 'level-filesystem'
  * @apiParam {string} prevFile
  * @apiParam {string} nextFile
  */
-const rename = ({driveId, prevFile, nextFile}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({driveId, prevFile, nextFile}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(getCtx().leveldb.sub('fs'));
     await fs.rename(`${driveId}${prevFile}`, `${driveId}${nextFile}`);
@@ -18,5 +18,3 @@ const rename = ({driveId, prevFile, nextFile}) => (dispatch, getCtx) => new Prom
     reject(e)
   }
 });
-
-export default module.exports = rename;

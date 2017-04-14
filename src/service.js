@@ -5,7 +5,6 @@ import getConfig from './config'
 import getLeveldb from './leveldb'
 import createServer from './http'
 import allActionCreators from './actions/allActionCreators'
-import getMongodb from './mongodb'
 
 const start = async () => {
 

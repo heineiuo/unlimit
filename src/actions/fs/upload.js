@@ -2,7 +2,7 @@ import path from 'path'
 import filesystem from 'level-filesystem'
 
 
-const upload = ({driveId, pathname, isHashName=true}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({driveId, pathname, isHashName=true}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const isPublic = pathname.search('/public') === 0;
     req.setHeader({
@@ -25,5 +25,3 @@ const upload = ({driveId, pathname, isHashName=true}) => (dispatch, getCtx) => n
     reject(e)
   }
 });
-
-export default module.exports = upload;

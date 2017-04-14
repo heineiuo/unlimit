@@ -4,7 +4,7 @@
  * get app detail
  * @returns {Promise}
  */
-const get = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const db = getCtx().leveldb.sub('app');
 
   try {
@@ -15,5 +15,3 @@ const get = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, rej
     reject(e)
   }
 });
-
-export default module.exports = get

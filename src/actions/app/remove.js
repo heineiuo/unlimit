@@ -1,6 +1,6 @@
 import removeSocket from '../socket/unbind'
 
-const remove = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const db = getCtx().leveldb.sub('app');
 
   try {
@@ -23,5 +23,3 @@ const remove = ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, 
     reject(e)
   }
 });
-
-export default module.exports = remove

@@ -1,12 +1,11 @@
 import Joi from 'joi'
-import ent from 'ent'
 
 const validate = (query) => Joi.validate(query, Joi.object().keys({
   driveId: Joi.string().required(),
   locations: Joi.array().required(),
 }), {allowUnknown: true});
 
-const commitLocations = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('location');
     const validated = validate(query);
@@ -23,5 +22,3 @@ const commitLocations = (query) => (dispatch, getCtx) => new Promise(async (reso
     reject(e)
   }
 });
-
-export default module.exports = commitLocations;

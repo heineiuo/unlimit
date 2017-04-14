@@ -1,7 +1,7 @@
 import ShouldNotFound from './shouldNotFound'
 import Joi from 'joi'
 
-const create = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, Joi.object.keys({
     appName: Joi.string().required()
   }), {allowUnknown: true});
@@ -23,4 +23,3 @@ const create = (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   }
 });
 
-export default module.exports = create

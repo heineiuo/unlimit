@@ -1,8 +1,4 @@
 import Joi from 'joi'
-import ent from 'ent'
-
-
-
 
 /**
  * @api {POST} /Location/delete 删除一个location
@@ -12,7 +8,7 @@ import ent from 'ent'
  * @apiParam {string} driveId
  * @apiParam {string} pathname
  */
-const removeItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
 
     const validated = Joi.validate(query, Joi.object().keys({
@@ -31,5 +27,3 @@ const removeItem = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
     reject(e)
   }
 });
-
-export default module.exports = removeItem

@@ -9,7 +9,7 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * 获取空间和用户的权限关系
  * @param query
  */
-const permission = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
@@ -27,5 +27,3 @@ const permission = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
     reject(e)
   }
 });
-
-module.exports = permission;

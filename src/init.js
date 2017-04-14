@@ -5,7 +5,7 @@ export default (app) => new Promise(async(resolve, reject) => {
 
     const config = await getConfig();
     console.log('[gateway] running init program...');
-    const {domain} = config.production().init;
+    const {domain} = config.production.init;
     let driveId = null;
     try {
       const result = await app.requestSelf({

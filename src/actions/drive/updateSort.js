@@ -1,7 +1,5 @@
 
 import Joi from 'joi'
-import ent from 'ent'
-
 
 
 /**
@@ -14,17 +12,17 @@ import ent from 'ent'
  * @apiParam {number} nextSort
  * @apiSuccess {number} success
  */
-const UpdateSort = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const validate = Joi.validate(query, Joi.object().keys({
+    const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required(),
       pathname: Joi.string().required(),
       nextSort: Joi.number().required()
     }), {allowUnknown: true});
-    if (validate.error) return reject(validate.error);
+    if (validated.error) return reject(validated.error);
 
     const db = getCtx().leveldb.sub('location');
-    const {nextSort, pathname, driveId} = query;
+    const {nextSort, pathname, driveId} = validated.value;
     if (nextSort < 1) return reject('PARAMS_ILLEGAL');
     const location = await db.get(driveId);
     const targetPath = location.locations[pathname];
@@ -54,5 +52,3 @@ const UpdateSort = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
   }
 
 });
-
-export default module.exports = UpdateSort;

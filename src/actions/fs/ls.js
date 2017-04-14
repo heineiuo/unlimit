@@ -10,7 +10,7 @@ import cat from './cat'
  * @apiParam {string} driveId
  * @apiParam {string} pathname
  */
-const ls = ({pathname, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({pathname, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const fs = filesystem(getCtx().leveldb.sub('fs'));
     const directory = `${driveId}${pathname}`;
@@ -56,6 +56,3 @@ const ls = ({pathname, driveId}) => (dispatch, getCtx) => new Promise(async (res
     }
   }
 });
-
-
-export default module.exports = ls

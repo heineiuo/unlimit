@@ -1,5 +1,5 @@
 import AliPush from 'ali-push'
-import config from '../../config'
+import getConfig from '../../config'
 
 let client = null;
 
@@ -18,8 +18,9 @@ export const createNumberCode = function(length=6){
  * @apiName EmailCodeForLogin
  * @apiParam {string} email 邮箱
  */
-const createVerificationCode = ({email}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({email}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
+    const config = await getConfig();
     const db = getCtx().leveldb.sub('emailcode');
     // console.log(email);
     const code = createNumberCode();
@@ -35,9 +36,9 @@ const createVerificationCode = ({email}) => (dispatch, getCtx) => new Promise(as
 
     if (!client) {
       client = new AliPush({
-        AccessKeyId: config.production().aliyun.accessid,
-        AccessKeySecret: config.production().aliyun.accesskey,
-        AccountName: config.production().aliyun.dms.accountName
+        AccessKeyId: config.production.aliyun.accessid,
+        AccessKeySecret: config.production.aliyun.accesskey,
+        AccountName: config.production.aliyun.dms.accountName
       });
     }
 
@@ -51,4 +52,3 @@ const createVerificationCode = ({email}) => (dispatch, getCtx) => new Promise(as
   }
 });
 
-export default module.exports = createVerificationCode

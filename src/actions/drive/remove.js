@@ -1,7 +1,7 @@
 import unbindDomain from './unbindDomain'
 import Joi from 'joi'
 
-const destroy = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required()
@@ -15,5 +15,3 @@ const destroy = (query) => (dispatch, getCtx) => new Promise(async (resolve, rej
     reject(e)
   }
 });
-
-export default module.exports = destroy

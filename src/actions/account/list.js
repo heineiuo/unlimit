@@ -4,7 +4,7 @@
  * @apiGroup Account
  * @apiParam {string} model model名, user
  */
-const userList = (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
   try {
     const db = getCtx().leveldb.sub('user');
     const limit = query.limit || 20;
@@ -22,4 +22,4 @@ const userList = (query) => (dispatch, getCtx) => new Promise(async (resolve,rej
   }
 });
 
-export default module.exports = userList
+

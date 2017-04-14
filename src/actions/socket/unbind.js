@@ -4,7 +4,7 @@ import Joi from 'joi'
 /**
  * delete socket
  */
-const remove = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const validated = Joi.validate(query, Joi.object.keys({
       socketId: Joi.string().required()
@@ -28,5 +28,3 @@ const remove = (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
     reject(e)
   }
 });
-
-export default module.exports = remove

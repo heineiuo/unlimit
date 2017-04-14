@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import ent from 'ent'
 
-const edit = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
 
     const validated = Joi.validate(query, Joi.object().keys({
@@ -34,5 +34,3 @@ const edit = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject
   }
 
 });
-
-export default module.exports = edit

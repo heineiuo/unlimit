@@ -1,5 +1,6 @@
+/* @private */
 
-const ShouldNotFound = ({appName}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default ({appName}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
     const db = getCtx().leveldb.sub('app');
     await db.get(appName);
@@ -9,5 +10,3 @@ const ShouldNotFound = ({appName}) => (dispatch, getCtx) => new Promise(async(re
     reject(e)
   }
 });
-
-export default ShouldNotFound
