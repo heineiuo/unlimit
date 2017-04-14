@@ -1,16 +1,15 @@
 import React, {Component} from 'react'
-import {css, StyleSheet} from 'aphrodite/no-important'
-import {HashRouter as Router, Switch, Route} from 'react-router-dom'
+import {css, StyleSheet} from 'aphrodite'
+import {HashRouter, Switch, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-
 import AsyncDrive from './Drive/AsyncDrive'
 import AsyncHome from './Home/AsyncHome'
+// import Home from './Home/AsyncHome'
 import AsyncConsole from './AsyncConsole'
 import AsyncAccount from './Account/AsyncAccount'
 import AsyncOAuth from './OAuth/AsyncOAuth'
 import {injectAsyncReducer} from '../store'
-
 // import Home from './Home/Home'
 // import Drive from './Drive/Master'
 
@@ -22,14 +21,10 @@ class CheckLogin extends Component {
     if (!account.loginChecked) checkLogin();
   };
 
-  componentWillUnmount = () => {
-    console.error('CheckLogin will unmount!')
-  };
-
   render () {
 
     return (
-      <Router>
+      <HashRouter>
         <Switch>
           <Route exact path="/" render={AsyncHome} />
           <Route path="/drive" render={AsyncDrive} />
@@ -38,7 +33,7 @@ class CheckLogin extends Component {
           <Route path="/console" render={AsyncConsole} />
           <Route component={require('./NotFound')}/>
         </Switch>
-      </Router>
+      </HashRouter>
     )
   }
 }

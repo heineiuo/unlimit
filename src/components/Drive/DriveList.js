@@ -12,7 +12,9 @@ import {connect} from 'react-redux'
 
 const DriveListItem = hoverHoc((props) => (
   <div>
-    <div className={css(styles.hostItem__title)}>{props.item.hostname || '未命名'} </div>
+    <div className={css(styles.hostItem__title)}>
+      {props.item.hostname || `未命名(${props.item.driveId.substr(0, 8)})`}
+    </div>
     <div className={css(styles.hostItem__info)}>
       简介: ...
     </div>

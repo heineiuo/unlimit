@@ -4,20 +4,23 @@ import {API_HOST} from '../../constants'
 import signature from '../common/signature'
 
 const logout = () => async (dispatch, getState) => {
+  console.log('正在登出系统...');
+  let result = null;
   try {
-    console.log('正在登出系统...');
-    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/logout`, signature({
+    result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/logout`, signature({
       token: localStorage.userToken
     }));
-    if (result.error) throw result.error;
-    localStorage.clear();
-    dispatch({
-      type: 'account__logout'
-    });
-    dispatch(push('/'));
   } catch (e) {
-    console.log(e.stack || e)
+    return console.log(e.stack || e)
   }
+
+  if (result.error) throw result.error;
+  localStorage.clear();
+  dispatch({
+    type: 'account__logout'
+  });
+  dispatch(push('/'));
+
 };
 
 export default module.exports = logout;

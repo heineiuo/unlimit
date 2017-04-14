@@ -3,7 +3,7 @@ import Paper from 'react-sea/lib/Paper'
 import {Switch, Route, Link } from 'react-router-dom'
 import Spin from 'react-spin'
 import {TabBar, TabPane} from 'react-sea/lib/Tabbar'
-import {css, StyleSheet} from 'aphrodite/no-important'
+import {css, StyleSheet} from 'aphrodite'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
@@ -67,6 +67,7 @@ class DriveWrapper extends Component {
               <Route path={`${match.path}/file`} component={require('./File/File')}/>
               <Route path={`${match.path}/topics`} render={AsyncTopic} />
               <Route path={`${match.path}/website`} component={require('./Website/Location')}/>
+              <Route path={`${match.path}/members`} component={require('./Members')}/>
               <Route path={`${match.path}/setting`} component={require('./Setting')}/>
             </Switch>
           </div>
@@ -111,8 +112,6 @@ const ConnectedWrapper = connect(
   (dispatch) => bindActionCreators({
     push,
     setTitle: require('../../actions/setNavTitle'),
-    getHostList: require('../../actions/host/getHostList'),
-    restoreFileList: require('../../actions/file/restoreFileList'),
   }, dispatch)
 )(DriveWrapper);
 

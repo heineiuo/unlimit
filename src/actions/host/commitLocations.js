@@ -9,9 +9,10 @@ import {restoreFileList} from '../file/restoreFileList'
  * @param locations
  */
 const commitLocations = (driveId, locations) => async(dispatch, getState) => {
+  const {token} = getState().account;
+  let response = null;
   try {
-    const {token} = getState().account;
-    const response = await POSTRawJSON(`${API_HOST}/seashell/drive/commitLocations`,{
+    response = await POSTRawJSON(`${API_HOST}/seashell/drive/commitLocations`,{
       token,
       driveId,
       locations: locations.map(location => {
@@ -20,20 +21,19 @@ const commitLocations = (driveId, locations) => async(dispatch, getState) => {
         return location
       })
     });
-    if (response.error) throw new Error(response.error);
-
-    dispatch({
-      type: "host__locationUpdate",
-      payload: {
-        driveId,
-        locations
-      }
-    })
-
   } catch(e){
     console.log(e.stack);
-    alert(e.message)
+    return alert(e.message)
   }
+
+  if (response.error) return console.log(response.error);
+  dispatch({
+    type: "host__locationUpdate",
+    payload: {
+      driveId,
+      locations
+    }
+  })
 };
 
 

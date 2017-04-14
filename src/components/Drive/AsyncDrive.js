@@ -14,7 +14,7 @@ const AsyncDrive = (props) => {
         injectAsyncReducer('file', file);
         injectAsyncReducer('nav', nav);
         //callback(require('./Master'));
-        require.ensure([], (require) => callback(null, require('./Master')))
+        require.ensure([], (require) => callback(null, require('./Drive')))
       }
     }>
       {(state, Master) => (

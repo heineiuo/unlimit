@@ -1,25 +1,28 @@
-import {POSTRawJSON} from 'fetch-tools'
-import {API_HOST} from '../../constants'
-import {push} from 'react-router-redux'
-import {restoreFileList} from '../file/restoreFileList'
+import {POSTRawJSON} from "fetch-tools"
+import {API_HOST} from "../../constants"
 /**
  * 删除host
  * @returns {function()}
  */
-const deleteHost = (driveId) => async (dispatch, getState) =>{
+const deleteHost = (driveId) => async (dispatch, getState) => {
+  const {token} = getState().account;
+  let result = null;
   try {
-    const {token} = getState().account;
-    await POSTRawJSON(`${API_HOST}/seashell/drive/remove`, {
+    result = await POSTRawJSON(`${API_HOST}/seashell/drive/remove`, {
       driveId,
       token
     });
-    dispatch({
-      type: 'host__remove',
-      payload: {driveId}
-    })
-  }catch(e){
+  } catch (e) {
     console.log(e.stack)
   }
+
+  if (result.error) return console.log(result.error)
+
+  dispatch({
+    type: 'host__remove',
+    payload: {driveId}
+  })
+
 };
 
 export default module.exports = deleteHost;

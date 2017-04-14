@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import {StyleSheet, css} from "aphrodite/no-important"
+import {StyleSheet, css} from "aphrodite"
 import Button from "react-sea/lib/Button"
 import path from 'path'
 // import Modal from "react-modal"

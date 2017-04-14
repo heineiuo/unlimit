@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import {StyleSheet, css} from 'aphrodite/no-important'
+import {StyleSheet, css} from 'aphrodite'
 import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
 import Input from 'react-sea/lib/Input'

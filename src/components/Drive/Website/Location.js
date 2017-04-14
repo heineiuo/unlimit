@@ -7,9 +7,8 @@ import { StyleSheet, css } from 'aphrodite'
 import Button from 'react-sea/lib/Button'
 import Spin from 'react-spin'
 import LocationItem from './LocationItem'
-
-import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
+import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
 class Location extends Component {
@@ -106,7 +105,7 @@ class Location extends Component {
                   </div>
                   <div className={css(styles.table__body)}>
                     {
-                      locations.length==0 ? <div>路由列表为空</div>:
+                      locations.length === 0 ? <div>路由列表为空</div>:
                         locations.map((location, index) => (
                           <LocationItem
                             locationLength={locations.length}
@@ -169,7 +168,7 @@ export default module.exports = connect(
   (dispatch) => bindActionCreators({
     push,
     setTitle: require('../../../actions/setNavTitle'),
-    getLocations: require('../../../actions/host/getLocations'),
+    getLocations: require('../../../actions/host/getLocations').default,
     getHostList: require('../../../actions/host/getHostList'),
     commitLocations: require('../../../actions/host/commitLocations'),
     restoreFileList: require('../../../actions/file/restoreFileList'),

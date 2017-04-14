@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {css, StyleSheet} from 'aphrodite/no-important'
+import {css, StyleSheet} from 'aphrodite'
 import Background from 'react-sea/lib/Background'
 import {Link} from 'react-router-dom'
 

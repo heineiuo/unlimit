@@ -7,17 +7,20 @@ import signature from '../common/signature'
  * @returns {function()}
  */
 const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
+  const {userToken=null} = localStorage;
+  const {redirectUrl} = getState().account;
+  let res = null;
   try {
-    const {userToken=null} = localStorage;
-    const {redirectUrl} = getState().account;
-    const res = await POSTRawJSON(`${API_HOST}/seashell/account/createTokenByAuthCode`, signature({
+    res = await POSTRawJSON(`${API_HOST}/seashell/account/createTokenByAuthCode`, signature({
       token: userToken
     }));
-    if (res.error) return console.log(res.error);
-    location.href = `${redirectUrl}?code=${res.code}`
   } catch(e){
-    console.log(e.stack||e)
+    return console.log(e.stack||e)
   }
+
+  if (res.error) return console.log(res.error);
+  location.href = `${redirectUrl}?code=${res.code}`
+
 };
 
 export default module.exports = getAuthCodeAndRedirect

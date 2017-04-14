@@ -8,42 +8,43 @@ import signature from '../common/signature'
  * @returns {function()}
  */
 const checkLogin = () => async (dispatch, getState) => {
-  try {
-    const userToken = localStorage.userToken || null;
-    if (!userToken) {
-      return dispatch({
-        type: "account__checkedLogin",
-        payload: {
-          logged: false
-        }
-      })
-    }
+  const userToken = localStorage.userToken || null;
+  if (!userToken) {
+    return dispatch({
+      type: "account__checkedLogin",
+      payload: {
+        logged: false
+      }
+    })
+  }
 
-    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, signature({
+  let result = null;
+  try {
+    result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, signature({
       token: userToken
     }));
+  } catch(e){
+    return console.log(e.stack)
+  }
 
-    if (result.error || !result.hasOwnProperty('id')) {
-      return dispatch({
-        type: 'account__checkedLogin',
-        payload: {
-          logged: false
-        }
-      })
-    }
-
-    dispatch({
+  if (result.error || !result.hasOwnProperty('id')) {
+    return dispatch({
       type: 'account__checkedLogin',
       payload: {
-        logged: true,
-        email: result.email,
-        token: userToken,
-        profile: result
-      },
+        logged: false
+      }
     })
-  } catch(e){
-    console.log(e.stack)
   }
+
+  dispatch({
+    type: 'account__checkedLogin',
+    payload: {
+      logged: true,
+      email: result.email,
+      token: userToken,
+      profile: result
+    },
+  })
 };
 
 export default module.exports = checkLogin

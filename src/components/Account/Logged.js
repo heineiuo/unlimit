@@ -6,7 +6,7 @@ import PopModal from './PopModal'
 import commonStyles from '../common/styles'
 import ImageUpload from 'react-sea/lib/ImageUpload'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
-import {StyleSheet, css} from 'aphrodite/no-important'
+import {StyleSheet, css} from 'aphrodite'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 

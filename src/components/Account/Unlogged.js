@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {StyleSheet, css} from 'aphrodite/no-important'
+import {StyleSheet, css} from 'aphrodite'
 import commonStyles from '../common/styles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'

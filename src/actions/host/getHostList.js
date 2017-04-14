@@ -1,6 +1,5 @@
-import {POSTRawJSON} from 'fetch-tools'
-import {API_HOST} from '../../constants'
-import {push} from 'react-router-redux'
+import {POSTRawJSON} from "fetch-tools"
+import {API_HOST} from "../../constants"
 
 /**
  * 更新我的app列表
@@ -19,16 +18,16 @@ const getHostList = () => async (dispatch, getState) => {
   });
 
   try {
-    hostListResult = await POSTRawJSON(`${API_HOST}/seashell/drive/list`,{
+    hostListResult = await POSTRawJSON(`${API_HOST}/seashell/drive/list`, {
       limit: 0, token
     });
-  } catch(e){
+  } catch (e) {
     return handleError(e)
   }
 
   if (hostListResult.error) return handleError(hostListResult.error);
   dispatch({
-    type: "host__listUpdate",
+    type: "host__hostListUpdate",
     payload: {
       hostList: hostListResult.list,
     }

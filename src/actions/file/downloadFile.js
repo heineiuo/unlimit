@@ -3,16 +3,16 @@ import {API_HOST} from '../../constants'
 
 
 const downloadFile = (path)=> async (dispatch, getState) => {
+  const {token} = getState().account;
+  let result = null;
   try {
-    const {token} = getState().account;
-
-    const url = POSTRawJSON(`${API_HOST}/seashell/fs/download`, {
+    result = await POSTRawJSON(`${API_HOST}/seashell/fs/download`, {
       token, path});
-    window.open(url)
-
   } catch(e){
-    console.log(e);
+    return console.log(e);
   }
+  if (result.error) return console.log(result.error)
+  window.open(result.url)
 };
 
 export default module.exports = downloadFile;

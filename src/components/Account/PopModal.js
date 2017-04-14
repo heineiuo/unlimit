@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import Button from 'react-sea/lib/Button'
 import Input from 'react-sea/lib/Input'
 import MdClose from 'react-sea/lib/Icons/close'
-import {StyleSheet, css} from 'aphrodite/no-important'
+import {StyleSheet, css} from 'aphrodite'
 
 class PopModal extends Component {
 

@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Route, Link} from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import HostSelector from './DriveSelector'
-import {StyleSheet, css} from 'aphrodite/no-important'
+import {StyleSheet, css} from 'aphrodite'
 import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
 import Input from 'react-sea/lib/Input'
@@ -40,36 +40,40 @@ class Header extends Component {
   };
 
   render(){
+    const {match} = this.props;
     return (
       <div className={css(styles.globalHeaderBar)}>
         <div style={{display: 'flex'}}>
           <Title color='#EEE' title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
           <span>
             <Link to='/drive' style={{color: '#666', fontSize: 13}}>全部空间</Link>
+            <Route path={`${match.path}/`} exact render={() => (
+              <span style={{color: '#FFF'}} onClick={() => this.setState({modalOpen: true})}>创建空间</span>
+            )}/>
             <Modal
               style={{overlay: commonStyles.modal__overlay, content: commonStyles.modal__content}}
               ref={(modal) => this.modal = modal}
               contentLabel="ADD_HOST"
               isOpen={this.state.modalOpen}>
-                  <Paper>
-                    {/*<div>添加一个域名</div>*/}
-                    <div>
-                      <Input
-                        label="添加域名"
-                        name="hostname"
-                        id="input-hostname"
-                        type="text"
-                        style={{marginBottom: 20}}
-                        onChange={(e)=>{this.setState({hostName: e.target.value})}}
-                        value={this.state.hostName}
-                        placeholder="请输入域名"  />
-                      <div style={{textAlign: 'right'}}>
-                        <Button style={{width: 100, marginRight: 10}} type="secondary" onClick={this.cancel}>取消</Button>
-                        <Button style={{width: 100}} onClick={this._createHost}>提交</Button>
-                      </div>
+                <Paper>
+                  {/*<div>添加一个域名</div>*/}
+                  <div>
+                    <Input
+                      label="添加域名"
+                      name="hostname"
+                      id="input-hostname"
+                      type="text"
+                      style={{marginBottom: 20}}
+                      onChange={(e)=>{this.setState({hostName: e.target.value})}}
+                      value={this.state.hostName}
+                      placeholder="请输入域名"  />
+                    <div style={{textAlign: 'right'}}>
+                      <Button style={{width: 100, marginRight: 10}} type="secondary" onClick={this.cancel}>取消</Button>
+                      <Button style={{width: 100}} onClick={this._createHost}>提交</Button>
                     </div>
-                  </Paper>
-                </Modal>
+                  </div>
+                </Paper>
+              </Modal>
           </span>
         </div>
         <div>

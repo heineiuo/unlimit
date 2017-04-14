@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import Spin from "react-spin"
-import {css, StyleSheet} from "aphrodite/no-important"
+import {css, StyleSheet} from "aphrodite"
 import {appmeta} from '../Drive/appmeta'
 
 class IntegrateApp extends Component {
