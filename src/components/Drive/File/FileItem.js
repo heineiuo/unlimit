@@ -46,7 +46,7 @@ class FileItem extends Component {
   };
 
   select = () => {
-    if (this.state.selectState != 2) this._toggleSelect(2)
+    if (this.state.selectState !== 2) this._toggleSelect(2)
   };
 
   render() {
@@ -66,14 +66,14 @@ class FileItem extends Component {
         <div className={css(styles.name)}>
           <Link
             className={css(styles.name__text)}
-            to={`${hrefPrefix}/file${pathname=="/"?'':pathname}/${item.name}`}>{item.name}</Link>
+            to={`${hrefPrefix}/file/${item._id}`}>{item.name}</Link>
           <div>
             <Button style={{width: 60, transition: 'none'}} size="small" type="secondary" onClick={this.deleteFile}>删除</Button>
             <Button style={{width: 60, transition: 'none'}} size="small" type="secondary" >重命名</Button>
           </div>
         </div>
         <div className={css(styles.size)}>
-          {filesize(item.stat.size)}
+          {filesize(item.size || 0)}
         </div>
         <div className={css(styles.options, mouseOver && styles.options_show)}>
 

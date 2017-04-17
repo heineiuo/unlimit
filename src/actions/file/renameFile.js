@@ -7,16 +7,11 @@ import {API_HOST} from '../../constants'
  */
 const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
   const {token} = getState().account;
-  let result = null;
-  try {
-    result = await POSTRawJSON(`${API_HOST}/seashell/fs/mv`, {
-      token, prevName, nextName
-    });
-  } catch(e){
-    return console.log(e)
-  }
+  const result = await POSTRawJSON(`${API_HOST}/seashell/fs/mv`, {
+    token, prevName, nextName
+  });
 
-  if (result.error) throw new Error(result.error);
+  if (result.error) return console.log(result.error);
 };
 
 export default module.exports = renameFile;

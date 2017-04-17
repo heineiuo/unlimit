@@ -10,23 +10,17 @@ import {restoreFileList} from '../file/restoreFileList'
  */
 const commitLocations = (driveId, locations) => async(dispatch, getState) => {
   const {token} = getState().account;
-  let response = null;
-  try {
-    response = await POSTRawJSON(`${API_HOST}/seashell/drive/commitLocations`,{
-      token,
-      driveId,
-      locations: locations.map(location => {
-        delete location.sort;
-        delete location.contentType;
-        return location
-      })
-    });
-  } catch(e){
-    console.log(e.stack);
-    return alert(e.message)
-  }
+  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/commitLocations`,{
+    token,
+    driveId,
+    locations: locations.map(location => {
+      delete location.sort;
+      delete location.contentType;
+      return location
+    })
+  });
 
-  if (response.error) return console.log(response.error);
+  if (result.error) return console.log(result.error);
   dispatch({
     type: "host__locationUpdate",
     payload: {

@@ -1,13 +1,12 @@
-import React, {Component, PropTypes} from 'react'
-import Paper from 'react-sea/lib/Paper'
-import {Switch, Route, Link } from 'react-router-dom'
-import Spin from 'react-spin'
-import {TabBar, TabPane} from 'react-sea/lib/Tabbar'
-import {css, StyleSheet} from 'aphrodite'
-import {connect} from 'react-redux'
-import {push} from 'react-router-redux'
-import {bindActionCreators} from 'redux'
-import AsyncTopic from './Topic/AsyncTopic'
+import React, {Component, PropTypes} from "react"
+import Paper from "react-sea/lib/Paper"
+import {Route, Switch} from "react-router-dom"
+import {TabBar, TabPane} from "react-sea/lib/Tabbar"
+import {css, StyleSheet} from "aphrodite"
+import {connect} from "react-redux"
+import {push} from "react-router-redux"
+import {bindActionCreators} from "redux"
+import AsyncTopic from "./Topic/AsyncTopic"
 
 class DriveWrapper extends Component {
 
@@ -20,14 +19,15 @@ class DriveWrapper extends Component {
   };
 
   componentWillMount = () => {
-    const {match: {params}, location: {pathname}} = this.props;
+    const {match: {params: {driveId}}, location: {pathname}, queryOne} = this.props;
+    queryOne(driveId)
 
-    const activeTab = pathname.search('/file')>0?'file':
-      pathname.search('/website')>0?'website':
-      pathname.search('/topics')>0?'topics':
-      pathname.search('/setting')>0?'setting':
-      pathname.search('/members')>0?'members':
-        'file';
+    const activeTab = pathname.search('/file') > 0 ? 'file' :
+      pathname.search('/website') > 0 ? 'website' :
+        pathname.search('/topics') > 0 ? 'topics' :
+          pathname.search('/setting') > 0 ? 'setting' :
+            pathname.search('/members') > 0 ? 'members' :
+              'file';
 
     this.setState({
       activeTab
@@ -40,12 +40,12 @@ class DriveWrapper extends Component {
     this.setState({activeTab});
   };
 
-  render (){
-    const {host, match, match: {params}} = this.props;
+  render() {
+    const {host, match, match: {params}, currentDriveName} = this.props;
 
     return (
       <div className={css(styles.wrapper)}>
-        <Paper style={{boxShadow: 'none', padding: 0}} >
+        <Paper style={{boxShadow: 'none', padding: 0}}>
           <div className={css(styles.wrapper__header)}>
             <div style={{position: 'relative', height: '40px', maxWidth: '400px', width: '60%'}}>
               <TabBar
@@ -59,13 +59,14 @@ class DriveWrapper extends Component {
                 <TabPane key="setting" style={styles.tabPane._definition}>设置</TabPane>
               </TabBar>
             </div>
-            <div style={{lineHeight: '40px'}}>{params.driveId}</div>
+            <div style={{lineHeight: '40px'}}>{currentDriveName}</div>
           </div>
           <div className={css(styles.wrapper__body)}>
             <Switch>
               <Route path={'/drive/:driveId'} exact component={require('./File/File')}/>
+              <Route path={`${match.path}/file/:fileId`} component={require('./File/File')}/>
               <Route path={`${match.path}/file`} component={require('./File/File')}/>
-              <Route path={`${match.path}/topics`} render={AsyncTopic} />
+              <Route path={`${match.path}/topics`} render={AsyncTopic}/>
               <Route path={`${match.path}/website`} component={require('./Website/Location')}/>
               <Route path={`${match.path}/members`} component={require('./Members')}/>
               <Route path={`${match.path}/setting`} component={require('./Setting')}/>
@@ -106,12 +107,13 @@ const styles = StyleSheet.create({
 
 
 const ConnectedWrapper = connect(
-  (state) => ({
-    host: state.host,
+  (store) => ({
+    host: store.host,
+    currentDriveName: store.host.currentDriveName
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle: require('../../actions/setNavTitle'),
+    queryOne: require('../../actions/drive/queryOne').default
   }, dispatch)
 )(DriveWrapper);
 

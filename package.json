@@ -1,6 +1,6 @@
 {
   "name": "smile-web",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "main": "dist/smile-web.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "aphrodite": "^1.1.0",
     "babel-polyfill": "^6.22.0",
     "emoji-mart": "^0.4.3",
-    "fetch-tools": "^0.3.1",
+    "fetch-tools": "^0.3.2",
     "filesize": "^3.5.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

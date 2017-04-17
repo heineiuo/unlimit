@@ -1,13 +1,15 @@
 import { handleActions } from 'redux-actions'
 
-
 const initialState = {
   currentDriveId: '',
+  currentDriveName: '',
 
   driveUserState: 0, // 0 not init, 1 querying 2 ready 3 mutating
   driveUserError: '',
+  adminId: '',
   driveUserAdmin: {},
   driveUserList: [],
+  domains: [],
 
   hostList: [],
   hostListState: 0, // 0=not init, 1=loading, 2=ready
@@ -27,8 +29,16 @@ export default handleActions({
     })
   },
 
-  host__switchCurrent (state, action) {
-    return Object.assign({}, state, action.payload, {locationState: 0})
+  host__metaUpdate (state, action) {
+    const {payload: {driveId, domains, name, locations, adminId}} = action;
+    return Object.assign({}, state, {
+      currentDriveId: driveId,
+      currentDriveName: name,
+      locations,
+      locationState: 2,
+      adminId,
+      domains,
+    })
   },
 
   host__add (state, action) {
@@ -43,32 +53,11 @@ export default handleActions({
       return item.hostname !== action.payload.hostname
     });
     return Object.assign({}, state, {hostList: nextHostList})
-
   },
 
   host__locationUpdate (state, action) {
     return Object.assign({}, state, action.payload, {
       locationState: 2
-    })
-  },
-
-  host__locationEdit (state, action) {
-    const newLocationItem = action.payload.nextLocation;
-    const nextLocations = Object.assign({}, state.locations, {
-      [newLocationItem.pathname]: newLocationItem
-    });
-    return Object.assign({}, state, {
-      locations: nextLocations
-    })
-  },
-
-  host__locationAdd (state, action) {
-    const newLocationItem = action.payload.nextLocation;
-    const nextLocations = Object.assign({}, state.locations, {
-      [newLocationItem.pathname]: newLocationItem
-    });
-    return Object.assign({}, state, {
-      locations: nextLocations
     })
   },
 

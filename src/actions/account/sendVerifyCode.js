@@ -21,17 +21,12 @@ const sendVerifyCode = (form) => async (dispatch, getState) => {
       setTimeout(()=>{countdown(count)}, 1000)
     }
   };
-  let result = null;
 
-  try {
-    result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/createVerificationCode`, signature({
-      email: form.email
-    }));
-  } catch(error){
-    return console.log(error.stack||error)
-  }
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/createVerificationCode`, signature({
+    email: form.email
+  }));
 
-  if (result.error) throw result.error;
+  if (result.error) return console.log(result.error);
   countdown(60)
 };
 

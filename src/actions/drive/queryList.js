@@ -8,7 +8,6 @@ const getHostList = () => async (dispatch, getState) => {
 
   const {account: {token}} = getState();
   const handleError = (e) => console.error(e);
-  let hostListResult = null;
 
   dispatch({
     type: 'host__stateUpdate',
@@ -17,19 +16,15 @@ const getHostList = () => async (dispatch, getState) => {
     }
   });
 
-  try {
-    hostListResult = await POSTRawJSON(`${API_HOST}/seashell/drive/list`, {
-      limit: 0, token
-    });
-  } catch (e) {
-    return handleError(e)
-  }
+  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/queryMeta`, {
+    limit: 0, token, fields: ['name']
+  });
 
-  if (hostListResult.error) return handleError(hostListResult.error);
+  if (result.error) return handleError(result.error);
   dispatch({
     type: "host__hostListUpdate",
     payload: {
-      hostList: hostListResult.list,
+      hostList: result.data,
     }
   });
 };

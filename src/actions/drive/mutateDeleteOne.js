@@ -5,16 +5,11 @@ import {API_HOST} from "../../constants"
  * @returns {function()}
  */
 const deleteHost = (driveId) => async (dispatch, getState) => {
-  const {token} = getState().account;
-  let result = null;
-  try {
-    result = await POSTRawJSON(`${API_HOST}/seashell/drive/remove`, {
-      driveId,
-      token
-    });
-  } catch (e) {
-    console.log(e.stack)
-  }
+  const {account: {token}} = getState();
+  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/remove`, {
+    driveId,
+    token
+  });
 
   if (result.error) return console.log(result.error)
 

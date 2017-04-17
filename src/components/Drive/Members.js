@@ -20,32 +20,33 @@ class Members extends Component {
   }
 
   componentWillMount = () => {
-    const {match: {params: {driveId}}, getDriveUserList} = this.props;
-    getDriveUserList({driveId})
+    const {match: {params: {driveId}}, queryUserList} = this.props;
+    queryUserList({driveId})
   }
 
-  addDriveUser = () => {
-    const {match: {params: {driveId}}, addDriveUserByEmail} = this.props;
-    addDriveUserByEmail({
-      email: this.state.addEmail,
-      driveId
-    })
+  addDriveUser = (userId) => {
+    const {match: {params: {driveId}}, mutateUsers} = this.props;
+    mutateUsers({driveId, add: [userId]})
   }
 
   removeDriveUser = (item) => {
-    const {match: {params: {driveId}}, editDriveUser} = this.props;
-    editDriveUser({driveId, remove: [item]})
+    const {match: {params: {driveId}}, mutateUsers} = this.props;
+    mutateUsers({driveId, remove: [item]})
+  }
+
+  onEmailChange = (e) => {
+    this.setState({addEmail: e.target.value})
   }
 
   render (){
-    const {driveUserList, driveUserAdmin} = this.props;
+    const {driveUserList, driveUserAdmin, adminId} = this.props;
     const {addEmail} = this.state;
 
     return (
       <div>
-        <div>{driveUserAdmin.email}(管理员)</div>
+        <div>{adminId}(管理员)</div>
         <div className={css(styles.searchBar)}>
-          <Input type="text" value={addEmail} onChange={e => this.setState({addEmail: e.target.value})} />
+          <Input type="text" value={addEmail} onChange={this.onEmailChange} />
           <Button onClick={this.addDriveUser} style={{width: 130}}>添加协作者</Button>
         </div>
         {
@@ -67,17 +68,16 @@ const styles = StyleSheet.create({
   }
 })
 
-
-
 export default module.exports = connect(
   (state) => ({
     host: state.host,
     driveUserAdmin: state.host.driveUserAdmin,
-    driveUserList: state.host.driveUserList
+    driveUserList: state.host.driveUserList,
+    adminId: state.host.adminId
   }),
   (dispatch) => bindActionCreators({
-    getDriveUserList: require('../../actions/host/getDriveUserList').default,
-    addDriveUserByEmail: require('../../actions/host/addDriveUserByEmail').default,
-    editDriveUser: require('../../actions/host/editDriveUser').default
+    queryUserList: require('../../actions/drive/queryUserList').default,
+    queryOneByEmail: require('../../actions/account/queryOneByEmail').default,
+    mutateUsers: require('../../actions/drive/mutateUsers').default
   }, dispatch)
 )(Members)

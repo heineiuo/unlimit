@@ -18,14 +18,9 @@ const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  let result = null;
-  try {
-    result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, signature({
-      token: userToken
-    }));
-  } catch(e){
-    return console.log(e.stack)
-  }
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, signature({
+    token: userToken
+  }));
 
   if (result.error || !result.hasOwnProperty('id')) {
     return dispatch({

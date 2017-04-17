@@ -13,15 +13,15 @@ class IntegrateApp extends Component {
     appState: 0, // 0未初始化， 1正在加载，2加载成功，3，app不存在，4加载失败
     appName: '',
     driveId: '',
-    pathname: '',
+    fileName: '',
     fullScreen: false,
     isCreated: true
   };
 
   open = async (options) => {
-    const {driveId, pathname, appName, isCreated=true} = options;
+    const {driveId, fileId, fileName, appName, isCreated=true} = options;
     const {injectAsyncReducer} = this.props;
-    const nextState = {appName, pathname, driveId, appState: 1, isCreated};
+    const nextState = {appName, fileId, fileName, driveId, appState: 1, isCreated};
     if (appmeta.findIndex(app => app.appName === appName) === -1 || !SystemJS.map.hasOwnProperty(appName)) {
       nextState.appState = 3;
       return this.setState(nextState);
@@ -46,7 +46,7 @@ class IntegrateApp extends Component {
       appName: null,
       fullScreen: false,
       driveId: null,
-      pathname: null
+      fileName: null
     });
     this.component = null;
     this.props.onClose()
@@ -59,7 +59,7 @@ class IntegrateApp extends Component {
   };
 
   render() {
-    const {fullScreen, appState, appName, driveId, pathname, isCreated} = this.state;
+    const {fullScreen, appState, appName, driveId, fileName, fileId, isCreated} = this.state;
     return appState === 4 ? (
         <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>
           <div onClick={this.close} className={css(styles.appToolBar__btn)} style={{width: 100}}>关闭应用</div>
@@ -84,7 +84,8 @@ class IntegrateApp extends Component {
                       appState,
                       appName,
                       driveId,
-                      pathname,
+                      fileId,
+                      fileName,
                       isCreated
                     })
                   }

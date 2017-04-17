@@ -13,13 +13,13 @@ import {connect} from 'react-redux'
 const DriveListItem = hoverHoc((props) => (
   <div>
     <div className={css(styles.hostItem__title)}>
-      {props.item.hostname || `未命名(${props.item.driveId.substr(0, 8)})`}
+      {props.item.name || `未命名(${props.item._id.substr(0, 8)})`}
     </div>
     <div className={css(styles.hostItem__info)}>
       简介: ...
     </div>
     <div className={css(styles.hostItem__bottomBar)}>
-      <Link className={css(styles.link, styles.hostItem__bottomBar__btn)} to={`/drive/${props.item.driveId}`}>文件</Link>
+      <Link className={css(styles.link, styles.hostItem__bottomBar__btn)} to={`/drive/${props.item._id}`}>文件</Link>
     </div>
   </div>
 ))
@@ -144,9 +144,9 @@ export default module.exports = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    deleteHost: require('../../actions/host/deleteHost'),
+    deleteHost: require('../../actions/drive/mutateDeleteOne'),
     setTitle: require('../../actions/setNavTitle'),
-    getHostList: require('../../actions/host/getHostList'),
+    getHostList: require('../../actions/drive/queryList'),
     restoreFileList: require('../../actions/file/restoreFileList'),
   }, dispatch)
 )(DriveList);

@@ -13,7 +13,6 @@ import IntegrateApp from "../../common/IntegrateApp"
 import {injectAsyncReducer} from '../../../store'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import IconArrowDropdown from '../../common/IconArrowDropdown'
-
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
@@ -31,24 +30,39 @@ class File extends Component {
     return pathname.substring(url.length)
   };
 
+  updateUploadLocation = () => {
+    const {
+      account: {token},
+      match: {params: {driveId, parentId}}
+    } = this.props;
+
+    this.uploadAction = `/api/seashell/fs/mutateUpload?${urlencode({
+      token,
+      driveId,
+      parentId
+    })}`;
+  }
+
   componentWillMount = () => {
-    const {setTitle, getFileList, match, match: {params: {driveId}}} = this.props;
-    getFileList(driveId, this.getSplat());
+    const { getFileList, match: {params: {driveId, fileId}}} = this.props;
+    console.log(fileId)
+    this.updateUploadLocation()
+    getFileList(driveId, fileId);
   };
 
   componentWillReceiveProps = (nextProps) => {
     const {getFileList, setTitle, match, host} = this.props;
-    const {params, params: {driveId}} = match;
-
-    const nextPath = this.getSplat(nextProps);
+    const {params, params: {driveId, fileId}} = match;
 
     if (nextProps.file.fileState === 0) {
       setTitle(`${nextProps.params.driveId} - 文件`);
-      return getFileList(nextProps.params.driveId, '/');
+      return getFileList(nextProps.params.driveId, null);
     }
 
-    if (nextPath !== this.getSplat()) {
-      getFileList(driveId, nextPath)
+    const nextFileId = nextProps.match.params.fileId;
+    if (fileId !== nextFileId) {
+      getFileList(driveId, nextFileId)
+      this.updateUploadLocation()
     }
   };
 
@@ -79,7 +93,7 @@ class File extends Component {
     });
   };
 
-  _handleUploadSuccess = () => {
+  handleUploadSuccess = () => {
     const {setTitle, getFileList, host, match} = this.props;
     const {params: {driveId}} = match;
 
@@ -118,12 +132,10 @@ class File extends Component {
     })
   };
 
-  deleteFile = ({name}) => {
+  deleteFile = ({name, _id: fileId}) => {
     const {match: {params: {driveId}}} = this.props;
-    const pathname = this.getSplat(this.props) || '/';
-    const willDeletePathname = `${pathname === "/"?'':pathname}/${name}`;
-    if (window.confirm(`是否删除${willDeletePathname}`)){
-      this.props.deleteFile(driveId, willDeletePathname)
+    if (window.confirm(`是否删除${name}`)){
+      this.props.deleteFile(driveId, fileId)
     }
   };
 
@@ -137,25 +149,17 @@ class File extends Component {
   };
 
   render() {
-    const {file: {clipboard}, emptyClipboard} = this.props;
-    const {selected, isIntegrateAppOpen} = this.state;
     const {
       file,
-      file: {isFile, cat, ls},
-      account,
-      match: {params: {driveId}},
+      match,
+      currentDriveName,
+      emptyClipboard,
+      file: {clipboard, isFile, cat, ls},
+      match: {params: {driveId, fileId}}
     } = this.props;
+    const {selected, isIntegrateAppOpen} = this.state;
     const pathname = this.getSplat() || '/';
     const hrefPrefix = `/drive/${driveId}`;
-
-    const uploadAction = `/api/gateway?${urlencode({
-      importAppName: 'gateway',
-      token: account.token,
-      reducerName: 'file',
-      action: 'upload',
-      driveId,
-      pathname
-    })}`;
 
     return (
       <div style={{minHeight: '160px'}}>
@@ -169,7 +173,7 @@ class File extends Component {
                 {/*路径栏*/}
                 <FilePathBar
                   isFile={isFile}
-                  driveName={'未命名空间'}
+                  driveName={currentDriveName}
                   hrefPrefix={hrefPrefix}
                   pathname={pathname} />
                 {/*工具栏*/}
@@ -221,7 +225,7 @@ class File extends Component {
                         </Button>
                       </DropDownTrigger>
                       <DropDownContent className={css(styles.clipboard__content)}>
-                        <div className={css(styles.triangle)}></div>
+                        <div className={css(styles.triangle)} />
                         <div className={css(styles.clipboard__info)}>
                           {
                             clipboard.length === 0 ? (
@@ -261,8 +265,8 @@ class File extends Component {
                         <div onClick={this.openCreateDirectoryModal}>文件夹</div>
                         <Upload
                           style={{display: 'flex'}}
-                          onSuccess={this._handleUploadSuccess}
-                          action={uploadAction}>上传文件</Upload>
+                          onSuccess={this.handleUploadSuccess}
+                          action={this.uploadAction}>上传文件</Upload>
                       </DropDownContent>
                     </DropDown>
                   </div>
@@ -274,7 +278,8 @@ class File extends Component {
                   isFile ?
                     <FileInfo
                       cat={cat}
-                      pathname={pathname}
+                      fileId={fileId}
+                      name={file.name}
                       isIntegrateAppOpen={isIntegrateAppOpen}
                       openIntegrateApp={this.openIntegrateApp}
                       driveId={driveId}
@@ -425,13 +430,14 @@ const connectedFile = connect(
     account: state.account,
     host: state.host,
     file: state.file,
+    currentDriveName: state.host.currentDriveName
   }),
   (dispatch) => bindActionCreators({
     push,
     getFileList: require('../../../actions/file/getFileList'),
     deleteFile: require('../../../actions/file/deleteFile'),
     setTitle: require('../../../actions/setNavTitle'),
-    getHostList: require('../../../actions/host/getHostList'),
+    getHostList: require('../../../actions/drive/queryList'),
     restoreFileList: require('../../../actions/file/restoreFileList'),
     pushFileToClipboard: require('../../../actions/file/pushFileToClipboard'),
     emptyClipboard: require('../../../actions/file/emptyClipboard'),

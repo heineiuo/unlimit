@@ -1457,9 +1457,9 @@ fbjs@^0.8.1, fbjs@^0.8.4:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
-fetch-tools@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.npmjs.org/fetch-tools/-/fetch-tools-0.3.1.tgz#d021cb308a97e15be314f50c02b228b1b3e2dfd0"
+fetch-tools@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/fetch-tools/-/fetch-tools-0.3.2.tgz#49d42c8f760e6aaf4021d12def102b38e29315a1"
   dependencies:
     form-urlencoded "^1.5.0"
 

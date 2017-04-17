@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import Card from 'react-sea/lib/Card'
-import Button from 'react-sea/lib/Button'
-import { StyleSheet, css } from 'aphrodite'
+import React, {Component} from "react"
+import {Link} from "react-router-dom"
+import Card from "react-sea/lib/Card"
+import Button from "react-sea/lib/Button"
+import {css, StyleSheet} from "aphrodite"
 
 class DriveSelector extends Component {
 
@@ -25,7 +25,7 @@ class DriveSelector extends Component {
     this.props.deleteHost(item.hostname)
   };
 
-  render(){
+  render() {
     const {style, host} = this.props;
     const {hostList} = host;
 
@@ -64,10 +64,10 @@ const styles = StyleSheet.create({
   titlebar: {
     marginBottom: 20,
     ':after': {
-        clear: 'both',
-        content: '',
-        display: 'table'
-      }
+      clear: 'both',
+      content: '',
+      display: 'table'
+    }
   },
 
   hostItem: {

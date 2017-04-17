@@ -57,9 +57,9 @@ export default module.exports = connect(
     nav: store.nav
   }),
   (dispatch) => bindActionCreators({
-    getHostList: require('../../actions/host/getHostList'),
-    deleteHost: require('../../actions/host/deleteHost'),
-    createHost: require('../../actions/host/createHost'),
+    getHostList: require('../../actions/drive/queryList'),
+    deleteHost: require('../../actions/drive/mutateDeleteOne'),
+    createHost: require('../../actions/drive/mutateInsertOne'),
   }, dispatch),
   (stateProps, dispatchProps, ownProps) => {
     return Object.assign({}, stateProps, dispatchProps, ownProps, {})

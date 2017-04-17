@@ -2,7 +2,7 @@ import { GETJSON, POSTRawJSON, Mock, Urlencode } from 'fetch-tools'
 import {API_HOST} from '../../constants'
 
 
-const getFileList = (driveId, pathname='/') => async (dispatch, getState) => {
+const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
   dispatch({
     type: 'file__stateUpdate',
     payload: {
@@ -11,21 +11,15 @@ const getFileList = (driveId, pathname='/') => async (dispatch, getState) => {
   });
 
   const {account: {token}} = getState();
-  let result = null;
-
-  try {
-    result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
-      driveId, pathname, token
-    });
-  } catch(e){
-    console.log(e.stack)
-  }
+  const result = await POSTRawJSON(`${API_HOST}/seashell/fs/queryFile`, {
+    driveId, parentId, token,
+    replaceWithFileMetaIfIsFile: true
+  });
 
   if (result.error) return console.log(result.error)
-
   dispatch({
     type: 'file__listUpdate',
-    payload: result
+    payload: result.data ? {ls: result.data, isFile: false} : result
   })
 
 };

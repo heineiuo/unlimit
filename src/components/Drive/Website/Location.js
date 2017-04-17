@@ -17,11 +17,6 @@ class Location extends Component {
     locations: []
   };
 
-  componentDidMount = () => {
-    const {getLocations, match: {params: {driveId}}} = this.props;
-    getLocations(driveId);
-  };
-
   componentWillReceiveProps = (nextProps) => {
     const {locations} = nextProps.host;
     this.setState({
@@ -78,7 +73,7 @@ class Location extends Component {
   };
 
   render () {
-    const {host: {locationState}, match: {params: {driveId}}} = this.props;
+    const {host: {locationState, currentDriveName, domains}, match: {params: {driveId}}} = this.props;
     const {locations} = this.state;
 
     return (
@@ -89,7 +84,8 @@ class Location extends Component {
             <div>
               <div className={css(styles.domains)}>
                 <div>域名绑定</div>
-                <div></div>
+                <div>自动分配域名： {`${currentDriveName}.youkuohao.com`}</div>
+                <div>自定义域名{JSON.stringify(domains)}</div>
               </div>
               <div className={css(styles.titleBar)}>
                 <div style={{width: 100}}>路由列表</div>
@@ -168,9 +164,8 @@ export default module.exports = connect(
   (dispatch) => bindActionCreators({
     push,
     setTitle: require('../../../actions/setNavTitle'),
-    getLocations: require('../../../actions/host/getLocations').default,
-    getHostList: require('../../../actions/host/getHostList'),
-    commitLocations: require('../../../actions/host/commitLocations'),
+    getHostList: require('../../../actions/drive/queryList'),
+    commitLocations: require('../../../actions/drive/mutateLocations'),
     restoreFileList: require('../../../actions/file/restoreFileList'),
   }, dispatch)
 )(Location)

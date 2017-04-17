@@ -11,15 +11,15 @@ class FileInfo extends Component {
   state = {
   };
 
-  _open = (appName) => {
-    const {pathname, driveId, openIntegrateApp} = this.props;
+  openFile = (appName) => {
+    const {fileId, driveId, openIntegrateApp} = this.props;
     openIntegrateApp({
-      driveId, pathname, appName
+      driveId, fileId, appName
     })
   };
 
   render(){
-    const {pathname, driveId, cat, isIntegrateAppOpen} = this.props;
+    const {pathname, driveId, cat, isIntegrateAppOpen, name} = this.props;
     const matchApp = matchAppByPathname(pathname);
 
     const buffer = new Buffer(cat);
@@ -30,7 +30,7 @@ class FileInfo extends Component {
         <div className={css(styles.fileInfo, !isIntegrateAppOpen && styles.fileInfo_show)}>
           <div className={css(styles.info)}>
             <div>
-              <div>文件名：{path.basename(pathname)}</div>
+              <div>文件名：{name}</div>
             </div>
             <div>
               <div>打开方式：</div>
@@ -42,7 +42,7 @@ class FileInfo extends Component {
                       key={app.appName}>
                       <Button
                         style={{width: 100}}
-                        onClick={() => this._open(app.appName, pathname)}>
+                        onClick={() => this.openFile(app.appName, pathname)}>
                         {app.prettyName}
                       </Button>
                     </div>

@@ -7,17 +7,11 @@ import {restoreFileList} from '../file/restoreFileList'
  * 添加host
  */
 const createHost = (form) => async (dispatch, getState) => {
-  let data = null;
-  try {
-    data = await POSTRawJSON(`${API_HOST}/seashell/drive/create`, {
-      hostnames: [form.hostname],
-      locations: []
-    });
-
-  } catch(e){
-    console.log(`${e}${JSON.stringify(e.stack||{})}`)
-  }
-  if (data.error) return console.log(data.error);
+  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/create`, {
+    hostnames: [form.hostname],
+    locations: []
+  });
+  if (result.error) return console.log(result.error);
 
   dispatch({
     type: 'host__add',
