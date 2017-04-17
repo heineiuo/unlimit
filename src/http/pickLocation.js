@@ -1,34 +1,27 @@
-import Url from 'url'
-import {Router} from 'express'
-import pathToRegexp from 'path-to-regexp'
+import Url from "url"
+import pathToRegexp from "path-to-regexp"
 
+/**e
+ * 查找host及其location列表
+ */
 const pickLocationMiddleware = (seashell) => {
-
   return async (req, res, next) => {
-
     try {
-      /**e
-       * 查找host及其location列表
-       */
       const {host} = req.headers;
-      // console.log('[gateway] searching host');
-      // console.log(requestHost.body);
-      // console.log('START REQUEST GATEWAY FOR LOCATION INFOMATION')
       const requestLocations = await seashell.requestSelf({
-        headers: {originUrl: '/drive/getByHostname'},
-        body: { hostname: host}
+        headers: {originUrl: '/drive/queryOneByDomain'},
+        body: {domain: host, fields: ['locations']}
       });
-      if (requestLocations.body.error) throw new Error(requestLocations.body.error);
-      const {location: {locations}, driveId} = requestLocations.body;
-      // console.log('locations: '+JSON.stringify(locations));
+      if (requestLocations.body.error) return next(new Error(requestLocations.body.error));
+      const {locations, driveId} = requestLocations.body;
       const {location, url} = await pickLocation(locations, req.url);
 
-      // console.log(drive);
       res.locals.host = host;
-      res.locals.driveId = driveId;
+      res.locals.driveId = driveId.toString();
       res.locals.url = url;
-      // res.locals.drive = drive;
-      res.locals.location = Object.assign({}, location, {content: location.content});
+      res.locals.location = Object.assign({
+        'X-Frame-Options': 'SAMEORIGIN'
+      }, location, {content: location.content});
 
       if (location.cors) {
         res.set('Access-Control-Expose-Headers', '*');
@@ -37,40 +30,35 @@ const pickLocationMiddleware = (seashell) => {
         res.set('Access-Control-Allow-Methods', '*')
       }
 
-      if (location['X-Frame-Options']) {
-        const value = location['X-Frame-Options'] || 'SAMEORIGIN';
-        res.set("X-Frame-Options", value);
-      }
+      res.set('X-Frame-Options', location['X-Frame-Options']);
 
       next()
-    } catch(e) {
+    } catch (e) {
+      console.log(e)
       next(e)
     }
   }
-
 };
 
+/**
+ * 通过比对pathname, 找到路由
+ */
 const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
   try {
     const url = Url.parse(requrl);
-
-    /**
-     * 通过比对pathname, 找到路由
-     */
     const targetLocation = findTargetLocation(locations, url);
-
-    const location = targetLocation?targetLocation: {
+    const location = targetLocation ? targetLocation : {
       pathname: '*',
       type: 'FILE'
     };
 
     try {
       location.content = JSON.parse(location.content);
-    } catch(e){}
+    } catch (e) {
+    }
 
     resolve({url, location});
-
-  } catch(e){
+  } catch (e) {
     reject(new Error('LOCATION_NOT_FOUND'))
   }
 });

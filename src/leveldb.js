@@ -49,7 +49,7 @@ const getLeveldb = (options={customError: 'LEVEL_DB_CANNOT_ACCESS'}) => new Prom
     resolve(await setup())
   } catch(e){
     console.error(e)
-    reject('LEVEL_DB_CANNOT_ACCESS')
+    reject(options.customError)
   }
 })
 

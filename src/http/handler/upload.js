@@ -2,19 +2,15 @@ import formidable from "formidable"
 import path from "path"
 import fs from "fs-promise"
 
-const handleUpload = (req, res, options) => new Promise(async(resolve, reject) => {
-
+export default (req, res, seashell, options) => new Promise(async (resolve, reject) => {
   try {
-
     /**
      *  uploadKey: the key in formData, default is 'file'
      *  uploadDir: the real directory on server, like `/root/gateway/data/app/superuser.youkuohao.com/public/upload`,
      *  uploadLocation: the prefix for the uploaded file, like `http://superuser.youkuohao.com/upload`
      * }
      **/
-    const {uploadKey = 'file', uploadDir, hostname, pathname, uploadLocation, isPublic, isHashName} = options;
-
-    // console.log(uploadKey, uploadDir, uploadLocation);
+    const {uploadKey, driveId, parentId} = options;
 
     /**
      * 设置上传参数, 处理上传, 返回上传结果 {fields, files}
@@ -23,7 +19,6 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
       const form = new formidable.IncomingForm();
       form.encoding = 'utf-8';
       form.hash = 'md5';
-      // form.uploadDir = uploadDir;
       form.keepExtensions = true;
       form.multiples = true;
 
@@ -38,25 +33,24 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
      */
     const filesFile = uploaded.files[uploadKey];
     const fileList = filesFile.length > 0 ? filesFile : [filesFile];
-    const result = await Promise.all(fileList.map(file => new Promise(async(resolve, reject) => {
+    const result = await Promise.all(fileList.map(file => new Promise(async (resolve, reject) => {
       try {
-        const filename = `${file.hash}${path.extname(file.name).toLowerCase()}`;
-        const content = await fs.readFile(file.path);
-        const transferResult = await res.seashell.requestSelf({
-          headers: {
-            originUrl: '/fs/upload',
-          },
+        const tmpPath = file.path;
+        const name = `${file.hash}${path.extname(file.name).toLowerCase()}`;
+        const content = await fs.readFile(tmpPath);
+        const transferResult = await seashell.requestSelf({
+          headers: {originUrl: '/fs/mutateInsertOne'},
           body: {
-            reducerName: 'file',
-            action: 'writeFile',
-            hostname,
-            pathname: pathname + '/' + filename,
+            parentId,
+            driveId,
+            name,
             content
           }
         });
-        if (transferResult.body.error) throw new Error(transferResult.body.error);
-        await fs.unlink(file.path);
-        resolve(isPublic ? `${uploadLocation}/${filename}` : filename)
+        if (transferResult.body.error) return reject(new Error(transferResult.body.error));
+        await fs.unlink(tmpPath);
+        console.log(transferResult)
+        resolve(transferResult.body)
       } catch (e) {
         reject(e)
       }
@@ -70,11 +64,9 @@ const handleUpload = (req, res, options) => new Promise(async(resolve, reject) =
     res.json({result});
     resolve()
   } catch (e) {
+    console.log(e)
     reject(e)
   }
-
-
 });
 
 
-export default handleUpload

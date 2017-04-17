@@ -1,20 +1,15 @@
 /**
  * 下载文件
+ * @param req
  * @param res
  * @param path (req.query.path)
  */
-const downloadHandle = (res, path) => new Promise((resolve, reject) => {
-  try {
-
-    if (typeof path == 'undefined') throw new Error('PARAMS_LOST');
-    const rawPath = decodeURI(path);
-    const result = {path: rawPath};
-    const truePath = rawPath;
-    res.download(truePath);
-    resolve();
-  } catch (e) {
-    reject(e)
-  }
+export default (req, res, path) => new Promise((resolve, reject) => {
+  if (typeof path === 'undefined') return reject(new Error('PARAMS_LOST'));
+  const rawPath = decodeURI(path);
+  // const result = {path: rawPath};
+  // const truePath = rawPath;
+  res.download(rawPath);
+  resolve();
 });
 
-export default downloadHandle;

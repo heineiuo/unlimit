@@ -4,52 +4,39 @@ import handleFILE from "./file"
 import handleREDIRECT from "./redirect"
 import handleDOWNLOAD from "./download"
 import handleUPLOAD from "./upload"
-import {Router} from "express"
 
-const handler = (seashell) => {
-  const router = Router();
+const handler = (seashell) => async (req, res, next) => {
+  const {host, driveId, url, location, location: {type, content}} = res.locals;
+  const handles = {
+    JSON: () => new Promise((resolve, reject) => {
+      try {
+        res.json(location.content);
+        resolve()
+      } catch (e) {
+        reject(e)
+      }
+    }),
+    HTML: () => handleHTML(req, res, content),
+    BLOCK: () => handleBLOCK(req, res, content),
+    FILE: () => handleFILE(req, res, seashell, driveId, url.pathname, req.path),
+    REDIRECT: () => handleREDIRECT(req, res, content),
+    DOWNLOAD: () => handleDOWNLOAD(req, res, req.query.path),
+    UPLOAD: () => handleUPLOAD(req, res, seashell, content),
+  };
 
-  router.use(async(req, res, next) => {
+  if (!handles.hasOwnProperty(type)) {
+    /**
+     * 未定义的type类型
+     */
+    return next(new Error('ILLEGAL_HTTP_REQUEST'))
+  }
 
-    try {
-
-      const {host, driveId, url, location, location: {type, content}} = res.locals;
-      const handles = {
-        JSON: () => new Promise((resolve, reject) => {
-          try {
-            res.json(location.content);
-            resolve()
-          } catch (e) {
-            reject(e)
-          }
-        }),
-        HTML: () => handleHTML(res, content),
-        BLOCK: () => handleBLOCK(res, content),
-        FILE: () => handleFILE(seashell, res, driveId, url.pathname, req.path),
-        REDIRECT: () => handleREDIRECT(res, content),
-        DOWNLOAD: () => handleDOWNLOAD(res, req.query.path),
-        UPLOAD: () => handleUPLOAD(req, res, content),
-      };
-
-      if (handles.hasOwnProperty(type)) return await handles[type]();
-
-      /**
-       * 未定义的type类型
-       */
-      next(new Error('ILLEGAL_HTTP_REQUEST'))
-
-    } catch (e) {
-      next(e)
-    }
-
-  });
-
-  router.use((err, req, res, next) => {
-    if (err.message === 'USE_PROXY') return next();
-    next(err)
-  });
-
-  return router;
+  try {
+    await handles[type]();
+  } catch (e) {
+    if (e.message === 'USE_PROXY') return next();
+    next(e)
+  }
 };
 
 export {

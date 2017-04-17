@@ -1,7 +1,7 @@
 /**
  * 返回json
  */
-const lambdaHandle = async(res, content, query) => {
+const lambdaHandle = async(req, res, content, query) => {
 
 
   /**

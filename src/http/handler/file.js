@@ -1,24 +1,24 @@
 /**
  * 文件下载代理
  */
-const handleFILE = (seashell, res, driveId, pathname, reqpath) => new Promise(async(resolve, reject) => {
+const handleFILE = (req, res, seashell, driveId, pathname, reqpath) => new Promise(async (resolve, reject) => {
 
+  let result = {body: {}};
   try {
-    const result = await seashell.requestSelf({
-      headers: {originUrl: '/fs/cat'},
-      body: {driveId, pathname: `/public${reqpath}`}
+    result = await seashell.requestSelf({
+      headers: {originUrl: '/fs/queryFileContent'},
+      body: {fullPath: `/${driveId}${reqpath}`}
     });
-
-    if (result.body.error) return reject(new Error('NOT_FOUND'));
-    res.setHeader('CacheControl', true);
-    res.setHeader('maxAge', 31536000000);
-    res.setHeader('Expires', new Date(Date.now() + 31536000000));
-    res.write(result.body.cat);
-    res.end();
-
   } catch (e) {
-    reject(new Error('NOT_FOUND'))
+    result.body.error = e;
   }
+  if (result.body.error) return reject(new Error('NOT_FOUND'));
+  res.setHeader('CacheControl', true);
+  res.setHeader('maxAge', 31536000000);
+  res.setHeader('Expires', new Date(Date.now() + 31536000000));
+  res.write(result.body.cat);
+  res.end();
+
 });
 
 export default handleFILE;

@@ -1,11 +1,11 @@
-import {Router} from 'express'
-import bodyParser from 'body-parser'
-import pick from 'lodash.pick'
+import {Router} from "express"
+import bodyParser from "body-parser"
+import pick from "lodash/pick"
 
 const JSONSafeParse = (content, schema) => {
   try {
     return JSON.parse(content)
-  } catch(e){
+  } catch (e) {
     return Object.assign({}, schema, {
       JSONSafeParseError: e
     })
@@ -56,7 +56,8 @@ const seashellProxyMiddleware = (seashell) => {
               }
             }
           });
-        } catch(e){}
+        } catch (e) {
+        }
 
         delete data.token;
 
@@ -90,7 +91,7 @@ const seashellProxyMiddleware = (seashell) => {
 
       next()
 
-    } catch(e){
+    } catch (e) {
       next(e)
     }
 
@@ -99,7 +100,7 @@ const seashellProxyMiddleware = (seashell) => {
   router.use((err, req, res, next) => {
     if (!err) return next();
     if (err.message === 'NOT_SEASHELL') return next();
-    console.log('SEASHELL PROXY FAIL: \n '+err.message||err);
+    console.log('SEASHELL PROXY FAIL: \n ' + err.message || err);
     next(err)
   });
 
