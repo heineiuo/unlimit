@@ -42,8 +42,9 @@ export default handleActions({
   },
 
   host__add (state, action) {
+    const {name, _id, description=''} = action.payload;
     const nextHostList = state.hostList.concat({
-      hostname: action.payload.hostname
+      name, _id, description
     });
     return Object.assign({}, state, {hostList: nextHostList})
   },

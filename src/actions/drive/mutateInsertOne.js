@@ -6,21 +6,24 @@ import {restoreFileList} from '../file/restoreFileList'
 /**
  * 添加host
  */
-const createHost = (form) => async (dispatch, getState) => {
-  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/create`, {
-    hostnames: [form.hostname],
-    locations: []
+const createHost = (query) => async (dispatch, getState) => {
+  const {name, description} = query;
+  const {account: {token}} = getState();
+  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/mutateInsertOne`, {
+    token,
+    name,
+    description,
   });
-  if (result.error) return console.log(result.error);
+  if (result.error) return alert(result.error);
 
   dispatch({
     type: 'host__add',
     payload: {
-      hostname: form.hostname
+      name: query.name
     }
   });
 
-  dispatch(push(`/${form.driveId}`))
+  dispatch(push(`/drive/${result._id}`))
 };
 
 export default module.exports = createHost;

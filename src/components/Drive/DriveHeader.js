@@ -14,6 +14,7 @@ import commonStyles from '../common/styles'
 class Header extends Component {
 
   state = {
+    name: '',
     driveId: '',
     modalOpen: false,
   };
@@ -23,7 +24,7 @@ class Header extends Component {
   };
 
   _createHost = () => {
-    this.props.createHost({hostname: this.state.hostName});
+    this.props.createHost({name: this.state.name});
     this.setState({modalOpen: false})
   };
 
@@ -60,12 +61,12 @@ class Header extends Component {
                   <div>
                     <Input
                       label="添加域名"
-                      name="hostname"
+                      name="name"
                       id="input-hostname"
                       type="text"
                       style={{marginBottom: 20}}
-                      onChange={(e)=>{this.setState({hostName: e.target.value})}}
-                      value={this.state.hostName}
+                      onChange={(e)=>{this.setState({name: e.target.value})}}
+                      value={this.state.name}
                       placeholder="请输入域名"  />
                     <div style={{textAlign: 'right'}}>
                       <Button style={{width: 100, marginRight: 10}} type="secondary" onClick={this.cancel}>取消</Button>
