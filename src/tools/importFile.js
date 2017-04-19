@@ -5,7 +5,6 @@ import filesystem from 'level-filesystem'
 import readdirp from 'readdirp'
 import path from 'path'
 
-
 const run = async({driveId, localPath, force}) => {
   const config = await getConfig()
   const leveldb = await getLeveldb()

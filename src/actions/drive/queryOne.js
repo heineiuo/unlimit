@@ -4,10 +4,10 @@ import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   domain: Joi.string().regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/),
-  name: Joi.string().regex(/^[a-z]{1,1}[a-z0-9_]{5,30}$/),
+  name: Joi.string().regex(/^[a-z]{1,1}[a-z0-9]{2,30}$/),
   driveId: Joi.string(),
   fields: Joi.array().default(['name'])
-}).xor('domain', 'driveId', 'name'))
+}).xor('domain', 'driveId', 'name'), {allowUnknown: true})
 
 export default query => (dispatch, geCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);

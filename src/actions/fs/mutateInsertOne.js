@@ -19,6 +19,12 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   try {
     const fileContent = (await getLeveldb()).sub('fileContent');
     const file = (await getMongodb()).collection('file');
+    const result0 = await file.findOne({driveId, parentId, name});
+    if (result0) {
+      console.log(validated.value)
+      console.log(result0)
+      return reject(new Error('FILE_EXIST'));
+    }
     const result = await file.insertOne({driveId, type, parentId, name})
     const id = result.insertedId.toString()
     if (type === 1) await fileContent.put(id, content)

@@ -10,7 +10,7 @@ export default (req, res, seashell, options) => new Promise(async (resolve, reje
      *  uploadLocation: the prefix for the uploaded file, like `http://superuser.youkuohao.com/upload`
      * }
      **/
-    const {uploadKey, driveId, parentId} = options;
+    const {uploadKey, driveId, parentId, name, fileId} = options;
 
     /**
      * 设置上传参数, 处理上传, 返回上传结果 {fields, files}
@@ -32,24 +32,25 @@ export default (req, res, seashell, options) => new Promise(async (resolve, reje
      * 移动文件
      */
     const filesFile = uploaded.files[uploadKey];
+    if (!filesFile) return reject(new Error('UPLOAD_FAIL'))
     const fileList = filesFile.length > 0 ? filesFile : [filesFile];
     const result = await Promise.all(fileList.map(file => new Promise(async (resolve, reject) => {
       try {
         const tmpPath = file.path;
-        const name = `${file.hash}${path.extname(file.name).toLowerCase()}`;
         const content = await fs.readFile(tmpPath);
         const transferResult = await seashell.requestSelf({
-          headers: {originUrl: '/fs/mutateInsertOne'},
+          headers: {originUrl: typeof fileId ==='string' ? '/fs/mutateFileContent' : '/fs/mutateInsertOne'},
           body: {
+            fileId,
             parentId,
             driveId,
-            name,
-            content
+            content,
+            name: typeof name === 'string' ? name : `${file.hash}${path.extname(file.name).toLowerCase()}`
           }
         });
+
         if (transferResult.body.error) return reject(new Error(transferResult.body.error));
         await fs.unlink(tmpPath);
-        console.log(transferResult)
         resolve(transferResult.body)
       } catch (e) {
         reject(e)

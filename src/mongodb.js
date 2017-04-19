@@ -34,6 +34,7 @@ const firstConnect = () => new Promise(async (resolve, reject) => {
     const {production: {mongodbUrl}} = await getConfig();
     db = await connectPromise(mongodbUrl)
     isConnected = true
+    isConnecting = false
     attach(db)
     resolve(db)
   } catch(e){

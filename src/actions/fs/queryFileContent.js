@@ -21,14 +21,16 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   let {fullPath, fileId} = validated.value;
   try {
     const fileContentdb = (await getLeveldb()).sub('fileContent');
+    let indexData = null;
     if (!fileId) {
-      const indexData = await dispatch(queryOneByFullPath({
+      indexData = await dispatch(queryOneByFullPath({
         fullPath, replaceWithIndexHTMLWhenIsFolder: true
       }));
       if (!indexData) return reject(new Error('NOT_FOUND'))
       fileId = indexData.fileId
     }
-    return resolve({isFile: true, cat: await queryLevel(fileContentdb, fileId)})
+    const cat = await fileContentdb.get(fileId);
+    return resolve({isFile: true, cat})
   } catch(e){
     reject(e)
   }

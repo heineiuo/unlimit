@@ -12,12 +12,21 @@ const handleFILE = (req, res, seashell, driveId, pathname, reqpath) => new Promi
   } catch (e) {
     result.body.error = e;
   }
-  if (result.body.error) return reject(new Error('NOT_FOUND'));
-  res.setHeader('CacheControl', true);
-  res.setHeader('maxAge', 31536000000);
-  res.setHeader('Expires', new Date(Date.now() + 31536000000));
-  res.write(result.body.cat);
-  res.end();
+
+  try {
+    if (result.body.error) return reject(new Error('NOT_FOUND'));
+    res.setHeader('CacheControl', true);
+    res.setHeader('maxAge', 31536000000);
+    res.setHeader('Expires', new Date(Date.now() + 31536000000));
+    // console.log(result.body.cat)
+    // console.log(new Buffer(result.body.cat).toString())
+    res.write(new Buffer(result.body.cat));
+    res.end();
+    resolve()
+  } catch(e){
+    console.log(e)
+    reject(e)
+  }
 
 });
 

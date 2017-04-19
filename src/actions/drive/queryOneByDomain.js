@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import queryOne from './queryOne'
+import getConfig from '../../config'
 import getLevel from '../../leveldb'
 import ms from 'ms'
 
@@ -30,8 +31,13 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
   const {domain, forceSync} = validated.value;
   const syncCache = async () => {
     try {
-      const db = (await getLevel()).sub('domain');
-      const driveData = await dispatch(queryOne({domain, fields: ['locations']}));
+      const {pageDomain} = (await getConfig()).production;
+      const pageDomainRegex = new RegExp(`.${pageDomain}$`);
+      const index = domain.search(pageDomainRegex);
+      const filter = index === -1 ? {domain} : {
+        name: domain.substring(0, index)
+      }
+      const driveData = await dispatch(queryOne({...filter, fields: ['locations']}));
       const cacheValue = {
         updateTime: Date.now()
       }
@@ -41,6 +47,8 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
         cacheValue.driveId = driveData._id.toString();
         cacheValue.locations = driveData.locations;
       }
+
+      const db = (await getLevel()).sub('domain');
       await db.put(domain, cacheValue)
     } catch(e){
       console.log(e)

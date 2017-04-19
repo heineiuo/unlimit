@@ -66,7 +66,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   try {
     const fileIndex = (await getLevel()).sub('fileIndex')
     let indexData = await queryLevel(fileIndex, fullPath)
-    if (!indexData || Date.now() > indexData.updateTime + ms('1h') || !indexData.updateTime) {
+    if (!indexData || Date.now() > indexData.updateTime + ms('1s') || !indexData.updateTime) {
       indexData = await syncIndexData(fullPath)
     }
     if (indexData.error) return reject(new Error(indexData.error));

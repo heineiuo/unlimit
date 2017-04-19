@@ -5,7 +5,7 @@ import {ObjectId} from 'mongodb'
 export const validate = query => Joi.validate(query, Joi.object().keys({
   keywords: Joi.string().default(''),
   tags: Joi.string().default(''),
-  limit: Joi.number().default(20),
+  limit: Joi.number().default(200),
   driveId: Joi.string(),
   parentId: Joi.string().allow(null),
   replaceWithFileMetaIfIsFile: Joi.boolean().default(false),
