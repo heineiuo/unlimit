@@ -1,7 +1,9 @@
 import Joi from 'joi'
+import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
-  limit: Joi.number().default(20)
+  limit: Joi.number().default(20),
+  fields: Joi.array().default(['appName', 'permissions'])
 }), {allowUnknown: true})
 
 
@@ -12,21 +14,16 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
-  const {limit} = validated.value
+  const {limit, fields} = validated.value
+  const filter = {}
 
+  const {session} = getCtx().request.headers;
+  if (!session) return reject(new Error('PERMISSION_DENIED'))
+  filter.adminId = session.userId;
   try {
-    const db = getCtx().leveldb.sub('app');
-    const list = [];
-    db.createReadStream({limit})
-      .on('data', (data) => {
-        list.push(data)
-      })
-      .on('error', (e) => {
-        console.log(e)
-      })
-      .on('end', () => {
-        resolve({list})
-      });
+    const db = (await getMongodb()).collection('app');
+    const data = await db.find(filter, {fields}).limit(limit).toArray();
+    resolve({data})
   } catch(e){
     reject(e)
   }

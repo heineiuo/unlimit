@@ -5,6 +5,7 @@
  */
 
 import Joi from 'joi'
+import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().required()
@@ -25,33 +26,19 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const {appName} = validated.value;
 
   try {
-    const db = getCtx().leveldb.sub('app');
+    const {session} = getCtx().request.headers;
+    if (!session) return reject(new Error('PERMISSION_DENIED'));
+    const db = (await getMongodb()).collection('app');
+    let app = await db.findOne({appName});
+    if (app !== null) return reject(new Error('APP_NAME_EXIST'));
 
-    /**
-     * app:
-     *  {
-     *
-     *  appName: 'account',
-     *  permission: ['admin']
-     *  list: [
-     *   {
-     *     appId: 'fdada-gfdh213-123hfkaj-123412',
-     *     socketId: '/#fafdg213',
-     *     status: 1
-     *    }, {...}
-     *  ]
-     *
-     *  }
-     */
-    const app = {
+    app = (await db.insertOne({
       appName,
-      permission: [],
-      list: []
-    };
-    const current = await queryLevel(db, appName)
-    if (!current) return reject(new Error('APP_HAS_EXIST'))
-    await db.put(appName, app);
-    resolve(app)
+      permissions: [],
+      adminId: session.userId
+    })).ops[0]
+
+    resolve({...app, appId: app._id.toString()})
   } catch(e){
     reject(e)
   }

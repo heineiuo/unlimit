@@ -4,9 +4,8 @@ import Joi from 'joi'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().required(),
-  token: Joi.string().required()
+  appToken: Joi.string().required()
 }), {allowUnknown: true})
-
 
 /**
  * get app detail
@@ -14,15 +13,16 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  */
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
+  console.log(validated.error)
   if (validated.error) return reject(validated.error);
-  const {appName} = validated.value;
+  const {appName, appToken} = validated.value;
 
   try {
-    const db = (await getLevel()).sub('app');
-    const detail = await db.get(appName);
+    const db = (await getLevel()).sub('apptoken');
+    const detail = await db.get(appToken);
     resolve(detail)
   } catch(e){
-    if (e.name !== 'NotFoundError') return reject('APP_NOT_CREATED');
+    if (e.name !== 'NotFoundError') return reject(new Error('NO_SESSION'));
     reject(e)
   }
 });

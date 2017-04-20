@@ -1,6 +1,7 @@
 /* @public */
 import getLeveldb from '../../leveldb'
 import Joi from 'joi';
+import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().required(),

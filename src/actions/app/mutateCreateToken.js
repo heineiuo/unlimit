@@ -2,6 +2,7 @@ import uuid from 'uuid'
 import crypto from 'crypto'
 import Joi from 'joi'
 import getMongodb from '../../mongodb'
+import getLeveldb from '../../leveldb'
 
 import getApp from './queryLevelApp'
 import updateApp from './mutateOne'
@@ -22,22 +23,26 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const {appName} = validated.value;
 
   try {
-    const nextService = {
-      appId: uuid.v1(),
-      appName: appName,
-      appSecret: createSecret().toString(10)
-    };
-
-    const app = await dispatch(getApp({appName}));
-    app.list.push({
-      appId: nextService.appId,
-      appSecret: nextService.appSecret,
-      socketId: '',
-      status: 0,
-    });
-
-    await dispatch(updateApp({appName, app}));
-    resolve(nextService)
+    const {session} = getCtx().request.headers;
+    console.log(session)
+    if (!session) return reject(new Error('PERMISSION_DENIED'))
+    const db = (await getMongodb()).collection('app');
+    const tokendb = (await getLeveldb()).sub('apptoken');
+    const app = await db.findOne({appName, adminId: session.userId});
+    // if (app.adminId !== session.userId) return reject(new Error('PERMISSION_DENIED'));
+    if (!app) return reject(new Error('APP_NOT_FOUNT'));
+    const token = createSecret();
+    const nextTokens = app.tokens ? app.tokens.concat([token]) : [token];
+    const {permissions, adminId} = app;
+    await tokendb.put(token, {
+      updateTime: Date.now(),
+      appName,
+      adminId,
+      permissions,
+      appId: app._id.toString()
+    })
+    await db.findOneAndUpdate({_id: app._id}, {$set: {tokens: nextTokens}})
+    resolve({token})
   } catch(e) {
     reject(e)
   }
