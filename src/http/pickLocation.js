@@ -1,10 +1,43 @@
 import Url from "url"
+import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
+
+/**
+ * 通过比对pathname, 找到路由
+ */
+export const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
+  try {
+    const url = Url.parse(requrl);
+    const targetLocation = findTargetLocation(locations, url);
+    const location = targetLocation ? targetLocation : {
+      pathname: '*',
+      type: 'FILE'
+    };
+
+    try {
+      location.content = JSON.parse(location.content);
+    } catch (e) {
+    }
+
+    resolve({url, location});
+  } catch (e) {
+    reject(new Error('LOCATION_NOT_FOUND'))
+  }
+});
+
+export const findTargetLocation = (locations, url) => {
+  return locations.find(item => {
+    const re = pathToRegexp(item.pathname);
+    const matches = url.pathname.match(re);
+    return matches && matches[0] === url.pathname;
+  });
+};
+
 
 /**e
  * 查找host及其location列表
  */
-const pickLocationMiddleware = (seashell) => {
+export default (seashell, approvedDomains) => {
   return async (req, res, next) => {
     try {
       const {host} = req.headers;
@@ -31,47 +64,22 @@ const pickLocationMiddleware = (seashell) => {
       }
 
       res.set('X-Frame-Options', location['X-Frame-Options']);
+      res.removeHeader("x-powered-by");
+
+
+      if (approvedDomains.indexOf(req.headers.host) > -1) {
+        if (req.protocol === 'http') {
+          const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
+          if (browser.name !== 'IE' || (browser.name === 'IE' && Number(browser.major) >= 9)) {
+            return res.redirect(`https://${req.headers.host}${req.originalUrl}`)
+          }
+        }
+      }
 
       next()
+
     } catch (e) {
       next(e)
     }
   }
 };
-
-/**
- * 通过比对pathname, 找到路由
- */
-const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
-  try {
-    const url = Url.parse(requrl);
-    const targetLocation = findTargetLocation(locations, url);
-    const location = targetLocation ? targetLocation : {
-      pathname: '*',
-      type: 'FILE'
-    };
-
-    try {
-      location.content = JSON.parse(location.content);
-    } catch (e) {
-    }
-
-    resolve({url, location});
-  } catch (e) {
-    reject(new Error('LOCATION_NOT_FOUND'))
-  }
-});
-
-const findTargetLocation = (locations, url) => {
-  return locations.find(item => {
-    const re = pathToRegexp(item.pathname);
-    const matches = url.pathname.match(re);
-    return matches && matches[0] === url.pathname;
-  });
-};
-
-export {
-  findTargetLocation,
-  pickLocationMiddleware,
-  pickLocation
-}

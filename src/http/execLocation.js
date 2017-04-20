@@ -1,12 +1,16 @@
-import handleHTML from "./html"
-import handleBLOCK from "./block"
-import handleFILE from "./file"
-import handleREDIRECT from "./redirect"
-import handleDOWNLOAD from "./download"
-import handleUPLOAD from "./upload"
 
-const handler = (seashell) => async (req, res, next) => {
-  const {host, driveId, url, location, location: {type, content}} = res.locals;
+import handleHTML from "./handler/html"
+import handleBLOCK from "./handler/block"
+import handleFILE from "./handler/file"
+import handleREDIRECT from "./handler/redirect"
+import handleDOWNLOAD from "./handler/download"
+import handleUPLOAD from "./handler/upload"
+import proxyHTTP from './handler/proxyHTTP'
+
+export default (seashell) => async (req, res, next) => {
+
+  const {location, location: {type, content}, url, driveId} = res.locals;
+
   const handles = {
     JSON: () => new Promise((resolve, reject) => {
       try {
@@ -24,21 +28,17 @@ const handler = (seashell) => async (req, res, next) => {
     UPLOAD: () => handleUPLOAD(req, res, seashell, content),
   };
 
+  /**
+   * 未定义的type类型, 报非法请求错误
+   */
   if (!handles.hasOwnProperty(type)) {
-    /**
-     * 未定义的type类型
-     */
     return next(new Error('ILLEGAL_HTTP_REQUEST'))
   }
 
   try {
     await handles[type]();
   } catch (e) {
-    if (e.message === 'USE_PROXY') return next();
+    if (e.message === 'USE_PROXY') return proxyHTTP(req, res, next);
     next(e)
   }
-};
-
-export {
-  handler
 }

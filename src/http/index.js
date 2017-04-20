@@ -12,11 +12,9 @@ import morgan from 'morgan'
 import compression from 'compression'
 import express from 'express'
 
-import {redirectToHttpsMiddleware} from './redirectToHttps'
-import {pickLocationMiddleware} from './pickLocation'
-import {httpProxyMiddleware} from './httpProxy'
-import {seashellProxyMiddleware} from './seashellProxy'
-import {handler} from './handler'
+import pickLocation from './pickLocation'
+import execLocation from './execLocation'
+import proxySeashell from './proxySeashell'
 
 /**
  * @param config
@@ -42,36 +40,31 @@ const createServer = (config, seashell) => {
 
   app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
   app.use(compression());
-  app.use((req, res, next) => {
-    res.removeHeader("x-powered-by");
-    next()
-  });
-
-  app.use(redirectToHttpsMiddleware(approvedDomains));
-  app.use(pickLocationMiddleware(seashell));
 
   /**
-   * 先判断是否需要经过seashell请求，如果是，则等待seashell请求，请求结果如果是继续操作，则修改res.locals.location等
-   * 对象，并交给handler处理，如果请求结果是直接返回结果，则直接返回，不经过handler。
-   * handler处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
+   * 1. 先获取location， 并处理http-https跳转
+   * 2. 如果location.type是seashell，则先请求seashell，
+   *  如果seashell请求结果是直接返回结果，则直接返回，不经过execLocation，
+   *  否则更新res.locals.location， 并交给execLocation继续处理
+   * 3. execLocation能处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  app.use(seashellProxyMiddleware(seashell));
-  app.use(handler(seashell));
-  app.use(httpProxyMiddleware(app));
+  app.use(pickLocation(seashell, approvedDomains));
+  app.use(proxySeashell(seashell));
+  app.use(execLocation(seashell));
 
-
-  /**
-   * 处理handler内遇到的异常和错误
-   * `HOST_NOT_FOUND` 即没有找到host，返回404
-   * `LOCATION_NOT_FOUND` 即没有找到location，404
-   * `UNDEFINED_TYPE` 用户非法请求
-   *
-   * 其他的错误显示异常
-   */
   app.use((err, req, res, next) => {
     if (!err) return next();
+    /**
+     * 即没有找到host，返回404
+     */
     if (err.message === 'HOST_NOT_FOUND') return next();
+    /**
+     * 即没有找到location，404
+     */
     if (err.message === 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
+    /**
+     * 用户非法请求
+     */
     if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
     if (err.message === 'NOT_FOUND') return next();
     console.log('Catch Error: \n' + err.stack||err);
