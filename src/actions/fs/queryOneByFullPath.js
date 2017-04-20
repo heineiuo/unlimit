@@ -1,5 +1,6 @@
 import getLevel from '../../leveldb'
 import getMongodb from '../../mongodb'
+import getConfig from '../../config'
 import Joi from 'joi'
 import ms from 'ms'
 
@@ -65,8 +66,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const fileIndex = (await getLevel()).sub('fileIndex')
+    const {cacheExpireTime} = (await getConfig()).production
     let indexData = await queryLevel(fileIndex, fullPath)
-    if (!indexData || Date.now() > indexData.updateTime + ms('1s') || !indexData.updateTime) {
+    if (!indexData || Date.now() > indexData.updateTime + ms(cacheExpireTime) || !indexData.updateTime) {
       indexData = await syncIndexData(fullPath)
     }
     if (indexData.error) return reject(new Error(indexData.error));

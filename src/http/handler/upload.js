@@ -65,7 +65,6 @@ export default (req, res, seashell, options) => new Promise(async (resolve, reje
     res.json({result});
     resolve()
   } catch (e) {
-    console.log(e)
     reject(e)
   }
 });

@@ -1,5 +1,5 @@
-import getConfig from '../config'
-import getLevel from '../leveldb'
+import getConfig from '../src/config'
+import getLevel from '../src/leveldb'
 import union from 'lodash/union'
 
 

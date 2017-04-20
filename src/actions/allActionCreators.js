@@ -1,4 +1,4 @@
-const allActionCreators = {
+export default {
   account: {
     mutateCreateVerificationCode: require('./account/mutateCreateVerificationCode').default,
     mutateCreateAuthCode: require('./account/mutateCreateAuthCode').default,
@@ -49,4 +49,3 @@ const allActionCreators = {
   }
 };
 
-export default allActionCreators;

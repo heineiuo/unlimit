@@ -1,6 +1,7 @@
 import AliPush from 'ali-push'
 import getConfig from '../../config'
 import Joi from 'joi'
+import getLeveldb from '../../leveldb'
 
 let client = null;
 
@@ -13,6 +14,10 @@ export const createNumberCode = function(length=6){
   return fill0(String(Math.random()).substr(2, length));
 };
 
+export const validate = query => Joi.validate(query, Joi.object().keys({
+  email: Joi.string().required()
+}), {allowUnknown: true})
+
 /**
  * @api {POST} /account2/emailcode/createVerificationCode 获取登录验证码
  * @apiGroup Account
@@ -20,17 +25,15 @@ export const createNumberCode = function(length=6){
  * @apiParam {string} email 邮箱
  */
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = Joi.validate(query, Joi.object().keys({
-    email: Joi.string().required()
-  }), {allowUnknown: true})
+  const validated = validate(query)
   if (validated.error) return reject(validated.error)
   const {email} = validated.value;
   try {
     const config = await getConfig();
-    const db = getCtx().leveldb.sub('emailcode');
+    const db = (await getLeveldb()).sub('emailcode');
     const code = createNumberCode();
     await db.put(email, {code, createTime: Date.now()});
-    console.log(code, Date.now());
+    console.log({code, createTime: Date.now()});
 
     const options = {
       ToAddress: email,

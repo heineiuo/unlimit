@@ -29,8 +29,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       if (!indexData) return reject(new Error('NOT_FOUND'))
       fileId = indexData.fileId
     }
-    const cat = await fileContentdb.get(fileId);
-    return resolve({isFile: true, cat})
+    const cat = await queryLevel(fileContentdb, fileId);
+    if (!cat) return reject(new Error('NOT_FOUND'))
+    resolve({isFile: true, cat})
   } catch(e){
     reject(e)
   }

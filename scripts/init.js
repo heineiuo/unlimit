@@ -1,4 +1,4 @@
-import getConfig from '../config'
+import getConfig from '../src/config'
 
 export default (app) => new Promise(async(resolve, reject) => {
   try {
@@ -15,7 +15,7 @@ export default (app) => new Promise(async(resolve, reject) => {
 
       driveId = result.body.driveId;
     } catch(e){
-      console.log(e)
+      return reject(e)
     }
 
     if (!driveId) {

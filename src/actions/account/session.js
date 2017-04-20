@@ -1,6 +1,21 @@
 /* @public */
 import Joi from 'joi'
 import getLeveldb from '../../leveldb'
+import queryOne from './queryOne'
+
+const queryLevel = (db, key) => new Promise(async resolve => {
+  try {
+    const value = await db.get(key);
+    const validated = Joi.validate(value, Joi.object().keys({
+      userId: Joi.string().required(),
+      email: Joi.string()
+    }), {allowUnknown: true})
+    if (validated.error) return resolve(null)
+    resolve(value)
+  } catch(e){
+    resolve(null)
+  }
+})
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   token: Joi.string().required()
@@ -22,9 +37,13 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
     const db = await getLeveldb();
     const tokendb = db.sub('token');
     const userdb = db.sub('user');
-    const result = await tokendb.get(token);
-    const user = await userdb.get(result.userId);
-    resolve({...user, userId: user.id});
+    const {userId} = await tokendb.get(token);
+    let user = await queryLevel(userdb, userId);
+    if (user === null) {
+      user = await dispatch(queryOne({userId}))
+      userdb.put(userId, user)
+    }
+    resolve(user);
   } catch (e) {
     if (e.name === 'NotFoundError') return reject(new Error('EMPTY_SESSION'));
     reject(e)

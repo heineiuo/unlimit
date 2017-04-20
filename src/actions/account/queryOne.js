@@ -1,29 +1,33 @@
 /* @private */
 import Joi from "joi"
 import getLevel from '../../leveldb'
+import getMongodb from '../../mongodb'
+import {ObjectId} from 'mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
-  email: Joi.string().required(),
-  enableNull: Joi.string().default(false)
-}))
-
-export const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    resolve(await db.get(key))
-  } catch (e) {
-    resolve(null)
-  }
-})
+  userId: Joi.string(),
+  email: Joi.string(),
+  enableNull: Joi.boolean().default(false)
+}).xor(['userId', 'email']), {allowUnknown: true})
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
-  const {email, enableNull} = validated.value;
+  const {userId, email, enableNull} = validated.value;
   try {
-    const db = (await getLevel()).sub('email');
-    let result = await queryLevel(db, email);
-    if (!result && !enableNull) return reject(new Error('NOT_FOUND'));
-    resolve(result)
+    const filter = {};
+    if (userId) {
+      filter._id = ObjectId(userId)
+    } else {
+      filter.email = email
+    }
+    const db = (await getMongodb()).collection('user');
+    const result = await db.findOne(filter)
+    if (result === null) {
+      if (enableNull) return resolve(null)
+      return reject(new Error('NOT_FOUND'))
+    }
+    resolve({...result, userId: result._id.toString()})
   } catch (e) {
     reject(e)
   }

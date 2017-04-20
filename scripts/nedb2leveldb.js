@@ -1,5 +1,4 @@
 
-const request = require('request');
 var Datastore = require('nedb-promise');
 const LevelLocation = require('.././drive');
 const LevelHost = require('.././host');

@@ -81,6 +81,8 @@ const seashellProxyMiddleware = (seashell) => {
         });
       }
 
+      if (result.body.error === 'TARGET_SERVICE_OFFLINE') res.status(404)
+
       if (result.headers.hasOwnProperty('__HTML')) {
         Object.assign(res.locals.location, {type: 'HTML', content: result.body.html})
       } else if (result.headers.hasOwnProperty('__UPLOAD')) {

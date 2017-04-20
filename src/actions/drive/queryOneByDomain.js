@@ -56,6 +56,16 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
   }
 
   try {
+    const {cacheExpireTime, apiDomain} = (await getConfig()).production;
+    if (domain === apiDomain) return resolve({
+      driveId: '',
+      locations: [{
+        "pathname": "*",
+        "cors": true,
+        "type": "SEASHELL",
+        "content": ""
+      }]
+    })
     const db = (await getLevel()).sub('domain');
     const target = await queryLevel(db, domain);
     if (!target || target.disable) {
@@ -63,7 +73,7 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
       return process.nextTick(syncCache)
     }
     resolve(target);
-    if (forceSync || Date.now() > target.updateTime + ms('1s')) process.nextTick(syncCache)
+    if (forceSync || Date.now() > target.updateTime + ms(cacheExpireTime)) process.nextTick(syncCache)
   } catch(e){
     reject(e)
   }

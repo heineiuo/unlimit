@@ -15,6 +15,7 @@ docs/apidoc
 
 config.json
 data
+dist
 build
 !build/README.md
 

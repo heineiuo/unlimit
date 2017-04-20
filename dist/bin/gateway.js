@@ -396,25 +396,24 @@
 	              _context.t1 = _context.sent;
 	              config.production = _context.t0.parse.call(_context.t0, _context.t1);
 
-	              console.log(config);
 	              configReady = true;
 	              resolve(config);
-	              _context.next = 20;
+	              _context.next = 19;
 	              break;
 
-	            case 16:
-	              _context.prev = 16;
+	            case 15:
+	              _context.prev = 15;
 	              _context.t2 = _context["catch"](5);
 
 	              configError = _context.t2;
 	              reject(configError);
 
-	            case 20:
+	            case 19:
 	            case "end":
 	              return _context.stop();
 	          }
 	        }
-	      }, _callee, undefined, [[5, 16]]);
+	      }, _callee, undefined, [[5, 15]]);
 	    }));
 
 	    return function (_x2, _x3) {
@@ -719,11 +718,11 @@
 	   */
 	  app.use(function (err, req, res, next) {
 	    if (!err) return next();
-	    console.log('Catch Error: \n' + err.stack || err);
 	    if (err.message === 'HOST_NOT_FOUND') return next();
 	    if (err.message === 'LOCATION_NOT_FOUND') return res.end(req.headers.host + ': \n LOCATION NOT FOUND');
 	    if (err.message === 'UNDEFINED_TYPE') return res.end(req.headers.host + ': \n CONFIGURE ERROR');
 	    if (err.message === 'NOT_FOUND') return next();
+	    console.log('Catch Error: \n' + err.stack || err);
 	    return res.json({ error: err.message });
 	  });
 
@@ -1209,6 +1208,8 @@
 
 	            case 27:
 
+	              if (result.body.error === 'TARGET_SERVICE_OFFLINE') res.status(404);
+
 	              if (result.headers.hasOwnProperty('__HTML')) {
 	                (0, _assign2.default)(res.locals.location, { type: 'HTML', content: result.body.html });
 	              } else if (result.headers.hasOwnProperty('__UPLOAD')) {
@@ -1219,21 +1220,21 @@
 
 	              next();
 
-	              _context.next = 34;
+	              _context.next = 35;
 	              break;
 
-	            case 31:
-	              _context.prev = 31;
+	            case 32:
+	              _context.prev = 32;
 	              _context.t1 = _context["catch"](0);
 
 	              next(_context.t1);
 
-	            case 34:
+	            case 35:
 	            case "end":
 	              return _context.stop();
 	          }
 	        }
-	      }, _callee, undefined, [[0, 31], [10, 16]]);
+	      }, _callee, undefined, [[0, 32], [10, 16]]);
 	    }));
 
 	    return function (_x, _x2, _x3) {
@@ -1841,14 +1842,14 @@
 	    mutateCreateVerificationCode: __webpack_require__(45).default,
 	    mutateCreateAuthCode: __webpack_require__(48).default,
 	    mutateCreateToken: __webpack_require__(52).default,
-	    mutateDeleteToken: __webpack_require__(55).default,
-	    session: __webpack_require__(56).default,
-	    queryOne: __webpack_require__(53).default,
-	    queryAll: __webpack_require__(58).default
+	    mutateDeleteToken: __webpack_require__(57).default,
+	    session: __webpack_require__(58).default,
+	    queryOne: __webpack_require__(54).default,
+	    queryAll: __webpack_require__(59).default
 	  },
 	  fs: {
-	    queryFileContent: __webpack_require__(59).default,
-	    queryOneByFullPath: __webpack_require__(60).default,
+	    queryFileContent: __webpack_require__(60).default,
+	    queryOneByFullPath: __webpack_require__(61).default,
 	    queryOneById: __webpack_require__(62).default,
 	    queryFile: __webpack_require__(63).default,
 	    mutateInsertOne: __webpack_require__(64).default,
@@ -1898,7 +1899,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.createNumberCode = undefined;
+	exports.validate = exports.createNumberCode = undefined;
 
 	var _regenerator = __webpack_require__(3);
 
@@ -1924,6 +1925,10 @@
 
 	var _joi2 = _interopRequireDefault(_joi);
 
+	var _leveldb = __webpack_require__(14);
+
+	var _leveldb2 = _interopRequireDefault(_leveldb);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var client = null;
@@ -1939,6 +1944,12 @@
 	    return str.length === length ? str : fill0(str + '0');
 	  };
 	  return fill0(String(Math.random()).substr(2, length));
+	};
+
+	var validate = exports.validate = function validate(query) {
+	  return _joi2.default.validate(query, _joi2.default.object().keys({
+	    email: _joi2.default.string().required()
+	  }), { allowUnknown: true });
 	};
 
 	/**
@@ -1957,9 +1968,7 @@
 	          while (1) {
 	            switch (_context.prev = _context.next) {
 	              case 0:
-	                validated = _joi2.default.validate(query, _joi2.default.object().keys({
-	                  email: _joi2.default.string().required()
-	                }), { allowUnknown: true });
+	                validated = validate(query);
 
 	                if (!validated.error) {
 	                  _context.next = 3;
@@ -1976,13 +1985,17 @@
 
 	              case 7:
 	                config = _context.sent;
-	                db = getCtx().leveldb.sub('emailcode');
+	                _context.next = 10;
+	                return (0, _leveldb2.default)();
+
+	              case 10:
+	                db = _context.sent.sub('emailcode');
 	                code = createNumberCode();
-	                _context.next = 12;
+	                _context.next = 14;
 	                return db.put(email, { code: code, createTime: Date.now() });
 
-	              case 12:
-	                console.log(code, Date.now());
+	              case 14:
+	                console.log({ code: code, createTime: Date.now() });
 
 	                options = {
 	                  ToAddress: email,
@@ -2005,21 +2018,21 @@
 	                  resolve({});
 	                });
 
-	                _context.next = 21;
+	                _context.next = 23;
 	                break;
 
-	              case 18:
-	                _context.prev = 18;
+	              case 20:
+	                _context.prev = 20;
 	                _context.t0 = _context['catch'](4);
 
 	                reject(_context.t0);
 
-	              case 21:
+	              case 23:
 	              case 'end':
 	                return _context.stop();
 	            }
 	          }
-	        }, _callee, undefined, [[4, 18]]);
+	        }, _callee, undefined, [[4, 20]]);
 	      }));
 
 	      return function (_x2, _x3) {
@@ -2360,6 +2373,10 @@
 	});
 	exports.validate = undefined;
 
+	var _extends2 = __webpack_require__(53);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
 	var _regenerator = __webpack_require__(3);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -2376,7 +2393,7 @@
 
 	var _joi2 = _interopRequireDefault(_joi);
 
-	var _queryOne = __webpack_require__(53);
+	var _queryOne = __webpack_require__(54);
 
 	var _queryOne2 = _interopRequireDefault(_queryOne);
 
@@ -2388,9 +2405,17 @@
 
 	var _crypto2 = _interopRequireDefault(_crypto);
 
-	var _uuid = __webpack_require__(54);
+	var _uuid = __webpack_require__(55);
 
 	var _uuid2 = _interopRequireDefault(_uuid);
+
+	var _ms = __webpack_require__(56);
+
+	var _ms2 = _interopRequireDefault(_ms);
+
+	var _mongodb = __webpack_require__(49);
+
+	var _mongodb2 = _interopRequireDefault(_mongodb);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2456,35 +2481,37 @@
 
 	            case 3:
 	              result = _context2.sent;
+
+	              console.log(result);
 	              validated = _joi2.default.validate(result, _joi2.default.object().keys({
 	                code: _joi2.default.string().length(6).required(),
-	                createTime: _joi2.default.number().length(14).required()
+	                createTime: _joi2.default.number().required()
 	              }));
 
 	              if (!validated.error) {
-	                _context2.next = 7;
+	                _context2.next = 8;
 	                break;
 	              }
 
 	              return _context2.abrupt('return', resolve(null));
 
-	            case 7:
+	            case 8:
 	              resolve(result);
-	              _context2.next = 13;
+	              _context2.next = 14;
 	              break;
 
-	            case 10:
-	              _context2.prev = 10;
+	            case 11:
+	              _context2.prev = 11;
 	              _context2.t0 = _context2['catch'](0);
 
 	              resolve(null);
 
-	            case 13:
+	            case 14:
 	            case 'end':
 	              return _context2.stop();
 	          }
 	        }
-	      }, _callee2, undefined, [[0, 10]]);
+	      }, _callee2, undefined, [[0, 11]]);
 	    }));
 
 	    return function (_x3) {
@@ -2523,7 +2550,7 @@
 	                break;
 	              }
 
-	              return _context3.abrupt('return', reject(new Error('ILLEGAL_CODE')));
+	              return _context3.abrupt('return', reject(new Error('ILLEGAL_CODE_A')));
 
 	            case 9:
 	              if (!(result.code !== code)) {
@@ -2531,10 +2558,10 @@
 	                break;
 	              }
 
-	              return _context3.abrupt('return', reject(new Error('ILLEGAL_CODE')));
+	              return _context3.abrupt('return', reject(new Error('ILLEGAL_CODE_B')));
 
 	            case 11:
-	              if (!(Date.now() > result.createTime + 6000 * 3)) {
+	              if (!(Date.now() > result.createTime + (0, _ms2.default)('5m'))) {
 	                _context3.next = 13;
 	                break;
 	              }
@@ -2633,34 +2660,33 @@
 	var createUser = function createUser(email) {
 	  return new _promise2.default(function () {
 	    var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(resolve, reject) {
-	      var db, id, value;
+	      var db, result, user;
 	      return _regenerator2.default.wrap(function _callee5$(_context5) {
 	        while (1) {
 	          switch (_context5.prev = _context5.next) {
 	            case 0:
-	              _context5.next = 2;
-	              return (0, _leveldb2.default)();
+	              _context5.prev = 0;
+	              _context5.next = 3;
+	              return (0, _mongodb2.default)();
 
-	            case 2:
-	              db = _context5.sent.sub('user');
-	              _context5.prev = 3;
-	              id = _uuid2.default.v1();
-	              value = {
-	                email: email,
-	                id: id,
-	                userId: id
-	              };
-	              _context5.next = 8;
-	              return db.put(id, value);
+	            case 3:
+	              db = _context5.sent.collection('user');
+	              _context5.next = 6;
+	              return db.insertOne({
+	                email: email, createTime: Date.now()
+	              });
 
-	            case 8:
-	              resolve(value);
+	            case 6:
+	              result = _context5.sent;
+	              user = result.ops[0];
+
+	              resolve((0, _extends3.default)({}, user, { userId: user._id.toString() }));
 	              _context5.next = 14;
 	              break;
 
 	            case 11:
 	              _context5.prev = 11;
-	              _context5.t0 = _context5['catch'](3);
+	              _context5.t0 = _context5['catch'](0);
 
 	              reject(_context5.t0);
 
@@ -2669,7 +2695,7 @@
 	              return _context5.stop();
 	          }
 	        }
-	      }, _callee5, undefined, [[3, 11]]);
+	      }, _callee5, undefined, [[0, 11]]);
 	    }));
 
 	    return function (_x8, _x9) {
@@ -2681,7 +2707,7 @@
 	var validate = exports.validate = function validate(query) {
 	  return _joi2.default.validate(query, _joi2.default.object().keys({
 	    email: _joi2.default.string().required(),
-	    driveId: _joi2.default.string().required(),
+	    driveId: _joi2.default.string(),
 	    code: _joi2.default.string().length(6).required()
 	  }), { allowUnknown: true });
 	};
@@ -2699,7 +2725,7 @@
 	  return function (dispatch, getCtx) {
 	    return new _promise2.default(function () {
 	      var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(resolve, reject) {
-	        var validated, _validated$value, code, email, driveId, result, userId, db, user;
+	        var validated, _validated$value, code, email, driveId, result, userId;
 
 	        return _regenerator2.default.wrap(function _callee6$(_context6) {
 	          while (1) {
@@ -2716,6 +2742,9 @@
 
 	              case 3:
 	                _validated$value = validated.value, code = _validated$value.code, email = _validated$value.email, driveId = _validated$value.driveId;
+
+	                // todo 发放OAuth授权令牌
+
 	                _context6.prev = 4;
 	                _context6.next = 7;
 	                return checkCode({ email: email, code: code });
@@ -2726,58 +2755,56 @@
 
 	              case 9:
 	                result = _context6.sent;
-	                userId = null;
 
-	                if (result) {
-	                  _context6.next = 23;
+	                if (!(result === null)) {
+	                  _context6.next = 16;
 	                  break;
 	                }
 
-	                _context6.next = 14;
-	                return _leveldb2.default;
-
-	              case 14:
-	                db = _context6.sent.sub('email');
-	                _context6.next = 17;
+	                _context6.next = 13;
 	                return createUser(email);
 
-	              case 17:
-	                user = _context6.sent;
-
-	                userId = user.userId;
-	                _context6.next = 21;
-	                return db.put(email, { userId: user.id, email: email });
-
-	              case 21:
-	                _context6.next = 24;
+	              case 13:
+	                _context6.t0 = _context6.sent.userId;
+	                _context6.next = 17;
 	                break;
+
+	              case 16:
+	                _context6.t0 = result.userId;
+
+	              case 17:
+	                userId = _context6.t0;
+
+	                if (userId) {
+	                  _context6.next = 20;
+	                  break;
+	                }
+
+	                return _context6.abrupt('return', reject(new Error('EXCEPTION_ERROR')));
+
+	              case 20:
+	                _context6.t1 = resolve;
+	                _context6.next = 23;
+	                return createTokenByUserId(userId);
 
 	              case 23:
-	                userId = result.userId;
-
-	              case 24:
-	                _context6.t0 = resolve;
-	                _context6.next = 27;
-	                return createTokenByUserId(userId, driveId);
-
-	              case 27:
-	                _context6.t1 = _context6.sent;
-	                (0, _context6.t0)(_context6.t1);
-	                _context6.next = 34;
+	                _context6.t2 = _context6.sent;
+	                (0, _context6.t1)(_context6.t2);
+	                _context6.next = 30;
 	                break;
 
-	              case 31:
-	                _context6.prev = 31;
-	                _context6.t2 = _context6['catch'](4);
+	              case 27:
+	                _context6.prev = 27;
+	                _context6.t3 = _context6['catch'](4);
 
-	                reject(_context6.t2);
+	                reject(_context6.t3);
 
-	              case 34:
+	              case 30:
 	              case 'end':
 	                return _context6.stop();
 	            }
 	          }
-	        }, _callee6, undefined, [[4, 31]]);
+	        }, _callee6, undefined, [[4, 27]]);
 	      }));
 
 	      return function (_x10, _x11) {
@@ -2789,6 +2816,12 @@
 
 /***/ },
 /* 53 */
+/***/ function(module, exports) {
+
+	module.exports = require("babel-runtime/helpers/extends");
+
+/***/ },
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2796,11 +2829,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.queryLevel = exports.validate = undefined;
+	exports.validate = undefined;
 
 	var _regenerator = __webpack_require__(3);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
+
+	var _extends2 = __webpack_require__(53);
+
+	var _extends3 = _interopRequireDefault(_extends2);
 
 	var _asyncToGenerator2 = __webpack_require__(5);
 
@@ -2818,128 +2855,118 @@
 
 	var _leveldb2 = _interopRequireDefault(_leveldb);
 
+	var _mongodb = __webpack_require__(49);
+
+	var _mongodb2 = _interopRequireDefault(_mongodb);
+
+	var _mongodb3 = __webpack_require__(50);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/* @private */
 	var validate = exports.validate = function validate(query) {
 	  return _joi2.default.validate(query, _joi2.default.object().keys({
-	    email: _joi2.default.string().required(),
-	    enableNull: _joi2.default.string().default(false)
-	  }));
-	};
-
-	var queryLevel = exports.queryLevel = function queryLevel(db, key) {
-	  return new _promise2.default(function () {
-	    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
-	      return _regenerator2.default.wrap(function _callee$(_context) {
-	        while (1) {
-	          switch (_context.prev = _context.next) {
-	            case 0:
-	              _context.prev = 0;
-	              _context.t0 = resolve;
-	              _context.next = 4;
-	              return db.get(key);
-
-	            case 4:
-	              _context.t1 = _context.sent;
-	              (0, _context.t0)(_context.t1);
-	              _context.next = 11;
-	              break;
-
-	            case 8:
-	              _context.prev = 8;
-	              _context.t2 = _context['catch'](0);
-
-	              resolve(null);
-
-	            case 11:
-	            case 'end':
-	              return _context.stop();
-	          }
-	        }
-	      }, _callee, undefined, [[0, 8]]);
-	    }));
-
-	    return function (_x) {
-	      return _ref.apply(this, arguments);
-	    };
-	  }());
+	    userId: _joi2.default.string(),
+	    email: _joi2.default.string(),
+	    enableNull: _joi2.default.boolean().default(false)
+	  }).xor(['userId', 'email']), { allowUnknown: true });
 	};
 
 	exports.default = function (query) {
 	  return function (dispatch, getCtx) {
 	    return new _promise2.default(function () {
-	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(resolve, reject) {
-	        var validated, _validated$value, email, enableNull, db, result;
+	      var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
+	        var validated, _validated$value, userId, email, enableNull, filter, db, result;
 
-	        return _regenerator2.default.wrap(function _callee2$(_context2) {
+	        return _regenerator2.default.wrap(function _callee$(_context) {
 	          while (1) {
-	            switch (_context2.prev = _context2.next) {
+	            switch (_context.prev = _context.next) {
 	              case 0:
 	                validated = validate(query);
 
 	                if (!validated.error) {
-	                  _context2.next = 3;
+	                  _context.next = 3;
 	                  break;
 	                }
 
-	                return _context2.abrupt('return', reject(validated.error));
+	                return _context.abrupt('return', reject(validated.error));
 
 	              case 3:
-	                _validated$value = validated.value, email = _validated$value.email, enableNull = _validated$value.enableNull;
-	                _context2.prev = 4;
-	                _context2.next = 7;
-	                return (0, _leveldb2.default)();
+	                _validated$value = validated.value, userId = _validated$value.userId, email = _validated$value.email, enableNull = _validated$value.enableNull;
+	                _context.prev = 4;
+	                filter = {};
 
-	              case 7:
-	                db = _context2.sent.sub('email');
-	                _context2.next = 10;
-	                return queryLevel(db, email);
+	                if (userId) {
+	                  filter._id = (0, _mongodb3.ObjectId)(userId);
+	                } else {
+	                  filter.email = email;
+	                }
+	                _context.next = 9;
+	                return (0, _mongodb2.default)();
 
-	              case 10:
-	                result = _context2.sent;
+	              case 9:
+	                db = _context.sent.collection('user');
+	                _context.next = 12;
+	                return db.findOne(filter);
 
-	                if (!(!result && !enableNull)) {
-	                  _context2.next = 13;
+	              case 12:
+	                result = _context.sent;
+
+	                if (!(result === null)) {
+	                  _context.next = 17;
 	                  break;
 	                }
 
-	                return _context2.abrupt('return', reject(new Error('NOT_FOUND')));
+	                if (!enableNull) {
+	                  _context.next = 16;
+	                  break;
+	                }
 
-	              case 13:
-	                resolve(result);
-	                _context2.next = 19;
-	                break;
+	                return _context.abrupt('return', resolve(null));
 
 	              case 16:
-	                _context2.prev = 16;
-	                _context2.t0 = _context2['catch'](4);
+	                return _context.abrupt('return', reject(new Error('NOT_FOUND')));
 
-	                reject(_context2.t0);
+	              case 17:
+	                resolve((0, _extends3.default)({}, result, { userId: result._id.toString() }));
+	                _context.next = 23;
+	                break;
 
-	              case 19:
+	              case 20:
+	                _context.prev = 20;
+	                _context.t0 = _context['catch'](4);
+
+	                reject(_context.t0);
+
+	              case 23:
 	              case 'end':
-	                return _context2.stop();
+	                return _context.stop();
 	            }
 	          }
-	        }, _callee2, undefined, [[4, 16]]);
+	        }, _callee, undefined, [[4, 20]]);
 	      }));
 
-	      return function (_x2, _x3) {
-	        return _ref2.apply(this, arguments);
+	      return function (_x, _x2) {
+	        return _ref.apply(this, arguments);
 	      };
 	    }());
 	  };
 	};
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = require("uuid");
 
 /***/ },
-/* 55 */
+/* 56 */
+/***/ function(module, exports) {
+
+	module.exports = require("ms");
+
+/***/ },
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3016,7 +3043,7 @@
 	};
 
 /***/ },
-/* 56 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3029,10 +3056,6 @@
 	var _regenerator = __webpack_require__(3);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
-
-	var _extends2 = __webpack_require__(57);
-
-	var _extends3 = _interopRequireDefault(_extends2);
 
 	var _asyncToGenerator2 = __webpack_require__(5);
 
@@ -3050,9 +3073,62 @@
 
 	var _leveldb2 = _interopRequireDefault(_leveldb);
 
+	var _queryOne = __webpack_require__(54);
+
+	var _queryOne2 = _interopRequireDefault(_queryOne);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/* @public */
+	var queryLevel = function queryLevel(db, key) {
+	  return new _promise2.default(function () {
+	    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
+	      var value, validated;
+	      return _regenerator2.default.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              _context.prev = 0;
+	              _context.next = 3;
+	              return db.get(key);
+
+	            case 3:
+	              value = _context.sent;
+	              validated = _joi2.default.validate(value, _joi2.default.object().keys({
+	                userId: _joi2.default.string().required(),
+	                email: _joi2.default.string()
+	              }), { allowUnknown: true });
+
+	              if (!validated.error) {
+	                _context.next = 7;
+	                break;
+	              }
+
+	              return _context.abrupt('return', resolve(null));
+
+	            case 7:
+	              resolve(value);
+	              _context.next = 13;
+	              break;
+
+	            case 10:
+	              _context.prev = 10;
+	              _context.t0 = _context['catch'](0);
+
+	              resolve(null);
+
+	            case 13:
+	            case 'end':
+	              return _context.stop();
+	          }
+	        }
+	      }, _callee, undefined, [[0, 10]]);
+	    }));
+
+	    return function (_x) {
+	      return _ref.apply(this, arguments);
+	    };
+	  }());
+	}; /* @public */
 	var validate = exports.validate = function validate(query) {
 	  return _joi2.default.validate(query, _joi2.default.object().keys({
 	    token: _joi2.default.string().required()
@@ -3071,83 +3147,93 @@
 	exports.default = function (query) {
 	  return function (dispatch, getCtx) {
 	    return new _promise2.default(function () {
-	      var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
-	        var validated, token, db, tokendb, userdb, result, user;
-	        return _regenerator2.default.wrap(function _callee$(_context) {
+	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(resolve, reject) {
+	        var validated, token, db, tokendb, userdb, _ref3, userId, user;
+
+	        return _regenerator2.default.wrap(function _callee2$(_context2) {
 	          while (1) {
-	            switch (_context.prev = _context.next) {
+	            switch (_context2.prev = _context2.next) {
 	              case 0:
 	                validated = validate(query);
 
 	                if (!validated.error) {
-	                  _context.next = 3;
+	                  _context2.next = 3;
 	                  break;
 	                }
 
-	                return _context.abrupt('return', reject(validated.error));
+	                return _context2.abrupt('return', reject(validated.error));
 
 	              case 3:
 	                token = validated.value.token;
-	                _context.prev = 4;
-	                _context.next = 7;
+	                _context2.prev = 4;
+	                _context2.next = 7;
 	                return (0, _leveldb2.default)();
 
 	              case 7:
-	                db = _context.sent;
+	                db = _context2.sent;
 	                tokendb = db.sub('token');
 	                userdb = db.sub('user');
-	                _context.next = 12;
+	                _context2.next = 12;
 	                return tokendb.get(token);
 
 	              case 12:
-	                result = _context.sent;
-	                _context.next = 15;
-	                return userdb.get(result.userId);
+	                _ref3 = _context2.sent;
+	                userId = _ref3.userId;
+	                _context2.next = 16;
+	                return queryLevel(userdb, userId);
 
-	              case 15:
-	                user = _context.sent;
+	              case 16:
+	                user = _context2.sent;
 
-	                resolve((0, _extends3.default)({}, user, { userId: user.id }));
-	                _context.next = 24;
-	                break;
-
-	              case 19:
-	                _context.prev = 19;
-	                _context.t0 = _context['catch'](4);
-
-	                if (!(_context.t0.name === 'NotFoundError')) {
-	                  _context.next = 23;
+	                if (!(user === null)) {
+	                  _context2.next = 22;
 	                  break;
 	                }
 
-	                return _context.abrupt('return', reject(new Error('EMPTY_SESSION')));
+	                _context2.next = 20;
+	                return dispatch((0, _queryOne2.default)({ userId: userId }));
 
-	              case 23:
-	                reject(_context.t0);
+	              case 20:
+	                user = _context2.sent;
 
-	              case 24:
+	                userdb.put(userId, user);
+
+	              case 22:
+	                resolve(user);
+	                _context2.next = 30;
+	                break;
+
+	              case 25:
+	                _context2.prev = 25;
+	                _context2.t0 = _context2['catch'](4);
+
+	                if (!(_context2.t0.name === 'NotFoundError')) {
+	                  _context2.next = 29;
+	                  break;
+	                }
+
+	                return _context2.abrupt('return', reject(new Error('EMPTY_SESSION')));
+
+	              case 29:
+	                reject(_context2.t0);
+
+	              case 30:
 	              case 'end':
-	                return _context.stop();
+	                return _context2.stop();
 	            }
 	          }
-	        }, _callee, undefined, [[4, 19]]);
+	        }, _callee2, undefined, [[4, 25]]);
 	      }));
 
-	      return function (_x, _x2) {
-	        return _ref.apply(this, arguments);
+	      return function (_x2, _x3) {
+	        return _ref2.apply(this, arguments);
 	      };
 	    }());
 	  };
 	};
 
 /***/ },
-/* 57 */
-/***/ function(module, exports) {
-
-	module.exports = require("babel-runtime/helpers/extends");
-
-/***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3215,7 +3301,7 @@
 	};
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3237,7 +3323,7 @@
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _queryOneByFullPath = __webpack_require__(60);
+	var _queryOneByFullPath = __webpack_require__(61);
 
 	var _queryOneByFullPath2 = _interopRequireDefault(_queryOneByFullPath);
 
@@ -3350,24 +3436,35 @@
 
 	              case 16:
 	                _context2.next = 18;
-	                return fileContentdb.get(fileId);
+	                return queryLevel(fileContentdb, fileId);
 
 	              case 18:
 	                cat = _context2.sent;
-	                return _context2.abrupt('return', resolve({ isFile: true, cat: cat }));
 
-	              case 22:
-	                _context2.prev = 22;
+	                if (cat) {
+	                  _context2.next = 21;
+	                  break;
+	                }
+
+	                return _context2.abrupt('return', reject(new Error('NOT_FOUND')));
+
+	              case 21:
+	                resolve({ isFile: true, cat: cat });
+	                _context2.next = 27;
+	                break;
+
+	              case 24:
+	                _context2.prev = 24;
 	                _context2.t0 = _context2['catch'](4);
 
 	                reject(_context2.t0);
 
-	              case 25:
+	              case 27:
 	              case 'end':
 	                return _context2.stop();
 	            }
 	          }
-	        }, _callee2, undefined, [[4, 22]]);
+	        }, _callee2, undefined, [[4, 24]]);
 	      }));
 
 	      return function (_x2, _x3) {
@@ -3378,7 +3475,7 @@
 	};
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3388,7 +3485,7 @@
 	});
 	exports.validate = undefined;
 
-	var _extends2 = __webpack_require__(57);
+	var _extends2 = __webpack_require__(53);
 
 	var _extends3 = _interopRequireDefault(_extends2);
 
@@ -3412,11 +3509,15 @@
 
 	var _mongodb2 = _interopRequireDefault(_mongodb);
 
+	var _config = __webpack_require__(9);
+
+	var _config2 = _interopRequireDefault(_config);
+
 	var _joi = __webpack_require__(47);
 
 	var _joi2 = _interopRequireDefault(_joi);
 
-	var _ms = __webpack_require__(61);
+	var _ms = __webpack_require__(56);
 
 	var _ms2 = _interopRequireDefault(_ms);
 
@@ -3471,7 +3572,7 @@
 	  return function (dispatch, getCtx) {
 	    return new _promise2.default(function () {
 	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(resolve, reject) {
-	        var validated, _validated$value, fullPath, replaceWithIndexHTMLWhenIsFolder, syncIndexData, fileIndex, indexData;
+	        var validated, _validated$value, fullPath, replaceWithIndexHTMLWhenIsFolder, syncIndexData, fileIndex, cacheExpireTime, indexData;
 
 	        return _regenerator2.default.wrap(function _callee4$(_context4) {
 	          while (1) {
@@ -3649,60 +3750,65 @@
 	              case 8:
 	                fileIndex = _context4.sent.sub('fileIndex');
 	                _context4.next = 11;
-	                return queryLevel(fileIndex, fullPath);
+	                return (0, _config2.default)();
 
 	              case 11:
+	                cacheExpireTime = _context4.sent.production.cacheExpireTime;
+	                _context4.next = 14;
+	                return queryLevel(fileIndex, fullPath);
+
+	              case 14:
 	                indexData = _context4.sent;
 
-	                if (!(!indexData || Date.now() > indexData.updateTime + (0, _ms2.default)('1s') || !indexData.updateTime)) {
-	                  _context4.next = 16;
+	                if (!(!indexData || Date.now() > indexData.updateTime + (0, _ms2.default)(cacheExpireTime) || !indexData.updateTime)) {
+	                  _context4.next = 19;
 	                  break;
 	                }
 
-	                _context4.next = 15;
+	                _context4.next = 18;
 	                return syncIndexData(fullPath);
 
-	              case 15:
+	              case 18:
 	                indexData = _context4.sent;
 
-	              case 16:
+	              case 19:
 	                if (!indexData.error) {
-	                  _context4.next = 18;
+	                  _context4.next = 21;
 	                  break;
 	                }
 
 	                return _context4.abrupt('return', reject(new Error(indexData.error)));
 
-	              case 18:
+	              case 21:
 	                if (!(indexData.type === 2 && replaceWithIndexHTMLWhenIsFolder)) {
-	                  _context4.next = 23;
+	                  _context4.next = 26;
 	                  break;
 	                }
 
 	                fullPath = fullPath + '/index.html';
-	                _context4.next = 22;
+	                _context4.next = 25;
 	                return syncIndexData(fullPath);
 
-	              case 22:
+	              case 25:
 	                indexData = _context4.sent;
 
-	              case 23:
+	              case 26:
 	                resolve(indexData);
-	                _context4.next = 29;
+	                _context4.next = 32;
 	                break;
 
-	              case 26:
-	                _context4.prev = 26;
+	              case 29:
+	                _context4.prev = 29;
 	                _context4.t0 = _context4['catch'](5);
 
 	                reject(_context4.t0);
 
-	              case 29:
+	              case 32:
 	              case 'end':
 	                return _context4.stop();
 	            }
 	          }
-	        }, _callee4, undefined, [[5, 26]]);
+	        }, _callee4, undefined, [[5, 29]]);
 	      }));
 
 	      return function (_x3, _x4) {
@@ -3711,12 +3817,6 @@
 	    }());
 	  };
 	};
-
-/***/ },
-/* 61 */
-/***/ function(module, exports) {
-
-	module.exports = require("ms");
 
 /***/ },
 /* 62 */
@@ -3924,7 +4024,7 @@
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _extends2 = __webpack_require__(57);
+	var _extends2 = __webpack_require__(53);
 
 	var _extends3 = _interopRequireDefault(_extends2);
 
@@ -4092,7 +4192,7 @@
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _queryOneByFullPath = __webpack_require__(60);
+	var _queryOneByFullPath = __webpack_require__(61);
 
 	var _queryOneByFullPath2 = _interopRequireDefault(_queryOneByFullPath);
 
@@ -4778,7 +4878,7 @@
 
 	var _leveldb2 = _interopRequireDefault(_leveldb);
 
-	var _queryOne = __webpack_require__(53);
+	var _queryOne = __webpack_require__(54);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4881,7 +4981,7 @@
 	});
 	exports.validate = undefined;
 
-	var _extends2 = __webpack_require__(57);
+	var _extends2 = __webpack_require__(53);
 
 	var _extends3 = _interopRequireDefault(_extends2);
 
@@ -4915,7 +5015,7 @@
 
 	var _leveldb2 = _interopRequireDefault(_leveldb);
 
-	var _ms = __webpack_require__(61);
+	var _ms = __webpack_require__(56);
 
 	var _ms2 = _interopRequireDefault(_ms);
 
@@ -4984,7 +5084,7 @@
 	  return function (dispatch) {
 	    return new _promise2.default(function () {
 	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(resolve, reject) {
-	        var validated, _validated$value, domain, forceSync, syncCache, db, target;
+	        var validated, _validated$value, domain, forceSync, syncCache, _production, cacheExpireTime, apiDomain, db, target;
 
 	        return _regenerator2.default.wrap(function _callee3$(_context3) {
 	          while (1) {
@@ -5069,42 +5169,66 @@
 
 	                _context3.prev = 5;
 	                _context3.next = 8;
-	                return (0, _leveldb2.default)();
+	                return (0, _config2.default)();
 
 	              case 8:
+	                _production = _context3.sent.production;
+	                cacheExpireTime = _production.cacheExpireTime;
+	                apiDomain = _production.apiDomain;
+
+	                if (!(domain === apiDomain)) {
+	                  _context3.next = 13;
+	                  break;
+	                }
+
+	                return _context3.abrupt('return', resolve({
+	                  driveId: '',
+	                  locations: [{
+	                    "pathname": "*",
+	                    "cors": true,
+	                    "type": "SEASHELL",
+	                    "content": ""
+	                  }]
+	                }));
+
+	              case 13:
+	                _context3.next = 15;
+	                return (0, _leveldb2.default)();
+
+	              case 15:
 	                db = _context3.sent.sub('domain');
-	                _context3.next = 11;
+	                _context3.next = 18;
 	                return queryLevel(db, domain);
 
-	              case 11:
+	              case 18:
 	                target = _context3.sent;
 
 	                if (!(!target || target.disable)) {
-	                  _context3.next = 15;
+	                  _context3.next = 22;
 	                  break;
 	                }
 
 	                reject(new Error('NOT_FOUND'));
 	                return _context3.abrupt('return', process.nextTick(syncCache));
 
-	              case 15:
+	              case 22:
 	                resolve(target);
-	                if (forceSync || Date.now() > target.updateTime + (0, _ms2.default)('1s')) process.nextTick(syncCache);
-	                _context3.next = 22;
+	                if (forceSync || Date.now() > target.updateTime + (0, _ms2.default)(cacheExpireTime)) process.nextTick(syncCache);
+	                _context3.next = 29;
 	                break;
 
-	              case 19:
-	                _context3.prev = 19;
+	              case 26:
+	                _context3.prev = 26;
 	                _context3.t0 = _context3['catch'](5);
 
 	                reject(_context3.t0);
 
-	              case 22:
+	              case 29:
 	              case 'end':
 	                return _context3.stop();
 	            }
 	          }
-	        }, _callee3, undefined, [[5, 19]]);
+	        }, _callee3, undefined, [[5, 26]]);
 	      }));
 
 	      return function (_x2, _x3) {
@@ -5296,35 +5420,37 @@
 	                _context.prev = 4;
 	                session = getCtx().request.headers.session;
 
+	                console.log(session);
+
 	                if (session) {
-	                  _context.next = 8;
+	                  _context.next = 9;
 	                  break;
 	                }
 
 	                return _context.abrupt('return', reject(new Error('PERMISSION_DENIED')));
 
-	              case 8:
+	              case 9:
 	                userId = session ? session.userId : '123';
-	                _context.next = 11;
+	                _context.next = 12;
 	                return dispatch((0, _queryOne2.default)({ name: name }));
 
-	              case 11:
+	              case 12:
 	                driveData = _context.sent;
 
 	                if (!driveData) {
-	                  _context.next = 14;
+	                  _context.next = 15;
 	                  break;
 	                }
 
 	                return _context.abrupt('return', reject(new Error('NAME_EXIST')));
 
-	              case 14:
-	                _context.next = 16;
+	              case 15:
+	                _context.next = 17;
 	                return (0, _mongodb2.default)();
 
-	              case 16:
+	              case 17:
 	                drive = _context.sent.collection('drive');
-	                _context.next = 19;
+	                _context.next = 20;
 	                return drive.insertOne({
 	                  name: name,
 	                  description: description,
@@ -5334,25 +5460,25 @@
 	                  adminId: userId,
 	                  status: 1 });
 
-	              case 19:
+	              case 20:
 	                result = _context.sent;
 
 	                resolve(result.ops[0]);
-	                _context.next = 26;
+	                _context.next = 27;
 	                break;
 
-	              case 23:
-	                _context.prev = 23;
+	              case 24:
+	                _context.prev = 24;
 	                _context.t0 = _context['catch'](4);
 
 	                reject(_context.t0);
 
-	              case 26:
+	              case 27:
 	              case 'end':
 	                return _context.stop();
 	            }
 	          }
-	        }, _callee, undefined, [[4, 23]]);
+	        }, _callee, undefined, [[4, 24]]);
 	      }));
 
 	      return function (_x, _x2) {
@@ -6477,7 +6603,7 @@
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _uuid = __webpack_require__(54);
+	var _uuid = __webpack_require__(55);
 
 	var _uuid2 = _interopRequireDefault(_uuid);
 
@@ -6586,6 +6712,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.validate = undefined;
 
 	var _regenerator = __webpack_require__(3);
 
@@ -6599,80 +6726,148 @@
 
 	var _promise2 = _interopRequireDefault(_promise);
 
+	var _joi = __webpack_require__(47);
+
+	var _joi2 = _interopRequireDefault(_joi);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var queryLevel = function queryLevel(db, key) {
+	  return new _promise2.default(function () {
+	    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve) {
+	      return _regenerator2.default.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              _context.prev = 0;
+	              _context.t0 = resolve;
+	              _context.next = 4;
+	              return db.get(key);
+
+	            case 4:
+	              _context.t1 = _context.sent;
+	              (0, _context.t0)(_context.t1);
+	              _context.next = 11;
+	              break;
+
+	            case 8:
+	              _context.prev = 8;
+	              _context.t2 = _context['catch'](0);
+
+	              resolve(null);
+
+	            case 11:
+	            case 'end':
+	              return _context.stop();
+	          }
+	        }
+	      }, _callee, undefined, [[0, 8]]);
+	    }));
+
+	    return function (_x) {
+	      return _ref.apply(this, arguments);
+	    };
+	  }());
+	};
+
+	var validate = exports.validate = function validate(query) {
+	  return _joi2.default.validate(query, _joi2.default.object().keys({
+	    appName: _joi2.default.string().regex(/[a-z]{1, 1}[0-9a-z]{4, 30}/).required(),
+	    appId: _joi2.default.string().required()
+	  }), { allowUnknown: true });
+	};
 
 	/**
 	 * 获取处理请求的app, 并作负载均衡
 	 */
-	exports.default = function (_ref) {
-	  var appName = _ref.appName,
-	      appId = _ref.appId,
-	      filter = _ref.filter;
+
+	exports.default = function (query) {
 	  return function (dispatch, getCtx) {
 	    return new _promise2.default(function () {
-	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
-	        var db, app, onlineItems, ts, randomNumber, randomIndex;
-	        return _regenerator2.default.wrap(function _callee$(_context) {
-	          while (1) {
-	            switch (_context.prev = _context.next) {
-	              case 0:
-	                _context.prev = 0;
-	                db = getCtx().leveldb.sub('app');
-	                _context.next = 4;
-	                return db.get(appName);
+	      var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(resolve, reject) {
+	        var validated, _validated$error, appName, appId, filter, db, app, onlineItems, ts, randomNumber, randomIndex;
 
-	              case 4:
-	                app = _context.sent;
+	        return _regenerator2.default.wrap(function _callee2$(_context2) {
+	          while (1) {
+	            switch (_context2.prev = _context2.next) {
+	              case 0:
+	                validated = validate(query);
+
+	                if (!validated.error) {
+	                  _context2.next = 3;
+	                  break;
+	                }
+
+	                return _context2.abrupt('return', reject(new Error('NOT_FOUND')));
+
+	              case 3:
+	                _validated$error = validated.error, appName = _validated$error.appName, appId = _validated$error.appId, filter = _validated$error.filter;
+	                _context2.prev = 4;
+	                db = getCtx().leveldb.sub('app');
+	                _context2.next = 8;
+	                return queryLevel(db, appName);
+
+	              case 8:
+	                app = _context2.sent;
+
+	                if (!(app === null)) {
+	                  _context2.next = 11;
+	                  break;
+	                }
+
+	                return _context2.abrupt('return', reject(new Error('NOT_FOUND')));
+
+	              case 11:
 	                onlineItems = app.list.filter(function (service) {
 	                  return service.status === 1;
 	                });
 
 	                if (!(onlineItems.length === 0)) {
-	                  _context.next = 8;
+	                  _context2.next = 14;
 	                  break;
 	                }
 
-	                return _context.abrupt('return', reject(new Error('TARGET_SERVICE_OFFLINE')));
+	                return _context2.abrupt('return', reject(new Error('TARGET_SERVICE_OFFLINE')));
 
-	              case 8:
+	              case 14:
 	                if (!appId) {
-	                  _context.next = 10;
+	                  _context2.next = 16;
 	                  break;
 	                }
 
-	                return _context.abrupt('return', resolve(onlineItems.find(function (item) {
+	                return _context2.abrupt('return', resolve(onlineItems.find(function (item) {
 	                  return item.appId === appId;
 	                })));
 
-	              case 10:
+	              case 16:
 	                if (!(onlineItems.length === 1)) {
-	                  _context.next = 12;
+	                  _context2.next = 18;
 	                  break;
 	                }
 
-	                return _context.abrupt('return', resolve(onlineItems[0]));
+	                return _context2.abrupt('return', resolve(onlineItems[0]));
 
-	              case 12:
+	              case 18:
 	                ts = String(Date.now());
 	                randomNumber = Number(ts[ts.length - 1]);
 	                randomIndex = Math.floor(randomNumber * onlineItems.length / 10);
-	                return _context.abrupt('return', resolve(app.list[randomIndex]));
+	                return _context2.abrupt('return', resolve(app.list[randomIndex]));
 
-	              case 18:
-	                _context.prev = 18;
-	                _context.t0 = _context['catch'](0);
+	              case 24:
+	                _context2.prev = 24;
+	                _context2.t0 = _context2['catch'](4);
 
-	                reject(_context.t0);
+	                reject(_context2.t0);
 
-	              case 21:
+	              case 27:
 	              case 'end':
-	                return _context.stop();
+	                return _context2.stop();
 	            }
 	          }
-	        }, _callee, undefined, [[0, 18]]);
+	        }, _callee2, undefined, [[4, 24]]);
 	      }));
 
-	      return function (_x, _x2) {
+	      return function (_x2, _x3) {
 	        return _ref2.apply(this, arguments);
 	      };
 	    }());
@@ -6909,7 +7104,7 @@
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _extends2 = __webpack_require__(57);
+	var _extends2 = __webpack_require__(53);
 
 	var _extends3 = _interopRequireDefault(_extends2);
 
@@ -6925,7 +7120,7 @@
 
 	var _joi2 = _interopRequireDefault(_joi);
 
-	var _session = __webpack_require__(56);
+	var _session = __webpack_require__(58);
 
 	var _session2 = _interopRequireDefault(_session);
 

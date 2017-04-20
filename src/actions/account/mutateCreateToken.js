@@ -4,6 +4,8 @@ import queryOne from './queryOne'
 import getLeveldb from "../../leveldb"
 import crypto from 'crypto'
 import uuid from 'uuid'
+import ms from 'ms'
+import getMongodb from '../../mongodb'
 
 const createTokenByUserId = userId => new Promise(async (resolve, reject) => {
   const normalToken = () => crypto.randomBytes(48).toString('hex');
@@ -21,11 +23,14 @@ const createTokenByUserId = userId => new Promise(async (resolve, reject) => {
 const queryCodeLevel = (db, key) => new Promise(async resolve => {
   try {
     const result = await db.get(key);
+    console.log(result)
     const validated = Joi.validate(result, Joi.object().keys({
       code: Joi.string().length(6).required(),
-      createTime: Joi.number().length(14).required()
+      createTime: Joi.number().required()
     }))
-    if (validated.error) return resolve(null)
+    if (validated.error) {
+      return resolve(null)
+    }
     resolve(result)
   } catch(e){
     resolve(null)
@@ -40,9 +45,9 @@ const checkCode = ({email, code}) => new Promise(async (resolve, reject) => {
   try {
     const db = (await getLeveldb()).sub('emailcode');
     const result = await queryCodeLevel(db, email);
-    if (!result) return reject(new Error('ILLEGAL_CODE'));
-    if (result.code !== code) return reject(new Error('ILLEGAL_CODE'));
-    if (Date.now() > result.createTime + 6000 * 3) return reject(new Error('EXPIRE_CODE'));
+    if (!result) return reject(new Error('ILLEGAL_CODE_A'));
+    if (result.code !== code) return reject(new Error('ILLEGAL_CODE_B'));
+    if (Date.now() > result.createTime + ms('5m')) return reject(new Error('EXPIRE_CODE'));
     await db.del(email);
     resolve(true)
   } catch(e){
@@ -71,16 +76,13 @@ const createTokenByAuthCode = ({authCode}) => new Promise(async(resolve, reject)
 
 
 const createUser = (email) => new Promise(async (resolve, reject) => {
-  const db = (await getLeveldb()).sub('user');
   try {
-    const id = uuid.v1();
-    const value = {
-      email,
-      id,
-      userId: id
-    }
-    await db.put(id, value);
-    resolve(value)
+    const db = (await getMongodb()).collection('user');
+    const result = await db.insertOne({
+      email, createTime: Date.now()
+    })
+    const user = result.ops[0];
+    resolve({...user, userId: user._id.toString()})
   } catch(e){
     reject(e)
   }
@@ -89,7 +91,7 @@ const createUser = (email) => new Promise(async (resolve, reject) => {
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   email: Joi.string().required(),
-  driveId: Joi.string().required(),
+  driveId: Joi.string(),
   code: Joi.string().length(6).required()
 }), {allowUnknown: true})
 
@@ -108,19 +110,13 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
   if (validated.error) return reject(validated.error)
   const {code, email, driveId} = validated.value;
 
+  // todo 发放OAuth授权令牌
   try {
     await checkCode({email, code});
     const result = await dispatch(queryOne({email, enableNull: true}));
-    let userId = null;
-    if (!result) {
-      const db = (await getLeveldb).sub('email')
-      const user = await createUser(email);
-      userId = user.userId;
-      await db.put(email, {userId: user.id, email});
-    } else {
-      userId = result.userId
-    }
-    resolve(await createTokenByUserId(userId, driveId))
+    const userId = result === null ? (await createUser(email)).userId : result.userId;
+    if (!userId) return reject(new Error('EXCEPTION_ERROR'))
+    resolve(await createTokenByUserId(userId))
   } catch(e) {
     reject(e)
   }

@@ -70,11 +70,11 @@ const createServer = (config, seashell) => {
    */
   app.use((err, req, res, next) => {
     if (!err) return next();
-    console.log('Catch Error: \n' + err.stack||err);
     if (err.message === 'HOST_NOT_FOUND') return next();
     if (err.message === 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
     if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
     if (err.message === 'NOT_FOUND') return next();
+    console.log('Catch Error: \n' + err.stack||err);
     return res.json({error: err.message});
   });
 

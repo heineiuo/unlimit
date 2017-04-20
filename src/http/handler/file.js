@@ -24,7 +24,6 @@ const handleFILE = (req, res, seashell, driveId, pathname, reqpath) => new Promi
     res.end();
     resolve()
   } catch(e){
-    console.log(e)
     reject(e)
   }
 

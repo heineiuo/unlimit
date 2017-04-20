@@ -11,17 +11,13 @@
   "dependencies": {
     "action-creator": "^0.4.0",
     "ali-push": "^0.1.6",
-    "aphrodite": "^1.1.0",
     "auto-sni": "^1.5.1",
     "babel-runtime": "^6.9.2",
     "blueimp-md5": "~2.3.0",
     "body-parser": "^1.14.1",
     "chalk": "^1.1.3",
     "child-process-promise": "^2.1.3",
-    "cli-table2": "^0.2.0",
     "compression": "^1.6.1",
-    "cookie": "^0.2.3",
-    "cookie-parser": "^1.4.0",
     "decompress": "^3.0.0",
     "directory": "~0.1.0",
     "ent": "^2.2.0",
@@ -45,11 +41,7 @@
     "path-to-regexp": "^1.7.0",
     "prettyjson": "^1.2.1",
     "q-level": "^1.1.3",
-    "request": "^2.67.0",
     "seashell": "^0.10.3",
-    "seashell-dev": "^0.1.0",
-    "socket.io": "^1.7.3",
-    "sprucejs": "^0.3.0",
     "ua-parser-js": "~0.7.10",
     "uuid": "~2.0.2",
     "yargs": "^6.6.0"
@@ -57,6 +49,7 @@
   "devDependencies": {
     "babel-cli": "~6.9.0",
     "babel-core": "~6.9.0",
+    "seashell-dev": "^0.1.0",
     "babel-loader": "~6.2.4",
     "babel-plugin-dynamic-import-node": "^1.0.1",
     "babel-plugin-dynamic-import-webpack": "^1.0.1",
@@ -92,8 +85,5 @@
     "webpack-dev-server": "^1.14.0",
     "webpack-hot-middleware": "~2.10.0",
     "webpack-node-externals": "^1.0.0"
-  },
-  "peerDependencies": {
-    "prettyjson": "^1.2.1"
   }
 }

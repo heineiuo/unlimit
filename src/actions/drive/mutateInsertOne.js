@@ -13,6 +13,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const {name, description} = validated.value;
   try {
     const {session} = getCtx().request.headers;
+    console.log(session)
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const userId = session ? session.userId : '123';
     const driveData = await dispatch(queryOne({name}));
