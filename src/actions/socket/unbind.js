@@ -1,4 +1,4 @@
-import updateApp from '../app/update'
+import updateApp from '../app/mutateOne'
 import Joi from 'joi'
 
 /**

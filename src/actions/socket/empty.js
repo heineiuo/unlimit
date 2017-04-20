@@ -1,7 +1,7 @@
 
 import listSocket from './list'
-import listApp from '../app/list'
-import updateApp from '../app/update'
+import listApp from '../app/queryApp'
+import updateApp from '../app/mutateOne'
 
 /**
  * empty all sockets records

@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import getApp from "../app/get"
-import updateApp from "../app/update"
+import getApp from "../app/queryLevelApp"
+import updateApp from "../app/mutateOne"
 
 const validate = (query) => Joi.validate(query, Joi.object().keys({
   socketId: Joi.string().required(),

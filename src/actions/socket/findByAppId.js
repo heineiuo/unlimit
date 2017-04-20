@@ -1,4 +1,4 @@
-import getApp from '../app/get'
+import getApp from '../app/queryLevelApp'
 /**
  * Socket
  * socket_${socketId}:

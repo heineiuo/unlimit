@@ -20,4 +20,3 @@ export default (query) => (dispatch, getCtx) => new Promise(async(resolve, rejec
     reject(e)
   }
 })
-

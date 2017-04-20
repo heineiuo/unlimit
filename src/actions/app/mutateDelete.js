@@ -1,9 +1,20 @@
 import removeSocket from '../socket/unbind'
+import getMongodb from '../../mongodb'
+import Joi from 'joi'
 
-export default ({appName}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const db = getCtx().leveldb.sub('app');
+
+export const validate = query => Joi.validate(query, Joi.object().keys({
+  appName: Joi.string().required()
+}), {allowUnknown: true})
+
+
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const validated = validate(query);
+  if (validated.error) return reject(validated.error);
+  const {appName} = validated.value;
 
   try {
+    const db = getCtx().leveldb.sub('app');
     const detail = await db.del(appName);
 
     await Promise.all(detail.list.map(item => {

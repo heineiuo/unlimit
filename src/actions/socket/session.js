@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import getUserSession from '../account/session'
-import getApp from '../app/get'
+import getApp from '../app/queryLevelApp'
 
 const validate = (query) => Joi.validate(query, Joi.object().keys({
   socketId: Joi.string(),

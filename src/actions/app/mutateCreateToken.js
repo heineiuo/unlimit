@@ -1,22 +1,27 @@
 import uuid from 'uuid'
 import crypto from 'crypto'
-
-import getApp from './get'
 import Joi from 'joi'
-import updateApp from './update'
+import getMongodb from '../../mongodb'
+
+import getApp from './queryLevelApp'
+import updateApp from './mutateOne'
 
 const createSecret = () => crypto.randomBytes(512).toString('hex');
+
+export const validate = query => Joi.validate(query, Joi.object().keys({
+  appName: Joi.string().required()
+}), {allowUnknown: true})
+
 
 /**
  * app create
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const validated = validate(query);
+  if (validated.error) return reject(validated.error);
+  const {appName} = validated.value;
+
   try {
-    const validated = Joi.validate(query, Joi.object().keys({
-      appName: Joi.string().required()
-    }), {allowUnknown: true});
-    if (validated.error) return reject(validated.error);
-    const {appName} = validated.value;
     const nextService = {
       appId: uuid.v1(),
       appName: appName,

@@ -20,6 +20,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = validate(query);
   if (validated.error) return reject(new Error('NOT_FOUND'))
   const {appName, appId, filter} = validated.error;
+
   try {
     const db = getCtx().leveldb.sub('app');
     const app = await queryLevel(db, appName);
