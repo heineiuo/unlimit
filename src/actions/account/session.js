@@ -2,6 +2,7 @@
 import Joi from 'joi'
 import getLeveldb from '../../leveldb'
 import queryOne from './queryOne'
+import queryOneClient from '../client/queryOne'
 
 const queryLevel = (db, key) => new Promise(async resolve => {
   try {
@@ -35,9 +36,8 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
   const {token} = validated.value;
   try {
     const db = await getLeveldb();
-    const tokendb = db.sub('token');
     const userdb = db.sub('user');
-    const {userId} = await tokendb.get(token);
+    const {id: userId} = await dispatch(queryOneClient({token}))
     let user = await queryLevel(userdb, userId);
     if (user === null) {
       user = await dispatch(queryOne({userId}))
@@ -45,7 +45,7 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
     }
     resolve(user);
   } catch (e) {
-    if (e.name === 'NotFoundError') return reject(new Error('EMPTY_SESSION'));
+    if (e.name === 'NotFoundError') return resolve(null);
     reject(e)
   }
 });

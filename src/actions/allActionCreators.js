@@ -35,18 +35,19 @@ export default {
     querySession: require('./app/querySession').default,
     mutateInsertOne: require('./app/mutateInsertOne').default,
     remove: require('./app/mutateDelete').default,
-    get: require('./app/queryLevelApp').default,
     queryApp: require('./app/queryApp').default,
     mutateCreateToken: require('./app/mutateCreateToken').default,
     find: require('./app/queryOne').default,
     removeItem: require('./app/mutateDeleteToken').default,
   },
+  client: {
+    query: require('./client/query').default,
+  },
   socket: {
+    query: require('./socket/queryOne').default,
     bind: require('./socket/bind').default,
     unbind: require('./socket/unbind').default,
     session: require('./socket/session').default,
-    emptyAll: require('./socket/empty').default,
-    findByAppId: require('./socket/findByAppId').default,
   }
 };
 

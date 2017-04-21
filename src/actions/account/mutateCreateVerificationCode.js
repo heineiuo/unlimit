@@ -33,7 +33,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     const db = (await getLeveldb()).sub('emailcode');
     const code = createNumberCode();
     await db.put(email, {code, createTime: Date.now()});
-    console.log({code, createTime: Date.now()});
+    console.log({email, code})
 
     const options = {
       ToAddress: email,
@@ -41,6 +41,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       FromAlias: '右括号',
       TextBody: `您的验证码为${code}`
     };
+
+    if (config.debug) return resolve({email})
 
     if (!client) {
       client = new AliPush({
@@ -52,7 +54,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
     client.SingleSendMail(options, (err, res, body) => {
       if (err) return reject(err);
-      resolve({})
+      resolve({email})
     });
 
   } catch (e) {

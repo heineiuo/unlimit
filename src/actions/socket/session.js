@@ -1,53 +1,36 @@
-import Joi from 'joi'
-import getUserSession from '../account/session'
-import getApp from '../app/queryLevelApp'
+import queryOne from '../client/queryOne'
 
-const validate = (query) => Joi.validate(query, Joi.object().keys({
-  socketId: Joi.string(),
-  headers: Joi.object().required()
-}), {allowUnknown: true});
+export const queryLevel = (db, key) => new Promise(async resolve => {
+  try {
+    resolve(await db.get(key))
+  } catch(e){
+    resolve(null)
+  }
+})
+
 
 /**
- * 根据socketId获取app信息
+ * 根据 socketId / switch-identify 获取app信息
  * @returns {Promise}
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const {headers} = query;
+  let session = null;
   try {
-    const validated = validate(query);
-    if (validated.error) return reject(validated.error);
-
-    const {headers, socketId} = validated.value;
-    const db = getCtx().leveldb.sub('socket');
-
-    let session = null;
     if (headers.hasOwnProperty('switch-identity')) {
-      const {appSecret, appId, appName} = headers['switch-identity'];
-      if (appName === 'user') {
-        try {
-          session = await dispatch(getUserSession({token: appSecret}));
-        } catch (e) {}
-      } else {
-        try {
-          const result = await dispatch(getApp({appName, appId}));
-          const targetApp = result.list.find(item => {
-            return item.appId === appId && item.appSecret === appSecret
-          });
-          if (targetApp) {
-            session = {...targetApp, appName}
-          }
-        } catch(e){}
-
+      const {appSecret: token, appName: name} = headers['switch-identity'];
+      const type = name === 'user' ? 'user' : 'app'
+      console.log(headers['switch-identity'])
+      if (token) {
+        session = await dispatch(queryOne({token, withSourceData: true}))
       }
-    } else {
-      if (socketId) {
-        session = await db.get(socketId, {valueEncoding: 'json'});
-      }
+    } else if (query.socketId) {
+      const socketdb = getCtx().leveldb.sub('socket');
+      session = await queryLevel(socketdb, query.socketId);
     }
-
-    resolve(session);
   } catch(e){
-    if (e.name === 'NotFoundError') return reject(new Error('SOCKET_NOT_FOUND'));
-    reject(e)
+    console.log(e)
   }
+  resolve(session);
 });
 

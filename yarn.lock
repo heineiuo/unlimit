@@ -1568,15 +1568,6 @@ clean-css@4.0.x:
   dependencies:
     source-map "0.5.x"
 
-cli-table2@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/cli-table2/-/cli-table2-0.2.0.tgz#2d1ef7f218a0e786e214540562d4bd177fe32d97"
-  dependencies:
-    lodash "^3.10.1"
-    string-width "^1.0.1"
-  optionalDependencies:
-    colors "^1.1.2"
-
 cliui@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/cliui/-/cliui-2.1.0.tgz#4b475760ff80264c762c3a1719032e91c7fea0d1"
@@ -1732,13 +1723,6 @@ convert-source-map@^1.1.0, convert-source-map@^1.1.1:
   version "1.4.0"
   resolved "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.4.0.tgz#e3dad195bf61bfe13a7a3c73e9876ec14a0268f3"
 
-cookie-parser@^1.4.0:
-  version "1.4.3"
-  resolved "https://registry.npmjs.org/cookie-parser/-/cookie-parser-1.4.3.tgz#0fe31fa19d000b95f4aadf1f53fdc2b8a203baa5"
-  dependencies:
-    cookie "0.3.1"
-    cookie-signature "1.0.6"
-
 cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
@@ -1746,10 +1730,6 @@ cookie-signature@1.0.6:
 cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
-
-cookie@^0.2.3:
-  version "0.2.4"
-  resolved "https://registry.npmjs.org/cookie/-/cookie-0.2.4.tgz#a8c155aa7b9b2cf2c4d32ebc7b9a0aa288ccc6bd"
 
 core-js@^1.0.0:
   version "1.2.7"
@@ -3771,7 +3751,7 @@ level-ws@^0.0.1:
     readable-stream "~2.0.6"
     xtend "~2.1.1"
 
-leveldown@^1.5.3, leveldown@^1.6.0:
+leveldown@^1.6.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/leveldown/-/leveldown-1.6.0.tgz#e6ec906d2995a8bffd02499f39e95988cd2b230f"
   dependencies:
@@ -3781,7 +3761,7 @@ leveldown@^1.5.3, leveldown@^1.6.0:
     nan "~2.5.1"
     prebuild-install "^2.1.0"
 
-levelup@^1.3.3, levelup@^1.3.5:
+levelup@^1.3.5:
   version "1.3.5"
   resolved "https://registry.npmjs.org/levelup/-/levelup-1.3.5.tgz#fa80a972b74011f2537c8b65678bd8b5188e4e66"
   dependencies:
@@ -3896,10 +3876,6 @@ lodash.isequal@^4.0.0:
 lodash.pullallby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.npmjs.org/lodash.pullallby/-/lodash.pullallby-4.7.0.tgz#8786dfe21936191e688f0c235d1ac67e4c3db65e"
-
-lodash@^3.10.1:
-  version "3.10.1"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.4, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1:
   version "4.17.4"
@@ -5478,9 +5454,9 @@ seashell-proxy@^0.2.4:
   version "0.2.4"
   resolved "https://registry.npmjs.org/seashell-proxy/-/seashell-proxy-0.2.4.tgz#d50b6fde26159446123c81ea5d744b26f0ea00ba"
 
-seashell@^0.10.3:
-  version "0.10.3"
-  resolved "https://registry.npmjs.org/seashell/-/seashell-0.10.3.tgz#67eeb27518d4538349f260c2fc222b8221fe15ee"
+seashell@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.npmjs.org/seashell/-/seashell-0.11.0.tgz#ad5d10833c55acc509dec18251ccb44fea48f0e2"
   dependencies:
     chalk "^1.1.3"
     path-to-regexp "^1.7.0"
@@ -5772,16 +5748,6 @@ spin.js@^2.0.1:
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
-
-sprucejs@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/sprucejs/-/sprucejs-0.3.0.tgz#c9e2668bcecdf7125c550c118096061eef4f20f1"
-  dependencies:
-    babel-runtime "^6.22.0"
-    level-sublevel "^6.6.1"
-    leveldown "^1.5.3"
-    levelup "^1.3.3"
-    q-level "^1.1.3"
 
 sshpk@^1.7.0:
   version "1.11.0"

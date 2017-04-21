@@ -1,0 +1,12 @@
+{
+  "name": "user",
+  "type": "user",
+  "id": "58f85f367cef946e5f78de70",
+  "clientId": "58f9dde742eaf6ae9fc5c1c7",
+  "user": {
+    "_id": "58f85f367cef946e5f78de70",
+    "email": "heineiuo@gmail.com",
+    "createTime": 1492672310158,
+    "userId": "58f85f367cef946e5f78de70"
+  }
+}

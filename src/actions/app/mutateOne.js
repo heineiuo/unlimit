@@ -4,13 +4,13 @@ import Joi from 'joi';
 import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
-  appName: Joi.string().required(),
-  app: Joi.object().required(),
+  appId: Joi.string().required(),
 }), {allowUnknown: true});
 
-export default (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
+  const {appId} = validated.value;
   try {
     const {appName, app} = query;
     const db = (await getLeveldb()).sub('app');

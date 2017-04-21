@@ -2,23 +2,9 @@
 import Joi from 'joi'
 import queryOne from './queryOne'
 import getLeveldb from "../../leveldb"
-import crypto from 'crypto'
-import uuid from 'uuid'
 import ms from 'ms'
 import getMongodb from '../../mongodb'
-
-const createTokenByUserId = userId => new Promise(async (resolve, reject) => {
-  const normalToken = () => crypto.randomBytes(48).toString('hex');
-
-  try {
-    const db = (await getLeveldb()).sub('token');
-    const nextToken = {token: normalToken(), userId, updateTime: Date.now()};
-    await db.put(nextToken.token, nextToken);
-    resolve(nextToken)
-  } catch(e){
-    reject(e)
-  }
-});
+import mutateInsertOne from '../client/mutateInsertOne'
 
 const queryCodeLevel = (db, key) => new Promise(async resolve => {
   try {
@@ -116,7 +102,7 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
     const result = await dispatch(queryOne({email, enableNull: true}));
     const userId = result === null ? (await createUser(email)).userId : result.userId;
     if (!userId) return reject(new Error('EXCEPTION_ERROR'))
-    resolve(await createTokenByUserId(userId))
+    resolve(await dispatch(mutateInsertOne({id: userId, name: 'user', type: 'user'})))
   } catch(e) {
     reject(e)
   }
