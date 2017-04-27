@@ -1,8 +1,10 @@
-```
-key          _id        parentId  isDirectory pathname extname  driveId   tags   content
-valueType    ObjectId   ObjectId  Boolean     String   String   ObjectId  Array  Object
-```
+key      |    _id      |  parentId | isDirectory 
 
+pathname  | extname  driveId |  tags |  content
+
+valueType |   ObjectId   |ObjectId | Boolean     
+
+String   |String  | ObjectId  Array | Object
 
 ### Create
 ```
