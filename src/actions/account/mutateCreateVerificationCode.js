@@ -46,9 +46,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
     if (!client) {
       client = new AliPush({
-        AccessKeyId: config.production.aliyun.accessid,
-        AccessKeySecret: config.production.aliyun.accesskey,
-        AccountName: config.production.aliyun.dms.accountName
+        AccessKeyId: config.aliyun.accessid,
+        AccessKeySecret: config.aliyun.accesskey,
+        AccountName: config.aliyun.dms.accountName
       });
     }
 

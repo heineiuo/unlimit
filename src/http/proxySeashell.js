@@ -32,7 +32,7 @@ export default (seashell) => {
       const content = location.content;
       const requestUrl = url.pathname.substring(content.length);
 
-      let result = null;
+      let result = {body: {}};
       if (requestUrl.search(seashell.__SEASHELL_NAME) === 0) {
         const originUrl = requestUrl.substring(seashell.__SEASHELL_NAME.length);
         let session = null;

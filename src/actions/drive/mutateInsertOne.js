@@ -16,7 +16,13 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     console.log(session)
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const userId = session ? session.userId : '123';
-    const driveData = await dispatch(queryOne({name}));
+    const driveData = await new Promise(async resolve => {
+      try {
+        resolve(await dispatch(queryOne({name})));
+      } catch(e) {
+        resolve(null)
+      }
+    })
     if (driveData) return reject(new Error('NAME_EXIST'));
     const drive = (await getMongodb()).collection('drive');
     const result = await drive.insertOne({

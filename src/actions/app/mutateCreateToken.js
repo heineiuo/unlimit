@@ -19,7 +19,6 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const {session} = getCtx().request.headers;
-    console.log(session)
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const db = (await getMongodb()).collection('app');
     const tokendb = (await getLeveldb()).sub('apptoken');

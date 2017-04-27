@@ -17,7 +17,7 @@ const connectPromise = (mongodbUrl) => {
 const reconnect = async () => {
   console.log('mongodb reconnecting...')
   try {
-    const {production: {mongodbUrl}} = await getConfig();
+    const {mongodbUrl} = await getConfig();
     db = await connectPromise(mongodbUrl)
     isConnected = true
     isConnecting = false
@@ -31,7 +31,7 @@ const reconnect = async () => {
 const firstConnect = () => new Promise(async (resolve, reject) => {
   try {
     isConnecting = true;
-    const {production: {mongodbUrl}} = await getConfig();
+    const {mongodbUrl} = await getConfig();
     db = await connectPromise(mongodbUrl)
     isConnected = true
     isConnecting = false

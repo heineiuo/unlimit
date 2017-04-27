@@ -14,9 +14,11 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   let {limit, fields, name, id} = validated.value;
   try {
     const db = (await getMongodb()).collection('client');
-    const filter = {}
+    const filter = {$or: []}
     fields = fields.filter(item => item !== 'token');
-    filter.$or = [{name}, {id}];
+    if (name) filter.$or.push({name})
+    if (id) filter.$or.push({id})
+    if (filter.$or.length === 0) delete filter.$or
     const data = await db.find(filter, {fields}).limit(limit).toArray()
     resolve({data})
   } catch (e) {

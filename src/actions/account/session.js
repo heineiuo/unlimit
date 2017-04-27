@@ -19,7 +19,7 @@ const queryLevel = (db, key) => new Promise(async resolve => {
 })
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
-  token: Joi.string().required()
+  token: Joi.string().length(96).required()
 }), {allowUnknown: true})
 
 /**

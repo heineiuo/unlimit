@@ -20,7 +20,6 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     if (headers.hasOwnProperty('switch-identity')) {
       const {appSecret: token, appName: name} = headers['switch-identity'];
       const type = name === 'user' ? 'user' : 'app'
-      console.log(headers['switch-identity'])
       if (token) {
         session = await dispatch(queryOne({token, withSourceData: true}))
       }

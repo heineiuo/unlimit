@@ -2,7 +2,6 @@ import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import getMongodb from '../../mongodb'
 import getLeveldb from '../../leveldb'
-import {queryLevel} from '../account/queryOne'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   driveId: Joi.string(),
@@ -19,7 +18,10 @@ export default query => (dispatch, geCtx) => new Promise(async (resolve, reject)
     if (!result) return reject(new Error('NOT_FOUND'))
     const userdb = (await getLeveldb()).sub('user')
     let data = await Promise.all(result.users.map(userId => {
-      return queryLevel(userdb, userId)
+      return new Promise(resolve => userdb.get(userId)
+        .then(resolve)
+        .catch(() => resolve(null))
+      )
     }))
     data = data.filter(item => item !== null)
     resolve({data})

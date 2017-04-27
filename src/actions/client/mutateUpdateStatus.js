@@ -17,8 +17,8 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   id: Joi.string(),
   clientId: Joi.string(),
   socketId: Joi.string().required(),
-  toStatus: Joi.number().required(),
-  token: Joi.string(),
+  toStatus: Joi.number().valid([1, 2]).required(),
+  token: Joi.string().length(96),
 }), {allowUnknown: true});
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
@@ -31,26 +31,28 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     const socketdb = (await getLeveldb()).sub('socket')
 
     if (toStatus === 1) {
-      await mongo.findOneAndUpdate({socketId}, {$set: {
+      const result = (await mongo.findOneAndUpdate({socketId}, {$set: {
         status: 1,
         socketId: null
-      }})
+      }}, {returnOriginal: false})).value
       await deleteLevelItem(socketdb, socketId)
-      return resolve({})
+      return resolve(result)
     }
 
     if (toStatus === 2) {
-      const result = await mongo.findOneAndUpdate({id, name, token}, {$set: {
+      const result = (await mongo.findOneAndUpdate({id, name, token}, {$set: {
         status: 2,
         socketId
-      }})
-
-      console.log(result)
+      }}, {returnOriginal: false})).value
 
       await new Promise(async resolve => {
-        socketdb.put(socketId, {id, name}).then(resolve).catch(resolve)
+        try {
+          resolve(await socketdb.put(socketId, {id, name}))
+        } catch(e){
+          reject(e)
+        }
       })
-      return resolve({})
+      return resolve(result)
     }
 
   } catch (e) {

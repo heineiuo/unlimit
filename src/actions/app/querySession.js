@@ -4,7 +4,7 @@ import Joi from 'joi'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().required(),
-  appToken: Joi.string().required()
+  appToken: Joi.string().length(96).required()
 }), {allowUnknown: true})
 
 /**
@@ -13,7 +13,6 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  */
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
-  console.log(validated.error)
   if (validated.error) return reject(validated.error);
   const {appName, appToken} = validated.value;
 

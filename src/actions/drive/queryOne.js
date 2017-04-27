@@ -18,7 +18,9 @@ export default query => (dispatch, geCtx) => new Promise(async (resolve, reject)
     const filter = driveId ? {_id: ObjectId(driveId)} :
       name ? {name} :
       {domains: {$elemMatch: {$eq: domain}}}
-    resolve(await drive.findOne(filter, {fields}))
+    const result = await drive.findOne(filter, {fields})
+    if (!result) return reject(new Error('NOT_FOUND'))
+    resolve({...result, driveId: result._id.toString()})
   } catch(e){
     reject(e)
   }

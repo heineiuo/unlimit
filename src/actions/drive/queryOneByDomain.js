@@ -31,7 +31,7 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
   const {domain, forceSync} = validated.value;
   const syncCache = async () => {
     try {
-      const {pageDomain} = (await getConfig()).production;
+      const {pageDomain} = await getConfig();
       const pageDomainRegex = new RegExp(`.${pageDomain}$`);
       const index = domain.search(pageDomainRegex);
       const filter = index === -1 ? {domain} : {
@@ -56,7 +56,7 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
   }
 
   try {
-    const {cacheExpireTime, apiDomain} = (await getConfig()).production;
+    const {cacheExpireTime, apiDomain} = await getConfig();
     if (domain === apiDomain) return resolve({
       driveId: '',
       locations: [{

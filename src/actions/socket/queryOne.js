@@ -15,13 +15,12 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   const {appName, appId} = validated.value;
-
   let socketId = null;
   try {
     if (appId) {
       socketId = await dispatch(queryOne({clientId: appId})).socketId
     } else {
-      const {data} = await dispatch(queryClient({name: appName}))
+      const {data} = await dispatch(queryClient({name: appName, fields: ['socketId']}))
       const result = data.find(item => item.socketId !== null)
       socketId = result ? result.socketId : null
     }

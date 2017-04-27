@@ -66,7 +66,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const fileIndex = (await getLevel()).sub('fileIndex')
-    const {cacheExpireTime} = (await getConfig()).production
+    const {cacheExpireTime} = await getConfig();
     let indexData = await queryLevel(fileIndex, fullPath)
     if (!indexData || Date.now() > indexData.updateTime + ms(cacheExpireTime) || !indexData.updateTime) {
       indexData = await syncIndexData(fullPath)

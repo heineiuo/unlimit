@@ -9,9 +9,14 @@ import allActionCreators from './actions/allActionCreators'
 const start = async () => {
 
   try {
-    const app = new Seashell();
+
     const config = await getConfig();
     const leveldb = await getLeveldb();
+
+    const server = await createServer(config.https);
+
+    // const server = require('http').createServer();
+    const app = new Seashell({server});
 
     app.use(async (ctx, next) => {
       ctx.leveldb = leveldb;
@@ -60,10 +65,7 @@ const start = async () => {
       }
     });
 
-    // start with https server or only start WebSocket server
-    // also can be used standalone like `hub.io.listen(3443)`
-    const server = createServer(config.production.https, app);
-    app.io.attach(server);
+    server.run(app);
 
   } catch(e){
     console.log('START FAIL\n'+e.stack||e);

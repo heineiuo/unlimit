@@ -7,36 +7,27 @@
  * This integration also show how to control an http service(like stop or restart), from seashell
  */
 
-import createAutoSNIServer from 'auto-sni'
-import morgan from 'morgan'
-import compression from 'compression'
-import express from 'express'
+import morgan from "morgan"
+import compression from "compression"
+import express from "express"
+import {homedir} from "os"
+import http from "http"
+import https from "https"
+import pickLocation from "./pickLocation"
+import execLocation from "./execLocation"
+import proxySeashell from "./proxySeashell"
+import getConfig from "../config"
+import greenlock from 'greenlock'
+import redirectHttps from 'redirect-https'
 
-import pickLocation from './pickLocation'
-import execLocation from './execLocation'
-import proxySeashell from './proxySeashell'
+const app = express();
 
 /**
- * @param config
- *   "agreeTos": true,
- *    "debug": false,
- *    "email": "heineiuo@gmail.com",
- *    "approvedDomains": [
- *    ],
- *    "domains": [
- *       []
- *    ]
  * @param seashell
- *  {
- *    handler: () => promise,
- *    request: () => promise
- *  }
- * @returns {*}
+ * @param server
+ * @param [secureServer]
  */
-const createServer = (config, seashell) => {
-  const {email, debug, domains, approvedDomains} = config;
-
-  const app = express();
+const run = (seashell, server, secureServer) => {
 
   app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
   app.use(compression());
@@ -48,7 +39,7 @@ const createServer = (config, seashell) => {
    *  否则更新res.locals.location， 并交给execLocation继续处理
    * 3. execLocation能处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  app.use(pickLocation(seashell, approvedDomains));
+  app.use(pickLocation(seashell));
   app.use(proxySeashell(seashell));
   app.use(execLocation(seashell));
 
@@ -67,7 +58,7 @@ const createServer = (config, seashell) => {
      */
     if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
     if (err.message === 'NOT_FOUND') return next();
-    console.log('Catch Error: \n' + err.stack||err);
+    console.log('Catch Error: \n' + err.stack || err);
     return res.json({error: err.message});
   });
 
@@ -76,23 +67,45 @@ const createServer = (config, seashell) => {
     res.end('NOT FOUND \n SEASHELL SERVER.')
   });
 
+  server.listen(80, () => console.log('http on port 80'))
+  if (secureServer) secureServer.listen(443, () => console.log('http on port 443'))
+}
 
-  const server = createAutoSNIServer({
-    email,
-    debug,
-    // domains: (hostname, callback) => callback(null, [hostname]),
-    domains,
-    agreeTos: true,
-    forceSSL: false,
-    redirectCode: 301,
-    ports: {
-      http: 80,
-      https: 443
+
+export default () => new Promise(async (resolve, reject) => {
+  let server = null;
+  let secureServer = null;
+
+  try {
+    const config = await getConfig();
+    const enableHttps = config.https.enable || false;
+    if (!enableHttps) {
+      server = http.createServer(app);
+      server.run = (seashell) => run(seashell, server);
+      return resolve(server);
     }
-  }, app).once("listening", () => console.log("[SEASHELL] Listening on port 443 and 80."));
 
-  return server
 
-};
+    const {email, agreeTos, debug, approvedDomains} = config.https;
+    const le = greenlock.create({
+      app,
+      debug,
+      email,
+      agreeTos,
+      server: debug ? 'staging' : 'production',
+      configDir: `${homedir()}/letsencrypt/etc`,
+      approvedDomains
+    })
 
-export default createServer
+    server = http.createServer(app);
+    // server = http.createServer(le.middleware(redirectHttps()));
+
+    secureServer = https.createServer(le.httpsOptions, le.middleware(le.app))
+    secureServer.run = (seashell) => run(seashell, server, secureServer)
+    return resolve(secureServer)
+
+  } catch (e) {
+    reject(e)
+  }
+});
+

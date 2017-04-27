@@ -1,13 +1,12 @@
 /* @private */
 
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 import getLeveldb from '../../leveldb'
 import queryOneUser from '../account/queryOne'
 import queryOneApp from '../app/queryOne'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
-  token: Joi.string(),
+  token: Joi.string().length(96),
   socketId: Joi.string(),
   clientId: Joi.string(),
   withSourceData: Joi.boolean().default(false)

@@ -1,6 +1,7 @@
 import Url from "url"
 import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
+import getConfig from '../config'
 
 /**
  * 通过比对pathname, 找到路由
@@ -37,10 +38,11 @@ export const findTargetLocation = (locations, url) => {
 /**e
  * 查找host及其location列表
  */
-export default (seashell, approvedDomains) => {
+export default (seashell) => {
   return async (req, res, next) => {
     try {
       const {host} = req.headers;
+      const {approvedDomains} = (await getConfig()).https;
       const requestLocations = await seashell.requestSelf({
         headers: {originUrl: '/drive/queryOneByDomain'},
         body: {domain: host, fields: ['locations']}
@@ -52,18 +54,26 @@ export default (seashell, approvedDomains) => {
       res.locals.host = host;
       res.locals.driveId = driveId.toString();
       res.locals.url = url;
-      res.locals.location = Object.assign({
-        'X-Frame-Options': 'SAMEORIGIN'
-      }, location, {content: location.content});
+      res.locals.location = location;
 
       if (location.cors) {
         res.set('Access-Control-Expose-Headers', '*');
+        // IE8 does not allow domains to be specified, just the *
+        // headers["Access-Control-Allow-Origin"] = req.headers.origin;
         res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type, X-Requested-With');
         res.set('Access-Control-Allow-Methods', '*')
+
+        if (req.method === 'OPTIONS') {
+          res.set("Access-Control-Max-Age", '86400')
+          return res.end();
+        }
       }
 
-      res.set('X-Frame-Options', location['X-Frame-Options']);
+      if (location['X-Frame-Options']) {
+        res.set('X-Frame-Options', location['X-Frame-Options']);
+      }
+
       res.removeHeader("x-powered-by");
 
 

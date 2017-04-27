@@ -9,7 +9,6 @@ import mutateInsertOne from '../client/mutateInsertOne'
 const queryCodeLevel = (db, key) => new Promise(async resolve => {
   try {
     const result = await db.get(key);
-    console.log(result)
     const validated = Joi.validate(result, Joi.object().keys({
       code: Joi.string().length(6).required(),
       createTime: Joi.number().required()
