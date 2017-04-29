@@ -2,7 +2,7 @@ import {Router} from "express"
 import bodyParser from "body-parser"
 import pick from "lodash/pick"
 
-export default (seashell) => {
+export default (getSeashell) => {
 
   const router = Router();
 
@@ -21,6 +21,7 @@ export default (seashell) => {
   router.use(async (req, res, next) => {
 
     try {
+      const seashell = await getSeashell();
       const {host, url, location} = res.locals;
       const __GATEWAY_META = Object.assign({},
         pick(req, ['ip', 'method', 'originalUrl', 'protocol']),

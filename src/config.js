@@ -12,7 +12,7 @@ export default (key = null) => new Promise(async (resolve, reject) => {
   if (configError) return reject(configError);
   if (configReady) return resolve(config);
   try {
-    const {name} = json5.parse(await fs.readFile(path.join(__dirname, '../package.json'), 'utf8'));
+    const {name} = json5.parse(await fs.readFile(path.join(process.cwd(), './package.json'), 'utf8'));
     const datadir = argv.datadir ? argv.datadir : `${homedir()}/data/${name}`;
     const conf = argv.conf ? argv.conf : `${homedir()}/data/${name}/config.json`;
     const confContent = json5.parse(await fs.readFile(conf, 'utf8'));

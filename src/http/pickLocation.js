@@ -38,11 +38,12 @@ export const findTargetLocation = (locations, url) => {
 /**e
  * 查找host及其location列表
  */
-export default (seashell) => {
+export default (getSeashell) => {
   return async (req, res, next) => {
     try {
+      const seashell = await getSeashell();
       const {host} = req.headers;
-      const {approvedDomains} = (await getConfig()).https;
+      const {forceHTTPSDomains} = (await getConfig()).https;
       const requestLocations = await seashell.requestSelf({
         headers: {originUrl: '/drive/queryOneByDomain'},
         body: {domain: host, fields: ['locations']}
@@ -77,7 +78,7 @@ export default (seashell) => {
       res.removeHeader("x-powered-by");
 
 
-      if (approvedDomains.indexOf(req.headers.host) > -1) {
+      if (forceHTTPSDomains.indexOf(req.headers.host) > -1) {
         if (req.protocol === 'http') {
           const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
           if (browser.name !== 'IE' || (browser.name === 'IE' && Number(browser.major) >= 9)) {

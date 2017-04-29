@@ -1,4 +1,4 @@
-import Seashell from 'seashell'
+import Seashell from '../../../git/seashell'
 import chalk from 'chalk'
 import {createDispatch} from 'action-creator'
 import getConfig from './config'
@@ -12,7 +12,6 @@ const start = async () => {
 
     const config = await getConfig();
     const leveldb = await getLeveldb();
-
     const server = await createServer(config.https);
 
     // const server = require('http').createServer();

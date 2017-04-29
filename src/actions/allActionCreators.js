@@ -30,6 +30,7 @@ export default {
     mutateInsertOne: require('./drive/mutateInsertOne').default,
     mutateLocation: require('./drive/mutateLocation').default,
     mutateUser: require('./drive/mutateUser').default,
+    mutateApproveDomain: require('./drive/mutateApproveDomain').default,
   },
   app: {
     querySession: require('./app/querySession').default,
