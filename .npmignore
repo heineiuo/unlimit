@@ -11,3 +11,4 @@ Dockerfile
 seashell-dev.json
 yarn.lock
 *.log*
+*.yml
