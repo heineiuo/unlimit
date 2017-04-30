@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "dynamic-import-node",
     "transform-class-properties",
     ["transform-runtime", {
       "polyfill": false,

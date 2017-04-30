@@ -1,0 +1,13 @@
+__mocks__
+__tests__
+.vscode
+docs
+scripts
+src
+.babelrc
+.editorconfig
+.gitignore
+Dockerfile
+seashell-dev.json
+yarn.lock
+*.log*

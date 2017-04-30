@@ -1,6 +1,6 @@
 {
   "name": "gateway",
-  "script": "./bin/gateway.js",
+  "script": "./dist/bin/gateway.js",
   "watch": true,
   "env": {
     "NODE_ENV": "production"

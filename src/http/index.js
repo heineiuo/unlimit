@@ -17,7 +17,6 @@ import pickLocation from "./pickLocation"
 import execLocation from "./execLocation"
 import proxySeashell from "./proxySeashell"
 import getConfig from "../config"
-import redirectHttps from 'redirect-https'
 import SNICallback from './SNICallback'
 import letiny from 'letiny'
 import {tmpdir} from 'os'
