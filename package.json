@@ -6,7 +6,7 @@
     "start": "npm run server",
     "test": "jest __tests__",
     "server": "nodemon --watch ./src --exec sudo babel-node ./src/index.js --debug",
-    "build": "seashell-dev --build --compress"
+    "build": "seashell-dev --build"
   },
   "dependencies": {
     "action-creator": "^0.4.0",

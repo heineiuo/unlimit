@@ -2373,8 +2373,7 @@
 	  var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 	  return new _promise2.default(function () {
 	    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(resolve, reject) {
-	      var _json5$parse, name, datadir, conf, confContent;
-
+	      var name, datadir, conf, confContent;
 	      return _regenerator2.default.wrap(function _callee$(_context) {
 	        while (1) {
 	          switch (_context.prev = _context.next) {
@@ -2396,44 +2395,37 @@
 
 	            case 4:
 	              _context.prev = 4;
-	              _context.t0 = _json2.default;
-	              _context.next = 8;
-	              return _fsPromise2.default.readFile(_path2.default.join(process.cwd(), './package.json'), 'utf8');
-
-	            case 8:
-	              _context.t1 = _context.sent;
-	              _json5$parse = _context.t0.parse.call(_context.t0, _context.t1);
-	              name = _json5$parse.name;
+	              name = 'seashell-gateway';
 	              datadir = _yargs.argv.datadir ? _yargs.argv.datadir : (0, _os.homedir)() + "/data/" + name;
 	              conf = _yargs.argv.conf ? _yargs.argv.conf : (0, _os.homedir)() + "/data/" + name + "/config.json";
-	              _context.t2 = _json2.default;
-	              _context.next = 16;
+	              _context.t0 = _json2.default;
+	              _context.next = 11;
 	              return _fsPromise2.default.readFile(conf, 'utf8');
 
-	            case 16:
-	              _context.t3 = _context.sent;
-	              confContent = _context.t2.parse.call(_context.t2, _context.t3);
+	            case 11:
+	              _context.t1 = _context.sent;
+	              confContent = _context.t0.parse.call(_context.t0, _context.t1);
 
 	              delete confContent.conf;
 	              config = (0, _extends3.default)({ datadir: datadir }, confContent, _yargs.argv);
 	              configReady = true;
 	              resolve(config);
-	              _context.next = 28;
+	              _context.next = 23;
 	              break;
 
-	            case 24:
-	              _context.prev = 24;
-	              _context.t4 = _context["catch"](4);
+	            case 19:
+	              _context.prev = 19;
+	              _context.t2 = _context["catch"](4);
 
-	              configError = _context.t4;
+	              configError = _context.t2;
 	              reject(configError);
 
-	            case 28:
+	            case 23:
 	            case "end":
 	              return _context.stop();
 	          }
 	        }
-	      }, _callee, undefined, [[4, 24]]);
+	      }, _callee, undefined, [[4, 19]]);
 	    }));
 
 	    return function (_x2, _x3) {
