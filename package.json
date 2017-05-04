@@ -1,12 +1,12 @@
 {
   "name": "smile-web",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "main": "dist/smile-web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "react-sh",
-    "build": "react-sh --build --production --compress"
+    "build": "rm -rf dist/* && react-sh --build --production --compress"
   },
   "author": "@heineiuo",
   "license": "MIT",

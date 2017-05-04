@@ -22,7 +22,7 @@ const sendVerifyCode = (form) => async (dispatch, getState) => {
     }
   };
 
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/createVerificationCode`, signature({
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateVerificationCode`, signature({
     email: form.email
   }));
 

@@ -22,7 +22,7 @@ const checkLogin = () => async (dispatch, getState) => {
     token: userToken
   }));
 
-  if (result.error || !result.hasOwnProperty('id')) {
+  if (result.error || !result.hasOwnProperty('userId')) {
     return dispatch({
       type: 'account__checkedLogin',
       payload: {

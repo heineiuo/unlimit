@@ -26,10 +26,10 @@ class Title extends Component {
         </DropDownTrigger>
         <DropDownContent className={css(styles.title__content)}>
           <div className={css(styles.triangle)} />
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/">右括号</Link>
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">协作空间</Link>
+          <Link onClick={this.closeContent} className={css(styles.link)} to="/">消息</Link>
+          <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">空间</Link>
           <Link onClick={this.closeContent} className={css(styles.link)} to="/account">账号</Link>
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/console">管理面板</Link>
+          <Link onClick={this.closeContent} className={css(styles.link)} to="/service">服务</Link>
         </DropDownContent>
       </DropDown>
     )

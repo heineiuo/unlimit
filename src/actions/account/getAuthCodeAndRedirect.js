@@ -9,7 +9,7 @@ import signature from '../common/signature'
 const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   const {userToken=null} = localStorage;
   const {redirectUrl} = getState().account;
-  const res = await POSTRawJSON(`${API_HOST}/seashell/account/createTokenByAuthCode`, signature({
+  const res = await POSTRawJSON(`${API_HOST}/seashell/account/mutateCreateAuthCode`, signature({
     token: userToken
   }));
 

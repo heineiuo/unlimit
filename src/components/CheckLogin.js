@@ -9,6 +9,7 @@ import AsyncHome from './Home/AsyncHome'
 import AsyncConsole from './AsyncConsole'
 import AsyncAccount from './Account/AsyncAccount'
 import AsyncOAuth from './OAuth/AsyncOAuth'
+import AsyncIframe from './OAuth/AsyncIframe'
 import {injectAsyncReducer} from '../store'
 // import Home from './Home/Home'
 // import Drive from './Drive/Master'
@@ -28,6 +29,7 @@ class CheckLogin extends Component {
         <Switch>
           <Route exact path="/" render={AsyncHome} />
           <Route path="/drive" render={AsyncDrive} />
+          <Route path="/oauth/iframe" render={AsyncIframe} />
           <Route path="/oauth" render={AsyncOAuth} />
           <Route path="/account" render={AsyncAccount} />
           <Route path="/console" render={AsyncConsole} />

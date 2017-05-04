@@ -5,7 +5,7 @@ import signature from '../common/signature'
 
 const logout = () => async (dispatch, getState) => {
   console.log('正在登出系统...');
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/logout`, signature({
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateDeleteToken`, signature({
     token: localStorage.userToken
   }));
 

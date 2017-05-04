@@ -4,7 +4,7 @@ import {API_HOST} from '../../constants'
 import signature from '../common/signature'
 
 const login = (formData) => async (dispatch, getState) => {
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/createTokenByVerificationCode`, signature({
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateToken`, signature({
     email: formData.email,
     code: formData.code
   }));
@@ -13,7 +13,7 @@ const login = (formData) => async (dispatch, getState) => {
     console.log(result.error);
     return dispatch({
       type: "account__loginError",
-      error: e
+      error: result.error
     })
   }
   localStorage.userId = result.userId;

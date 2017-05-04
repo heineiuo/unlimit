@@ -21,6 +21,7 @@
 
   window.DEV = true;
   window.__SMILE_DEV = true;
+  window.__SMILE_API = 'https://api.youkuohao.com';
   SystemJS.config({
     baseUrl: '/',
     meta: {'*.js': {format: 'amd'}},
@@ -35,10 +36,10 @@
       'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
       'smile-draft': 'http://127.0.0.1:8085/dist/smile-draft.js',
       'smile-admin': 'https://unpkg.com/smile-admin@0.0.1/dist/smile-admin.js',
-//      'smile-topic': 'https://unpkg.com/smile-topic@0.0.3/dist/smile-topic.js',
       'smile-topic': 'https://unpkg.com/smile-topic@0.0.3/dist/smile-topic.js',
-//      'smile-web': 'https://unpkg.com/smile-web@0.0.7/dist/smile-web.js',
-      'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js',
+//      'smile-topic': 'http://127.0.0.1:8086/dist/smile-topic.js',
+      'smile-web': 'https://unpkg.com/smile-web@0.0.8/dist/smile-web.js',
+//      'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js',
     }
   });
 
