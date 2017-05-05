@@ -19,9 +19,10 @@ export default (servername, callback) => {
       if (!approvedDomains.includes(servername)) return callback(new Error('Unapproved domain'));
       console.log('start create secure context..')
       const ctx = ctxMap[servername] = tls.createSecureContext({
-        ca: await fs.readFileSync(`${pemdir}/${servername}/ca.pem`),
-        key: await fs.readFileSync(`${pemdir}/${servername}/key.pem`),
-        cert: await fs.readFileSync(`${pemdir}/${servername}/cert.pem`)
+        pfx: await fs.readFileSync(`${pemdir}/${servername}/pfx.pem`),
+        // ca: await fs.readFileSync(`${pemdir}/${servername}/ca.pem`),
+        // key: await fs.readFileSync(`${pemdir}/${servername}/key.pem`),
+        // cert: await fs.readFileSync(`${pemdir}/${servername}/cert.pem`)
       })
       console.log(ctx);
       callback(null, ctx)

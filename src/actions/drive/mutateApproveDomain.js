@@ -22,6 +22,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       email,
       domains: domain, //'example.com,www.example.com',
       webroot: `${tmpdir()}`,
+      pfxFile: `${pemdir}/${domain}/pfx.pem`,
       certFile: `${pemdir}/${domain}/cert.pem`,
       caFile: `${pemdir}/${domain}/ca.pem`,
       privateKey: `${pemdir}/${domain}/key.pem`,

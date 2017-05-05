@@ -392,13 +392,15 @@
 
 	'use strict';
 
+	var _getPrototypeOf = __webpack_require__(9);
+
+	var _getPrototypeOf2 = _interopRequireDefault2(_getPrototypeOf);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _getPrototypeOf = __webpack_require__(9);
-
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
 	var _classCallCheck2 = __webpack_require__(10);
 
@@ -511,13 +513,15 @@
 
 	'use strict';
 
+	var _assign = __webpack_require__(4);
+
+	var _assign2 = _interopRequireDefault2(_assign);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _assign = __webpack_require__(4);
-
-	var _assign2 = _interopRequireDefault(_assign);
 
 	var _regenerator = __webpack_require__(3);
 
@@ -699,6 +703,16 @@
 
 	'use strict';
 
+	var _assign = __webpack_require__(4);
+
+	var _assign2 = _interopRequireDefault2(_assign);
+
+	var _promise = __webpack_require__(2);
+
+	var _promise2 = _interopRequireDefault2(_promise);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -707,14 +721,6 @@
 	var _extends2 = __webpack_require__(18);
 
 	var _extends3 = _interopRequireDefault(_extends2);
-
-	var _assign = __webpack_require__(4);
-
-	var _assign2 = _interopRequireDefault(_assign);
-
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
 
 	var _typeof2 = __webpack_require__(19);
 
@@ -978,6 +984,12 @@
 
 	'use strict';
 
+	var _getPrototypeOf = __webpack_require__(9);
+
+	var _getPrototypeOf2 = _interopRequireDefault2(_getPrototypeOf);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -986,10 +998,6 @@
 	var _extends2 = __webpack_require__(18);
 
 	var _extends3 = _interopRequireDefault(_extends2);
-
-	var _getPrototypeOf = __webpack_require__(9);
-
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
 	var _classCallCheck2 = __webpack_require__(10);
 
@@ -1040,7 +1048,7 @@
 	          headers: (0, _extends3.default)({}, _this.response.headers, { type: 'I_HAVE_HANDLE_THIS_REQUEST' }),
 	          body: _this.response.body
 	        }));
-	        // this.emit('end');
+	        _this.emit('close');
 	      }
 	    };
 	    return _this;
@@ -1057,19 +1065,15 @@
 
 	"use strict";
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.clearUnsafeHeaders = undefined;
-
 	var _stringify = __webpack_require__(27);
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	var clearUnsafeHeaders = function clearUnsafeHeaders(req) {
 	  if (req instanceof Object) return (0, _stringify2.default)(req);
 	  return req;
@@ -1089,6 +1093,12 @@
 
 	'use strict';
 
+	var _promise = __webpack_require__(2);
+
+	var _promise2 = _interopRequireDefault2(_promise);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -1101,10 +1111,6 @@
 	var _asyncToGenerator2 = __webpack_require__(5);
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
 
 	var _Context = __webpack_require__(25);
 
@@ -1344,17 +1350,19 @@
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _assign = __webpack_require__(4);
 
-	var _assign2 = _interopRequireDefault(_assign);
+	var _assign2 = _interopRequireDefault2(_assign);
 
 	var _getPrototypeOf = __webpack_require__(9);
 
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	var _getPrototypeOf2 = _interopRequireDefault2(_getPrototypeOf);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _classCallCheck2 = __webpack_require__(10);
 
@@ -1636,6 +1644,12 @@
 
 	'use strict';
 
+	var _promise = __webpack_require__(2);
+
+	var _promise2 = _interopRequireDefault2(_promise);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -1648,10 +1662,6 @@
 	var _asyncToGenerator2 = __webpack_require__(5);
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
 
 	var _debug = __webpack_require__(38);
 
@@ -2038,6 +2048,16 @@
 
 	'use strict';
 
+	var _promise = __webpack_require__(2);
+
+	var _promise2 = _interopRequireDefault2(_promise);
+
+	var _assign = __webpack_require__(4);
+
+	var _assign2 = _interopRequireDefault2(_assign);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -2047,17 +2067,9 @@
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
-
 	var _extends2 = __webpack_require__(18);
 
 	var _extends3 = _interopRequireDefault(_extends2);
-
-	var _assign = __webpack_require__(4);
-
-	var _assign2 = _interopRequireDefault(_assign);
 
 	var _asyncToGenerator2 = __webpack_require__(5);
 
@@ -2231,6 +2243,12 @@
 
 	'use strict';
 
+	var _promise = __webpack_require__(2);
+
+	var _promise2 = _interopRequireDefault2(_promise);
+
+	function _interopRequireDefault2(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -2243,10 +2261,6 @@
 	var _asyncToGenerator2 = __webpack_require__(5);
 
 	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-	var _promise = __webpack_require__(2);
-
-	var _promise2 = _interopRequireDefault(_promise);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -3984,45 +3998,33 @@
 	            console.log('start create secure context..');
 	            _context.t0 = _tls2.default;
 	            _context.next = 18;
-	            return _fsPromise2.default.readFileSync(pemdir + '/' + servername + '/ca.pem');
+	            return _fsPromise2.default.readFileSync(pemdir + '/' + servername + '/pfx.pem');
 
 	          case 18:
 	            _context.t1 = _context.sent;
-	            _context.next = 21;
-	            return _fsPromise2.default.readFileSync(pemdir + '/' + servername + '/key.pem');
-
-	          case 21:
-	            _context.t2 = _context.sent;
-	            _context.next = 24;
-	            return _fsPromise2.default.readFileSync(pemdir + '/' + servername + '/cert.pem');
-
-	          case 24:
-	            _context.t3 = _context.sent;
-	            _context.t4 = {
-	              ca: _context.t1,
-	              key: _context.t2,
-	              cert: _context.t3
+	            _context.t2 = {
+	              pfx: _context.t1
 	            };
-	            ctx = ctxMap[servername] = _context.t0.createSecureContext.call(_context.t0, _context.t4);
+	            ctx = ctxMap[servername] = _context.t0.createSecureContext.call(_context.t0, _context.t2);
 
 	            console.log(ctx);
 	            callback(null, ctx);
-	            _context.next = 35;
+	            _context.next = 29;
 	            break;
 
-	          case 31:
-	            _context.prev = 31;
-	            _context.t5 = _context['catch'](0);
+	          case 25:
+	            _context.prev = 25;
+	            _context.t3 = _context['catch'](0);
 
-	            console.log(_context.t5);
-	            callback(_context.t5);
+	            console.log(_context.t3);
+	            callback(_context.t3);
 
-	          case 35:
+	          case 29:
 	          case 'end':
 	            return _context.stop();
 	        }
 	      }
-	    }, _callee, undefined, [[0, 31]]);
+	    }, _callee, undefined, [[0, 25]]);
 	  })));
 	};
 
@@ -8712,6 +8714,7 @@
 	                  email: email,
 	                  domains: domain, //'example.com,www.example.com',
 	                  webroot: '' + (0, _os.tmpdir)(),
+	                  pfxFile: pemdir + '/' + domain + '/pfx.pem',
 	                  certFile: pemdir + '/' + domain + '/cert.pem',
 	                  caFile: pemdir + '/' + domain + '/ca.pem',
 	                  privateKey: pemdir + '/' + domain + '/key.pem',
