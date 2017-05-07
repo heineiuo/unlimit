@@ -1,0 +1,48 @@
+{
+  "targets": [
+    {
+      "disable": false,
+      "origin": false,
+      "key": "smile-admin",
+      "filename": "./src/index.js",
+      "distPath": "./dist",
+      "template": "src/index.html",
+      "publicPath": "/smile-admin@0.0.1/dist/",
+      "devPublicPath": "http://127.0.0.1:8088/dist/",
+      "externals":  {
+        "react": {
+          "root": "React",
+          "amd": "react",
+          "commonjs": "react"
+        },
+        "react-dom": {
+          "root": "ReactDOM",
+          "amd": "react-dom",
+          "commonjs": "react-dom"
+        },
+        "react-router-dom": {
+          "root": "ReactRouterDOM",
+          "amd": "react-router-dom",
+          "commonjs": "react-router-dom"
+        },
+        "redux": {
+          "root": "Redux",
+          "amd": "redux",
+          "commonjs": "redux"
+        },
+        "react-redux": {
+          "root": "ReactRedux",
+          "amd": "react-redux",
+          "commonjs": "react-redux"
+        }
+      },
+      "isLibrary": true,
+      "//useSystemRegister": true
+    }
+  ],
+  "useBabelrc": true,
+  "devPublicPath": "./",
+  "modulesNeedBabel": [
+    "react-lang"
+  ]
+}

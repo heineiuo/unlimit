@@ -1,0 +1,13 @@
+node_modules
+src
+.babelrc
+.ediorconfig
+.gitignore
+index.html
+react-dev.json
+README.md
+yarn.lock
+.idea
+.DS_Store
+*.log*
+.git
