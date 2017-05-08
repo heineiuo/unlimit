@@ -6,9 +6,9 @@ import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
-import Title from '../common/Title'
-import ProfileDropDown from '../common/ProfileDropDown'
-import commonStyles from '../common/styles'
+import Title from '../components/Title'
+import ProfileDropDown from '../components/ProfileDropDown'
+import commonStyles from '../styles'
 
 class Header extends Component {
 

@@ -163,9 +163,9 @@ export default module.exports = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle: require('../../../actions/setNavTitle'),
-    getHostList: require('../../../actions/drive/queryList'),
-    commitLocations: require('../../../actions/drive/mutateLocations'),
-    restoreFileList: require('../../../actions/file/restoreFileList'),
+    setTitle: require('../../actions/setNavTitle').default,
+    getHostList: require('../../actions/drive/queryList').default,
+    commitLocations: require('../../actions/drive/mutateLocations').default,
+    restoreFileList: require('../../actions/file/restoreFileList').default,
   }, dispatch)
 )(Location)

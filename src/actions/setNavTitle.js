@@ -6,4 +6,4 @@ const setTitle = (title) => {
   }
 };
 
-export default module.exports = setTitle
+export default setTitle

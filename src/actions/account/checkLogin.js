@@ -1,7 +1,6 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../../constants'
-import signature from '../common/signature'
 
 /**
  * 检查登录
@@ -18,9 +17,9 @@ const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, signature({
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, {
     token: userToken
-  }));
+  });
 
   if (result.error || !result.hasOwnProperty('userId')) {
     return dispatch({

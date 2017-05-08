@@ -1,5 +1,5 @@
 import {POSTRawJSON} from 'fetch-tools'
-import {API_HOST, signature} from '../constants'
+import {API_HOST, signature} from '../../constants'
 
 export const allStatus = ['草稿', '已发布', '已下线']
 

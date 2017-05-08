@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import Header from './Header'
 import Paper from 'react-sea/lib/Paper'
 import Body from 'react-sea/lib/Body'
 import Spin from 'react-spin'
@@ -8,11 +7,12 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {Switch, Route} from 'react-router-dom'
 
+import Header from './Header'
 import Bot from './Bot'
 import Users from './Users'
 import IntegrateApp from './IntegrateApp'
 
-import {fetchUserList} from '../store/admin'
+import {fetchUserList} from '../reducers/admin'
 
 /**
  * 集成APP

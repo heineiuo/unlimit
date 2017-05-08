@@ -113,7 +113,7 @@ const ConnectedWrapper = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    queryOne: require('../../actions/drive/queryOne').default
+    queryOne: require('../actions/drive/queryOne').default
   }, dispatch)
 )(DriveWrapper);
 

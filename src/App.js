@@ -3,7 +3,7 @@ import {Provider} from 'react-redux'
 import { ConnectedRouter} from 'react-router-redux'
 import {store, history} from './store'
 
-import ConnectCheckLogin from './components/CheckLogin'
+import ConnectCheckLogin from './CheckLogin'
 
 class App extends Component {
 

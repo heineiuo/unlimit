@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import AsyncComponent from '../../common/AsyncComponent'
-import {injectAsyncReducer} from '../../../store'
+import AsyncComponent from '../../components/AsyncComponent'
+import {injectAsyncReducer} from '../../store'
 
 
 const Async = (props) => {

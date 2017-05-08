@@ -24,4 +24,4 @@ const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
 
 };
 
-export default module.exports = getFileList;
+export default getFileList;

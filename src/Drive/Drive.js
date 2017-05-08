@@ -1,11 +1,11 @@
 import React, {Component} from "react"
 import {Link, Route, Switch} from "react-router-dom"
-import DriveHeader from "./DriveHeader"
 import Body from "react-sea/lib/Body"
 import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import HostList from "./DriveList"
+import DriveHeader from "./DriveHeader"
 
 class Drive extends Component {
 
@@ -57,9 +57,9 @@ export default module.exports = connect(
     nav: store.nav
   }),
   (dispatch) => bindActionCreators({
-    getHostList: require('../../actions/drive/queryList'),
-    deleteHost: require('../../actions/drive/mutateDeleteOne'),
-    createHost: require('../../actions/drive/mutateInsertOne'),
+    getHostList: require('../actions/drive/queryList').default,
+    deleteHost: require('../actions/drive/mutateDeleteOne').default,
+    createHost: require('../actions/drive/mutateInsertOne').default,
   }, dispatch),
   (stateProps, dispatchProps, ownProps) => {
     return Object.assign({}, stateProps, dispatchProps, ownProps, {})

@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite'
-import commonStyles from '../common/styles'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import commonStyles from '../styles'
 
 const codeInputStyle = Object.assign({}, commonStyles.input, {
   width: '164px',
@@ -133,7 +133,7 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    login: require('../../actions/account/login'),
-    sendVerifyCode: require('../../actions/account/sendVerifyCode')
+    login: require('../actions/account/login'),
+    sendVerifyCode: require('../actions/account/sendVerifyCode')
   }, dispatch)
 )(UnLogged)

@@ -3,13 +3,13 @@ import {Link, Route, Switch} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {css, StyleSheet} from 'aphrodite'
-import TagsEditor from './TagsEditor'
-import makeCancelable from './common/makeCancelable'
-import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import hoverHoc from './common/hoverHoc'
-import {allStatus} from '../actions/editTopicStatus'
-import TopicCommentList from './TopicCommentList'
 import Button from 'react-sea/lib/Button'
+import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
+import TagsEditor from './TagsEditor'
+import makeCancelable from '../helpers/makeCancelable'
+import hoverHoc from '../components/hoverHoc'
+import {allStatus} from '../actions/topic/editTopicStatus'
+import TopicCommentList from './TopicCommentList'
 import DraftWithPlugin from './DraftWithPlugin'
 
 const StatusItem = hoverHoc(props => (
@@ -284,10 +284,10 @@ export default connect(
     current: store.topic.current
   }),
   (dispatch) => bindActionCreators({
-    postTopic: require('../actions/postTopic').default,
-    putTopic: require('../actions/putTopic').default,
-    editTopicTags: require('../actions/editTopicTags').default,
-    editTopicStatus: require('../actions/editTopicStatus').default,
-    getTopic: require('../actions/getTopic').default
+    postTopic: require('../actions/topic/postTopic').default,
+    putTopic: require('../actions/topic/putTopic').default,
+    editTopicTags: require('../actions/topic/editTopicTags').default,
+    editTopicStatus: require('../actions/topic/editTopicStatus').default,
+    getTopic: require('../actions/topic/getTopic').default
   }, dispatch)
 )(TopicDetail)

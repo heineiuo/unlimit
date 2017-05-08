@@ -1,6 +1,5 @@
 import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
 import {API_HOST} from '../../constants'
-import signature from '../common/signature'
 
 /**
  * 获取授权码
@@ -9,9 +8,9 @@ import signature from '../common/signature'
 const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   const {userToken=null} = localStorage;
   const {redirectUrl} = getState().account;
-  const res = await POSTRawJSON(`${API_HOST}/seashell/account/mutateCreateAuthCode`, signature({
+  const res = await POSTRawJSON(`${API_HOST}/seashell/account/mutateCreateAuthCode`, {
     token: userToken
-  }));
+  });
 
   if (res.error) return console.log(res.error);
   location.href = `${redirectUrl}?code=${res.code}`

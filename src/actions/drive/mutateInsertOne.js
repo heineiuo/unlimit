@@ -26,4 +26,4 @@ const createHost = (query) => async (dispatch, getState) => {
   dispatch(push(`/drive/${result._id}`))
 };
 
-export default module.exports = createHost;
+export default createHost;

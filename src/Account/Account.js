@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import Spin from 'react-spin'
+import Body from 'react-sea/lib/Body'
 import Logged from "./Logged"
 import UnLogged from './Unlogged'
-import Spin from 'react-spin'
 import Header from './AccountHeader'
-import Body from 'react-sea/lib/Body'
 
 class Check extends Component {
 
@@ -50,8 +50,8 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    checkLogin: require('../../actions/account/checkLogin'),
-    sendVerifyCode: require('../../actions/account/sendVerifyCode'),
-    getAuthCodeAndRedirect: require('../../actions/account/getAuthCodeAndRedirect')
+    checkLogin: require('../actions/account/checkLogin'),
+    sendVerifyCode: require('../actions/account/sendVerifyCode'),
+    getAuthCodeAndRedirect: require('../actions/account/getAuthCodeAndRedirect')
   }, dispatch)
 )(Check)

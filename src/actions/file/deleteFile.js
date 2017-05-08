@@ -12,4 +12,4 @@ const deleteFile = (driveId, fileId) => async (dispatch, getState) => {
   if (result.error) return console.log(result.error)
 };
 
-export default module.exports = deleteFile;
+export default deleteFile;

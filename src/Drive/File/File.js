@@ -5,17 +5,17 @@ import Button from "react-sea/lib/Button"
 import Upload from "rc-upload"
 import Spin from "react-spin"
 import urlencode from "form-urlencoded"
+import {connect} from 'react-redux'
+import {push} from 'react-router-redux'
+import {bindActionCreators} from 'redux'
+import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from '../CreateFileModal'
-import IntegrateApp from "../../common/IntegrateApp"
-import {injectAsyncReducer} from '../../../store'
-import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import IconArrowDropdown from '../../common/IconArrowDropdown'
-import {connect} from 'react-redux'
-import {push} from 'react-router-redux'
-import {bindActionCreators} from 'redux'
+import IntegrateApp from "../../components/IntegrateApp"
+import {injectAsyncReducer} from '../../store'
+import IconArrowDropdown from '../../components/IconArrowDropdown'
 
 class File extends Component {
 
@@ -434,13 +434,13 @@ const connectedFile = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    getFileList: require('../../../actions/file/getFileList'),
-    deleteFile: require('../../../actions/file/deleteFile'),
-    setTitle: require('../../../actions/setNavTitle'),
-    getHostList: require('../../../actions/drive/queryList'),
-    restoreFileList: require('../../../actions/file/restoreFileList'),
-    pushFileToClipboard: require('../../../actions/file/pushFileToClipboard'),
-    emptyClipboard: require('../../../actions/file/emptyClipboard'),
+    getFileList: require('../../actions/file/getFileList').default,
+    deleteFile: require('../../actions/file/deleteFile').default,
+    setTitle: require('../../actions/setNavTitle').default,
+    getHostList: require('../../actions/drive/queryList').default,
+    restoreFileList: require('../../actions/file/restoreFileList').default,
+    pushFileToClipboard: require('../../actions/file/pushFileToClipboard').default,
+    emptyClipboard: require('../../actions/file/emptyClipboard').default,
   }, dispatch)
 )(File);
 

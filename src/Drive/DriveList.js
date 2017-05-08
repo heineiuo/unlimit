@@ -4,11 +4,11 @@ import Card from 'react-sea/lib/Card'
 import Button from 'react-sea/lib/Button'
 import { StyleSheet, css } from 'aphrodite'
 import Spin from 'react-spin'
-import hoverHoc from '../common/hoverHoc'
-import commonStyles from '../common/styles'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import hoverHoc from '../components/hoverHoc'
+import commonStyles from '../styles'
 
 const DriveListItem = hoverHoc((props) => (
   <div>
@@ -144,10 +144,10 @@ export default module.exports = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    deleteHost: require('../../actions/drive/mutateDeleteOne'),
-    setTitle: require('../../actions/setNavTitle'),
-    getHostList: require('../../actions/drive/queryList'),
-    restoreFileList: require('../../actions/file/restoreFileList'),
+    deleteHost: require('../actions/drive/mutateDeleteOne').default,
+    setTitle: require('../actions/setNavTitle').default,
+    getHostList: require('../actions/drive/queryList').default,
+    restoreFileList: require('../actions/file/restoreFileList').default,
   }, dispatch)
 )(DriveList);
 

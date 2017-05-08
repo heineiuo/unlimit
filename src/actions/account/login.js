@@ -1,13 +1,12 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../../constants'
-import signature from '../common/signature'
 
 const login = (formData) => async (dispatch, getState) => {
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateToken`, signature({
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateToken`, {
     email: formData.email,
     code: formData.code
-  }));
+  });
 
   if (result.error) {
     console.log(result.error);

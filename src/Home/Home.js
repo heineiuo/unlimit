@@ -5,13 +5,13 @@ import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown
 import {Logo} from 'react-sea/lib/Smile'
 import Background from 'react-sea/lib/Background'
 import {Link} from 'react-router-dom'
-import Particle from '../common/Particle'
-import Title from '../common/Title'
-import ProfileDropDown from '../common/ProfileDropDown'
+import Particle from '../components/Particle'
+import Title from '../components/Title'
+import ProfileDropDown from '../components/ProfileDropDown'
 import MessageList from './MessageList'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import commonStyles from '../common/styles'
+import commonStyles from '../styles'
 
 class Home extends Component {
 

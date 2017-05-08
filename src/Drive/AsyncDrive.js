@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import AsyncComponent from '../common/AsyncComponent'
-import {injectAsyncReducer} from '../../store'
-import host from '../../reducers/drive'
-import file from '../../reducers/file'
-import nav from '../../reducers/nav'
+import AsyncComponent from '../components/AsyncComponent'
+import {injectAsyncReducer} from '../store'
+import host from '../reducers/drive'
+import file from '../reducers/file'
+import nav from '../reducers/nav'
 
 const AsyncDrive = (props) => {
 

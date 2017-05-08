@@ -6,11 +6,11 @@ import {connect} from 'react-redux'
 import AsyncDrive from './Drive/AsyncDrive'
 import AsyncHome from './Home/AsyncHome'
 // import Home from './Home/AsyncHome'
-import AsyncConsole from './AsyncConsole'
+import AsyncConsole from './components/AsyncConsole'
 import AsyncAccount from './Account/AsyncAccount'
 import AsyncOAuth from './OAuth/AsyncOAuth'
 import AsyncIframe from './OAuth/AsyncIframe'
-import {injectAsyncReducer} from '../store'
+import {injectAsyncReducer} from './store'
 // import Home from './Home/Home'
 // import Drive from './Drive/Master'
 
@@ -33,7 +33,7 @@ class CheckLogin extends Component {
           <Route path="/oauth" render={AsyncOAuth} />
           <Route path="/account" render={AsyncAccount} />
           <Route path="/console" render={AsyncConsole} />
-          <Route component={require('./NotFound')}/>
+          <Route component={require('./NotFound').default}/>
         </Switch>
       </HashRouter>
     )
@@ -48,7 +48,7 @@ const ConnectCheckLogin = connect(
     postList: store.postList
   }),
   (dispatch) => bindActionCreators({
-    checkLogin: require('../actions/account/checkLogin'),
+    checkLogin: require('./actions/account/checkLogin'),
   }, dispatch)
 )(CheckLogin);
 

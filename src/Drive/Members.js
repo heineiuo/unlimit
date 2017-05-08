@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import hoverHoc from '../common/hoverHoc'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import {css, StyleSheet} from 'aphrodite'
+import hoverHoc from '../components/hoverHoc'
 
 const MemberItem = hoverHoc(props => (
   <div className={css(styles.memberItem)}>
@@ -76,8 +76,8 @@ export default module.exports = connect(
     adminId: state.host.adminId
   }),
   (dispatch) => bindActionCreators({
-    queryUserList: require('../../actions/drive/queryUserList').default,
-    queryOneByEmail: require('../../actions/account/queryOneByEmail').default,
-    mutateUsers: require('../../actions/drive/mutateUsers').default
+    queryUserList: require('../actions/drive/queryUserList').default,
+    queryOneByEmail: require('../actions/account/queryOneByEmail').default,
+    mutateUsers: require('../actions/drive/mutateUsers').default
   }, dispatch)
 )(Members)

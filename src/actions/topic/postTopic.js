@@ -1,6 +1,6 @@
 import {POSTRawJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
-import {API_HOST, signature} from '../constants'
+import {API_HOST, signature} from '../../constants'
 import {stateToHTML} from 'draft-js-export-html'
 import {convertToRaw} from 'draft-js'
 

@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default module.exports = NotFound;
+export default NotFound;

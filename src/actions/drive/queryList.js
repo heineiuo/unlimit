@@ -30,4 +30,4 @@ const getHostList = () => async (dispatch, getState) => {
 };
 
 
-export default module.exports = getHostList;
+export default getHostList;

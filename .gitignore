@@ -4,3 +4,6 @@ node_modules
 dist
 Thumb.db
 *.log*
+
+# packages
+packages/*/dist

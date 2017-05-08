@@ -1,7 +1,6 @@
 import {POSTUrlencodeJSON} from 'fetch-tools'
 import {push} from 'react-router-redux'
 import {API_HOST } from '../../constants'
-import signature from '../common/signature'
 
 /**
  * 发送验证码
@@ -22,9 +21,9 @@ const sendVerifyCode = (form) => async (dispatch, getState) => {
     }
   };
 
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateVerificationCode`, signature({
+  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateVerificationCode`, {
     email: form.email
-  }));
+  });
 
   if (result.error) return console.log(result.error);
   countdown(60)

@@ -6,8 +6,9 @@
       "key": "smile-web",
       "template": "src/index.html",
       "filename": "src/index.js",
-      "distPath": "./dist",
-      "publicPath": "//unpkg.com/smile-web@0.0.9/dist/",
+      "distPath": "./packages/smile-web/dist",
+      "publicPath": "//unpkg.com/smile-web@0.0.12/dist/",
+      "//publicPath": "http://127.0.0.1:8083/packages/smile-web/dist/",
       "devPublicPath": "http://127.0.0.1:8083/dist/",
       "//alias": {
         "react": "react/dist/react.js",
@@ -39,7 +40,7 @@
       "isLibrary": true
     },
     {
-      "disable": false,
+      "disable": true,
       "origin": false,
       "key": "smile-admin",
       "filename": ".src/Admin/index.js",

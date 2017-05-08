@@ -14,4 +14,4 @@ const pushFileToClipboard = (files) => (dispatch, getState) => {
   })
 };
 
-export default module.exports = pushFileToClipboard;
+export default pushFileToClipboard;

@@ -7,4 +7,4 @@ const emptyClipboard = () => ({
   type: 'file__clipboardEmpty',
 });
 
-export default module.exports = emptyClipboard;
+export default emptyClipboard;

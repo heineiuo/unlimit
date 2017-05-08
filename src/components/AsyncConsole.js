@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import AsyncComponent from './common/AsyncComponent'
-import Title from './common/Title'
+import AsyncComponent from './AsyncComponent'
+import Title from './Title'
 import {injectAsyncReducer} from '../store'
 
 const getTitle = () => Title;

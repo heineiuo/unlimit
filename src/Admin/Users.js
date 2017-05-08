@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Spin from 'react-spin'
-import UserItem from './UserItem'
-
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {fetchUserList} from '../store/admin'
+import {fetchUserList} from '../reducers/admin'
+import UserItem from './UserItem'
 
 class Users extends Component {
 

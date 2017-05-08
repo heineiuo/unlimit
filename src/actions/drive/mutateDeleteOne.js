@@ -20,4 +20,4 @@ const deleteHost = (driveId) => async (dispatch, getState) => {
 
 };
 
-export default module.exports = deleteHost;
+export default deleteHost;

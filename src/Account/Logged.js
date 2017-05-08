@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Modal from 'react-modal'
 import Button from 'react-sea/lib/Button'
-import PopModal from './PopModal'
-import commonStyles from '../common/styles'
 import ImageUpload from 'react-sea/lib/ImageUpload'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import PopModal from './PopModal'
+import commonStyles from '../styles'
 
 class Profile extends Component {
 
@@ -282,6 +282,6 @@ export default module.exports = connect(
     account: store.account,
   }),
   (dispatch) => bindActionCreators({
-    logout: require('../../actions/account/logout'),
+    logout: require('../actions/account/logout'),
   }, dispatch)
 )(Profile)

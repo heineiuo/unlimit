@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import AsyncComponent from '../common/AsyncComponent'
+import AsyncComponent from '../components/AsyncComponent'
 
 const AsyncHome = (props) => (
   <AsyncComponent loadKey="home" load={(callback) => require.ensure([], (require) => callback(null, require('./Home')))}>

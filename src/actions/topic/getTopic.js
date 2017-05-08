@@ -1,5 +1,5 @@
 import {POSTRawJSON} from 'fetch-tools'
-import {API_HOST, signature} from '../constants'
+import {API_HOST, signature} from '../../constants'
 
 const methodTypes = ['getMore', 'getLatest']
 

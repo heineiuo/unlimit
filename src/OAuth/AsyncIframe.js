@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import AsyncComponent from '../common/AsyncComponent'
+import AsyncComponent from '../components/AsyncComponent'
 
 const Async = (props) => (
   <AsyncComponent loadKey="oauth-iframe" load={(callback) => require.ensure([], (require) => callback(null, require('./Iframe')))}>

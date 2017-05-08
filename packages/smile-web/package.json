@@ -1,0 +1,8 @@
+{
+  "name": "smile-web",
+  "version": "0.0.12",
+  "description": "smile-web",
+  "main": "dist/smile-web.js",
+  "author": "@heineiuo",
+  "license": "MIT"
+}
