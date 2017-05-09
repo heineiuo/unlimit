@@ -4,7 +4,7 @@ import {ObjectId} from 'mongodb'
 import queryOne from './queryOne'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
-  driveId: Joi.object().required(),
+  driveId: Joi.string().required(),
   add: Joi.array().default([]),
   remove: Joi.array().default([])
 }), {allowUnknown: true})

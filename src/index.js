@@ -1,4 +1,4 @@
-import Seashell from '../../../git/seashell'
+import Seashell from '../../seashell/packages/seashell'
 import chalk from 'chalk'
 import {createDispatch} from 'action-creator'
 import getConfig from './config'
