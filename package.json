@@ -1,7 +1,7 @@
 {
   "name": "smile-web",
   "version": "0.0.11",
-  "description": "",
+  "private": true,
   "main": "dist/smile-web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -36,9 +36,7 @@
     "smile-web": "^0.0.4",
     "systemjs": "^0.20.7",
     "utf8": "^2.1.2",
-    "uuid": "^3.0.1"
-  },
-  "dependencies": {
+    "uuid": "^3.0.1",
     "form-urlencoded": "^1.5.0",
     "rc-upload": "^2.3.4"
   }

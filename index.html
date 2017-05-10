@@ -19,8 +19,7 @@
 
   window.DEV = true;
   window.__SMILE_DEV = true;
-  window.__SMILE_API = 'https://api.youkuohao.com';
-  // window.__SMILE_API = 'http://localapi.youkuohao.com';
+  window.__SMILE_API = 'http://localapi.youkuohao.com';
 
 </script>
 <script src='https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js'></script>
@@ -28,16 +27,8 @@
 <script src='https://unpkg.com/react@15.4.2/dist/react.js'></script>
 <script src='https://unpkg.com/react-dom@15.4.2/dist/react-dom.js'></script>
 <script src='http://127.0.0.1:8083/dist/smile-web.js'></script>
-<!--<script src='http://127.0.0.1:8083/packages/smile-web/dist/smile-web.js'></script>-->
 
 <script>
-
-
-  SystemJS.set(System.normalizeSync('react'), System.newModule({'default': window.React , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('react-dom'), System.newModule({'default': window.ReactDOM , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('react-router-dom'), System.newModule({'default': window.ReactRouterDOM , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('react-redux'), System.newModule({'default': window.ReactRedux , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('redux'), System.newModule({'default': window.Redux , __useDefault: true }) );
 
   SystemJS.config({
     baseUrl: '/',
@@ -50,14 +41,13 @@
       // 'react-router-dom': 'https://unpkg.com/react-router-dom@4.0.0/umd/react-router-dom.js',
       // 'redux': 'https://unpkg.com/redux@3.6.0/dist/redux.js',
       // 'react-redux': 'https://unpkg.com/react-redux@5.0.2/dist/react-redux.js',
-      'familytree': 'https://unpkg.com/familytree@0.0.2/dist/familytree.js',
-      // 'smile-text-editor': 'https://unpkg.com/smile-text-editor@0.0.4/dist/smile-text-editor.js',
+      'familytree': 'http:127.0.0.1:8080/dist/familytree.js',
       'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
       'smile-draft': 'http://127.0.0.1:8085/dist/smile-draft.js',
-      'smile-admin': 'https://unpkg.com/smile-admin@0.0.1/dist/smile-admin.js',
-      'smile-topic': 'https://unpkg.com/smile-topic@0.0.3/dist/smile-topic.js',
+      'smile-admin': 'http://127.0.0.1:8086/dist/smile-admin.js',
+      'smile-topic': 'http://127.0.0.1:8087/smile-topic@0.0.3/dist/smile-topic.js',
+      'smile-catcms': 'http://127.0.0.1:8086/dist/smile-catcms',
       // 'smile-topic': 'http://127.0.0.1:8086/dist/smile-topic.js',
-      // 'smile-web': 'https://unpkg.com/smile-web@0.0.8/dist/smile-web.js',
       // 'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js',
     }
   });

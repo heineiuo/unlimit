@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+  <meta charset=utf-8>
+  <title></title>
+  <meta name=description content='右括号协作空间'>
+  <meta name=author content='Heineiuo'>
+  <meta name=viewport content='initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width'>
+  <meta name=viewport content='initial-scale=1,user-scalable=no,maximum-scale=1' media='(device-height: 568px)'>
+  <meta name=apple-mobile-web-app-title content='Material Console'>
+  <meta name=apple-mobile-web-app-capable content=yes>
+  <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+  <meta name=format-detection content='telephone=no'>
+  <meta name=HandheldFriendly content=True>
+  <meta http-equiv=cleartype content=on>
+<body style="margin: 0px; background-color: rgb(239, 239, 244);">
+<div id='app'></div>
+<script>
+
+  window.DEV = true;
+  window.__SMILE_DEV = true;
+  window.__SMILE_API = 'https://api.youkuohao.com';
+
+</script>
+<script src='https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js'></script>
+<script src='https://unpkg.com/systemjs@0.20.9/dist/system.js'></script>
+<script src='https://unpkg.com/react@15.4.2/dist/react.min.js'></script>
+<script src='https://unpkg.com/react-dom@15.4.2/dist/react-dom.min.js'></script>
+<script src='https://unpkg.com/smile-web@0.0.12/dist/smile-web.js'></script>
+
+<script>
+
+
+  SystemJS.set(System.normalizeSync('react'), System.newModule({'default': window.React , __useDefault: true }) );
+  SystemJS.set(System.normalizeSync('react-dom'), System.newModule({'default': window.ReactDOM , __useDefault: true }) );
+  SystemJS.set(System.normalizeSync('react-router-dom'), System.newModule({'default': window.ReactRouterDOM , __useDefault: true }) );
+  SystemJS.set(System.normalizeSync('react-redux'), System.newModule({'default': window.ReactRedux , __useDefault: true }) );
+  SystemJS.set(System.normalizeSync('redux'), System.newModule({'default': window.Redux , __useDefault: true }) );
+
+  SystemJS.config({
+    baseUrl: '/',
+    meta: {
+      '*.js': {format: 'amd'},
+    },
+    map: {
+      'familytree': 'https://unpkg.com/familytree@0.0.2/dist/familytree.js',
+      'smile-text-editor': 'https://unpkg.com/smile-text-editor@0.0.4/dist/smile-text-editor.js',
+      'smile-admin': 'https://unpkg.com/smile-admin@0.0.1/dist/smile-admin.js',
+      'smile-topic': 'https://unpkg.com/smile-topic@0.0.3/dist/smile-topic.js',
+    }
+  });
+  
+</script>
