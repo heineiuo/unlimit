@@ -17,16 +17,15 @@
 <div id='app'></div>
 <script>
 
-  window.DEV = true;
   window.__SMILE_DEV = true;
-  window.__SMILE_API = 'http://localapi.youkuohao.com';
+  window.__SMILE_API = 'http://api.youkuohao.dev';
 
 </script>
 <script src='https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js'></script>
 <script src='https://unpkg.com/systemjs@0.20.9/dist/system.js'></script>
 <script src='https://unpkg.com/react@15.4.2/dist/react.js'></script>
 <script src='https://unpkg.com/react-dom@15.4.2/dist/react-dom.js'></script>
-<script src='http://127.0.0.1:8083/dist/smile-web.js'></script>
+<script src='http://127.0.0.1:8083/smile-web@0.0.12/dist/smile-web.js'></script>
 
 <script>
 
@@ -36,19 +35,13 @@
       '*.js': {format: 'amd'},
     },
     map: {
-      // 'react': 'https://unpkg.com/react@15.4.2/dist/react.js',
-      // 'react-dom': 'https://unpkg.com/react-dom@15.4.2/dist/react-dom.js',
-      // 'react-router-dom': 'https://unpkg.com/react-router-dom@4.0.0/umd/react-router-dom.js',
-      // 'redux': 'https://unpkg.com/redux@3.6.0/dist/redux.js',
-      // 'react-redux': 'https://unpkg.com/react-redux@5.0.2/dist/react-redux.js',
-      'familytree': 'http:127.0.0.1:8080/dist/familytree.js',
-      'smile-text-editor': 'http://127.0.0.1:8087/dist/smile-text-editor.js',
-      'smile-draft': 'http://127.0.0.1:8085/dist/smile-draft.js',
-      'smile-admin': 'http://127.0.0.1:8086/dist/smile-admin.js',
-      'smile-topic': 'http://127.0.0.1:8087/smile-topic@0.0.3/dist/smile-topic.js',
-      'smile-catcms': 'http://127.0.0.1:8086/dist/smile-catcms',
-      // 'smile-topic': 'http://127.0.0.1:8086/dist/smile-topic.js',
-      // 'smile-web': 'http://127.0.0.1:8083/dist/smile-web.js',
+      'smile-admin': 'http://127.0.0.1:8083/smile-admin@0.0.1/dist/smile-admin.js',
+      'smile-oauth': 'http://127.0.0.1:8083/smile-oauth/dist/smile-oauth.js',
+      'smile-topic': 'http://127.0.0.1:8083/smile-topic@0.0.3/dist/smile-topic.js',
+      'smile-catcms': 'http://127.0.0.1:8086/smile-catcms@0.0.1/dist/smile-catcms.js',
+      'smile-text-editor': 'http://127.0.0.1:8087/smile-text-editor@0.0.1/dist/smile-text-editor.js',
+      'familytree': 'http:127.0.0.1:8088/familytree@0.0.1/dist/familytree.js',
+      'smile-draft': 'http://127.0.0.1:8089/smile-draft@0.0.1/dist/smile-draft.js',
     }
   });
   
