@@ -152,5 +152,10 @@ export default {
     border:0,
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
-  }
+  },
+
+  imgResponsive: {
+    width: '100%'
+  },
+
 }
