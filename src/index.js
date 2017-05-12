@@ -12,10 +12,8 @@ SystemJS.set(SystemJS.normalizeSync('react-router-dom'), SystemJS.newModule({'de
 SystemJS.set(SystemJS.normalizeSync('react-redux'), SystemJS.newModule({'default': window.ReactRedux , __useDefault: true }) );
 SystemJS.set(SystemJS.normalizeSync('redux'), SystemJS.newModule({'default': window.Redux , __useDefault: true }) );
 
-const start = () => {
+export default () => {
   const RenderApp = require('react-sea/lib/RenderApp');
   const App = require('./App');
   const app = new RenderApp(App, document.getElementById('app'));
 };
-
-start()

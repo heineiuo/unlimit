@@ -28,7 +28,6 @@
 <script src='http://127.0.0.1:8083/smile-web@0.0.12/dist/smile-web.js'></script>
 
 <script>
-
   SystemJS.config({
     baseUrl: '/',
     meta: {
@@ -42,7 +41,12 @@
       'smile-text-editor': 'http://127.0.0.1:8087/smile-text-editor@0.0.1/dist/smile-text-editor.js',
       'familytree': 'http:127.0.0.1:8088/familytree@0.0.1/dist/familytree.js',
       'smile-draft': 'http://127.0.0.1:8089/smile-draft@0.0.1/dist/smile-draft.js',
+      'smile-catcms-manager': 'http://127.0.0.1:8083/smile-catcms-manager@0.0.1/dist/smile-catcms-manager.js',
     }
   });
-  
+
+  window['smile-web'].default();
+
 </script>
+</body>
+</html>

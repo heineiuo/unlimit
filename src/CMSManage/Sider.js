@@ -3,6 +3,7 @@ import {StyleSheet, css} from 'aphrodite'
 import pick from 'lodash/pick'
 import {Route, Link} from 'react-router-dom'
 import hoverHoc from '../components/hoverHoc'
+import trimEnd from 'lodash/trimEnd'
 
 const NavItem = hoverHoc(props => (
   <Route path={props.to} exact={props.activeOnlyWhenExact} children={({match}) => (
@@ -28,10 +29,10 @@ class Sider extends Component {
           <div className={css(styles.sider__nav__main)}>
           </div>
           <div className={css(styles.sider__nav__sub)}>
-            <NavItem to={`${match.path}/`} activeOnlyWhenExact={true} name={'主面板'} />
-            <NavItem to={`${match.path}/posts`} name={'文章'} />
+            <NavItem to={`${trimEnd(match.url, '/')}/`} activeOnlyWhenExact={true} name={'主面板'} />
+            <NavItem to={`${trimEnd(match.url, '/')}/posts`} name={'文章'} />
             <div className={css(styles.gap)}>其他</div>
-            <NavItem to={`${match.path}/settings`} name={'站点设置'} />
+            <NavItem to={`${trimEnd(match.url, '/')}/settings`} name={'站点设置'} />
           </div>
         </div>
         

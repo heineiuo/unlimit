@@ -12,4 +12,4 @@ class Auth extends Component {
 
 
 
-export default module.exports = Auth
+export default Auth

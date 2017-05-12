@@ -38,21 +38,14 @@ class Home extends Component {
         <div>
           <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
           <Background bgColor="#efeff4" />
+          
           <div className={css(styles.globalHeaderBar)}>
-            {/*<div style={{padding: '0 20px', display: 'flex'}}>*/}
-              {/*<Link to="/" style={{display: 'flex', textDecoration: 'none'}}>*/}
-                {/*<Logo color="#f56455"/>*/}
-                {/*<span style={{color: '#f56455'}}>右括号</span>*/}
-              {/*</Link>*/}
-            {/*</div>*/}
-            <Title color="#f56455" title="右括号" style={{textDecoration: 'none', marginRight: 10}}/>
-            <div>
+            <div style={{display: 'flex'}}>
+              <Title color='#FFFFFF' title="首页" style={{textDecoration: 'none', marginRight: 10}}/>
             </div>
-            <ProfileDropDown />
           </div>
-          <MessageList postList={[]} />
           <div>
-
+            <MessageList postList={[]} />
           </div>
         </div>
       )
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default module.exports = connect(
+export default connect(
   (store) => ({
     account: store.account,
     postList: store.postList,

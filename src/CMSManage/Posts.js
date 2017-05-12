@@ -21,7 +21,7 @@ const TableRow = hoverHoc(props => (
   </Link>
 ))
 
-class Posts extends Component {
+class TopicList extends Component {
 
   onClickStatus = (e) => {
     e.preventDefault();
@@ -37,12 +37,13 @@ class Posts extends Component {
 
   componentDidMount = () => {
     const {match: {params: {driveId}}} = this.props;
-    console.log('this.props.getPosts(driveId)')
-    this.props.getPosts(driveId)
+    console.log('this.props.getTopicList(driveId)')
+    this.props.getTopicList(driveId)
   }
 
   render (){
-    const {match, posts} = this.props;
+    const {match, topic} = this.props;
+    console.log(topic);
     return (
       <Switch>
         <Route path={match.path} exact>
@@ -71,7 +72,7 @@ class Posts extends Component {
                   <div className={css(styles.tableView__cell, styles.tableView__cell_bold)}>状态</div>
                 </div>
                 <div className={css(styles.tableView__body)}>
-                  {posts.list.map(item => (
+                  {topic.list.map(item => (
                     <TableRow 
                       key={item._id}
                       path={match.path}
@@ -110,9 +111,9 @@ const styles = StyleSheet.create({
 export default connect(
   store => ({
     account: store.account,
-    posts: store.posts
+    topic: store.topic
   }),
   dispatch => bindActionCreators({
-    getPosts: require('../actions/posts/getPosts').default
+    getTopicList: require('../actions/topic/getTopicList').default
   }, dispatch)
-)(Posts)
+)(TopicList)

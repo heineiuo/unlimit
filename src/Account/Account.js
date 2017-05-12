@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Spin from 'react-spin'
-import Body from 'react-sea/lib/Body'
 import Logged from "./Logged"
 import UnLogged from './Unlogged'
 import Header from './AccountHeader'
@@ -20,7 +19,6 @@ class Check extends Component {
 
     return (
       <div>
-        <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
         {
           !loginChecked? (
             <div>
@@ -28,7 +26,6 @@ class Check extends Component {
             </div>
           ): (
             <div>
-              <Header />
               {
                 logged ?
                   <Logged/> :
@@ -43,7 +40,7 @@ class Check extends Component {
 }
 
 
-export default module.exports = connect(
+export default connect(
   (store) => ({
     loginChecked: store.account.loginChecked,
     logged: store.account.logged,

@@ -61,7 +61,7 @@ class Iframe extends Component {
 
 
 
-export default module.exports = connect(
+export default connect(
   (store) => ({
     account: store.account
   }),

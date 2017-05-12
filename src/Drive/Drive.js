@@ -17,7 +17,6 @@ class Drive extends Component {
     const {loginCheckState, logged, match, match: {params}} = this.props;
     return (
       <div>
-        <Body style={{margin: 0, backgroundColor: '#efeff4'}}/>
         {
           loginCheckState < 2 ?
             <div>loading</div> :
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default module.exports = connect(
+export default connect(
   (store) => ({
     loginCheckState: store.account.loginCheckState,
     logged: store.account.logged,

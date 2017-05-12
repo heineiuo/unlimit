@@ -30,6 +30,7 @@ export default {
   },
 
   card: {
+    boxSizing: 'border-box',
     width: '100%',
     maxWidth: 480,
     height: 618,

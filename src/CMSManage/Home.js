@@ -7,7 +7,6 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import 'react-vis/dist/style.css'
 import {RadialChart} from 'react-vis'
-import MessageList from './MessageList'
 import commonStyles from '../styles'
 
 class Dashboard extends Component {
@@ -28,7 +27,7 @@ class Dashboard extends Component {
 
   render () {
 
-    const {posts, account} = this.props;
+    const {topic, account} = this.props;
 
     return (
         <div>
@@ -61,7 +60,7 @@ const styles = StyleSheet.create({
 export default connect(
   (store) => ({
     account: store.account,
-    posts: store.posts,
+    topic: store.topic,
   }),
   (dispatch) => bindActionCreators({
   }, dispatch)
