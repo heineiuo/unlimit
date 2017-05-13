@@ -16,6 +16,7 @@ import CreateFileModal from '../CreateFileModal'
 import IntegrateApp from "../../components/IntegrateApp"
 import {injectAsyncReducer} from '../../store'
 import IconArrowDropdown from '../../components/IconArrowDropdown'
+import {API_HOST} from '../../constants'
 
 class File extends Component {
 
@@ -36,7 +37,7 @@ class File extends Component {
       match: {params: {driveId, parentId}}
     } = this.props;
 
-    this.uploadAction = `/api/seashell/fs/mutateUpload?${urlencode({
+    this.uploadAction = `${API_HOST}/seashell/fs/mutateUpload?${urlencode({
       token,
       driveId,
       parentId

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import {css, StyleSheet} from 'aphrodite'
-import hoverHoc from './common/hoverHoc'
+import hoverHoc from '../../components/hoverHoc'
 
 const TagItem = hoverHoc(props => (
   <div className={css(styles.tag, props.hovered && styles.tag_hover)}>

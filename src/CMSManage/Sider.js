@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite'
 import pick from 'lodash/pick'
 import {Route, Link} from 'react-router-dom'
-import hoverHoc from '../components/hoverHoc'
 import trimEnd from 'lodash/trimEnd'
+import {Logo} from 'react-sea/lib/Smile'
+import hoverHoc from '../components/hoverHoc'
 
 const NavItem = hoverHoc(props => (
   <Route path={props.to} exact={props.activeOnlyWhenExact} children={({match}) => (
@@ -27,6 +28,9 @@ class Sider extends Component {
         <div style={{width: 240+64}}></div>
         <div className={css(styles.sider__nav)}>
           <div className={css(styles.sider__nav__main)}>
+            <Link to="/">
+              <div style={{paddingLeft: 14}} color="#FFF"><Logo /></div>
+            </Link>
           </div>
           <div className={css(styles.sider__nav__sub)}>
             <NavItem to={`${trimEnd(match.url, '/')}/`} activeOnlyWhenExact={true} name={'主面板'} />

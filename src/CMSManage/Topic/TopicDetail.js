@@ -6,11 +6,11 @@ import {css, StyleSheet} from 'aphrodite'
 import Button from 'react-sea/lib/Button'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
 import TagsEditor from './TagsEditor'
-import makeCancelable from '../helpers/makeCancelable'
-import hoverHoc from '../components/hoverHoc'
-import {allStatus} from '../actions/topic/editTopicStatus'
+import makeCancelable from '../../helpers/makeCancelable'
+import hoverHoc from '../../components/hoverHoc'
+import {allStatus} from '../../actions/topic/editTopicStatus'
 import TopicCommentList from './TopicCommentList'
-import DraftWithPlugin from './DraftWithPlugin'
+import DraftWithPlugin from '../../components/DraftWithPlugin'
 
 const StatusItem = hoverHoc(props => (
   <div
@@ -117,7 +117,7 @@ class TopicDetail extends Component {
           <div className={css(styles.topicContent)}>
             <div className={css(styles.content)}>
               <div className={css(styles.content__titleBar)}>
-                <div>
+                <div style={{flex: 1}}>
                   {
                     !isCreated || isEditing ?
                       <div>
@@ -284,10 +284,10 @@ export default connect(
     current: store.topic.current
   }),
   (dispatch) => bindActionCreators({
-    postTopic: require('../actions/topic/postTopic').default,
-    putTopic: require('../actions/topic/putTopic').default,
-    editTopicTags: require('../actions/topic/editTopicTags').default,
-    editTopicStatus: require('../actions/topic/editTopicStatus').default,
-    getTopic: require('../actions/topic/getTopic').default
+    postTopic: require('../../actions/topic/postTopic').default,
+    putTopic: require('../../actions/topic/putTopic').default,
+    editTopicTags: require('../../actions/topic/editTopicTags').default,
+    editTopicStatus: require('../../actions/topic/editTopicStatus').default,
+    getTopic: require('../../actions/topic/getTopic').default
   }, dispatch)
 )(TopicDetail)

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react"
 import Paper from "react-sea/lib/Paper"
-import {Route, Switch} from "react-router-dom"
+import {Route, Switch, Link} from "react-router-dom"
 import {TabBar, TabPane} from "react-sea/lib/Tabbar"
 import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
@@ -26,8 +26,9 @@ class DriveWrapper extends Component {
       pathname.search('/website') > 0 ? 'website' :
         pathname.search('/topics') > 0 ? 'topics' :
           pathname.search('/setting') > 0 ? 'setting' :
-            pathname.search('/members') > 0 ? 'members' :
-              'file';
+            pathname.search('/services') > 0 ? 'services' :
+              pathname.search('/members') > 0 ? 'members' :
+                'file';
 
     this.setState({
       activeTab
@@ -56,6 +57,7 @@ class DriveWrapper extends Component {
                 {/*<TabPane key="topics" style={styles.tabPane._definition}>主题</TabPane>*/}
                 <TabPane key="website" style={styles.tabPane._definition}>网站</TabPane>
                 <TabPane key="members" style={styles.tabPane._definition}>成员</TabPane>
+                <TabPane key="services" style={styles.tabPane._definition}>服务</TabPane>
                 <TabPane key="setting" style={styles.tabPane._definition}>设置</TabPane>
               </TabBar>
             </div>
@@ -66,7 +68,11 @@ class DriveWrapper extends Component {
               <Route path={'/drive/:driveId'} exact component={require('./File/File')}/>
               <Route path={`${match.path}/file/:fileId`} component={require('./File/File')}/>
               <Route path={`${match.path}/file`} component={require('./File/File')}/>
-              <Route path={`${match.path}/topics`} render={AsyncTopic}/>
+              <Route path={`${match.path}/services`}>
+                <div>
+                  <a href={`/#/cms-manage/${params.driveId}`} target='_blank'>cms</a>
+                </div>
+              </Route>
               <Route path={`${match.path}/website`} component={require('./Website/Location')}/>
               <Route path={`${match.path}/members`} component={require('./Members')}/>
               <Route path={`${match.path}/setting`} component={require('./Setting')}/>

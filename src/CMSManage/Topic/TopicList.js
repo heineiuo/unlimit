@@ -5,16 +5,27 @@ import {bindActionCreators} from "redux"
 import {css, StyleSheet} from "aphrodite"
 import Input from "react-sea/lib/Input"
 import Button from "react-sea/lib/Button"
-import commonStyles from "./common/styles"
-import hoverHoc from "./common/hoverHoc"
-import {allStatus} from "../actions/editTopicStatus"
+import commonStyles from "../../styles"
+import hoverHoc from "../../components/hoverHoc"
 
 const TopicListItem = hoverHoc((props) => {
   const {url, title, _id, tags = '', status} = props;
+
   return (
     <div className={css(styles.item)}>
       <Link to={url} className={css(styles.link)}>
-        <div>[{allStatus[status]}]{title || '无标题'}</div>
+        <div style={{display: 'flex', alignItems: 'center'}}> 
+          <div style={{marginRight: 6}}>
+            {
+              [
+                <div className={css(styles.status, styles.status__draft)} />,
+                <div className={css(styles.status, styles.status__online)} />,
+                <div className={css(styles.status, styles.status__offline)} />
+              ][status]
+            }
+          </div>
+          {title || '无标题'}
+        </div>
       </Link>
       <div>
         {
@@ -64,29 +75,26 @@ class TopicList extends Component {
       <div>
         <div className={css(styles.topicList__header)}>
           <div>
-            <div style={{display: 'flex'}}>
+            <div style={{display: 'flex', position: 'relative', width: 400, paddingLeft: 10}}>
               <Input
                 value={this.state.searchValue}
                 onChange={this.onSearchValueChange}
-                style={{flex: 1, minWidth: 200}}
+                style={{flex: 1, width: 400}}
                 placeholder='搜索'/>
-              <Button onClick={this.onSearch}>搜索</Button>
+              <Button onClick={this.onSearch} style={{position: 'absolute', width: 100, height: 35, top: 1, right: 1, bottom: 1}}>搜索</Button>
             </div>
-            <div>
+            <div style={{display: 'flex', flexWrap: 'wrap', padding: 10}}>
               {
                 [0, 1, 3].includes(tagsUpdateState) ?
                   [null, '正在加载', null, '加载出错'][tagsUpdateState] :
                   tags.length === 0 ?
                     null :
                     tags.map(item => (
-                      <span className={css(styles.tag)} key={item.tag}>{item.tag}({item.value})</span>
+                      <span className={css(styles.tag)} style={{marginBottom: 4}} key={item.tag}>{item.tag}({item.value})</span>
                     ))
               }
             </div>
           </div>
-          <Link to={`${match.url}/new`}>
-            <Button>添加</Button>
-          </Link>
         </div>
         <div className={css(styles.topicList__body)}>
           {
@@ -119,6 +127,14 @@ const styles = StyleSheet.create({
 
   topicList__body: {},
 
+  tag: {
+    backgroundColor: '#87b4e4',
+    color: '#FFF',
+    borderRadius: 4,
+    fontSize: 14,
+    marginRight: 4,
+    padding: '0 6px'
+  },
 
   item: {
     borderBottom: '1px solid #e1e4e8',
@@ -129,8 +145,26 @@ const styles = StyleSheet.create({
     lineHeight: '50px',
     ':hover': {
       backgroundColor: '#F8F8F8'
-    }
-  }
+    },
+
+  },
+
+  status: {
+    display: 'inline-block',
+    fontSize: '10px',
+    border: '2px solid #46c314',
+    height: '24px',
+    padding: '0 2px',
+    float: 'left',
+    lineHeight: '24px',
+    whiteSpace: 'nowrap',
+    borderRadius: '8px',
+    color: '#46c314',
+    textAlign: 'center',
+  },
+  status__draft: {borderColor: '#ffab06', color: '#ffab06', ':after': {content: '"草稿"'}},
+  status__online: {borderColor: '#46c314', color: '#46c314', ':after': {content: '"发布"'}},
+  status__offline: {borderColor: '#ccc', color: '#ccc', ':after': {content: '"下线"'}}
 })
 
 
@@ -142,8 +176,8 @@ export default connect(
     listUpdateState: store.topic.listUpdateState,
   }),
   (dispatch) => bindActionCreators({
-    getTopicList: require('../actions/getTopicList').default,
-    getDriveTopicTags: require('../actions/getDriveTopicTags').default,
+    getTopicList: require('../../actions/topic/getTopicList').default,
+    getDriveTopicTags: require('../../actions/topic/getDriveTopicTags').default,
 
   }, dispatch)
 )(TopicList)

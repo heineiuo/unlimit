@@ -16,7 +16,6 @@ class Manage extends Component {
     const showLoading = !account.loginChecked;
     const showLogin = !showLoading && account.logged;
     const showUnLogin = !showLoading && !account.logged;
-    console.log(match);
 
     return (
       <Switch>
@@ -36,7 +35,7 @@ class Manage extends Component {
                 </Route>
                 <Route path={`${match.path}/posts`}>
                   {props => (
-                    <AsyncComponent loadKey="employer" load={callback => require.ensure([], require => callback(null, require('./Posts').default))}>
+                    <AsyncComponent loadKey="employer" load={callback => require.ensure([], require => callback(null, require('./Topic').default))}>
                       {(state, Home) => state < 2 ? null : <Home {...props}/>}
                     </AsyncComponent>
                   )}

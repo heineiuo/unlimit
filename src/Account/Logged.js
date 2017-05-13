@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Modal from 'react-modal'
 import Button from 'react-sea/lib/Button'
-import ImageUpload from 'react-sea/lib/ImageUpload'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import PopModal from './PopModal'
 import commonStyles from '../styles'
+import ImageUpload from './ImageUpload'
 
 class Profile extends Component {
 
@@ -42,42 +42,37 @@ class Profile extends Component {
         </div>
         <div className={css(styles.profileRight)}>
           <div className={css(styles.itemInfo)}>
-            <span className={css(styles.itemName)} >昵称</span>
-            <span className={css(styles.itemContent)}>
-            <span className={css(styles.itemSpan)} />
-             <a className={css(styles.itemEdit)}  onClick={(e) => this.openModal(e,'UserName')}>修改昵称</a>
-          </span>
+            <span className={css(styles.itemInfo__itemName)} >昵称</span>
+            <span>
+              <span className={css(styles.itemInfo__itemSpan)} />
+              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'UserName')}>修改昵称</span>
+            </span>
           </div>
           <div className={css(styles.itemInfo)}>
-          <span className={css(styles.itemName)}>
-            <span>邮箱</span>
-          </span>
-          <span className={css(styles.itemContent)}>
-            <span className={css(styles.itemSpan)}>{this.props.account.email}</span>
-             <a className={css(styles.itemEdit)}  onClick={(e) => this.openModal(e,'Email')}>修改邮箱</a>
-          </span>
+            <span className={css(styles.itemInfo__itemName)}>邮箱</span>
+            <span>
+              <span>{this.props.account.email}</span>
+              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'Email')}>修改邮箱</span>
+            </span>
           </div>
-
           <div className={css(styles.itemInfo)}>
-          <span className={css(styles.itemName)}>
-            <span>电话</span>
-          </span>
-            <span className={css(styles.itemContent)}>
-            <span className={css(styles.itemSpan)}>...</span>
-            <a className={css(styles.itemEdit)}  onClick={(e) => this.openModal(e,'Phone')}>修改号码</a>
-          </span>
+            <span className={css(styles.itemInfo__itemName)}>电话</span>
+            <span>
+              <span>...</span>
+              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'Phone')}>修改号码</span>
+            </span>
           </div>
-
           <div className={css(styles.itemInfo)}>
-          <span className={css(styles.itemName)}>
-            <span>密码</span>
-          </span>
-            <span className={css(styles.itemContent)}>
-            <span className={css(styles.itemSpan)}>******</span>
-            <a className={css(styles.itemEdit)}  onClick={(e) => this.openModal(e,'Password')}>修改密码</a>
-          </span>
+            <span className={css(styles.itemInfo__itemName)}>密码</span>
+            <span>
+              <span>******</span>
+              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'Password')}>修改密码</span>
+            </span>
           </div>
           <Button style={buttonStyle} onClick={this.handleLogout}>退出</Button>
+          <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', lineHeight: '50px', backgroundColor: '#EEE'}}>
+            <Link to="/" style={{textDecoration: 'none', color: '#666'}}>进入右括号网站</Link>
+          </div>
           <Modal
             contentLabel="Modal"
             isOpen={this.state.modalIsOpen}
@@ -95,6 +90,12 @@ const styles = StyleSheet.create({
 
   ...commonStyles,
 
+  card: {
+    ...commonStyles.card,
+    position: 'relative',
+    padding: 0,
+  },
+
   userNameInput: {
     boxSizing: 'border-box',
     height: 26,
@@ -110,13 +111,11 @@ const styles = StyleSheet.create({
   },
 
   itemInfo: {
-    marginTop: 10
-  },
-
-  itemSpan: {
-    width: '100%',
-    maxWidth: 140,
-    display: 'inline-block'
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 42,
+    borderBottom: '1px solid #eaeaea'
   },
 
   inputWrapper: {
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00A000',
   },
 
-  itemName: {
+  itemInfo__itemName: {
     width: 45,
     display: 'inline-block',
     margin: '0 10px 0 0px',
@@ -133,28 +132,24 @@ const styles = StyleSheet.create({
     lineHeight: '30px'
   },
 
-  itemContent: {
-    maxWidth: 450,
-    lineHeight: '30px'
-  },
-
-  itemEdit: {
+  itemInfo__itemEdit: {
     color: '#6093bb',
     marginLeft: 15,
     fontSize: 14,
+    cursor: 'pointer'
   },
 
   profileLeft: {
-    float: 'left',
-    display: 'inline',
-    width: 58,
-    marginRight: 30,
-    marginTop: 10
+    backgroundColor: '#007eff',
+    height: 122,
+    position: 'relative',
+    backgroundImage: '-webkit-repeating-radial-gradient(center center, rgb(173, 187, 195), rgb(224, 227, 228) 1px, transparent 1px, transparent 100%)',
+    backgroundSize: '15px 15px',
+    // boxShadow: '0 2px 0px rgb(255, 208, 0), 0 -1px 0px #ffc600',
   },
 
   profileRight: {
-    float: 'left',
-    width: 310
+    padding: 40
   },
 
   /*账户中心*/
@@ -267,13 +262,13 @@ const customStyles = {
 };
 
 const buttonStyle = {
-  backgroundColor: '#41464b',
-  color: '#fff',
+  backgroundColor: '#fff',
+  color: 'rgb(234, 14, 14)',
+  borderColor: 'rgb(234, 14, 14)',
   cursor: 'pointer',
-  width:'120px',
   marginTop: '25px',
   lineHeight: '35px',
-  borderRadius: 2
+  borderRadius: 2,
 };
 
 
