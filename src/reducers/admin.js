@@ -1,7 +1,7 @@
 import {handleActions} from 'redux-actions'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../constants'
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 
 const initialState = {
   userListState: 0,
@@ -36,10 +36,10 @@ export const fetchUserList = (formData) => async (dispatch, getState) => {
     });
     const {token} = getState().account;
     console.log(getState());
-    const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/user/list`, {
+    const result = await new Fetch(`${API_HOST}/seashell/user/list`, {
       token,
       ...formData
-    });
+    }).post();
 
     if (result.error) throw result.error;
 

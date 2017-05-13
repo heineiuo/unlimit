@@ -1,12 +1,12 @@
-import {POSTRawJSON} from "fetch-tools"
+import Fetch from "fetch-tools"
 import {API_HOST} from "../../constants"
 
 export default (query) => async (dispatch, getState) => {
   const {account: {token}} = getState();
   const {driveId} = query;
-  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/queryUsers`, {
+  const result = await new Fetch(`${API_HOST}/seashell/drive/queryUsers`, {
     token, driveId
-  })
+  }).post();
   if (result.error) return console.log(result.error);
 
   dispatch({

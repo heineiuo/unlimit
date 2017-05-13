@@ -1,9 +1,9 @@
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../../constants'
 
 const login = (formData) => async (dispatch, getState) => {
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateToken`, {
+  const result = await new Fetch(`${API_HOST}/seashell/account/mutateCreateToken`, {
     email: formData.email,
     code: formData.code
   });

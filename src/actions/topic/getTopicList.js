@@ -1,4 +1,4 @@
-import {POSTRawJSON} from "fetch-tools"
+import Fetch from "fetch-tools"
 import {API_HOST} from "../../constants"
 
 const defaultOptions = {
@@ -32,13 +32,13 @@ export default (driveId, customOptions) => async (dispatch, getStore) => {
   const {topic: {list}, account: {token}} = getStore();
   let result = null;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/topic/list`, {
+    result = await new Fetch(`${API_HOST}/catblog/topic/list`, {
       token,
       driveId,
       keyword: options.keyword,
       fields: ['title', 'tags', 'status'],
       afterId: options.afterId,
-    })
+    }).post();
     if (result.error) return handleError(result.error)
   } catch (e) {
     return handleError(e)

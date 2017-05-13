@@ -1,4 +1,4 @@
-import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {API_HOST} from '../../constants'
 
 /**
@@ -8,9 +8,9 @@ import {API_HOST} from '../../constants'
 const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   const {userToken=null} = localStorage;
   const {redirectUrl} = getState().account;
-  const res = await POSTRawJSON(`${API_HOST}/seashell/account/mutateCreateAuthCode`, {
+  const res = await new Fetch(`${API_HOST}/seashell/account/mutateCreateAuthCode`, {
     token: userToken
-  });
+  }).post();
 
   if (res.error) return console.log(res.error);
   location.href = `${redirectUrl}?code=${res.code}`

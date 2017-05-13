@@ -1,4 +1,4 @@
-import { GETJSON, POSTRawJSON, Mock, Urlencode } from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {API_HOST} from '../constants'
 
 
@@ -7,8 +7,7 @@ const getDirInfo = (path) => async (dispatch, getState) => {
     const {token} = getState().account;
 
     path = decodeURI(path);
-    const result = await POSTRawJSON(`${API_HOST}/seashell/fs/ls`, {
-      token, path});
+    const result = await new Fetch(`${API_HOST}/seashell/fs/ls`, {token, path}).post();
     result.parentPath = path + ( path ==='/'?'':'/')
 
   } catch(e){

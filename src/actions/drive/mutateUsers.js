@@ -1,4 +1,4 @@
-import {GETJSON, POSTRawJSON, Mock, Urlencode} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {API_HOST} from '../../constants'
 import getDriveUserList from './queryUserList'
 
@@ -31,11 +31,11 @@ export default (query) => async (dispatch, getState) => {
     }
   })
 
-  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/mutateUser`, {
+  const result = await new Fetch(`${API_HOST}/seashell/drive/mutateUser`, {
     token, driveId,
     add: add.map(item => item.id),
     remove: remove.map(item => item.id),
-  })
+  }).post();
 
   if (result.error) return handleError(result.error)
 

@@ -1,4 +1,4 @@
-import { GETJSON, POSTRawJSON, Mock, Urlencode } from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {API_HOST} from '../../constants'
 
 
@@ -11,10 +11,10 @@ const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
   });
 
   const {account: {token}} = getState();
-  const result = await POSTRawJSON(`${API_HOST}/seashell/fs/queryFile`, {
+  const result = await new Fetch(`${API_HOST}/seashell/fs/queryFile`, {
     driveId, parentId, token,
     replaceWithFileMetaIfIsFile: true
-  });
+  }).post();
 
   if (result.error) return console.log(result.error)
   dispatch({

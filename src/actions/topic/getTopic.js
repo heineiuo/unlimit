@@ -1,4 +1,4 @@
-import {POSTRawJSON} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {API_HOST, signature} from '../../constants'
 
 const methodTypes = ['getMore', 'getLatest']
@@ -24,11 +24,11 @@ export default (driveId, topicId) => async (dispatch,getState) => {
 
   let result = null;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/topic/get`, signature({
+    result = await new Fetch(`${API_HOST}/catblog/topic/get`, signature({
       token,
       driveId,
       topicId: topicId
-    }))
+    })).post();
     if (result.error) return handleError(result.error)
   } catch(e){
     return handleError(e)

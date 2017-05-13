@@ -1747,11 +1747,12 @@ fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
-fetch-tools@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.npmjs.org/fetch-tools/-/fetch-tools-0.3.2.tgz#49d42c8f760e6aaf4021d12def102b38e29315a1"
+fetch-tools@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.npmjs.org/fetch-tools/-/fetch-tools-0.4.5.tgz#b8a3148374a8e9c306c1c1e9639351e78d99e39e"
   dependencies:
     form-urlencoded "^1.5.0"
+    isomorphic-fetch "^2.2.1"
 
 filename-regex@^2.0.0:
   version "2.0.0"
@@ -2250,7 +2251,7 @@ isobject@^2.0.0:
   dependencies:
     isarray "1.0.0"
 
-isomorphic-fetch@^2.1.1:
+isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:

@@ -1,4 +1,4 @@
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {push} from 'react-router-redux'
 import {API_HOST } from '../../constants'
 
@@ -21,9 +21,9 @@ const sendVerifyCode = (form) => async (dispatch, getState) => {
     }
   };
 
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/mutateCreateVerificationCode`, {
+  const result = await new Fetch(`${API_HOST}/seashell/account/mutateCreateVerificationCode`, {
     email: form.email
-  });
+  }).post();
 
   if (result.error) return console.log(result.error);
   countdown(60)

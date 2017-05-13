@@ -1,4 +1,4 @@
-import {POSTRawJSON} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {API_HOST} from '../../constants'
 import {push} from 'react-router-redux'
 import {restoreFileList} from '../file/restoreFileList'
@@ -9,11 +9,11 @@ import {restoreFileList} from '../file/restoreFileList'
 const createHost = (query) => async (dispatch, getState) => {
   const {name, description} = query;
   const {account: {token}} = getState();
-  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/mutateInsertOne`, {
+  const result = await new Fetch(`${API_HOST}/seashell/drive/mutateInsertOne`, {
     token,
     name,
     description,
-  });
+  }).post();
   if (result.error) return alert(result.error);
 
   dispatch({

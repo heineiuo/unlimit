@@ -53,7 +53,7 @@ class DriveWrapper extends Component {
                 activeKey={this.state.activeTab}
                 onSwitchKey={this.handleSwitchKey}>
                 <TabPane key="file" style={styles.tabPane._definition}>文件</TabPane>
-                <TabPane key="topics" style={styles.tabPane._definition}>主题</TabPane>
+                {/*<TabPane key="topics" style={styles.tabPane._definition}>主题</TabPane>*/}
                 <TabPane key="website" style={styles.tabPane._definition}>网站</TabPane>
                 <TabPane key="members" style={styles.tabPane._definition}>成员</TabPane>
                 <TabPane key="setting" style={styles.tabPane._definition}>设置</TabPane>

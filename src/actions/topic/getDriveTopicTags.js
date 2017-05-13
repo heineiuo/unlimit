@@ -1,4 +1,4 @@
-import {POSTRawJSON} from "fetch-tools"
+import Fetch from "fetch-tools"
 import {API_HOST, signature} from "../constants"
 
 export default (driveId) => async (dispatch, getStore) => {
@@ -22,10 +22,10 @@ export default (driveId) => async (dispatch, getStore) => {
   const { account: {token}} = getStore();
   let result = null;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/tags/getDriveTags`, signature({
+    result = await new Fetch(`${API_HOST}/catblog/tags/getDriveTags`, signature({
       token,
       driveId,
-    }))
+    })).post();
     if (result.error) return handleError(result.error)
   } catch (e) {
     return handleError(e)

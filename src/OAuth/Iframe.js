@@ -59,8 +59,6 @@ class Iframe extends Component {
   }
 }
 
-
-
 export default connect(
   (store) => ({
     account: store.account

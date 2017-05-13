@@ -1,4 +1,4 @@
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from 'fetch-tools'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../../constants'
 
@@ -17,9 +17,9 @@ const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  const result = await POSTUrlencodeJSON(`${API_HOST}/seashell/account/session`, {
+  const result = await new Fetch(`${API_HOST}/seashell/account/session`, {
     token: userToken
-  });
+  }).post();
 
   if (result.error || !result.hasOwnProperty('userId')) {
     return dispatch({

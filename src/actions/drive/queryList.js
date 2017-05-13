@@ -1,4 +1,4 @@
-import {POSTRawJSON} from "fetch-tools"
+import Fetch from "fetch-tools"
 import {API_HOST} from "../../constants"
 
 /**
@@ -16,9 +16,9 @@ const getHostList = () => async (dispatch, getState) => {
     }
   });
 
-  const result = await POSTRawJSON(`${API_HOST}/seashell/drive/queryMeta`, {
+  const result = await new Fetch(`${API_HOST}/seashell/drive/queryMeta`, {
     limit: 0, token, fields: ['name']
-  });
+  }).post();
 
   if (result.error) return handleError(result.error);
   dispatch({
