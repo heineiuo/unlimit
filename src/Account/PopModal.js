@@ -92,8 +92,7 @@ const styles = StyleSheet.create({
   },
 
   editContent: {
-      paddingTop: 26,
-      paddingBottom: 14
+    padding: 20
   },
 
   btn: {

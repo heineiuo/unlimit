@@ -71,7 +71,7 @@ class Profile extends Component {
             </span>
           </div>
           <Button style={buttonStyle} onClick={this.handleLogout}>退出</Button>
-          <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', lineHeight: '50px', backgroundColor: '#EEE'}}>
+          <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', lineHeight: '50px', borderTop: '1px solid #EEE'}}>
             <Link to="/" style={{textDecoration: 'none', color: '#666', display: 'flex', justifyContent: 'center'}}>
               <div style={{marginBottom: 5}}><Logo /></div>
             </Link>
