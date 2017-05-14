@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Modal from 'react-modal'
 import Button from 'react-sea/lib/Button'
+import {Logo} from 'react-sea/lib/Smile'
 import DropDown,{DropDownTrigger,DropDownContent}from 'react-sea/lib/DropDown'
 import {StyleSheet, css} from 'aphrodite'
 import {connect} from 'react-redux'
@@ -71,7 +72,9 @@ class Profile extends Component {
           </div>
           <Button style={buttonStyle} onClick={this.handleLogout}>退出</Button>
           <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', lineHeight: '50px', backgroundColor: '#EEE'}}>
-            <Link to="/" style={{textDecoration: 'none', color: '#666'}}>进入右括号网站</Link>
+            <Link to="/" style={{textDecoration: 'none', color: '#666', display: 'flex', justifyContent: 'center'}}>
+              <div style={{marginBottom: 5}}><Logo /></div>
+            </Link>
           </div>
           <Modal
             contentLabel="Modal"

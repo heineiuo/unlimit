@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
   hostList: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around'
+    // justifyContent: 'space-around'
+    justifyContent: 'flex-start'
   },
 
   hostItem: {
