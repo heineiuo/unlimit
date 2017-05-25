@@ -3,12 +3,12 @@
     {
       "disable": false,
       "origin": false,
-      "key": "smile-web",
+      "key": "drive-web",
       "template": "./src/index.html",
       "filename": "./src/index.js",
-      "distPath": "./packages/smile-web/dist/",
-      "publicPath": "//unpkg.com/smile-web@0.0.12/dist/",
-      "devPublicPath": "//127.0.0.1:8083/smile-web@0.0.12/dist/",
+      "distPath": "./packages/drive-web/dist/",
+      "publicPath": "//unpkg.com/drive-web@0.0.12/dist/",
+      "devPublicPath": "//127.0.0.1:8083/drive-web@0.0.12/dist/",
       "//alias": {
         "react": "react/dist/react.js",
         "react-dom": "react-dom/dist/react-dom.js"
@@ -26,11 +26,11 @@
     {
       "disable": true,
       "origin": false,
-      "key": "smile-admin",
+      "key": "drive-admin",
       "filename": "./src/Admin/index.js",
-      "distPath": "./packages/smile-admin/dist",
-      "publicPath": "//unpkg.com/smile-admin@0.0.1/dist/",
-      "devPublicPath": "//127.0.0.1:8083/smile-admin@0.0.1/dist/",
+      "distPath": "./packages/drive-admin/dist",
+      "publicPath": "//unpkg.com/drive-admin@0.0.1/dist/",
+      "devPublicPath": "//127.0.0.1:8083/drive-admin@0.0.1/dist/",
       "externals":  {
         "react": {
           "root": "React",
@@ -62,14 +62,54 @@
       "//useSystemRegister": true
     },
     {
-      "disable": false,
+      "disable": true,
       "origin": false,
-      "key": "smile-catcms-manager",
+      "key": "drive-catcms-manager",
       "filename": "./src/CMSManage/index.js",
-      "distPath": "./packages/smile-catcms-manager/dist",
-      "publicPath": "//unpkg.com/smile-catcms-manager@0.0.1/dist/",
-      "devPublicPath": "//127.0.0.1:8083/smile-catcms-manager@0.0.1/dist/",
+      "distPath": "./packages/drive-catcms-manager/dist",
+      "publicPath": "//unpkg.com/drive-catcms-manager@0.0.1/dist/",
+      "devPublicPath": "//127.0.0.1:8083/drive-catcms-manager@0.0.1/dist/",
       "externals":  {
+        "react": {
+          "root": "React",
+          "amd": "react",
+          "commonjs": "react"
+        },
+        "react-dom": {
+          "root": "ReactDOM",
+          "amd": "react-dom",
+          "commonjs": "react-dom"
+        },
+        "react-router-dom": {
+          "root": "ReactRouterDOM",
+          "amd": "react-router-dom",
+          "commonjs": "react-router-dom"
+        },
+        "redux": {
+          "root": "Redux",
+          "amd": "redux",
+          "commonjs": "redux"
+        },
+        "react-redux": {
+          "root": "ReactRedux",
+          "amd": "react-redux",
+          "commonjs": "react-redux"
+        }
+      },
+      "isLibrary": true,
+      "//useSystemRegister": true
+    },
+
+    {
+      "disable": true,
+      "origin": false,
+      "key": "smile-topic",
+      "filename": "./src/index.js",
+      "distPath": "./dist",
+      "template": "src/index.html",
+      "publicPath": "//unpkg.com/smile-topic@0.0.4/dist/",
+      "devPublicPath": "http://127.0.0.1:8091/dist/",
+      "externals": {
         "react": {
           "root": "React",
           "amd": "react",

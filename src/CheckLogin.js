@@ -89,7 +89,7 @@ class CheckLogin extends Component {
                 (callback) => {
                   //callback(require('./Master'));
                   //require.ensure([], (require) => callback(require('./Master')))
-                  SystemJS.import('smile-admin').then(admin => {
+                  SystemJS.import('drive-admin').then(admin => {
                     const Admin = admin({injectAsyncReducer});
                     callback(null, Admin)
                   }).catch(e => callback(e));
@@ -110,7 +110,7 @@ class CheckLogin extends Component {
               return (
                 <AsyncComponent 
                   loadKey="oauth" 
-                  load={callback => SystemJS.import('smile-catcms-manager').then(manager => callback(null, manager.default)).catch(e => callback(e))} >
+                  load={callback => SystemJS.import('drive-catcms-manager').then(manager => callback(null, manager.default)).catch(e => callback(e))} >
                   {(state, Auth) => (
                     state < 2 ? null:
                       <Auth {...props}/>

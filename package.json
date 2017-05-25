@@ -1,8 +1,8 @@
 {
-  "name": "smile-web",
+  "name": "drive-web",
   "version": "0.0.11",
   "private": true,
-  "main": "dist/smile-web.js",
+  "main": "dist/drive-web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "react-sh",

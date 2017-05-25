@@ -9,7 +9,7 @@ const Async = (props) => {
       (callback) => {
         //callback(require('./Master'));
         //require.ensure([], (require) => callback(require('./Master')))
-        SystemJS.import('smile-topic').then(admin => {
+        SystemJS.import('drive-topic').then(admin => {
           const Admin = admin({injectAsyncReducer});
           callback(null, Admin)
         }).catch(e => callback(e));

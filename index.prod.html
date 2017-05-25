@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang=zh-CN>
 <head>
@@ -27,16 +26,9 @@
 <script src='https://unpkg.com/systemjs@0.20.9/dist/system.js'></script>
 <script src='https://unpkg.com/react@15.4.2/dist/react.min.js'></script>
 <script src='https://unpkg.com/react-dom@15.4.2/dist/react-dom.min.js'></script>
-<script src='https://unpkg.com/smile-web@0.0.12/dist/smile-web.js'></script>
+<script src='https://unpkg.com/drive-web@0.0.12/dist/drive-web.js'></script>
 
 <script>
-
-
-  SystemJS.set(System.normalizeSync('react'), System.newModule({'default': window.React , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('react-dom'), System.newModule({'default': window.ReactDOM , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('react-router-dom'), System.newModule({'default': window.ReactRouterDOM , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('react-redux'), System.newModule({'default': window.ReactRedux , __useDefault: true }) );
-  SystemJS.set(System.normalizeSync('redux'), System.newModule({'default': window.Redux , __useDefault: true }) );
 
   SystemJS.config({
     baseUrl: '/',
@@ -45,12 +37,12 @@
     },
     map: {
       'familytree': 'https://unpkg.com/familytree@0.0.2/dist/familytree.js',
-      'smile-text-editor': 'https://unpkg.com/smile-text-editor@0.0.4/dist/smile-text-editor.js',
-      'smile-admin': 'https://unpkg.com/smile-admin@0.0.1/dist/smile-admin.js',
-      'smile-topic': 'https://unpkg.com/smile-topic@0.0.3/dist/smile-topic.js',
+      'drive-text-editor': 'https://unpkg.com/drive-text-editor@0.0.4/dist/drive-text-editor.js',
+      'drive-admin': 'https://unpkg.com/drive-admin@0.0.1/dist/drive-admin.js',
+      'drive-topic': 'https://unpkg.com/drive-topic@0.0.3/dist/drive-topic.js',
     }
   });
 
-  window['smile-web'].default();
+  window['drive-web'].default();
 
 </script>
