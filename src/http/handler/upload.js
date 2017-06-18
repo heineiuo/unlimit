@@ -1,6 +1,6 @@
 import formidable from "formidable"
 import path from "path"
-import fs from "fs-promise"
+import fs from "mz/fs"
 
 export default (req, res, seashell, options) => new Promise(async (resolve, reject) => {
   try {

@@ -1,4 +1,4 @@
-import fs from 'fs-promise'
+import fs from 'mz/fs'
 import path from 'path'
 import tls from 'tls'
 import getConfig from '../config'

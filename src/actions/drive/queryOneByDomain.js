@@ -5,14 +5,21 @@ import getConfig from '../../config'
 import getLevel from '../../leveldb'
 import ms from 'ms'
 
+const queryLevelSchema = Joi.object().keys({
+  updateTime: Joi.number().required(),
+  driveId: Joi.string().required(),
+  locations: Joi.array().required()
+})
+
+const queryByDomainSchema = Joi.object().keys({
+  domain: Joi.required(),
+  forceSync: Joi.boolean().default(false) // 强制更新（有很短的延迟）
+})
+
 const queryLevel = (db, key) => new Promise(async resolve => {
   try {
     const result = await db.get(key);
-    const validated = Joi.validate(result, Joi.object().keys({
-      updateTime: Joi.number().required(),
-      driveId: Joi.string().required(),
-      locations: Joi.array().required()
-    }))
+    const validated = Joi.validate(result, queryLevelSchema)
     if (validated.error) return resolve(null)
     resolve(result)
   } catch(e){
@@ -20,13 +27,10 @@ const queryLevel = (db, key) => new Promise(async resolve => {
   }
 })
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
-  domain: Joi.required(),
-  forceSync: Joi.boolean().default(false) // 强制更新（有很短的延迟）
-}), {allowUnknown: true})
+
 
 export default query => (dispatch) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;
   const syncCache = async () => {

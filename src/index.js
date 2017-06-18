@@ -1,13 +1,13 @@
-import Seashell from '../../seashell/packages/seashell'
+import Seashell from 'seashell'
 import chalk from 'chalk'
-import {createDispatch} from 'action-creator'
+import {createDispatch, seashellActionMiddleware} from 'action-creator'
+
 import getConfig from './config'
 import getLeveldb from './leveldb'
 import createServer from './http'
-import allActionCreators from './actions/allActionCreators'
+import allActionCreators from './actions'
 
 const start = async () => {
-
   try {
 
     const config = await getConfig();
@@ -21,8 +21,8 @@ const start = async () => {
       ctx.leveldb = leveldb;
       ctx.config = config;
       ctx.json = (json) => {
-        ctx.response.body = json
-        ctx.response.end()
+        ctx.response.body = json;
+        ctx.response.end();
       };
       ctx.setHeader = (header) => {
         Object.assign(ctx.response.headers, header);
@@ -51,22 +51,11 @@ const start = async () => {
       }
     });
 
-    app.use('/:moduleName/:actionName', async ctx => {
-      const {moduleName, actionName} = ctx.request.params;
-      if (!allActionCreators.hasOwnProperty(moduleName)) return ctx.error('NOT_FOUND');
-      const actionCreators = allActionCreators[moduleName];
-      if (!actionCreators.hasOwnProperty(actionName)) return ctx.error('NOT_FOUND');
-      const dispatch = createDispatch(ctx);
-      const actionType = dispatch(actionCreators[actionName](ctx.request.body));
-      if (actionType instanceof Promise) {
-        const result = await actionType;
-        ctx.json(result)
-      }
-    });
+    app.use(seashellActionMiddleware(allActionCreators));
 
     server.run(app);
 
-  } catch(e){
+  } catch (e) {
     console.log('START FAIL\n'+e.stack||e);
     process.cwd(1);
   }

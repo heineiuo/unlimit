@@ -3,12 +3,13 @@ import {ObjectId} from 'mongodb'
 import getMongodb from '../../mongodb'
 import getLeveldb from '../../leveldb'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+const queryUserSchema =  Joi.object().keys({
   driveId: Joi.string(),
-}), {allowUnknown: true})
+})
+
 
 export default query => (dispatch, geCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, queryUserSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId} = validated.value;
   try {

@@ -1,8 +1,9 @@
 import {homedir} from "os"
 import {argv} from "yargs"
-import fs from 'fs-promise'
-import json5 from 'json5'
+import fs from 'mz/fs'
+import JSON5 from 'json5'
 import path from 'path'
+import mkdirp from 'mkdirp'
 
 let config = {};
 let configReady = false;
@@ -14,10 +15,26 @@ export default (key = null) => new Promise(async (resolve, reject) => {
   try {
     const name = 'seashell-gateway';
     const datadir = argv.datadir ? argv.datadir : `${homedir()}/data/${name}`;
-    const conf = argv.conf ? argv.conf : `${homedir()}/data/${name}/config.json`;
-    const confContent = json5.parse(await fs.readFile(conf, 'utf8'));
+    const confPath = argv.conf ? argv.conf : `${datadir}/config.json`;
+    const confContent = {
+      /**
+       * default configure
+       */
+    }
+    
+    try {
+      const content = await fs.readFile(confPath, 'utf8')
+      Object.assign(confContent, JSON5.parse(content))
+    } catch (e) {
+      console.log(e)
+      mkdirp.sync(datadir)
+      await fs.writeFile(confPath, JSON.stringify(confContent), 'utf8')
+    }
     delete confContent.conf;
     config = {datadir, ...confContent, ...argv};
+    
+    console.log(config)
+
     configReady = true;
     resolve(config)
   } catch (e) {

@@ -3,14 +3,16 @@ import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import queryOne from './queryOne'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+const mutateDomainSchema = Joi.object().keys({
   driveId: Joi.string().required(),
   add: Joi.array().default([]),
   remove: Joi.array().default([])
-}), {allowUnknown: true})
+})
+
+
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, mutateDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId,add, remove} = validated.value;
 

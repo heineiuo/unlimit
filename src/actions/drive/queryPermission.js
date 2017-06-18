@@ -1,17 +1,18 @@
 import Joi from 'joi'
 import queryOne from './queryOne'
 
-export const validate = (query) => Joi.validate(query, Joi.object().keys({
+const queryPermissionSchame = Joi.object().keys({
   userId: Joi.string().required(),
   driveId: Joi.string().required(),
-}), {allowUnknown: true});
+})
+
 
 /**
  * 获取空间和用户的权限关系
  * @param query
  */
 export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, queryPermissionSchame, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {userId, driveId} = validated.value;
   try {

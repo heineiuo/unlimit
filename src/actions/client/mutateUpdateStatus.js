@@ -3,6 +3,7 @@
 import Joi from 'joi'
 import getMongodb from "../../mongodb"
 import getLeveldb from "../../leveldb"
+import {mutateUpdateSchema} from './schema'
 
 const deleteLevelItem = (db, key) => new Promise(async resolve => {
   try {
@@ -12,17 +13,9 @@ const deleteLevelItem = (db, key) => new Promise(async resolve => {
   }
 })
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
-  name: Joi.string(),
-  id: Joi.string(),
-  clientId: Joi.string(),
-  socketId: Joi.string().required(),
-  toStatus: Joi.number().valid([1, 2]).required(),
-  token: Joi.string().length(96),
-}), {allowUnknown: true});
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, mutateUpdateSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {name, id, socketId, clientId, toStatus, token} = validated.value;
 

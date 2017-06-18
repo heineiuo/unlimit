@@ -1,13 +1,15 @@
 import Joi from 'joi'
 import getMongodb from '../../mongodb'
 
-export const validate = (query) => Joi.validate(query, Joi.object().keys({
+const mutateLocationSchema = Joi.object().keys({
   driveId: Joi.string().required(),
   locations: Joi.array().required(),
-}), {allowUnknown: true});
+})
+
+
 
 export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, mutateLocationSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {locations, driveId} = validated.value;
 

@@ -2,13 +2,13 @@ import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import getMongodb from '../../mongodb'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+const queryMetaSchema = Joi.object().keys({
   limit: Joi.number().default(20),
   fields: Joi.array().default(['name', 'locations'])
-}), {allowUnknown: true})
+})
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, queryMetaSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value;
   const filter = {}

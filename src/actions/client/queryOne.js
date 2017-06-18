@@ -5,16 +5,10 @@ import getLeveldb from '../../leveldb'
 import queryOneUser from '../account/queryOne'
 import queryOneApp from '../app/queryOne'
 import getMongodb from '../../mongodb'
-
-export const validate = query => Joi.validate(query, Joi.object().keys({
-  token: Joi.string().length(96),
-  socketId: Joi.string(),
-  clientId: Joi.string(),
-  withSourceData: Joi.boolean().default(false)
-}).xor(['token', 'clientId', 'socketId']), {allowUnknown: true})
+import {queryOneSchema} from './schema'
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, queryOneSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {clientId, socketId, token, withSourceData} = validated.value;
 

@@ -4,13 +4,13 @@ import getConfig from '../../config'
 import {tmpdir} from 'os'
 import mkdirp from 'mkdirp'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+const mutateApproveDomainSchema = Joi.object().keys({
   domain: Joi.string().required(),
   driveId: Joi.string().required(),
-}), {allowUnknown: true});
+})
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, mutateApproveDomainSchema, {allowUnknown: true});;
   if (validated.error) return reject(validated.error);
   const {domain, driveId} = validated.value;
   try {

@@ -2,12 +2,12 @@ import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import getMongodb from '../../mongodb'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+export const mutateDisableSchema = Joi.object().keys({
   driveId: Joi.string().required()
-}), {allowUnknown: true})
+})
 
 export default query => dispatch => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, mutateDisableSchema, {allowUnknown: true})
   const {driveId} = validated.value;
   try {
     const drive = (await getMongodb()).collection('drive');

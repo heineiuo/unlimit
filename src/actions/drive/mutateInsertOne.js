@@ -2,13 +2,13 @@ import Joi from 'joi'
 import queryOne from './queryOne'
 import getMongodb from '../../mongodb'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+const insertSchema = Joi.object().keys({
   name: Joi.string().regex(/^[a-z]{1,1}[a-z0-9]{5,30}$/).required(),
   description: Joi.string().default(''),
-}), {allowUnknown: true})
+})
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query);
+  const validated = Joi.validate(query, insertSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error)
   const {name, description} = validated.value;
   try {
