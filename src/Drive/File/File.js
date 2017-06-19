@@ -14,9 +14,9 @@ import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from '../CreateFileModal'
 import IntegrateApp from "../../components/IntegrateApp"
-import {injectAsyncReducer} from '../../store'
+import {injectAsyncReducer} from '@react-shared/ootb-store'
 import IconArrowDropdown from '../../components/IconArrowDropdown'
-import {API_HOST} from '../../constants'
+const {API_HOST} = global
 
 class File extends Component {
 
@@ -56,12 +56,13 @@ class File extends Component {
     const {params, params: {driveId, fileId}} = match;
 
     if (nextProps.file.fileState === 0) {
-      setTitle(`${nextProps.params.driveId} - 文件`);
-      return getFileList(nextProps.params.driveId, null);
+      // console.log('getfILEliST. ...')
+      return getFileList(nextProps.match.params.driveId, null);
     }
 
     const nextFileId = nextProps.match.params.fileId;
     if (fileId !== nextFileId) {
+      // console.log('FILEid !== nextFileId. ...')
       getFileList(driveId, nextFileId)
       this.updateUploadLocation()
     }
@@ -429,9 +430,9 @@ const styles = StyleSheet.create({
 const connectedFile = connect(
   (state) => ({
     account: state.account,
-    host: state.host,
+    host: state.drive,
     file: state.file,
-    currentDriveName: state.host.currentDriveName
+    currentDriveName: state.drive.currentDriveName
   }),
   (dispatch) => bindActionCreators({
     push,

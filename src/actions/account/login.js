@@ -1,12 +1,12 @@
-import Fetch from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../../constants'
+const {API_HOST} = global
 
-const login = (formData) => async (dispatch, getState) => {
+export default (formData) => async (dispatch, getState) => {
   const result = await new Fetch(`${API_HOST}/seashell/account/mutateCreateToken`, {
     email: formData.email,
     code: formData.code
-  });
+  }).post();
 
   if (result.error) {
     console.log(result.error);
@@ -26,4 +26,3 @@ const login = (formData) => async (dispatch, getState) => {
   })
 };
 
-export default module.exports = login

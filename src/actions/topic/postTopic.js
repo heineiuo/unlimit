@@ -1,6 +1,6 @@
-import Fetch from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../../constants'
+const {API_HOST} = global
 import {stateToHTML} from 'draft-js-export-html'
 import {convertToRaw} from 'draft-js'
 

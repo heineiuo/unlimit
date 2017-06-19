@@ -1,5 +1,5 @@
-import Fetch from 'fetch-tools'
-import {API_HOST} from '../../constants'
+import Fetch from '@shared/fetch'
+const {API_HOST} = global
 
 
 export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {

@@ -169,7 +169,7 @@ export default module.exports = connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    login: require('../actions/account/login'),
+    login: require('../actions/account/login').default,
     sendVerifyCode: require('../actions/account/sendVerifyCode')
   }, dispatch)
 )(UnLogged)

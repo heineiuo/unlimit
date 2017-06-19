@@ -36,6 +36,8 @@ class IntegrateApp extends Component {
       console.error(e);
       nextState.appState = 4
     } finally {
+      console.log('integrate app open finally');
+      console.log(nextState.appState)
       this.setState(nextState)
     }
   };
@@ -60,37 +62,40 @@ class IntegrateApp extends Component {
 
   render() {
     const {fullScreen, appState, appName, driveId, fileName, fileId, isCreated} = this.state;
-    return appState === 4 ? (
-        <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>
-          <div onClick={this.close} className={css(styles.appToolBar__btn)} style={{width: 100}}>关闭应用</div>
-          <div>{`app(${appName})加载失败:(`}</div>
-        </div>
-      ) :
-        appState === 3 ? (
-          <div>
-            <div>{`app(${appName}）不存在:( `}</div>
-            <a href="/">回到首页</a>
-          </div>
-        ) :
-          appState === 1 ? <Spin /> :
-            appState === 2? (
-              <div className={css(styles.edit, fullScreen && styles.edit_fullScreen)}>
-                <div className={css(styles.appToolBar)} style={fullScreen?{position: 'absolute'}:{}}>
-                  <div onClick={this.toggleFullScreen} className={css(styles.appToolBar__btn)}>全屏</div>
-                  <div onClick={this.close} className={css(styles.appToolBar__btn)}>关闭应用</div>
-                </div>
-                  {
-                    React.createElement(this.component, {
-                      appState,
-                      appName,
-                      driveId,
-                      fileId,
-                      fileName,
-                      isCreated
-                    })
-                  }
+    console.log(`appState: ${appState}`)
+
+    return appState === 4 ? 
+      <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>
+        <div onClick={this.close} className={css(styles.appToolBar__btn)} style={{width: 100}}>关闭应用</div>
+        <div>{`app(${appName})加载失败:(`}</div>
+      </div> :
+      appState === 3 ? 
+        <div>
+          <div>{`app(${appName}）不存在:( `}</div>
+          <a href="/">回到首页</a>
+        </div> :
+        appState === 1 ? 
+          <Spin /> :
+          appState === 2? 
+            <div className={css(styles.edit, fullScreen && styles.edit_fullScreen)}>
+              <div className={css(styles.appToolBar)} style={fullScreen?{position: 'absolute'}:{}}>
+                <div onClick={this.toggleFullScreen} className={css(styles.appToolBar__btn)}>全屏</div>
+                <div onClick={this.close} className={css(styles.appToolBar__btn)}>关闭应用</div>
               </div>
-            ): null
+                {
+                  React.createElement(this.component, {
+                    appState,
+                    appName,
+                    driveId,
+                    fileId,
+                    fileName,
+                    isCreated
+                  })
+                }
+            </div>: 
+            appState === 0 ?
+              <div>还未初始化</div> :
+              <div>出错了</div>
   }
 }
 

@@ -1,19 +1,42 @@
 import * as ReactRouterDOM from 'react-router-dom'
 import * as Redux from 'redux'
 import * as ReactRedux from 'react-redux'
+import * as aphrodite from 'aphrodite'
+import * as ReactRouterRedux from 'react-router-redux'
+import ReactModal from 'react-modal'
+import RenderApp from '@react-shared/render-app'
+import defaults from 'lodash/defaults'
+import {store, history, injectAsyncReducer, AppWrapper} from '@react-shared/ootb-store'
 
-window.ReactRouterDOM = ReactRouterDOM
-window.Redux = Redux
-window.ReactRedux = ReactRedux
+import ConnectCheckLogin from './CheckLogin'
 
-SystemJS.set(SystemJS.normalizeSync('react'), SystemJS.newModule({'default': window.React , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-dom'), SystemJS.newModule({'default': window.ReactDOM , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-router-dom'), SystemJS.newModule({'default': window.ReactRouterDOM , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-redux'), SystemJS.newModule({'default': window.ReactRedux , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('redux'), SystemJS.newModule({'default': window.Redux , __useDefault: true }) );
+defaults(global, {
+  __SMILE_DEV: process.env.NODE_ENV !== 'production',
+  API_HOST: `http://api.youkuohao.dev`,
+  __SMILE_API: `http://api.youkuohao.dev`
+})
 
-export default () => {
-  const RenderApp = require('react-sea/lib/RenderApp');
-  const App = require('./App');
-  const app = new RenderApp(App, document.getElementById('app'));
-};
+injectAsyncReducer('account', require('./actions/account/account').default)
+injectAsyncReducer('drive', require('./actions/drive/drive').default)
+injectAsyncReducer('file', require('./actions/file/file').default)
+injectAsyncReducer('topic', require('./actions/topic/topic').default)
+injectAsyncReducer('admin', require('./actions/admin').default)
+injectAsyncReducer('nav', require('./actions/nav').default)
+injectAsyncReducer('notice', require('./actions/notice').default)
+
+SystemJS.set(SystemJS.normalizeSync('react'), SystemJS.newModule({'default': global.React , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('react-dom'), SystemJS.newModule({'default': global.ReactDOM , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('react-router-dom'), SystemJS.newModule({'default': ReactRouterDOM , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('react-redux'), SystemJS.newModule({'default': ReactRedux , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('react-router-redux'), SystemJS.newModule({'default': ReactRouterRedux , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('redux'), SystemJS.newModule({'default': Redux , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('react-modal'), SystemJS.newModule({'default': ReactModal , __useDefault: true }) );
+SystemJS.set(SystemJS.normalizeSync('aphrodite'), SystemJS.newModule({'default': aphrodite , __useDefault: true }) );
+
+SystemJS.config(global.__SYSTEM_CONFIG)
+
+const app = new RenderApp( () => 
+  <AppWrapper>
+    <ConnectCheckLogin />
+  </AppWrapper>
+, document.getElementById('app'));

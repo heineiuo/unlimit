@@ -114,8 +114,8 @@ const styles = StyleSheet.create({
 
 const ConnectedWrapper = connect(
   (store) => ({
-    host: store.host,
-    currentDriveName: store.host.currentDriveName
+    host: store.drive,
+    currentDriveName: store.drive.currentDriveName
   }),
   (dispatch) => bindActionCreators({
     push,

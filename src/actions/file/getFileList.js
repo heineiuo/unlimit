@@ -1,10 +1,10 @@
-import Fetch from 'fetch-tools'
-import {API_HOST} from '../../constants'
+import Fetch from '@shared/fetch'
+const {API_HOST} = global
 
 
 const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
   dispatch({
-    type: 'file__stateUpdate',
+    type: '@@file/list/update',
     payload: {
       fileState: 1
     }
@@ -18,7 +18,7 @@ const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
 
   if (result.error) return console.log(result.error)
   dispatch({
-    type: 'file__listUpdate',
+    type: '@@file/list/update',
     payload: result.data ? {ls: result.data, isFile: false} : result
   })
 

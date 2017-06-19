@@ -7,7 +7,7 @@ const pushFileToClipboard = (files) => (dispatch, getState) => {
     return files.indexOf(item) === -1
   }).concat(files);
   dispatch({
-    type: 'file__clipboardUpdate',
+    type: '@@file/clipboard/update',
     payload: {
       clipboard: nextClipboard
     }

@@ -11,7 +11,7 @@ class FileInfo extends Component {
   state = {
   };
 
-  openFile = (appName) => {
+  openFile = (appName, pathname) => {
     const {fileId, driveId, openIntegrateApp} = this.props;
     openIntegrateApp({
       driveId, fileId, appName

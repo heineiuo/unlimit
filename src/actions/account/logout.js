@@ -1,6 +1,6 @@
-import Fetch from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../../constants'
+const {API_HOST} = global
 
 const logout = () => async (dispatch, getState) => {
   console.log('正在登出系统...');

@@ -1,6 +1,6 @@
 
 const restoreFileList = () => ({
-  type: 'file__stateUpdate',
+  type: '@@file/state/update',
   payload: {fileState: 0}
 });
 

@@ -1,17 +1,17 @@
-import Fetch from 'fetch-tools'
-import {API_HOST} from '../../constants'
-
+import Fetch from '@shared/fetch'
+const {__SMILE_API} = global
 /**
  * 重命名文件
  * @returns {function()}
  */
-const renameFile = (prevName, nextName)=> async (dispatch, getState) => {
-  const {token} = getState().account;
-  const result = await new Fetch(`${API_HOST}/seashell/fs/mv`, {
-    token, prevName, nextName
+export default (query) => async (dispatch, getState) => {
+  const {account: {token}, file: {fileId}} = getState();
+  const {fileName} = query;
+  const result = await new Fetch(`${__SMILE_API}/seashell/fs/mutateFileName`, {
+    token,
+    fileId,
+    fileName
   }).post();
 
-  if (result.error) return console.log(result.error);
+  if (result.error) console.log(result.error);
 };
-
-export default module.exports = renameFile;

@@ -1,5 +1,5 @@
 import Admin from './Admin'
-import admin from '../reducers/admin'
+import admin from '../actions/admin'
 
 export default module.exports = ({injectAsyncReducer}) => {
   injectAsyncReducer('admin', admin);

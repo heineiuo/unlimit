@@ -140,8 +140,8 @@ const styles = StyleSheet.create({
 
 export default module.exports = connect(
   (state) => ({
-    hostList: state.host.hostList,
-    hostListState: state.host.hostListState,
+    hostList: state.drive.hostList,
+    hostListState: state.drive.hostListState,
   }),
   (dispatch) => bindActionCreators({
     push,

@@ -4,13 +4,9 @@ import {HashRouter, Switch, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Body from 'react-sea/lib/Body'
-import {injectAsyncReducer} from './store'
 import AsyncComponent from './components/AsyncComponent'
 import Title from './components/Title'
 import ProfileDropDown from './components/ProfileDropDown'
-import host from './reducers/drive'
-import file from './reducers/file'
-import nav from './reducers/nav'
 import commonStyles from './styles'
 
 const Router = HashRouter;
@@ -20,7 +16,6 @@ class CheckLogin extends Component {
 
   componentWillMount = () => {
     const {account, checkLogin} = this.props;
-    // console.log(account, checkLogin);
     if (!account.loginChecked) checkLogin();
   };
 
@@ -51,9 +46,6 @@ class CheckLogin extends Component {
             {(props) => (
               <AsyncComponent loadKey="drive" load={
                 (callback) => {
-                  injectAsyncReducer('host', host);
-                  injectAsyncReducer('file', file);
-                  injectAsyncReducer('nav', nav);
                   require.ensure([], (require) => callback(null, require('./Drive/Drive').default))
                 }
               }>
@@ -105,8 +97,6 @@ class CheckLogin extends Component {
           </Route>
           <Route path='/cms-manage'>
             {(props) => {
-              require.ensure([], (require) => injectAsyncReducer('topic', require('./reducers/topic').default))
-              // injectAsyncReducer('topic', require('./reducers/topic').default)
               return (
                 <AsyncComponent 
                   loadKey="oauth" 

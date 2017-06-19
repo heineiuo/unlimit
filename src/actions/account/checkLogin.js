@@ -1,6 +1,6 @@
-import Fetch from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../../constants'
+const {API_HOST} = global
 
 /**
  * 检查登录

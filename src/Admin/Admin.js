@@ -12,7 +12,7 @@ import Bot from './Bot'
 import Users from './Users'
 import IntegrateApp from './IntegrateApp'
 
-import {fetchUserList} from '../reducers/admin'
+import {fetchUserList} from '../actions/admin'
 
 /**
  * 集成APP

@@ -1,7 +1,8 @@
 import {handleActions} from 'redux-actions'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../constants'
-import Fetch from 'fetch-tools'
+import Fetch from '@shared/fetch'
+
+const {API_HOST} = global;
 
 const initialState = {
   userListState: 0,
