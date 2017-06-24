@@ -1,7 +1,5 @@
 /* @private */
 import Joi from "joi"
-import getLevel from '../../leveldb'
-import getMongodb from '../../mongodb'
 import {ObjectId} from 'mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
@@ -14,6 +12,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {userId, email, enableNull} = validated.value;
+  const {getMongodb} = getCtx()
   try {
     const filter = {};
     if (userId) {

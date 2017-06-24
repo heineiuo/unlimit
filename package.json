@@ -1,7 +1,6 @@
 {
-  "name": "@seashell/gateway",
+  "name": "@unlimit/gateway",
   "version": "0.2.0",
-  "private": true,
   "scripts": {
     "start": "npm run server",
     "test": "jest __tests__",
@@ -9,7 +8,7 @@
     "build": "seashell-dev --build"
   },
   "devDependencies": {
-    "action-creator": "^0.5.1",
+    "action-creator": "^0.6.2",
     "ali-push": "^0.1.6",
     "babel-cli": "~6.9.0",
     "babel-core": "~6.9.0",
@@ -64,5 +63,8 @@
     "ua-parser-js": "~0.7.10",
     "uuid": "~2.0.2",
     "yargs": "^6.6.0"
+  },
+  "dependencies": {
+    "env-paths": "^1.0.0"
   }
 }

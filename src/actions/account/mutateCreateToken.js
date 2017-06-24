@@ -1,9 +1,7 @@
 /* @public */
 import Joi from 'joi'
 import queryOne from './queryOne'
-import getLeveldb from "../../leveldb"
 import ms from 'ms'
-import getMongodb from '../../mongodb'
 import mutateInsertOne from '../client/mutateInsertOne'
 
 const queryCodeLevel = (db, key) => new Promise(async resolve => {
@@ -27,8 +25,9 @@ const queryCodeLevel = (db, key) => new Promise(async resolve => {
  * 检查验证码
  */
 const checkCode = ({email, code}) => new Promise(async (resolve, reject) => {
+  const {leveldb} = getCtx();
   try {
-    const db = (await getLeveldb()).sub('emailcode');
+    const db = leveldb.sub('emailcode');
     const result = await queryCodeLevel(db, email);
     if (!result) return reject(new Error('ILLEGAL_CODE_A'));
     if (result.code !== code) return reject(new Error('ILLEGAL_CODE_B'));
@@ -49,9 +48,9 @@ const checkCode = ({email, code}) => new Promise(async (resolve, reject) => {
  * @apiParam {string} code code
  * @apiSuccess {string} token token
  */
-const createTokenByAuthCode = ({authCode}) => new Promise(async(resolve, reject) => {
+const createTokenByAuthCode = ({authCode}, leveldb) => new Promise(async(resolve, reject) => {
   try {
-    const db = (await getLeveldb()).sub('ssocode');
+    const db = leveldb.sub('ssocode');
     const result = await db.get(authCode);
     resolve({token: result.token});
   } catch(e){
@@ -60,7 +59,7 @@ const createTokenByAuthCode = ({authCode}) => new Promise(async(resolve, reject)
 });
 
 
-const createUser = (email) => new Promise(async (resolve, reject) => {
+const createUser = (email, getMongodb) => new Promise(async (resolve, reject) => {
   try {
     const db = (await getMongodb()).collection('user');
     const result = await db.insertOne({
@@ -94,12 +93,12 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {code, email, driveId} = validated.value;
-
+  const {getMongodb} = getCtx()
   // todo 发放OAuth授权令牌
   try {
     await checkCode({email, code});
     const result = await dispatch(queryOne({email, enableNull: true}));
-    const userId = result === null ? (await createUser(email)).userId : result.userId;
+    const userId = result === null ? (await createUser(email, getMongodb)).userId : result.userId;
     if (!userId) return reject(new Error('EXCEPTION_ERROR'))
     resolve(await dispatch(mutateInsertOne({id: userId, name: 'user', type: 'user'})))
   } catch(e) {

@@ -1,11 +1,13 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 import {querySchema} from './schema'
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, querySchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   let {limit, fields, name, id} = validated.value;
+
+  const {getMongodb} = getCtx()
+
   try {
     const db = (await getMongodb()).collection('client');
     const filter = {$or: []}

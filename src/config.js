@@ -4,6 +4,9 @@ import fs from 'mz/fs'
 import JSON5 from 'json5'
 import path from 'path'
 import mkdirp from 'mkdirp'
+import envPaths from 'env-paths'
+
+const paths = envPaths('@unlimit/gateway')
 
 let config = {};
 let configReady = false;

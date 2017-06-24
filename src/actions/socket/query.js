@@ -15,6 +15,8 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   const {appName, appId} = validated.value;
+  if (validated.error) return reject(validated.error)
+
   let socketId = null;
   try {
     if (appId) {

@@ -15,7 +15,7 @@ export const queryLevel = (db, key) => new Promise(async resolve => {
  */
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const {headers} = query;
-  let session = null;
+  let session = {};
   try {
     if (headers.hasOwnProperty('switch-identity')) {
       const {appSecret: token, appName: name} = headers['switch-identity'];
@@ -28,7 +28,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       session = await queryLevel(socketdb, query.socketId);
     }
   } catch(e){
-    console.log(e)
+    // console.log(e)
   }
   resolve(session);
 });

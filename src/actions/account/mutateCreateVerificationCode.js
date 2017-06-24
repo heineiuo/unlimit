@@ -1,7 +1,5 @@
 import AliPush from 'ali-push'
-import getConfig from '../../config'
 import Joi from 'joi'
-import getLeveldb from '../../leveldb'
 
 let client = null;
 
@@ -28,9 +26,10 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query)
   if (validated.error) return reject(validated.error)
   const {email} = validated.value;
+  const {getConfig, leveldb} = getCtx();
   try {
     const config = await getConfig();
-    const db = (await getLeveldb()).sub('emailcode');
+    const db = leveldb.sub('emailcode');
     const code = createNumberCode();
     await db.put(email, {code, createTime: Date.now()});
     console.log({email, code})

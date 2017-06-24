@@ -1,6 +1,5 @@
 /* @public */
 import Joi from 'joi'
-import getLeveldb from '../../leveldb'
 import queryOne from './queryOne'
 import queryOneClient from '../client/queryOne'
 
@@ -31,22 +30,24 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * @apiSuccess {object} user
  */
 export default query => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
-  const validated = validate(query);
-  if (validated.error) return reject(validated.error);
-  const {token} = validated.value;
-  try {
-    const db = await getLeveldb();
-    const userdb = db.sub('user');
-    const {id: userId} = await dispatch(queryOneClient({token}))
-    let user = await queryLevel(userdb, userId);
-    if (user === null) {
-      user = await dispatch(queryOne({userId}))
-      userdb.put(userId, user)
-    }
-    resolve(user);
-  } catch (e) {
-    if (e.name === 'NotFoundError') return resolve(null);
-    reject(e)
-  }
+  return resolve(getCtx().request.headers.session)
+
+  // const validated = validate(query);
+  // if (validated.error) return resolve(validated.error);
+  // const {token} = validated.value;
+  // try {
+  //   const db = getCtx().leveldb;
+  //   const userdb = db.sub('user');
+  //   const {id: userId} = await dispatch(queryOneClient({token}))
+  //   let user = await queryLevel(userdb, userId);
+  //   if (user === null) {
+  //     user = await dispatch(queryOne({userId}))
+  //     userdb.put(userId, user)
+  //   }
+  //   resolve(user);
+  // } catch (e) {
+  //   if (e.name === 'NotFoundError') return resolve(null);
+  //   resolve({error: e})
+  // }
 });
 

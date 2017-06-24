@@ -1,10 +1,8 @@
 /* @private */
 
 import Joi from 'joi'
-import getLeveldb from '../../leveldb'
 import queryOneUser from '../account/queryOne'
 import queryOneApp from '../app/queryOne'
-import getMongodb from '../../mongodb'
 import {queryOneSchema} from './schema'
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
@@ -12,8 +10,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {clientId, socketId, token, withSourceData} = validated.value;
 
+  const {getMongodb, leveldb} = getCtx()
   try {
-    const tokendb = (await getLeveldb()).sub('token')
+    const tokendb = leveldb.sub('token')
     const mongodb = (await getMongodb()).collection('client')
     let client = await new Promise(async resolve => {
       try {

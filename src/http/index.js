@@ -30,7 +30,7 @@ const getSeashell = () => new Promise((resolve, reject) => {
 
 const app = express();
 
-app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
+// app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
 app.use(compression());
 
 app.use(letiny.webrootChallengeMiddleware(tmpdir()));
