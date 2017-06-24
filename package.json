@@ -1,6 +1,7 @@
 {
   "name": "@unlimit/gateway",
   "version": "0.2.0",
+  "main": "lib/gateway.js",
   "scripts": {
     "start": "npm run server",
     "test": "jest __tests__",

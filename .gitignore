@@ -16,6 +16,7 @@ docs/apidoc
 config.json
 data
 dist/**/*.min.js
+lib/**/*.js
 build
 !build/README.md
 
