@@ -1,5 +1,4 @@
 import Fetch from '@shared/fetch'
-const {API_HOST} = global
 
 /**
  * 获取授权码
@@ -8,7 +7,7 @@ const {API_HOST} = global
 const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   const {userToken=null} = localStorage;
   const {redirectUrl} = getState().account;
-  const res = await new Fetch(`${API_HOST}/seashell/account/mutateCreateAuthCode`, {
+  const res = await new Fetch(`${global.__SMILE_API}/seashell/account/mutateCreateAuthCode`, {
     token: userToken
   }).post();
 

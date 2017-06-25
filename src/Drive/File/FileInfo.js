@@ -4,7 +4,7 @@ import Button from "react-sea/lib/Button"
 import path from 'path'
 // import Modal from "react-modal"
 // import utf8 from 'utf8'
-import {appmeta, matchAppByPathname} from '../appmeta'
+import {appmeta, matchAppByPathname} from './appmeta'
 
 class FileInfo extends Component {
 

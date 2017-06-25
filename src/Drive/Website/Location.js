@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
 
 export default module.exports = connect(
   (state) => ({
-    host: state.host,
+    host: state.drive,
   }),
   (dispatch) => bindActionCreators({
     push,

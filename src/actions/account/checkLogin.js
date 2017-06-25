@@ -1,6 +1,5 @@
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-const {API_HOST} = global
 
 /**
  * 检查登录
@@ -17,7 +16,7 @@ const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  const result = await new Fetch(`${API_HOST}/seashell/account/session`, {
+  const result = await new Fetch(`${global.__SMILE_API}/seashell/account/session`, {
     token: userToken
   }).post();
 

@@ -1,5 +1,4 @@
 import Fetch from '@shared/fetch'
-const {API_HOST} = global
 
 /**
  * 创建文件
@@ -19,7 +18,7 @@ export default (query) => async (dispatch, getState) => {
   });
   let result = {}
   try {
-    result = await new Fetch(`${API_HOST}/seashell/fs/mutateInsertOne`, {
+    result = await new Fetch(`${global.__SMILE_API}/seashell/fs/mutateInsertOne`, {
       token,
       driveId,
       name,

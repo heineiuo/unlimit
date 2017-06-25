@@ -1,0 +1,8 @@
+{
+	"name": "@unlimit/text-editor",
+	"version": "0.1.6",
+	"description": "text editor",
+	"author": "@heineiuo",
+	"license": "MIT",
+	"main": "index.js"
+}

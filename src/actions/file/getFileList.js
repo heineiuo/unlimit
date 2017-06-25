@@ -1,5 +1,4 @@
 import Fetch from '@shared/fetch'
-const {API_HOST} = global
 
 
 const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
@@ -11,7 +10,7 @@ const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
   });
 
   const {account: {token}} = getState();
-  const result = await new Fetch(`${API_HOST}/seashell/fs/queryFile`, {
+  const result = await new Fetch(`${global.__SMILE_API}/seashell/fs/queryFile`, {
     driveId, parentId, token,
     replaceWithFileMetaIfIsFile: true
   }).post();

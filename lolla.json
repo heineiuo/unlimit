@@ -1,6 +1,5 @@
 {
   "devPublicPath": "./",
-  "CSSDisableHash": true,
   "babel-loader": "babel-loader?-babelrc,+cacheDirectory,presets[]=es2015,presets[]=stage-0,presets[]=react",
   "modulesNeedBabel": [
   ],
@@ -18,21 +17,25 @@
     {"commonjs": "react-modal","root": "ReactModal","amd": "react-modal"},
     {"commonjs": "ckeditor","root": "CKEDITOR"}
   ],
-  "targetsWithHTML": ["drive-web"],
+  "targetsWithHTML": ["@unlimit/web"],
   "ignoreTargets": [
-    "drive-admin"
+    "@unlimit/admin",
+    "//@unlimit/web",
+    "//@unlimit/text-editor"
   ],
   "targets": [
     {
-      "name": "drive-web",
-      "version": "0.1.9",
-      "main": "./src/index.js",
+      "name": "@unlimit/web",
+      "version": "0.1.16",
+      "main": "index.js",
+      "devEntry": "./src/index.js",
       "externals": ["react", "react-dom"]
     },
     {
-      "name": "drive-admin",
-      "version": "0.1.2",
-      "main": "./src/Admin/index.js",
+      "name": "@unlimit/admin",
+      "version": "0.1.4",
+      "main": "index.js",
+      "devEntry": "./src/Admin/index.js",
       "externals": [
         "react",
         "react-dom", 
@@ -45,9 +48,10 @@
       ]
     },
     {
-      "name": "drive-text-editor",
-      "version": "0.1.2",
-      "main": "./src/TextEditor/index.js",
+      "name": "@unlimit/text-editor",
+      "version": "0.1.6",
+      "main": "index.js",
+      "devEntry": "./src/TextEditor/index.js",
       "externals": [
         "react",
         "react-dom", 
@@ -79,29 +83,30 @@
     "preloadJS": [
       "https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js",
       "https://unpkg.com/systemjs@0.20.9/dist/system.js",
-      "https://unpkg.com/react@15.4.2/dist/react.min.js",
-      "https://unpkg.com/react-dom@15.4.2/dist/react-dom.min.js"
+      "https://unpkg.com/react@15.6.1/dist/react.min.js",
+      "https://unpkg.com/react-dom@15.6.1/dist/react-dom.min.js"
     ],
     "devPreloadJS": [
       "https://unpkg.com/babel-polyfill@6.23.0/dist/polyfill.min.js",
       "https://unpkg.com/systemjs@0.20.9/dist/system.js",
-      "https://unpkg.com/react@15.4.2/dist/react.js",
-      "https://unpkg.com/react-dom@15.4.2/dist/react-dom.js"
+      "https://unpkg.com/react@15.6.1/dist/react.js",
+      "https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"
     ],
-    "preloadPackages": ["drive-web"],
+    "preloadPackages": ["@unlimit/web"],
     "preloadCSS": [
     ],
     "devPreloadCSS": [
     ],
     "globalConstants": {
       "__SMILE_DEV": false,
+      "API_HOST": "https://api.youkuohao.com",
       "__SMILE_API": "https://api.youkuohao.com"
     },
     "devGlobalConstants": {
       "__SMILE_DEV": true,
-      "__SMILE_API": "http://api.youkuohao.dev",
+      "__SMILE_API": "https://api.youkuohao.com",
+      "API_HOST": "https://api.youkuohao.com",
       "__SMILE_OAUTH_UI_URL": "https://www.youkuohao.com/#/oauth"
-
     },
     "styles": {
       "html": "",

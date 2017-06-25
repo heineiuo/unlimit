@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import AsyncComponent from '../../components/AsyncComponent'
-import {injectAsyncReducer} from '@react-shared/ootb-store'
+import {injectAsyncReducer} from '../../store'
 
 
 const Async = (props) => {

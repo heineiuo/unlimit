@@ -1,0 +1,5 @@
+{
+	"name": "drive-admin",
+	"version": "0.1.3",
+	"main": "dist/@unlimit/admin.js"
+}

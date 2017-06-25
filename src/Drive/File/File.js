@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite"
-import {Link} from "react-router-dom"
+import {Link, Route} from "react-router-dom"
 import Button from "react-sea/lib/Button"
 import Upload from "rc-upload"
 import Spin from "react-spin"
@@ -12,9 +12,9 @@ import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown
 import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
-import CreateFileModal from '../CreateFileModal'
-import IntegrateApp from "../../components/IntegrateApp"
-import {injectAsyncReducer} from '@react-shared/ootb-store'
+import CreateFileModal from './CreateFileModal'
+import IntegrateApp from "./IntegrateApp"
+import {injectAsyncReducer} from '../../store'
 import IconArrowDropdown from '../../components/IconArrowDropdown'
 const {API_HOST} = global
 
@@ -162,6 +162,8 @@ class File extends Component {
     const {selected, isIntegrateAppOpen} = this.state;
     const pathname = this.getSplat() || '/';
     const hrefPrefix = `/drive/${driveId}`;
+
+    console.log(`fileState: ${file.fileState}`)
 
     return (
       <div style={{minHeight: '160px'}}>

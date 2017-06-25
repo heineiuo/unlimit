@@ -6,4 +6,4 @@ Thumb.db
 *.log*
 index.min.html
 # packages
-packages/*/dist
+packages/**/*.js

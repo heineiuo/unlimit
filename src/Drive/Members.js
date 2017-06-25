@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
 
 export default module.exports = connect(
   (state) => ({
-    host: state.host,
-    driveUserAdmin: state.host.driveUserAdmin,
-    driveUserList: state.host.driveUserList,
-    adminId: state.host.adminId
+    host: state.drive,
+    driveUserAdmin: state.drive.driveUserAdmin,
+    driveUserList: state.drive.driveUserList,
+    adminId: state.drive.adminId
   }),
   (dispatch) => bindActionCreators({
     queryUserList: require('../actions/drive/queryUserList').default,

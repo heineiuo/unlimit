@@ -6,14 +6,20 @@ import * as ReactRouterRedux from 'react-router-redux'
 import ReactModal from 'react-modal'
 import RenderApp from '@react-shared/render-app'
 import defaults from 'lodash/defaults'
-import {store, history, injectAsyncReducer, AppWrapper} from '@react-shared/ootb-store'
+import {store, history, injectAsyncReducer} from './store'
+import React, {Component } from 'react'
 
 import ConnectCheckLogin from './CheckLogin'
 
+const {ConnectedRouter} = ReactRouterRedux
+const {Provider} = ReactRedux
+
+console.log(global)
+
 defaults(global, {
   __SMILE_DEV: process.env.NODE_ENV !== 'production',
-  API_HOST: `http://api.youkuohao.dev`,
-  __SMILE_API: `http://api.youkuohao.dev`
+  API_HOST: `https://api.youkuohao.com`,
+  __SMILE_API: `https://api.youkuohao.com`
 })
 
 injectAsyncReducer('account', require('./actions/account/account').default)
@@ -35,8 +41,12 @@ SystemJS.set(SystemJS.normalizeSync('aphrodite'), SystemJS.newModule({'default':
 
 SystemJS.config(global.__SYSTEM_CONFIG)
 
-const app = new RenderApp( () => 
-  <AppWrapper>
-    <ConnectCheckLogin />
-  </AppWrapper>
-, document.getElementById('app'));
+
+ReactDOM.render( 
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <ConnectCheckLogin />
+    </ConnectedRouter>
+  </Provider>, 
+  document.getElementById('app')
+);

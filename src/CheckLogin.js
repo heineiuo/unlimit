@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
-import {HashRouter, Switch, Route} from 'react-router-dom'
+import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Body from 'react-sea/lib/Body'
@@ -9,7 +9,6 @@ import Title from './components/Title'
 import ProfileDropDown from './components/ProfileDropDown'
 import commonStyles from './styles'
 
-const Router = HashRouter;
 const getTitle = () => Title;
 
 class CheckLogin extends Component {

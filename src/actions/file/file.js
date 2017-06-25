@@ -8,6 +8,7 @@ const initialState = {
   fileId: null,
   createState: 0, // 0未创建，1正在创建，2已创建，3创建出错
   fileState: 0,
+  fileContentState: 0,
   clipboard: []
 };
 
@@ -20,6 +21,11 @@ export default handleActions({
   "@@file/list/update" (state, action) {
     return Object.assign({}, state, action.payload, {fileState: 2})
   },
+
+   "@@file/content/update" (state, action) {
+    return Object.assign({}, state, action.payload, {fileContentState: 2})
+  },
+
   "@@file/clipboard/update" (state, action) {
     return Object.assign({}, state, {clipboard: action.payload.clipboard})
   },
@@ -41,4 +47,5 @@ export default handleActions({
   }
 
 }, initialState)
+
 

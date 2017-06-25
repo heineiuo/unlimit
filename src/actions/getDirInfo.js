@@ -1,5 +1,4 @@
 import Fetch from '@shared/fetch'
-const {API_HOST} = global
 
 
 const getDirInfo = (path) => async (dispatch, getState) => {
@@ -7,7 +6,7 @@ const getDirInfo = (path) => async (dispatch, getState) => {
     const {token} = getState().account;
 
     path = decodeURI(path);
-    const result = await new Fetch(`${API_HOST}/seashell/fs/ls`, {token, path}).post();
+    const result = await new Fetch(`${global.__SMILE_API}/seashell/fs/ls`, {token, path}).post();
     result.parentPath = path + ( path ==='/'?'':'/')
 
   } catch(e){

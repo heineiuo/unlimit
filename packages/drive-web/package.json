@@ -1,8 +1,0 @@
-{
-  "name": "drive-web",
-  "version": "0.0.12",
-  "description": "drive-web",
-  "main": "dist/drive-web.js",
-  "author": "@heineiuo",
-  "license": "MIT"
-}
