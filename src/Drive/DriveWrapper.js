@@ -6,7 +6,6 @@ import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
 import {push} from "react-router-redux"
 import {bindActionCreators} from "redux"
-import AsyncTopic from "./Topic/AsyncTopic"
 
 class DriveWrapper extends Component {
 

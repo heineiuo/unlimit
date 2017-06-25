@@ -119,7 +119,7 @@ class File extends Component {
    * @param options
    */
   openIntegrateApp = (options) => {
-    this.integrateApp.open(options);
+    this.integrateApp.getWrappedInstance().open(options);
     this.setState({
       isIntegrateAppOpen: true
     })

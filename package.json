@@ -54,5 +54,8 @@
     "systemjs": "^0.20.7",
     "utf8": "^2.1.2",
     "uuid": "^3.0.1"
+  },
+  "dependencies": {
+    "react-textarea-autosize": "^5.0.7"
   }
 }

@@ -4,6 +4,8 @@ import {css, StyleSheet} from "aphrodite"
 import {appmeta} from './appmeta'
 import AsyncLoader from '@react-shared/async-loader'
 import {withRouter, Route} from 'react-router-dom'
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
 
 class IntegrateApp extends Component {
   static defaultProps = {
@@ -82,6 +84,7 @@ class IntegrateApp extends Component {
   render() {
     const {fullScreen, appState, appName, driveId, fileName, fileId, isCreated} = this.state;
     console.log('integrate app: render' + appName)
+    const {account, file} = this.props
 
     if (!appName) return <div></div>;
 
@@ -163,4 +166,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IntegrateApp
+export default connect(
+  store => ({
+    account: store.account,
+    file: store.file
+  }),
+  dispatch => bindActionCreators({
+
+  }, dispatch),
+  null,
+  {
+    withRef: true
+  }
+)(IntegrateApp)

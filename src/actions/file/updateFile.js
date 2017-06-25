@@ -17,7 +17,7 @@ export default (query) => async (dispatch, getState) => {
   }
   if (result.error) return console.error(result.error);
   dispatch({
-    type: '@@file/state/update',
-    payload: {state: 2, fileContentState: 2}
+    type: '@@file/content/update',
+    payload: {cat: content}
   })
 };

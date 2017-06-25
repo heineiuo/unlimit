@@ -3,17 +3,18 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Spin from 'react-spin'
 import Button from 'react-sea/lib/Button'
-import AceEditor from 'react-ace'
+// import AceEditor from 'react-ace'
 import {StyleSheet, css} from 'aphrodite/no-important'
 import path from 'path'
 import CreateFile from './CreateFile'
+import Textarea from 'react-textarea-autosize'
 
-import 'brace/theme/monokai'
-import 'brace/mode/javascript'
-import 'brace/mode/css'
-import 'brace/mode/json'
-import 'brace/mode/html'
-import 'brace/mode/plain_text'
+// import 'brace/theme/monokai'
+// import 'brace/mode/javascript'
+// import 'brace/mode/css'
+// import 'brace/mode/json'
+// import 'brace/mode/html'
+// import 'brace/mode/plain_text'
 
 const ext2mode = {
   js: 'javascript',
@@ -24,12 +25,15 @@ const ext2mode = {
 
 class Ace extends Component {
 
+
   state = {
     mode: 'plain_text',
     isCreated: true,
     fileName: '',
     ext: ''
   };
+
+  editorValue = ''
 
   componentDidMount = () => {
     const {driveId, fileId, fileName, parentId, isCreated} = this.props;
@@ -42,62 +46,64 @@ class Ace extends Component {
       parentId,
       fileId,
       createState: 2,
-      isCreated
     });
   };
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.fileContent.createState === 2){
+    if (nextProps.fileContent.fileContentState > this.props.fileContent.fileContentState){
+      
       this.setState({
-        isCreated: true,
-        fileName: nextProps.fileName
+        fileName: nextProps.fileName,
+        editorValue: nextProps.fileContent.cat
       })
     }
+    
   };
+  
 
   componentWillUnmount = () => {
     console.log('text editor: unmount')
     // this.props.initFile()
   };
 
-  onChange = (newValue) => {
-    // console.log('[change]:', newValue);
-    this.editorValue = newValue;
+  onChange = (e) => {
+    this.setState({editorValue: e.target.value})
   };
 
   saveFile = () => {
     const {driveId, updateFile} = this.props;
+    const {editorValue} = this.state;
     updateFile({
       driveId,
-      content: this.editorValue
+      content: editorValue
     })
   };
 
   getMode = (fileName) => {
+    console.log(fileName)
     const extname = path.extname(fileName);
     return extname.length === 0?'plain_text':
       ext2mode[extname.substring(1)] || 'plain_text';
   };
 
-  render(){
-    console.log('text editor: render')
+  render () {
     const {
-      fileContent, parentId, fileContent: {fileState, fileContentState}, driveId
+      fileContent, parentId, driveId,
+      fileContent: {
+        fileState, 
+        fileName, 
+        fileContentState
+      }
     } = this.props;
-    const {fileName, isCreated} = this.state;
-    const value = fileContent.cat
     const mode = this.getMode(fileName);
 
-    console.log(fileState)
-
-    return (
-      !isCreated?(
-        <CreateFile
-          parentId={parentId}
-          driveId={driveId}
-        />
-      ): fileContentState < 2?
-        <Spin />:(
+    return fileContent.createState !== 2 ? 
+      <CreateFile
+        parentId={parentId}
+        driveId={driveId}
+      /> : 
+      fileContentState < 2?
+        <Spin /> :
         <div>
           {/* 按钮区域 */}
           <div className={css(styles.header)}>
@@ -109,20 +115,14 @@ class Ace extends Component {
               </Button>
             </div>
           </div>
-
-          <AceEditor
-            width={`100%`}
-            height={`${global.innerHeight}px`}
-            defaultValue={value}
-            mode={mode}
-            theme="monokai"
+          <Textarea 
+            className={css(styles.editor)}
+            useCacheForDOMMeasurements
             onChange={this.onChange}
-            name="UNIQUE_ID_OF_DIV"
-            editorProps={{$blockScrolling: true}}/>
+            value={this.state.editorValue}
+          />
+         
         </div>
-      )
-
-    )
   }
 
 }
@@ -141,6 +141,18 @@ const styles = StyleSheet.create({
   },
   buttonBar: {
     borderBox: 'box-sizing',
+  },
+
+  editor: {
+    backgroundColor:'#282828',
+    color: '#F1F1F1',
+    flex: 1,
+    width: '100%',
+    minHeight: 500,
+    fontSize: 14,
+    lineHeight: '20px',
+    boxSizing: 'border-box',
+    fontFamily: 'monospace'
   }
 });
 

@@ -22,7 +22,7 @@ const history = createHashHistory()
 const historyMiddleware = routerMiddleware(history)
 
 const loggerMiddleware = store => next => action => {
-  if (process.env.NODE_ENV !== 'production') console.warn(action)
+  if (process.env.NODE_ENV !== 'production') console.warn(action, store.getState())
   return next(action)
 };
 

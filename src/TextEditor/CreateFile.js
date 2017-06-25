@@ -21,7 +21,6 @@ class CreateFile extends Component {
     })
   };
 
-
   render(){
     const {fileName, ext} = this.state;
 

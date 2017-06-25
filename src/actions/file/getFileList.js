@@ -3,7 +3,7 @@ import Fetch from '@shared/fetch'
 
 const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
   dispatch({
-    type: '@@file/list/update',
+    type: '@@file/meta/update',
     payload: {
       fileState: 1
     }
@@ -15,10 +15,15 @@ const getFileList = (driveId, parentId=null) => async (dispatch, getState) => {
     replaceWithFileMetaIfIsFile: true
   }).post();
 
+  const isFile = result.hasOwnProperty('data')
+  if (isFile) result.ls = result.data
+  result.fileName = result.name 
+  result.isFile = result.isFile 
+
   if (result.error) return console.log(result.error)
   dispatch({
-    type: '@@file/list/update',
-    payload: result.data ? {ls: result.data, isFile: false} : result
+    type: '@@file/meta/update',
+    payload: result
   })
 
 };
