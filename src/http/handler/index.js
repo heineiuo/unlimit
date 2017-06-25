@@ -1,11 +1,11 @@
 
-import handleHTML from "./handler/html"
-import handleBLOCK from "./handler/block"
-import handleFILE from "./handler/file"
-import handleREDIRECT from "./handler/redirect"
-import handleDOWNLOAD from "./handler/download"
-import handleUPLOAD from "./handler/upload"
-import proxyHTTP from './handler/proxyHTTP'
+import handleHTML from "./html"
+import handleBLOCK from "./block"
+import handleFILE from "./file"
+import handleREDIRECT from "./redirect"
+import handleDOWNLOAD from "./download"
+import handleUPLOAD from "./upload"
+import proxyHTTP from './proxyHTTP'
 
 export default (getSeashell) => async (req, res, next) => {
 

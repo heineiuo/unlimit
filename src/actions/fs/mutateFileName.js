@@ -16,7 +16,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const file = (await getMongodb()).collection('file');
-    const fileData = await file.findOne({_id: ObjectId(fileId)})
+    const fileData = await file.findOne({_id: ObjectId(fileId)});
     if (!fileData) return reject(new Error('NOT_FOUND'));
     const {parentId, driveId, name} = fileData;
     if (name === fileName) return resolve({});

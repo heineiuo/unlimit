@@ -13,9 +13,9 @@ import express from "express"
 import {homedir} from "os"
 import http from "http"
 import https from "https"
-import pickLocation from "./pickLocation"
-import execLocation from "./execLocation"
-import proxySeashell from "./proxySeashell"
+import pickLocation from "./location"
+import execLocation from "./handler"
+import proxySeashell from "./SeashellProxy"
 import getConfig from "../config"
 import SNICallback from './SNICallback'
 import letiny from 'letiny'

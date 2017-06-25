@@ -77,7 +77,6 @@ export default (getSeashell) => {
 
       res.removeHeader("x-powered-by");
 
-
       if (forceHTTPSDomains.indexOf(req.headers.host) > -1) {
         if (req.protocol === 'http') {
           const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
