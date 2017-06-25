@@ -5,7 +5,7 @@ import {bindActionCreators} from "redux"
 import {css, StyleSheet} from "aphrodite"
 import Input from "react-sea/lib/Input"
 import Button from "react-sea/lib/Button"
-import commonStyles from "../../styles"
+import commonStyles from "../../components/styles"
 import hoverHoc from "../../components/hoverHoc"
 
 const TopicListItem = hoverHoc((props) => {

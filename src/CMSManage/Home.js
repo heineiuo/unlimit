@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import 'react-vis/dist/style.css'
 import {RadialChart} from 'react-vis'
-import commonStyles from '../styles'
+import commonStyles from '../components/styles'
 
 class Dashboard extends Component {
 

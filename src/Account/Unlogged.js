@@ -5,7 +5,7 @@ import Button from 'react-sea/lib/Button'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Body from 'react-sea/lib/Body'
-import commonStyles from '../styles'
+import commonStyles from '../components/styles'
 import Logo from '../components/Logo'
 
 class UnLogged extends Component {

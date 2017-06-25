@@ -9,7 +9,7 @@ import Input from 'react-sea/lib/Input'
 import Button from 'react-sea/lib/Button'
 import Title from '../components/Title'
 import ProfileDropDown from '../components/ProfileDropDown'
-import commonStyles from '../styles'
+import commonStyles from '../components/styles'
 
 class Header extends Component {
 

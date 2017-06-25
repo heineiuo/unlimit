@@ -8,7 +8,7 @@ import {StyleSheet, css} from 'aphrodite'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import PopModal from './PopModal'
-import commonStyles from '../styles'
+import commonStyles from '../components/styles'
 import ImageUpload from './ImageUpload'
 
 class Profile extends Component {

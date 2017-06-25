@@ -8,7 +8,7 @@ import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import hoverHoc from '../components/hoverHoc'
-import commonStyles from '../styles'
+import commonStyles from '../components/styles'
 
 const DriveListItem = hoverHoc((props) => (
   <div>

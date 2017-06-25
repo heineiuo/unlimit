@@ -11,7 +11,7 @@ import ProfileDropDown from '../components/ProfileDropDown'
 import MessageList from './MessageList'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import commonStyles from '../styles'
+import commonStyles from '../components/styles'
 
 class Home extends Component {
 

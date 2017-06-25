@@ -6,8 +6,8 @@ import {Route, Switch, Link} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import hoverHoc from '../components/hoverHoc'
-import commonStyle from '../styles/index'
-import tableViewStyle from '../styles/tableView'
+import commonStyle from '../components/styles'
+import tableViewStyle from '../components/styles/tableView'
 
 const TableRow = hoverHoc(props => (
   <Link to={`${props.path}/${props.item._id}`} className={css(styles.link)}>
