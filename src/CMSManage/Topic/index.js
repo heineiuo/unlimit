@@ -6,7 +6,7 @@ import {css, StyleSheet} from 'aphrodite'
 import Button from 'react-sea/lib/Button'
 import TopicList from './TopicList'
 import TopicDetail from './TopicDetail'
-import {emptyTopicState} from '../../actions/topic'
+import {emptyTopicState} from '../../actions/topic/topic'
 
 class PostEdit extends Component {
 

@@ -64,9 +64,9 @@ class DriveWrapper extends Component {
           </div>
           <div className={css(styles.wrapper__body)}>
             <Switch>
-              <Route path={'/drive/:driveId'} exact component={require('./File/File')}/>
-              <Route path={`${match.path}/file/:fileId`} component={require('./File/File')}/>
-              <Route path={`${match.path}/file`} component={require('./File/File')}/>
+              <Route path={'/drive/:driveId'} exact component={require('./File/File').default}/>
+              <Route path={`${match.path}/file/:fileId`} component={require('./File/File').default}/>
+              <Route path={`${match.path}/file`} component={require('./File/File').default}/>
               <Route path={`${match.path}/services`}>
                 <div>
                   <a href={`/#/cms-manage/${params.driveId}`} target='_blank'>cms</a>

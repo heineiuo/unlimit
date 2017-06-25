@@ -26,7 +26,7 @@
   "targets": [
     {
       "name": "@unlimit/web",
-      "version": "0.1.16",
+      "version": "0.1.18",
       "main": "index.js",
       "devEntry": "./src/index.js",
       "externals": ["react", "react-dom"]
@@ -36,6 +36,22 @@
       "version": "0.1.4",
       "main": "index.js",
       "devEntry": "./src/Admin/index.js",
+      "externals": [
+        "react",
+        "react-dom", 
+        "aphrodite", 
+        "react-router-dom", 
+        "redux", 
+        "react-redux", 
+        "react-router-redux", 
+        "react-modal"
+      ]
+    },
+     {
+      "name": "@unlimit/cms-manage",
+      "version": "0.1.0",
+      "main": "index.js",
+      "devEntry": "./src/CMSManage/index.js",
       "externals": [
         "react",
         "react-dom", 

@@ -63,6 +63,9 @@ class File extends Component {
     const nextFileId = nextProps.match.params.fileId;
     if (fileId !== nextFileId) {
       // console.log('FILEid !== nextFileId. ...')
+
+    this.integrateApp.getWrappedInstance().close();
+      
       getFileList(driveId, nextFileId)
       this.updateUploadLocation()
     }
@@ -429,7 +432,7 @@ const styles = StyleSheet.create({
 
 
 
-const connectedFile = connect(
+export default connect(
   (state) => ({
     account: state.account,
     host: state.drive,
@@ -448,4 +451,3 @@ const connectedFile = connect(
   }, dispatch)
 )(File);
 
-export default module.exports = connectedFile
