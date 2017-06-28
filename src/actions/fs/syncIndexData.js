@@ -45,17 +45,22 @@ export default ({fullPath}) => (dispatch, getCtx) => new Promise(async resolve =
  * 根据 [ 文件id, 父文件id和文件名 ] 更新索引
  * 先获取完整路径，再写入索引
  */
-export const syncIndexDataByFile = ({file, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export const syncIndexDataByFile = ({file, fileId, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const {leveldb, getMongodb} = getCtx()
   try {
-    const fileIndex = leveldb.sub('fileIndex')
     const filedb = (await getMongodb()).collection('file')
+    if (!file) {
+      file = await filedb.findOne({_id: ObjectId(fileId)})
+      if (!file) throw new Error('File not exist')
+    }
+
 
     const indexData = {...file, updateTime: Date.now()}
-    const fullPath = file.parent === null ? 
+    const fullPath = file.parentId === null ? 
       `/${driveId}/${file.name}` :
       await walkRightToLeft([file.name], filedb, file._id, driveId)
 
+    const fileIndex = leveldb.sub('fileIndex')
     await fileIndex.put(fullPath, indexData)
     resolve(file)
 

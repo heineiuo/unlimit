@@ -1,11 +1,13 @@
 {
-  "name": "@unlimit/gateway",
+  "name": "@unlimit/gateway-build",
+  "private": true,
   "version": "0.2.0",
   "main": "lib/gateway.js",
   "scripts": {
     "start": "npm run server",
     "test": "jest __tests__",
     "server": "nodemon --watch ./src --exec sudo babel-node ./src/index.js --debug",
+    "build-cli": "babel src/cli -d lib/cli",
     "build": "seashell-dev --build"
   },
   "devDependencies": {

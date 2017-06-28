@@ -1,6 +1,5 @@
 import queryOneByFullPath from './queryOneByFullPath'
 import Joi from 'joi'
-import getLeveldb from '../../leveldb'
 
 export const schema = Joi.object().keys({
   fullPath /*完整路径*/: Joi.string(),
@@ -10,7 +9,12 @@ export const schema = Joi.object().keys({
 
 const queryLevel = (db, key) => new Promise(async resolve => {
   try {
-    resolve(await db.get(key))
+    const content = await db.get(key, {valueEncoding: 'utf8'})
+    try {
+      resolve(JSON.parse(content))
+    } catch(e){
+      resolve(content)
+    }
   } catch (e) {
     resolve(null)
   }
@@ -23,7 +27,6 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const {leveldb} = getCtx();
   try {
     const fileContentdb = leveldb.sub('fileContent');
-
 
     /**
      * 如果根据fileId来获取内容，则必须传入fileId, 否则必须传入fullPath

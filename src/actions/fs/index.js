@@ -8,4 +8,5 @@ export default {
   mutateDelete: require('./mutateDelete').default,
   mutateFileContent: require('./mutateFileContent').default,
   syncIndexData: require('./syncIndexData').default,
+  syncIndexDataByFile: require('./syncIndexData').syncIndexDataByFile,
 }
