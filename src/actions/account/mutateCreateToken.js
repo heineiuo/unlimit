@@ -24,7 +24,7 @@ const queryCodeLevel = (db, key) => new Promise(async resolve => {
 /**
  * 检查验证码
  */
-const checkCode = ({email, code}) => new Promise(async (resolve, reject) => {
+const checkCode = ({email, code}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const {leveldb} = getCtx();
   try {
     const db = leveldb.sub('emailcode');
@@ -96,7 +96,7 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
   const {getMongodb} = getCtx()
   // todo 发放OAuth授权令牌
   try {
-    await checkCode({email, code});
+    await dispatch(checkCode({email, code}));
     const result = await dispatch(queryOne({email, enableNull: true}));
     const userId = result === null ? (await createUser(email, getMongodb)).userId : result.userId;
     if (!userId) return reject(new Error('EXCEPTION_ERROR'))

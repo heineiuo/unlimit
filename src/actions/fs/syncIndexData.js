@@ -54,7 +54,6 @@ export const syncIndexDataByFile = ({file, fileId, driveId}) => (dispatch, getCt
       if (!file) throw new Error('File not exist')
     }
 
-
     const indexData = {...file, updateTime: Date.now()}
     const fullPath = file.parentId === null ? 
       `/${driveId}/${file.name}` :

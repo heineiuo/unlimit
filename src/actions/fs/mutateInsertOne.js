@@ -30,13 +30,21 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     if (result0) return reject(new Error('File Exist'));
 
     const result = await file.insertOne({driveId, type, parentId, name})
+    console.log(result.result)
     const id = result.insertedId.toString()
     
     /**
      * 文件创建成功后，将文件索引同步到leveldb > fileIndex
      * 将文件内容写入 leveldb > fileContent （注意，mongodb里不保存content）
      */
-    await dispatch(syncIndexDataByFile({file: result, fileId: id, driveId}))
+    await dispatch(syncIndexDataByFile({
+      file: {
+        _id: id,
+        driveId, type, parentId, name
+      },
+      fileId: id, 
+      driveId
+    }))
     
     if (type === 1) await fileContent.put(id, content)
     resolve(result.ops[0])
