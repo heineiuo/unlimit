@@ -2,7 +2,7 @@
   "targets": [
     {
       "entry": "./src/index.js",
-      "outputPath": "packages/@unlimit/gateway",
+      "outputPath": "lib",
       "outputName": "gateway"
     }
   ]

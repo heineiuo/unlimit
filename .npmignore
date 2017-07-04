@@ -7,8 +7,8 @@ src
 .babelrc
 .editorconfig
 .gitignore
+bitbucket-pipelines.yml
 Dockerfile
 seashell-dev.json
-yarn.lock
 *.log*
 *.yml

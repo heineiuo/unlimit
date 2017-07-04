@@ -2,13 +2,13 @@ import queryOneByFullPath from './queryOneByFullPath'
 import Joi from 'joi'
 import {syncIndexDataByFile} from './syncIndexData'
 
-export const validate = query => Joi.validate(query, Joi.object().keys({
+export const schema = Joi.object().keys({
   name: Joi.string().required(),
   parentId: Joi.string().allow(null).default(null),
   driveId: Joi.string().required(),
   content: Joi.any(),
   type: Joi.number().default(1), // 1 文件，2文件夹
-}), {allowUnknown: true})
+})
 
 /**
  * 创建文件
@@ -18,7 +18,7 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  *  同步文件内容到 leveldb - fileContent
  */
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = validate(query)
+  const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   let {driveId, type, parentId, name, content} = validated.value;
 
@@ -36,7 +36,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
      * 文件创建成功后，将文件索引同步到leveldb > fileIndex
      * 将文件内容写入 leveldb > fileContent （注意，mongodb里不保存content）
      */
-    await dispatch(syncIndexDataByFile({file: result, driveId}))
+    await dispatch(syncIndexDataByFile({file: result, fileId: id, driveId}))
     
     if (type === 1) await fileContent.put(id, content)
     resolve(result.ops[0])
