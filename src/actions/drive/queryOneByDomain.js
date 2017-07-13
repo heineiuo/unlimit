@@ -1,8 +1,6 @@
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import queryOne from './queryOne'
-import getConfig from '../../config'
-import getLevel from '../../leveldb'
 import ms from 'ms'
 
 const queryLevelSchema = Joi.object().keys({
@@ -33,6 +31,8 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  
   const syncCache = async () => {
     try {
       const {pageDomain} = await getConfig();

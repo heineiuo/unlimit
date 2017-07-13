@@ -1,7 +1,6 @@
 import Url from "url"
 import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
-import getConfig from '../config'
 
 /**
  * 通过比对pathname, 找到路由
@@ -38,12 +37,12 @@ export const findTargetLocation = (locations, url) => {
 /**e
  * 查找host及其location列表
  */
-export default (getSeashell) => {
+export default (getSeashell, config) => {
   return async (req, res, next) => {
     try {
       const seashell = await getSeashell();
       const {host} = req.headers;
-      const {forceHTTPSDomains} = (await getConfig()).https;
+      const {forceHTTPSDomains} = config.https;
       const requestLocations = await seashell.requestSelf({
         headers: {originUrl: '/drive/queryOneByDomain'},
         body: {domain: host, fields: ['locations']}

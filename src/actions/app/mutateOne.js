@@ -1,7 +1,5 @@
 /* @public */
-import getLeveldb from '../../leveldb'
 import Joi from 'joi';
-import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appId: Joi.string().required(),
@@ -11,6 +9,7 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appId} = validated.value;
+  const {getLeveldb} = getCtx()
   try {
     const {appName, app} = query;
     const db = (await getLeveldb()).sub('app');

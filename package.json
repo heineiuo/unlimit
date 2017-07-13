@@ -1,19 +1,20 @@
 {
   "name": "@unlimit/gateway",
-  "version": "0.2.1-beta.1",
+  "version": "0.2.1-beta.2",
   "bin": {
     "gateway": "bin/gateway"
   },
   "main": "lib/gateway.js",
   "scripts": {
     "start": "npm run server",
+    "publish-next": "npm run build && npm run build-cli && npm publish --tag=next",
     "test": "jest __tests__",
     "server": "nodemon --watch ./src --exec sudo babel-node ./src/index.js --debug",
     "build-cli": "babel src/cli -d lib/cli",
     "build": "seashell-dev --build"
   },
   "dependencies": {
-    "action-creator": "^0.6.2",
+    "action-creator": "^0.6.3",
     "ali-push": "^0.1.6",
     "babel-runtime": "^6.9.2",
     "blueimp-md5": "~2.3.0",
@@ -24,6 +25,7 @@
     "decompress": "^3.0.0",
     "directory": "~0.1.0",
     "ent": "^2.2.0",
+    "env-paths": "^1.0.0",
     "express": "^4.13.4",
     "formidable": "^1.1.1",
     "fs-extra": "^0.26.5",
@@ -54,8 +56,7 @@
     "seashell-proxy": "^0.2.4",
     "ua-parser-js": "~0.7.10",
     "uuid": "~2.0.2",
-    "yargs": "^6.6.0",
-    "env-paths": "^1.0.0"
+    "yargs": "^6.6.0"
   },
   "devDependencies": {
     "babel-cli": "~6.9.0",

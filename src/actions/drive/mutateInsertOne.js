@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import queryOne from './queryOne'
-import getMongodb from '../../mongodb'
+
 
 const insertSchema = Joi.object().keys({
   name: Joi.string().regex(/^[a-z]{1,1}[a-z0-9]{5,30}$/).required(),
@@ -11,6 +11,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, insertSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error)
   const {name, description} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  
   try {
     const {session} = getCtx().request.headers;
     console.log(session)

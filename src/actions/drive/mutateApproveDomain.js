@@ -1,6 +1,5 @@
 import letiny from 'letiny'
 import Joi from 'joi'
-import getConfig from '../../config'
 import {tmpdir} from 'os'
 import mkdirp from 'mkdirp'
 
@@ -13,6 +12,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateApproveDomainSchema, {allowUnknown: true});;
   if (validated.error) return reject(validated.error);
   const {domain, driveId} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
   try {
     // todo check rate limit
     const {https: {email}, datadir} = await getConfig();

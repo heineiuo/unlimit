@@ -1,6 +1,4 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
-import getLeveldb from '../../leveldb'
 import mutateInsertOne from '../client/mutateInsertOne'
 
 
@@ -16,6 +14,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
+  const {getMongodb, getLeveldb} = getCtx()
 
   try {
     const {session} = getCtx().request.headers;

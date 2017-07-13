@@ -2,8 +2,6 @@
 
 import crypto from 'crypto'
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
-import getLeveldb from '../../leveldb'
 import {mutateInsertOneSchema} from './schema'
 
 export const createSecret = () => crypto.randomBytes(48).toString('hex');
@@ -25,6 +23,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateInsertOneSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {type, name, id} = validated.value;
+  const {getMongodb, getLeveldb}  = getCtx()
 
   try {
     const mongo = (await getMongodb()).collection('client');

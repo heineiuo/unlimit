@@ -1,6 +1,5 @@
 import updateApp from './mutateOne'
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appId: Joi.string().required(),

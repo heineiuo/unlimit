@@ -1,7 +1,5 @@
 import path from 'path'
 import Joi from 'joi'
-import getConfig from '../../config'
-import getMongodb from '../../mongodb'
 import mutateInsertOne from './mutateInsertOne'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
@@ -16,6 +14,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {driveId, parentId, uploadKey, fileId, name} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
   getCtx().setHeader({__UPLOAD: true});
 
   try {

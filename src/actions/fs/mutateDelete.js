@@ -1,6 +1,4 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
-import getLeveldb from '../../leveldb'
 import {ObjectId} from 'mongodb'
 
 const validate = query => Joi.validate(query, Joi.object().keys({
@@ -12,6 +10,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {driveId, fileId} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
 
   try {
     const filedb = (await getMongodb()).collection('file')

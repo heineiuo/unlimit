@@ -1,8 +1,6 @@
 /* @private */
 
 import Joi from 'joi'
-import getMongodb from "../../mongodb"
-import getLeveldb from "../../leveldb"
 import {mutateUpdateSchema} from './schema'
 
 const deleteLevelItem = (db, key) => new Promise(async resolve => {
@@ -18,6 +16,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateUpdateSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {name, id, socketId, clientId, toStatus, token} = validated.value;
+  const {getMongodb, getLeveldb} = getCtx()
 
   try {
     const mongo = (await getMongodb()).collection('client')

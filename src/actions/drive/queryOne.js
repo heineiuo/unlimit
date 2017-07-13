@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
-import getMongodb from '../../mongodb'
+
 
 const queryOneSchema = Joi.object().keys({
   domain: Joi.string().regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/),
@@ -15,6 +15,7 @@ export default query => (dispatch, geCtx) => new Promise(async (resolve, reject)
   const validated = Joi.validate(query, queryOneSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, driveId, name, fields} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
   try {
     const drive = (await getMongodb()).collection('drive');
     const filter = driveId ? {_id: ObjectId(driveId)} :

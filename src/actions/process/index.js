@@ -3,9 +3,7 @@ import {ObjectId} from 'mongodb'
 import pick from 'lodash/pick'
 import pm2 from 'pm2'
 import npm from 'npm'
-
-import getMongodb from '../../mongodb'
-import getLeveldb from '../../leveldb'
+import selfUpdate from './selfUpdate'
 
 
 /**
@@ -20,7 +18,8 @@ const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
   const validated = Joi.validate(query, querySchema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   const {driveId, processId} = validated.value;
-
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  
   try {
     const processdb = (await getMongodb()).collection('process')
     const result = await processdb.findOne({_id: ObjectId(processId)})
@@ -75,6 +74,7 @@ const insertTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
 })
 
 export default {
+  selfUpdate,
   query,
   task: {
     query: queryTask,

@@ -1,5 +1,4 @@
 import removeSocket from '../socket/unbind'
-import getMongodb from '../../mongodb'
 import Joi from 'joi'
 
 
@@ -12,6 +11,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
+  const {getMongodb} = getCtx()
 
   try {
     const db = getCtx().leveldb.sub('app');

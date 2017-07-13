@@ -1,5 +1,3 @@
-import getMongodb from '../../mongodb'
-import getLevel from '../../leveldb'
 import Joi from 'joi'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
@@ -15,6 +13,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName, appToken} = validated.value;
+  const {getLevel} = getCtx()
 
   try {
     const db = (await getLevel()).sub('apptoken');

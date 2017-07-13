@@ -1,4 +1,3 @@
-import getMongodb from '../../mongodb'
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
 import queryOne from './queryOne'
@@ -15,7 +14,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId,add, remove} = validated.value;
-
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  
   try {
     const db = (await getMongodb()).collection('drive');
     const driveData = await dispatch(queryOne({driveId, fields: ['domains']}));

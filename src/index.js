@@ -13,7 +13,7 @@ const start = async () => {
 
     const config = await getConfig();
     const leveldb = await getLeveldb();
-    const server = await createServer(config.https);
+    const server = await createServer(config);
 
     // const server = require('http').createServer();
     const app = new Seashell({server});
@@ -22,6 +22,7 @@ const start = async () => {
       ctx.leveldb = leveldb;
       ctx.config = config;
 
+      ctx.getLevel = getLeveldb;
       ctx.getLeveldb = getLeveldb;
       ctx.getConfig = getConfig;
       ctx.getMongodb = getMongodb;
@@ -68,16 +69,6 @@ const start = async () => {
         config
       )
     });
-
-    // app.use('/account/session', async ctx => {
-    //   if (ctx.request.headers.session) {
-    //     ctx.json(ctx.request.headers.session)
-    //   } else {
-    //     ctx.error('NOT_LOGGED')
-    //   }
-    // });
-
-    // app.use(seashellActionMiddleware(allActionCreators));
 
     server.run(app);
 

@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 import {ObjectId} from 'mongodb'
 
 export const walkToBuildPrevFullPath = (currentPath, fileId) => new Promise(async (resolve, reject) => {
@@ -24,7 +23,8 @@ export default query => dispatch => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {includePath, fileId} = validated.value;
-
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  
   try {
     const file = (await getMongodb()).collection('file')
     const fileData = await file.findOne({_id: ObjectId(fileId)})

@@ -1,17 +1,16 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
+
 
 const mutateLocationSchema = Joi.object().keys({
   driveId: Joi.string().required(),
   locations: Joi.array().required(),
 })
 
-
-
 export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateLocationSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {locations, driveId} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
 
   try {
     const db = getCtx().leveldb.sub('location');

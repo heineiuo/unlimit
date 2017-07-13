@@ -2,6 +2,11 @@ import {Router} from "express"
 import bodyParser from "body-parser"
 import pick from "lodash/pick"
 
+const INSTANCE_META = {
+  version: '0.0.1',
+  instance_start_time: Date.now()
+}
+
 export default (getSeashell) => {
 
   const router = Router();
@@ -32,6 +37,11 @@ export default (getSeashell) => {
 
       const content = location.content;
       const requestUrl = url.pathname.substring(content.length);
+
+      if (requestUrl === '/') {
+        Object.assign(res.locals.location, {type: 'JSON', content: INSTANCE_META})
+        return next()
+      }
 
       let result = {body: {}};
       if (requestUrl.search(seashell.__SEASHELL_NAME) === 0) {

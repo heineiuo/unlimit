@@ -6,4 +6,4 @@ export default {
   client: require('./client').default,
   socket: require('./socket').default,
   process: require('./process').default
-};
+}

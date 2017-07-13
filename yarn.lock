@@ -46,9 +46,9 @@ acorn@^3.0.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
 
-action-creator@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.npmjs.org/action-creator/-/action-creator-0.6.2.tgz#d7036ebf1323c0da2a13ad38a6d03631a58d93a6"
+action-creator@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.npmjs.org/action-creator/-/action-creator-0.6.3.tgz#253d5a985ea7bceb248495fafd35ca1ccdcd239b"
 
 after@0.8.2:
   version "0.8.2"
@@ -1847,10 +1847,6 @@ dot-prop@^4.1.0:
   resolved "https://registry.npmjs.org/dot-prop/-/dot-prop-4.1.1.tgz#a8493f0b7b5eeec82525b5c7587fa7de7ca859c1"
   dependencies:
     is-obj "^1.0.0"
-
-drag-drop-touch-polyfill@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/drag-drop-touch-polyfill/-/drag-drop-touch-polyfill-1.0.0.tgz#f37bdde29dcf9cc4deabb1a1ea9793b67edb1f7b"
 
 duplexer2@~0.1.0:
   version "0.1.4"

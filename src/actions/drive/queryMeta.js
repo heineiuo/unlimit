@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
-import getMongodb from '../../mongodb'
+
 
 const queryMetaSchema = Joi.object().keys({
   limit: Joi.number().default(20),
@@ -12,7 +12,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value;
   const filter = {}
-
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
   const {session} = getCtx().request.headers;
   if (!session) return reject('PERMISSION_DENIED')
   const userId = session.userId

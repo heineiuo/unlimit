@@ -1,7 +1,5 @@
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
-import getMongodb from '../../mongodb'
-import getLeveldb from '../../leveldb'
 
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
@@ -13,7 +11,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {fileId, fileName} = validated.value;
-
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
   try {
     const file = (await getMongodb()).collection('file');
     const fileData = await file.findOne({_id: ObjectId(fileId)});

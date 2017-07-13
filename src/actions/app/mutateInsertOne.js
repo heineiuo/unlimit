@@ -5,7 +5,6 @@
  */
 
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().required()
@@ -24,6 +23,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
+  const {getMongodb} = getCtx()
 
   try {
     const {session} = getCtx().request.headers;

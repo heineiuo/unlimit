@@ -1,6 +1,5 @@
 /* @public */
 
-import getMongodb from '../../mongodb'
 import crypto from 'crypto'
 
 const normalCode = () => crypto.randomBytes(32).toString('hex');

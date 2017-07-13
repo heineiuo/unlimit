@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 import {ObjectId} from 'mongodb'
 import union from 'lodash/union'
 
@@ -13,6 +12,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = Joi.validate(query, mutateUserScheme, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId, add, remove} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
 
   try {
     if (add.length > 0 || remove.length > 0) {

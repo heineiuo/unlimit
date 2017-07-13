@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import getMongodb from '../../mongodb'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   limit: Joi.number().default(20),
@@ -16,7 +15,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value
   const filter = {}
-
+  const {getMongodb} = getCtx()
   const {session} = getCtx().request.headers;
   if (!session) return reject(new Error('PERMISSION_DENIED'))
   filter.adminId = session.userId;

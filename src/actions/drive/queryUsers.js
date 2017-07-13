@@ -1,7 +1,5 @@
 import Joi from 'joi'
 import {ObjectId} from 'mongodb'
-import getMongodb from '../../mongodb'
-import getLeveldb from '../../leveldb'
 
 const queryUserSchema =  Joi.object().keys({
   driveId: Joi.string(),
@@ -12,6 +10,7 @@ export default query => (dispatch, geCtx) => new Promise(async (resolve, reject)
   const validated = Joi.validate(query, queryUserSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId} = validated.value;
+  const {getMongodb, getLeveldb, getConfig} = getCtx()
   try {
     const drive = (await getMongodb()).collection('drive');
     const filter = {_id: ObjectId(driveId)};
