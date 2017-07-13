@@ -15,10 +15,13 @@ import http from "http"
 import https from "https"
 import letiny from 'letiny'
 import {tmpdir} from 'os'
+import fs from 'mz/fs'
+import path from 'path'
+import tls from 'tls'
 
-import pickLocation from "../actions/http/location"
-import execLocation from "../actions/http"
-import proxySeashell from "../actions/http/SeashellProxy"
+import pickLocation from "./actions/http/location"
+import execLocation from "./actions/http"
+import proxySeashell from "./actions/http/SeashellProxy"
 
 let seashell = null;
 
@@ -85,57 +88,32 @@ const run = (s, server, secureServer) => {
   if (secureServer) secureServer.listen(443, () => console.log('http on port 443'))
 }
 
-import fs from 'mz/fs'
-import path from 'path'
-import tls from 'tls'
-
 const ctxMap = {}
 
 const SNICallback = (config) => (servername, callback) => {
-  process.nextTick(async () => {
-
-    try {
-      const {https: {approvedDomains}, datadir} = await getConfig();
-      const pemdir = datadir + '/pem';
-      console.log('servername: '+servername)
-      console.log('pemdir: ' + pemdir)
-      if (ctxMap[servername]) return callback(null, ctxMap[servername]);
-      console.log('is approved: ' + approvedDomains.includes(servername))
-      if (!approvedDomains.includes(servername)) return callback(new Error('Unapproved domain'));
-      console.log('start create secure context..')
-      const ctx = ctxMap[servername] = tls.createSecureContext({
-        pfx: await fs.readFileSync(`${pemdir}/${servername}/pfx.pem`),
-        // ca: await fs.readFileSync(`${pemdir}/${servername}/ca.pem`),
-        // key: await fs.readFileSync(`${pemdir}/${servername}/key.pem`),
-        // cert: await fs.readFileSync(`${pemdir}/${servername}/cert.pem`)
-      })
-      console.log(ctx);
-      callback(null, ctx)
-    } catch(e){
-      console.log(e);
-      callback(e)
-    }
-
+  const {https: {approvedDomains}, datadir} = config;
+  const pemdir = datadir + '/pem';
+  if (ctxMap[servername]) return callback(null, ctxMap[servername]);
+  if (!approvedDomains.includes(servername)) return callback(new Error('Unapproved domain'));
+  fs.readFileSync(`${pemdir}/${servername}/pfx.pem`, (err, pfx) => {
+    if (err) return callback(err)
+    const ctx = ctxMap[servername] = tls.createSecureContext({pfx})
+    callback(null, ctx)
   })
 }
 
-export default (config) => new Promise(async (resolve, reject) => {
-  let secureServer = null;
-
-  try {
-    const server = http.createServer(createApp(config));
-    const enableHttps = config.https.enable || false;
-    if (!enableHttps) {
-      server.run = (s) => run(s, server);
-      return resolve(server);
-    }
-
-    secureServer = https.createServer({SNICallback: SNICallback(config)}, app);
-    secureServer.run = (s) => run(s, server, secureServer);
-    return resolve(secureServer)
-
-  } catch (e) {
-    reject(e)
+export default (config) => {
+  const app = createApp(config);
+  const server = http.createServer(app);
+  const enableHttps = config.https.enable || false;
+  if (!enableHttps) {
+    server.run = (s) => run(s, server);
+    return server;
   }
-});
+
+  const secureServer = https.createServer({SNICallback: SNICallback(config)}, app);
+  secureServer.run = (s) => run(s, server, secureServer);
+  return secureServer
+
+};
 

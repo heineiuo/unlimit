@@ -13,7 +13,7 @@ const start = async () => {
 
     const config = await getConfig();
     const leveldb = await getLeveldb();
-    const server = await createServer(config);
+    const server = createServer(config);
 
     // const server = require('http').createServer();
     const app = new Seashell({server});
