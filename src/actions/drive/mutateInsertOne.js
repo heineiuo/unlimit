@@ -11,7 +11,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, insertSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error)
   const {name, description} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {getMongodbw, getConfig} = getCtx()
   
   try {
     const {session} = getCtx().request.headers;

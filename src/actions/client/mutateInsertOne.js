@@ -15,20 +15,16 @@ const mongodbSchema = Joi.object().keys({
   status: Joi.number().default(1)
 })
 
-const levelSchema = Joi.object().keys({
-  
-})
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateInsertOneSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {type, name, id} = validated.value;
-  const {getMongodb, getLeveldb}  = getCtx()
+  const {getMongodb}  = getCtx()
 
   try {
     const mongo = (await getMongodb()).collection('client');
-    const leveldb = await getLeveldb()
-    const tokendb = leveldb.sub('token')
+    const tokendb = (await getMongodb()).collection('token');
     const insertData = {
       name, type, id,
       token: createSecret(),
@@ -36,7 +32,13 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       status: 1 // 0, disable, 1, not online 2, online
     }
     const clientId = (await mongo.insertOne(insertData)).ops[0]._id.toString();
-    await tokendb.put(insertData.token, {name, type, token: insertData.token, id, clientId})
+    await tokendb.insert({
+      name, 
+      type, 
+      token: insertData.token, 
+      id, 
+      clientId
+    })
     resolve({...insertData, clientId})
   } catch(e){
     console.log(e)

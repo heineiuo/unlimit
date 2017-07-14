@@ -6,11 +6,11 @@ const normalCode = () => crypto.randomBytes(32).toString('hex');
 
 export default ({token}) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   try {
-    const {getMongodb, leveldb, request: {headers: {session}}} = getCtx()
+    const {getMongodb, request: {headers: {session}}} = getCtx()
     if (!session) reject(new Error('ERR_NOT_LOGGED'));
-    const db = leveldb.sub('ssocode');
+    const db = (await getMongodb()).collection('ssocode');
     const code = normalCode();
-    await db.put(code, {token, code});
+    await db.insert({token, code});
     resolve(code)
   } catch(e){
     reject(e)

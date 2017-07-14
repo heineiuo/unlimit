@@ -18,7 +18,7 @@ const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
   const validated = Joi.validate(query, querySchema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   const {driveId, processId} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {getMongodb, getConfig} = getCtx()
   
   try {
     const processdb = (await getMongodb()).collection('process')

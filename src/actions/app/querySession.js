@@ -13,11 +13,11 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName, appToken} = validated.value;
-  const {getLevel} = getCtx()
+  const {getMongodb} = getCtx()
 
   try {
-    const db = (await getLevel()).sub('apptoken');
-    const detail = await db.get(appToken);
+    const db = (await getMongodb()).collection('apptoken');
+    const detail = await db.findOne({appToken});
     resolve(detail)
   } catch(e){
     if (e.name !== 'NotFoundError') return reject(new Error('NO_SESSION'));

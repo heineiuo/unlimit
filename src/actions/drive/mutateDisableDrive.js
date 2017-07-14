@@ -9,7 +9,7 @@ export const mutateDisableSchema = Joi.object().keys({
 export default query => dispatch => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateDisableSchema, {allowUnknown: true})
   const {driveId} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {getMongodb, getConfig} = getCtx()
   try {
     const drive = (await getMongodb()).collection('drive');
     await drive.findOneAndUpdate({_id: ObjectId(driveId)}, {$set: {status: 0}})

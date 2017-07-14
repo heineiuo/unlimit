@@ -51,12 +51,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     let indexData = await queryLevel(fileIndex, fullPath)
     console.log('queryOneByFullPath: ', fullPath, replaceWithIndexHTMLWhenIsFolder, indexData)
     if (!indexData) throw Error('Not found')
-    
-    // if (!indexData || Date.now() > indexData.updateTime + ms(cacheExpireTime) || !indexData.updateTime) {
-    //   indexData = await syncIndexData(fullPath)
-    // }
-
-    // if (indexData.error) return reject(new Error(indexData.error));
+      
     if (indexData.type === 2 && replaceWithIndexHTMLWhenIsFolder) {
       fullPath = `${fullPath}/index.html`
       indexData = await dispatch(syncIndexData({fullPath}))

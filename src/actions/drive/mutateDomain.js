@@ -9,12 +9,11 @@ const mutateDomainSchema = Joi.object().keys({
 })
 
 
-
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId,add, remove} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {getMongodb, getConfig} = getCtx()
   
   try {
     const db = (await getMongodb()).collection('drive');

@@ -4,35 +4,20 @@ import queryOne from './queryOne'
 import ms from 'ms'
 import mutateInsertOne from '../client/mutateInsertOne'
 
-const queryCodeLevel = (db, key) => new Promise(async resolve => {
-  try {
-    const result = await db.get(key);
-    const validated = Joi.validate(result, Joi.object().keys({
-      code: Joi.string().length(6).required(),
-      createTime: Joi.number().required()
-    }))
-    if (validated.error) {
-      return resolve(null)
-    }
-    resolve(result)
-  } catch(e){
-    resolve(null)
-  }
-})
-
 
 /**
  * 检查验证码
  */
 const checkCode = ({email, code}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const {leveldb} = getCtx();
+  const {getMongodb} = getCtx();
   try {
-    const db = leveldb.sub('emailcode');
-    const result = await queryCodeLevel(db, email);
+    const db = (await getMongodb()).collection('emailcode');
+    const result = await db.findOne({email});
+
     if (!result) return reject(new Error('ILLEGAL_CODE_A'));
     if (result.code !== code) return reject(new Error('ILLEGAL_CODE_B'));
     if (Date.now() > result.createTime + ms('5m')) return reject(new Error('EXPIRE_CODE'));
-    await db.del(email);
+    await db.findOneAndDelete({email});
     resolve(true)
   } catch(e){
     if (e.name === 'NotFoundError') return reject(new Error('ILLEGAL_CODE'));
@@ -40,23 +25,6 @@ const checkCode = ({email, code}) => (dispatch, getCtx) => new Promise(async (re
   }
 });
 
-
-/**
- * @api {POST} /account/createTokenByAuthCode 根据AuthCode获取token
- * @apiName TokenBySSOCode
- * @apiGroup Account
- * @apiParam {string} code code
- * @apiSuccess {string} token token
- */
-const createTokenByAuthCode = ({authCode}, leveldb) => new Promise(async(resolve, reject) => {
-  try {
-    const db = leveldb.sub('ssocode');
-    const result = await db.get(authCode);
-    resolve({token: result.token});
-  } catch(e){
-    reject(e)
-  }
-});
 
 
 const createUser = (email, getMongodb) => new Promise(async (resolve, reject) => {

@@ -14,24 +14,13 @@ const queryByDomainSchema = Joi.object().keys({
   forceSync: Joi.boolean().default(false) // 强制更新（有很短的延迟）
 })
 
-const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    const result = await db.get(key);
-    const validated = Joi.validate(result, queryLevelSchema)
-    if (validated.error) return resolve(null)
-    resolve(result)
-  } catch(e){
-    resolve(null)
-  }
-})
-
 
 
 export default query => (dispatch) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {getMongodb, getConfig} = getCtx()
   
   const syncCache = async () => {
     try {
@@ -53,7 +42,7 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
       }
 
       const db = (await getLevel()).sub('domain');
-      await db.put(domain, cacheValue)
+      await db.findOneAndUpdate({domain}, {$set: cacheValue})
     } catch(e){
       console.log(e)
     }
@@ -70,8 +59,11 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
         "content": ""
       }]
     })
-    const db = (await getLevel()).sub('domain');
-    const target = await queryLevel(db, domain);
+
+    const db = (await getMongodb()).collection('domain');
+    
+    const target = await db.findOne({domain});
+    
     if (!target || target.disable) {
       reject(new Error('NOT_FOUND'));
       return process.nextTick(syncCache)

@@ -5,10 +5,11 @@
  * @apiParam {string} token token
  */
 export default ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const {getMongodb} = getCtx();
   try {
-    const db = getCtx().leveldb.sub('token');
+    const db = (await getMongodb()).collection('token');
     if (getCtx().request.headers.session.user) {
-      await db.del(token)
+      await db.findOneAndDelete({token})
     }
     resolve({})
   } catch(e){

@@ -10,15 +10,6 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().required()
 }), {allowUnknown: true})
 
-const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    resolve(await db.get(key))
-  } catch(e){
-    resolve(null)
-  }
-})
-
-
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);

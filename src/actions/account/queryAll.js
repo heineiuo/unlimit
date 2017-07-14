@@ -5,18 +5,12 @@
  * @apiParam {string} model model名, user
  */
 export default (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
+  const {getMongodb} = getCtx()
   try {
-    const db = getCtx().leveldb.sub('user');
+    const db = (await getMongodb()).collection('user');
     const limit = query.limit || 20;
-    const list = [];
-    db.createReadStream({limit})
-      .on('data', (item) => {
-        list.push(item.value)
-      })
-      .on('end', () => {
-        resolve({list})
-      });
-
+    const list = await db.find({}).limit(20)
+    resolve({list})
   } catch(e){
     reject(e)
   }

@@ -16,10 +16,11 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appId, appName} = validated.value;
+  const {getMongodb} = getCtx()
 
   try {
-    const db = getCtx().leveldb.sub('app');
-    const app = await db.get(appName);
+    const db = (await getMongodb()).collection('app');
+    const app = await db.findOne({appName});
     app.list = app.list.filter(item => item.appId !== appId);
     await dispatch(updateApp({appName, app}));
     resolve({})

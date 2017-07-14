@@ -15,7 +15,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const db = getCtx().leveldb.sub('app');
-    const detail = await db.del(appName);
+    const detail = await db.findOneAndDelete({appName});
 
     await Promise.all(detail.list.map(item => {
       return new Promise(async (resolve, reject) => {

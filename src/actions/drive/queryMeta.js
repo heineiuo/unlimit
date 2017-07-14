@@ -12,7 +12,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value;
   const filter = {}
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {getMongodb, getConfig} = getCtx()
   const {session} = getCtx().request.headers;
   if (!session) return reject('PERMISSION_DENIED')
   const userId = session.userId

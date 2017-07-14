@@ -14,13 +14,13 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
-  const {getMongodb, getLeveldb} = getCtx()
+  const {getMongodb} = getCtx()
 
   try {
     const {session} = getCtx().request.headers;
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const db = (await getMongodb()).collection('app');
-    const tokendb = (await getLeveldb()).sub('apptoken');
+    const tokendb = (await getMongodb()).collection('apptoken');
     const app = await db.findOne({appName, adminId: session.userId});
     // if (app.adminId !== session.userId) return reject(new Error('PERMISSION_DENIED'));
     if (!app) return reject(new Error('APP_NOT_FOUNT'));
@@ -28,7 +28,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       id: app._id.toString(), type: 'app', name: appName
     }));
     const {permissions, adminId} = app;
-    await tokendb.put(token, {
+    await tokendb.insert({
+      token,
       updateTime: Date.now(),
       appName,
       adminId,

@@ -10,13 +10,13 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {clientId, socketId, token, withSourceData} = validated.value;
 
-  const {getMongodb, leveldb} = getCtx()
+  const {getMongodb} = getCtx()
   try {
-    const tokendb = leveldb.sub('token')
+    const tokendb = (await getMongodb()).collection('token')
     const mongodb = (await getMongodb()).collection('client')
     let client = await new Promise(async resolve => {
       try {
-        resolve(await tokendb.get(token));
+        resolve(await tokendb.findOne({token}));
       } catch(e) {
         resolve(null)
       }
