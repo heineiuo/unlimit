@@ -13,7 +13,6 @@ var Host = module.exports = new Datastore({
   autoload: true
 })
 
-
 const test = async () => {
   try {
     const hosts = await Host.cfind({}).limit(10000).exec();
