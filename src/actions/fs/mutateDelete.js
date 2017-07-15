@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import {ObjectId} from 'mongodb'
+
 
 const validate = query => Joi.validate(query, Joi.object().keys({
   fileId: Joi.string().required(),
@@ -10,14 +10,14 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {driveId, fileId} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {db, config} = getCtx()
 
   try {
-    const filedb = (await getMongodb()).collection('file')
-    const result = await filedb.findOneAndDelete({_id: ObjectId(fileId)})
+    const fileDb = db.collection('file')
+    const result = await fileDb.findOneAndDelete({_id: fileId})
     if (result.value.type === 1) {
-      const fileContentdb = (await getLeveldb()).sub('fileContent')
-      await fileContentdb.del(fileId)
+      const fileContentDb = db.collection('fileContent')
+      await fileContentDb.findOneAndDelete({_id: fileId})
     }
     resolve(result)
   } catch(e){

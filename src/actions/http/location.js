@@ -52,7 +52,7 @@ export default (getSeashell, config) => {
       const {location, url} = await pickLocation(locations, req.url);
 
       res.locals.host = host;
-      res.locals.driveId = driveId.toString();
+      res.locals.driveId = driveId;
       res.locals.url = url;
       res.locals.location = location;
 

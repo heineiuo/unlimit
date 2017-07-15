@@ -4,37 +4,22 @@ import queryOne from './queryOne'
 import ms from 'ms'
 import mutateInsertOne from '../client/mutateInsertOne'
 
-const queryCodeLevel = (db, key) => new Promise(async resolve => {
-  try {
-    const result = await db.get(key);
-    const validated = Joi.validate(result, Joi.object().keys({
-      code: Joi.string().length(6).required(),
-      createTime: Joi.number().required()
-    }))
-    if (validated.error) {
-      return resolve(null)
-    }
-    resolve(result)
-  } catch(e){
-    resolve(null)
-  }
-})
 
 
 /**
  * 检查验证码
  */
-const checkCode = ({email, code}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const {leveldb} = getCtx();
+const checkCode = ({ email, code }) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const { db } = getCtx();
   try {
-    const db = leveldb.sub('emailcode');
-    const result = await queryCodeLevel(db, email);
+    const emailcodeDb = db.sub('emailcode');
+    const result = await emailcodeDb.findOne({ email });
     if (!result) return reject(new Error('ILLEGAL_CODE_A'));
     if (result.code !== code) return reject(new Error('ILLEGAL_CODE_B'));
     if (Date.now() > result.createTime + ms('5m')) return reject(new Error('EXPIRE_CODE'));
-    await db.del(email);
+    await emailcodeDb.findOneAndDelete({ email });
     resolve(true)
-  } catch(e){
+  } catch (e) {
     if (e.name === 'NotFoundError') return reject(new Error('ILLEGAL_CODE'));
     reject(e)
   }
@@ -48,26 +33,26 @@ const checkCode = ({email, code}) => (dispatch, getCtx) => new Promise(async (re
  * @apiParam {string} code code
  * @apiSuccess {string} token token
  */
-const createTokenByAuthCode = ({authCode}, leveldb) => new Promise(async(resolve, reject) => {
+const createTokenByAuthCode = ({ authCode }, db) => new Promise(async (resolve, reject) => {
   try {
-    const db = leveldb.sub('ssocode');
-    const result = await db.get(authCode);
-    resolve({token: result.token});
-  } catch(e){
+    const ssocodeDb = db.collection('ssocode');
+    const result = await ssocodeDb.findOne({ _id: authCode });
+    resolve({ token: result.token });
+  } catch (e) {
     reject(e)
   }
 });
 
 
-const createUser = (email, getMongodb) => new Promise(async (resolve, reject) => {
+const createUser = (email, db) => new Promise(async (resolve, reject) => {
   try {
-    const db = (await getMongodb()).collection('user');
-    const result = await db.insertOne({
+    const userdb = db.collection('user');
+    const result = await userdb.insertOne({
       email, createTime: Date.now()
     })
     const user = result.ops[0];
-    resolve({...user, userId: user._id.toString()})
-  } catch(e){
+    resolve({ ...user, userId: user._id })
+  } catch (e) {
     reject(e)
   }
 });
@@ -77,7 +62,7 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   email: Joi.string().required(),
   driveId: Joi.string(),
   code: Joi.string().length(6).required()
-}), {allowUnknown: true})
+}), { allowUnknown: true })
 
 
 
@@ -89,19 +74,19 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * @apiParam {string} email
  * @apiSuccess {string} token
  */
-export default query => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
-  const {code, email, driveId} = validated.value;
-  const {getMongodb} = getCtx()
+  const { code, email, driveId } = validated.value;
+  const { db } = getCtx()
   // todo 发放OAuth授权令牌
   try {
-    await dispatch(checkCode({email, code}));
-    const result = await dispatch(queryOne({email, enableNull: true}));
-    const userId = result === null ? (await createUser(email, getMongodb)).userId : result.userId;
+    await dispatch(checkCode({ email, code }));
+    const result = await dispatch(queryOne({ email, enableNull: true }));
+    const userId = result === null ? (await createUser(email, db)).userId : result.userId;
     if (!userId) return reject(new Error('EXCEPTION_ERROR'))
-    resolve(await dispatch(mutateInsertOne({id: userId, name: 'user', type: 'user'})))
-  } catch(e) {
+    resolve(await dispatch(mutateInsertOne({ id: userId, name: 'user', type: 'user' })))
+  } catch (e) {
     reject(e)
   }
 });

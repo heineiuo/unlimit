@@ -1,9 +1,8 @@
 import Joi from 'joi'
-import {ObjectId} from 'mongodb'
 import queryOne from './queryOne'
 import ms from 'ms'
 
-const queryLevelSchema = Joi.object().keys({
+const queryDomainSchema = Joi.object().keys({
   updateTime: Joi.number().required(),
   driveId: Joi.string().required(),
   locations: Joi.array().required()
@@ -14,28 +13,17 @@ const queryByDomainSchema = Joi.object().keys({
   forceSync: Joi.boolean().default(false) // 强制更新（有很短的延迟）
 })
 
-const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    const result = await db.get(key);
-    const validated = Joi.validate(result, queryLevelSchema)
-    if (validated.error) return resolve(null)
-    resolve(result)
-  } catch(e){
-    resolve(null)
-  }
-})
-
 
 
 export default query => (dispatch) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {db, config} = getCtx()
   
   const syncCache = async () => {
     try {
-      const {pageDomain} = await getConfig();
+      const {pageDomain} = config;
       const pageDomainRegex = new RegExp(`.${pageDomain}$`);
       const index = domain.search(pageDomainRegex);
       const filter = index === -1 ? {domain} : {
@@ -48,19 +36,19 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
       if (!driveData) {
         cacheValue.disable = true;
       } else {
-        cacheValue.driveId = driveData._id.toString();
+        cacheValue.driveId = driveData._id;
         cacheValue.locations = driveData.locations;
       }
 
-      const db = (await getLevel()).sub('domain');
-      await db.put(domain, cacheValue)
+      const domainDb = db.collection('domain');
+      await domainDb.findOneAndUpdate({domain}, {$set: cacheValue})
     } catch(e){
       console.log(e)
     }
   }
 
   try {
-    const {cacheExpireTime, apiDomain} = await getConfig();
+    const {cacheExpireTime, apiDomain} = config;
     if (domain === apiDomain) return resolve({
       driveId: '',
       locations: [{
@@ -70,8 +58,8 @@ export default query => (dispatch) => new Promise(async (resolve, reject) => {
         "content": ""
       }]
     })
-    const db = (await getLevel()).sub('domain');
-    const target = await queryLevel(db, domain);
+    const domainDb = db.collection('domain');
+    const target = await domainDb.findOne({_id: domain});
     if (!target || target.disable) {
       reject(new Error('NOT_FOUND'));
       return process.nextTick(syncCache)

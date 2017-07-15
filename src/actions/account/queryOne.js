@@ -1,6 +1,6 @@
 /* @private */
 import Joi from "joi"
-import {ObjectId} from 'mongodb'
+
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   userId: Joi.string(),
@@ -12,21 +12,21 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {userId, email, enableNull} = validated.value;
-  const {getMongodb} = getCtx()
+  const {db} = getCtx()
   try {
     const filter = {};
     if (userId) {
-      filter._id = ObjectId(userId)
+      filter._id = userId
     } else {
       filter.email = email
     }
-    const db = (await getMongodb()).collection('user');
-    const result = await db.findOne(filter)
+    const userDb = db.collection('user');
+    const result = await userDb.findOne(filter)
     if (result === null) {
       if (enableNull) return resolve(null)
       return reject(new Error('NOT_FOUND'))
     }
-    resolve({...result, userId: result._id.toString()})
+    resolve({...result, userId: result._id})
   } catch (e) {
     reject(e)
   }

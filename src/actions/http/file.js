@@ -18,8 +18,6 @@ const handleFILE = (req, res, seashell, driveId, pathname, reqpath) => new Promi
     res.setHeader('CacheControl', true);
     res.setHeader('maxAge', 31536000000);
     res.setHeader('Expires', new Date(Date.now() + 31536000000));
-    // console.log(result.body.cat)
-    // console.log(new Buffer(result.body.cat).toString())
     res.write(new Buffer(result.body.cat));
     res.end();
     resolve()

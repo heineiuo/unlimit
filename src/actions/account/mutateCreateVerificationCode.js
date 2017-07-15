@@ -26,13 +26,11 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query)
   if (validated.error) return reject(validated.error)
   const {email} = validated.value;
-  const {getConfig, leveldb} = getCtx();
+  const {config, db} = getCtx();
   try {
-    const config = await getConfig();
-    const db = leveldb.sub('emailcode');
+    const emailcodedb = db.collection('emailcode');
     const code = createNumberCode();
-    await db.put(email, {code, createTime: Date.now()});
-    console.log({email, code})
+    await emailcodedb.insertOne({_id: email, code, createTime: Date.now()});
 
     const options = {
       ToAddress: email,

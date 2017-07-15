@@ -11,11 +11,10 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
-  const {getMongodb} = getCtx()
 
   try {
-    const db = getCtx().leveldb.sub('app');
-    const detail = await db.del(appName);
+    const appDb = getCtx().db.collection('app');
+    const detail = await appDb.findOneAndDelete({appName});
 
     await Promise.all(detail.list.map(item => {
       return new Promise(async (resolve, reject) => {

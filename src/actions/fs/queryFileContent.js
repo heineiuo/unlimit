@@ -7,26 +7,14 @@ export const schema = Joi.object().keys({
   replaceWithIndexHTMLWhenIsFolder/*如果是文件夹，是否切换目标为文件夹目录下的`index.html`文件*/: Joi.boolean().default(true)
 }).xor(['fullPath', 'fileId']) 
 
-const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    const content = await db.get(key, {valueEncoding: 'utf8'})
-    try {
-      resolve(JSON.parse(content))
-    } catch(e){
-      resolve(content)
-    }
-  } catch (e) {
-    resolve(null)
-  }
-})
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   let {fullPath, fileId, replaceWithIndexHTMLWhenIsFolder} = validated.value;
-  const {leveldb} = getCtx();
+  const {db} = getCtx();
   try {
-    const fileContentdb = leveldb.sub('fileContent');
+    const fileContentDb = db.collection('fileContent');
 
     /**
      * 如果根据fileId来获取内容，则必须传入fileId, 否则必须传入fullPath
@@ -39,7 +27,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       if (!indexData) return reject(new Error('Not found'))
       fileId = indexData.fileId
     }
-    const cat = await queryLevel(fileContentdb, fileId);
+    const cat = await fileContentdb.findOne({_id: fileId})
     if (cat === null) return reject(new Error('Not found'))
     resolve({isFile: true, cat})
   } catch(e){

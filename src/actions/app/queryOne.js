@@ -1,13 +1,5 @@
 import Joi from 'joi'
 
-const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    resolve(await db.get(key))
-  } catch(e){
-    resolve(null)
-  }
-})
-
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appName: Joi.string().regex(/[a-z]{1, 1}[0-9a-z]{4, 30}/).required(),
   appId: Joi.string().required(),
@@ -22,8 +14,8 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const {appName, appId, filter} = validated.error;
 
   try {
-    const db = getCtx().leveldb.sub('app');
-    const app = await queryLevel(db, appName);
+    const appDb = getCtx().db.collection('app');
+    const app = await appDb.findOne({_id: appName});
     if (app === null) return reject(new Error('NOT_FOUND'))
     const onlineItems = app.list.filter(service => service.status === 1);
     if (onlineItems.length === 0) return reject(new Error('TARGET_SERVICE_OFFLINE'));

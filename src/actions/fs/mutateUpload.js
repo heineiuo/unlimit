@@ -14,7 +14,6 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {driveId, parentId, uploadKey, fileId, name} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
   getCtx().setHeader({__UPLOAD: true});
 
   try {

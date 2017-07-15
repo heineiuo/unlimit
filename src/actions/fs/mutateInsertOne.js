@@ -13,29 +13,28 @@ export const schema = Joi.object().keys({
 /**
  * 创建文件
  * 先检查文件是否已存在，如果已存在，则报错'File Exist'
- * 在mongodb里创建文件，
- * 并同步文件信息到leveldb - fileIndex, 
- *  同步文件内容到 leveldb - fileContent
+ * 在file里创建文件，
+ * 并同步文件信息到 fileIndex, 
+ *  同步文件内容到 fileContent
  */
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   let {driveId, type, parentId, name, content} = validated.value;
+  const {db, config} = getCtx();
 
-  const {leveldb, getMongodb, getConfig} = getCtx();
   try {
-    const fileContent = leveldb.sub('fileContent');
-    const file = (await getMongodb()).collection('file');
-    const result0 = await file.findOne({driveId, parentId, name});
+    const fileContentDb = db.collection('fileContent');
+    const fileDb = db.collection('file');
+    const result0 = await fileDb.findOne({driveId, parentId, name});
     if (result0) return reject(new Error('File Exist'));
 
-    const result = await file.insertOne({driveId, type, parentId, name})
-    console.log(result.result)
-    const id = result.insertedId.toString()
+    const result = await fileDb.insertOne({driveId, type, parentId, name})
+    const id = result._id
     
     /**
-     * 文件创建成功后，将文件索引同步到leveldb > fileIndex
-     * 将文件内容写入 leveldb > fileContent （注意，mongodb里不保存content）
+     * 文件创建成功后，将文件索引同步到 db > fileIndex
+     * 将文件内容写入 db > fileContent （注意，fileIndex里不保存content）
      */
     await dispatch(syncIndexDataByFile({
       file: {
@@ -46,7 +45,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       driveId
     }))
     
-    if (type === 1) await fileContent.put(id, content)
+    if (type === 1) await fileContentDb.findOneAndUpdate({_id: id}, {$set: content})
     resolve(result.ops[0])
   } catch(e){
     reject(e)

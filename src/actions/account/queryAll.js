@@ -6,20 +6,13 @@
  */
 export default (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
   try {
-    const db = getCtx().leveldb.sub('user');
+    const {db} = getCtx()
     const limit = query.limit || 20;
     const list = [];
-    db.createReadStream({limit})
-      .on('data', (item) => {
-        list.push(item.value)
-      })
-      .on('end', () => {
-        resolve({list})
-      });
-
+    const userDb = db.collection('user')
+    const result = await userDb.find({}).limit(limit)
+    resolve(result)
   } catch(e){
     reject(e)
   }
 });
-
-

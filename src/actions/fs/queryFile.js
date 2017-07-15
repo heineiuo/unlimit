@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import {ObjectId} from 'mongodb'
+
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   keywords: Joi.string().default(''),
@@ -15,11 +15,11 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {keywords, tags, limit, fields, parentId, driveId, replaceWithFileMetaIfIsFile} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {db, config} = getCtx()
   try {
-    const filedb = (await getMongodb()).collection('file');
+    const fileDb = db.collection('file');
     if (parentId) {
-      const parentMeta = await filedb.findOne({_id: ObjectId(parentId)})
+      const parentMeta = await fileDb.findOne({_id: parentId})
       if (!parentMeta) return reject(new Error('PARENT_NOT_EXIST'))
       if (parentMeta.type === 1) {
         if (replaceWithFileMetaIfIsFile) return resolve({...parentMeta, isFile: true})
@@ -41,7 +41,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
     if (filter.$or.length === 0) delete filter.$or
 
-    const data = await filedb.find(filter, fields).limit(limit).toArray()
+    const data = await fileDb.find(filter, fields).limit(limit).toArray()
     resolve({data})
   } catch(e){
     return reject(e)

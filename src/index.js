@@ -1,10 +1,8 @@
 import Seashell from 'seashell'
 import chalk from 'chalk'
 import {createDispatch, pathsToActions} from 'action-creator'
-
 import getConfig from './config'
-import getLeveldb from './leveldb'
-import getMongodb from './mongodb'
+import {Db} from './db'
 import createServer from './http'
 import allActionCreators from './actions'
 
@@ -12,20 +10,23 @@ const start = async () => {
   try {
 
     const config = await getConfig();
-    const leveldb = await getLeveldb();
+    
+    const db = new Db({
+      presets: [],
+      dbpath: `${config.datadir}/db`,
+      keyEncoding: 'utf8',
+      valueEncoding: 'json'
+    });
+
     const server = createServer(config);
 
     // const server = require('http').createServer();
     const app = new Seashell({server});
 
+    
     app.use(async (ctx, next) => {
-      ctx.leveldb = leveldb;
+      ctx.db = db;
       ctx.config = config;
-
-      ctx.getLevel = getLeveldb;
-      ctx.getLeveldb = getLeveldb;
-      ctx.getConfig = getConfig;
-      ctx.getMongodb = getMongodb;
 
       ctx.json = (json) => {
         ctx.response.body = json;

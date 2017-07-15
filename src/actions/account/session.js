@@ -3,19 +3,6 @@ import Joi from 'joi'
 import queryOne from './queryOne'
 import queryOneClient from '../client/queryOne'
 
-const queryLevel = (db, key) => new Promise(async resolve => {
-  try {
-    const value = await db.get(key);
-    const validated = Joi.validate(value, Joi.object().keys({
-      userId: Joi.string().required(),
-      email: Joi.string()
-    }), {allowUnknown: true})
-    if (validated.error) return resolve(null)
-    resolve(value)
-  } catch(e){
-    resolve(null)
-  }
-})
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   token: Joi.string().length(96).required()
@@ -32,22 +19,5 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 export default query => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
   return resolve(getCtx().request.headers.session)
 
-  // const validated = validate(query);
-  // if (validated.error) return resolve(validated.error);
-  // const {token} = validated.value;
-  // try {
-  //   const db = getCtx().leveldb;
-  //   const userdb = db.sub('user');
-  //   const {id: userId} = await dispatch(queryOneClient({token}))
-  //   let user = await queryLevel(userdb, userId);
-  //   if (user === null) {
-  //     user = await dispatch(queryOne({userId}))
-  //     userdb.put(userId, user)
-  //   }
-  //   resolve(user);
-  // } catch (e) {
-  //   if (e.name === 'NotFoundError') return resolve(null);
-  //   resolve({error: e})
-  // }
 });
 

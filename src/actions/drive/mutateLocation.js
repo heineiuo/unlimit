@@ -10,15 +10,15 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = Joi.validate(query, mutateLocationSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {locations, driveId} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {db, config, request: {headers: {session}}} = getCtx()
+  const {userId} = session;
 
   try {
-    const db = getCtx().leveldb.sub('location');
-    const location = await db.get(driveId);
-    const {userId} = getCtx().request.headers.session;
-    location.users = location.users.filter(item => item !== userId).concat([userId]);
-    location.locations = locations;
-    await db.put(driveId, location);
+    const locationDb = db.collection('location');
+    const locationResult = await locationDb.findOne({_id: driveId});
+    locationResult.users = locationResult.users.filter(item => item !== userId).concat([userId]);
+    locationResult.locations = locations;
+    await locationDb.findOneAndUpdate({_id: driveId}, {$set: locationResult});
     resolve({success:1});
   } catch(e){
     reject(e)

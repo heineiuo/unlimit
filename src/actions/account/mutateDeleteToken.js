@@ -6,9 +6,10 @@
  */
 export default ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().leveldb.sub('token');
+    const {db} = getCtx()
+    const tokenDb = db.collection('token')
     if (getCtx().request.headers.session.user) {
-      await db.del(token)
+      await tokenDb.findOneAndDelete({_id: token})
     }
     resolve({})
   } catch(e){

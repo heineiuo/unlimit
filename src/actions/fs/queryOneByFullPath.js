@@ -3,14 +3,6 @@ import ms from 'ms'
 import trimEnd from 'lodash/trimEnd'
 import syncIndexData from './syncIndexData'
 
-const queryLevel = (db, key) => new Promise(async (resolve, reject) => {
-  try {
-    resolve(await db.get(key))
-  } catch(e){
-    resolve(null)
-  }
-})
-
 export const validate = query => Joi.validate(query, Joi.object().keys({
   fullPath: Joi.string(), // include driveId
   replaceWithIndexHTMLWhenIsFolder: Joi.boolean().default(false)
@@ -44,11 +36,11 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
    */
   fullPath = trimEnd(fullPath, '/')
 
-  const {leveldb, getConfig, getMongodb} = getCtx()
+  const {db, config} = getCtx()
 
   try {
-    const fileIndex = leveldb.sub('fileIndex')
-    let indexData = await queryLevel(fileIndex, fullPath)
+    const fileIndexDb = db.collection('fileIndex')
+    let indexData = await fileIndexDb.findOne({_id: fullPath})
     console.log('queryOneByFullPath: ', fullPath, replaceWithIndexHTMLWhenIsFolder, indexData)
     if (!indexData) throw Error('Not found')
     

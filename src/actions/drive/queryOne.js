@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import {ObjectId} from 'mongodb'
 
 
 const queryOneSchema = Joi.object().keys({
@@ -10,20 +9,19 @@ const queryOneSchema = Joi.object().keys({
 }).xor('domain', 'driveId', 'name')
 
 
-
 export default query => (dispatch, geCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryOneSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, driveId, name, fields} = validated.value;
-  const {getMongodb, getLeveldb, getConfig} = getCtx()
+  const {db, config} = getCtx()
   try {
-    const drive = (await getMongodb()).collection('drive');
-    const filter = driveId ? {_id: ObjectId(driveId)} :
+    const driveDb = db.collection('drive');
+    const filter = driveId ? {_id: driveId} :
       name ? {name} :
       {domains: {$elemMatch: {$eq: domain}}}
-    const result = await drive.findOne(filter, {fields})
+    const result = await driveDb.findOne(filter, {fields})
     if (!result) return reject(new Error('NOT_FOUND'))
-    resolve({...result, driveId: result._id.toString()})
+    resolve({...result, driveId: result._id})
   } catch(e){
     reject(e)
   }
