@@ -45,8 +45,8 @@ export default ({fullPath}) => (dispatch, getCtx) => new Promise(async resolve =
  * 先获取完整路径，再写入索引
  */
 export const syncIndexDataByFile = ({file, fileId, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const {db, config} = getCtx()
   try {
+    const {db, config} = getCtx()
     const fileDb = db.collection('file')
     if (!file) {
       file = await fileDb.findOne({_id: fileId})

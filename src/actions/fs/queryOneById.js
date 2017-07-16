@@ -18,7 +18,7 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   includePath: Joi.boolean().default(false)
 }))
 
-export default query => dispatch => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {includePath, fileId} = validated.value;

@@ -9,8 +9,8 @@ export default query => (dispatch, getCtx) => new Promise(async(resolve, reject)
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appId} = validated.value;
-  const {db} = getCtx()
   try {
+    const {db} = getCtx()
     const {appName, app} = query;
     const appDb = db.collection('app');
     await appDb.findOneAndUpdate({_id: appName}, {$set: app});

@@ -10,10 +10,10 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = Joi.validate(query, mutateLocationSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {locations, driveId} = validated.value;
-  const {db, config, request: {headers: {session}}} = getCtx()
-  const {userId} = session;
-
+  
   try {
+    const {db, config, request: {headers: {session}}} = getCtx()
+    const {userId} = session;
     const locationDb = db.collection('location');
     const locationResult = await locationDb.findOne({_id: driveId});
     locationResult.users = locationResult.users.filter(item => item !== userId).concat([userId]);

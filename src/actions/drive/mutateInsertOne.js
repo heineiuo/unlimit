@@ -11,9 +11,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, insertSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error)
   const {name, description} = validated.value;
-  const {db, config} = getCtx()
   
   try {
+    const {db, config} = getCtx()
     const {session} = getCtx().request.headers;
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const userId = session ? session.userId : '123';
@@ -35,7 +35,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       adminId: userId,
       status: 1, // 0 不启用， 1正常
     })
-    resolve(result.ops[0])
+    resolve(result)
   } catch(e){
     reject(e)
   }

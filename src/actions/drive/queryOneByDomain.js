@@ -15,7 +15,7 @@ const queryByDomainSchema = Joi.object().keys({
 
 
 
-export default query => (dispatch) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;

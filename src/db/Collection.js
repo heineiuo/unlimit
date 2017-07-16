@@ -12,19 +12,24 @@ class Collection {
    */
   _getEnsureSafe = (_id) => new Promise(async (resolve) => {
     try {
-      resolve(this.db.get(_id))
+      resolve(await this.db.get(_id))
     } catch(e){
       resolve(null)
     }
   })
 
   findOne = (filter) => new Promise(async (resolve, reject) => {
-    if (!!filter._id) {
-      return resolve(await this._getEnsureSafe(filter._id))
+    try {
+      if (!!filter._id) {
+        return resolve(await this._getEnsureSafe(filter._id))
+      }
+      const result = await this.find(filter).toArray()
+      if (result.length === 0) return resolve(null)
+      return resolve(result[0])
+    } catch(e){
+      reject(e)
     }
-    const result = await this.find(filter).toArray()
-    if (result.length === 0) return resolve(null)
-    return resolve(result[0])
+    
   })
 
   find = (filter, fields) => {

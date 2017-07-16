@@ -8,9 +8,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateUpdateSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {name, id, socketId, clientId, toStatus, token} = validated.value;
-  const {db} = getCtx()
 
   try {
+    const {db} = getCtx()
     const clientDb = db.collection('client')
     const socketDb = db.collection('socket')
 

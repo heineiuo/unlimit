@@ -41,6 +41,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   try {
     const fileIndexDb = db.collection('fileIndex')
     let indexData = await fileIndexDb.findOne({_id: fullPath})
+
     console.log('queryOneByFullPath: ', fullPath, replaceWithIndexHTMLWhenIsFolder, indexData)
     if (!indexData) throw Error('Not found')
     

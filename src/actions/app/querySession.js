@@ -13,9 +13,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName, appToken} = validated.value;
-  const {db} = getCtx()
 
   try {
+    const {db} = getCtx()
     const apptokenDb = db.collection('apptoken');
     const detail = await apptokenDb.findOne({_id: appToken});
     resolve(detail)

@@ -7,7 +7,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   let {limit, fields, name, id} = validated.value;
 
   try {
-    const clientDb = db.collection('client');
+    const clientDb = getCtx().db.collection('client');
     const filter = {$or: []}
     fields = fields.filter(item => item !== 'token');
     if (name) filter.$or.push({name})

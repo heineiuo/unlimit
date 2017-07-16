@@ -11,9 +11,9 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const validated = Joi.validate(query, mutateUserScheme, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId, add, remove} = validated.value;
-  const {db, config} = getCtx()
 
   try {
+    const {db, config} = getCtx()
     if (add.length > 0 || remove.length > 0) {
       const driveDb = db.collection('drive');
       const driveData = await driveDb.findOne({_id: driveId});

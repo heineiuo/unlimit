@@ -26,8 +26,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query)
   if (validated.error) return reject(validated.error)
   const {email} = validated.value;
-  const {config, db} = getCtx();
   try {
+    const {config, db} = getCtx();
     const emailcodedb = db.collection('emailcode');
     const code = createNumberCode();
     await emailcodedb.insertOne({_id: email, code, createTime: Date.now()});

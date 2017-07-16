@@ -20,9 +20,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateInsertOneSchema, { allowUnknown: true });
   if (validated.error) return reject(validated.error);
   const { type, name, id } = validated.value;
-  const { db } = getCtx()
 
   try {
+    const { db } = getCtx()
     const clientDb = db.collection('client');
     const tokenDb = db.collection('token')
     const insertData = {

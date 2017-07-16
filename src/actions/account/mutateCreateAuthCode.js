@@ -8,9 +8,9 @@ export default ({token}) => (dispatch, getCtx) => new Promise(async(resolve, rej
   try {
     const {db, request: {headers: {session}}} = getCtx()
     if (!session) reject(new Error('ERR_NOT_LOGGED'));
-    const db = getCtx().db.collection('ssocode');
+    const ssocodeDb = getCtx().db.collection('ssocode');
     const code = normalCode();
-    await db.insertOne({_id: code, token, code});
+    await ssocodeDb.insertOne({_id: code, token, code});
     resolve(code)
   } catch(e){
     reject(e)

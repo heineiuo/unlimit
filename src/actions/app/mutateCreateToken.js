@@ -14,9 +14,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
-  const {db} = getCtx()
 
   try {
+    const {db} = getCtx()
     const {session} = getCtx().request.headers;
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const appDb = db.collection('app');

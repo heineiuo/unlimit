@@ -12,8 +12,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {userId, email, enableNull} = validated.value;
-  const {db} = getCtx()
   try {
+    const {db} = getCtx()
     const filter = {};
     if (userId) {
       filter._id = userId

@@ -10,8 +10,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {clientId, socketId, token, withSourceData} = validated.value;
 
-  const {db} = getCtx()
   try {
+    const {db} = getCtx()
     const tokenDb = db.collection('token')
     const clientDb = db.collection('client')
     let client = await tokenDb.findOne({_id: token})

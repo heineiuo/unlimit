@@ -12,8 +12,8 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateApproveDomainSchema, {allowUnknown: true});;
   if (validated.error) return reject(validated.error);
   const {domain, driveId} = validated.value;
-  const {config} = getCtx()
   try {
+    const {config} = getCtx()
     // todo check rate limit
     const {https: {email}, datadir} = config;
     const pemdir = datadir + '/pem';
