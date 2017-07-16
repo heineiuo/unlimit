@@ -20,7 +20,7 @@ class Collection {
 
   findOne = (filter) => new Promise(async (resolve, reject) => {
     if (!!filter._id) {
-      return resolve(await this._getEnsureSafe(_id))
+      return resolve(await this._getEnsureSafe(filter._id))
     }
     const result = await this.find(filter).toArray()
     if (result.length === 0) return resolve(null)

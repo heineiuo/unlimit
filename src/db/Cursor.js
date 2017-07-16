@@ -1,8 +1,9 @@
+import sift from 'sift'
 
 class Cursor {
   constructor(db, filter){
     this.db = db;
-    this.filter = filter
+    this._filter = filter
   }
 
   _limit = null
@@ -27,10 +28,6 @@ class Cursor {
     return this
   }
 
-  validate = (item) => {
-    return true
-  }
-
   count = () => new Promise(async (resolve, reject) => {
     try {
       resolve((await this.exec()).length)
@@ -40,11 +37,12 @@ class Cursor {
   })
 
   exec = () => new Promise(async (resolve, reject) => {
+    const validate = sift(this._filter)
     const result = []
     const rs = this.db.createReadStream({
     })
     .on('data', (data) => {
-      if (this.validate(data)) {
+      if (validate(data.value)) {
         result.push(data.value)
         if (this._limit && result.length >= this._limit) {
           rs.destroy()

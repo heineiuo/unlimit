@@ -54,6 +54,7 @@
     "seashell": "^0.11.0",
     "seashell-dev": "^0.1.0",
     "seashell-proxy": "^0.2.4",
+    "sift": "^3.3.12",
     "ua-parser-js": "~0.7.10",
     "uuid": "^3.1.0",
     "yargs": "^6.6.0"
