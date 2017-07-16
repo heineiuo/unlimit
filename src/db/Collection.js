@@ -19,16 +19,46 @@ class Collection {
   })
 
   findOne = (filter) => new Promise(async (resolve, reject) => {
-    if (filter.hasOwnProperty(_id)) {
-      return this._getEnsureSafe(_id)
+    if (!!filter._id) {
+      return resolve(await this._getEnsureSafe(_id))
     }
+    const result = await this.find(filter).toArray()
+    if (result.length === 0) return resolve(null)
+    return resolve(result[0])
   })
 
-  find = (filter) => {
-    return new Cursor(this.db, filter)
+  find = (filter, fields) => {
+    return new Cursor(this.db, filter, fields)
   }
 
-  findOneAndUpdate = () => new Promise(async (resolve, reject) => {
+  findOneAndUpdate = (filter={}, update={$set: {}}, options={}) => new Promise(async (resolve, reject) => {
+    try {
+      if (!!filter._id) {
+        const data = await this._getEnsureSafe(filter._id)
+        const nextData = Object.assign({}, data, update.$set)
+        await this.db.put(filter._id, nextData)
+        return resolve(nextData)
+      }
+
+      const found = await this.find(filter).limit(1).toArray()
+      if (found.length === 0) {
+        if (options.upsert) {
+          const result = await this.insertOne(update.$set)
+          update._id = result._id
+          return resolve(update)
+        } else {
+          return reject(new Error('Not found'))
+        }
+      }
+
+      const doc = found[0]
+      const nextDoc = Object.assign({}, doc, update.$set)
+      await this.db.put(doc._id, nextDoc)
+      return resolve(nextDoc)
+
+    } catch(e){
+      reject(e)
+    }
 
   })
 

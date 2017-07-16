@@ -19,4 +19,5 @@ dist/**/*.min.js
 lib/**/*.js
 build
 !build/README.md
+db
 
