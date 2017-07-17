@@ -19,9 +19,9 @@ import fs from 'mz/fs'
 import path from 'path'
 import tls from 'tls'
 
-import pickLocation from "./actions/http/location"
-import execLocation from "./actions/http"
-import proxySeashell from "./actions/http/SeashellProxy"
+import pickLocation from "./location"
+import execLocation from "./handle"
+import proxySeashell from "./SeashellProxy"
 
 let seashell = null;
 

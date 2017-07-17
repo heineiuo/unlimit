@@ -12,12 +12,12 @@ import mutateInsertOne from '../client/mutateInsertOne'
 const checkCode = ({ email, code }) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
     const { db } = getCtx();
-    const emailcodeDb = db.sub('emailcode');
-    const result = await emailcodeDb.findOne({ email });
+    const emailcodeDb = db.collection('emailcode');
+    const result = await emailcodeDb.findOne({ _id: email });
     if (!result) return reject(new Error('ILLEGAL_CODE_A'));
     if (result.code !== code) return reject(new Error('ILLEGAL_CODE_B'));
     if (Date.now() > result.createTime + ms('5m')) return reject(new Error('EXPIRE_CODE'));
-    await emailcodeDb.findOneAndDelete({ email });
+    await emailcodeDb.findOneAndDelete({ _id: email });
     resolve(true)
   } catch (e) {
     if (e.name === 'NotFoundError') return reject(new Error('ILLEGAL_CODE'));

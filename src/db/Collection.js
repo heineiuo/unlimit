@@ -80,10 +80,16 @@ class Collection {
     return resolve()
   })
 
-  insertOne = (data) => {
-    const _id = data._id || uuidv1()
-    return this.db.put(_id, {...data, _id})
-  }
+  insertOne = (data) => new Promise(async (resolve, reject) => {
+    try {
+      const _id = data._id || uuidv1()
+      const putData = {...data, _id}
+      await this.db.put(_id, putData)
+      resolve(putData)
+    } catch(e){
+      reject(e)
+    }
+  })
 }
 
 export default Collection

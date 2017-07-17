@@ -1,5 +1,5 @@
 import Joi from 'joi'
-
+import {NotFoundError} from '../../errors'
 
 const queryOneSchema = Joi.object().keys({
   domain: Joi.string().regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/),
@@ -20,7 +20,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       name ? {name} :
       {domains: {$elemMatch: {$eq: domain}}}
     const result = await driveDb.findOne(filter, {fields})
-    if (!result) return reject(new Error('NOT_FOUND'))
+    if (!result) return reject(new NotFoundError('Cannot find target drive'))
     resolve({...result, driveId: result._id})
   } catch(e){
     reject(e)

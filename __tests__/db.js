@@ -2,7 +2,7 @@ import {Db} from '../src/db'
 
 const db = new Db({
   presets: [],
-  dbpath: `${process.cwd()}/db`,
+  dbpath: `${process.cwd()}/data`,
   keyEncoding: 'utf8',
   valueEncoding: 'json'
 });

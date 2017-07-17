@@ -2,7 +2,7 @@
 
 import Joi from 'joi'
 import queryOneUser from '../account/queryOne'
-import queryOneApp from '../app/queryOne'
+import queryOneApp from '../drive/queryOneApp'
 import {queryOneSchema} from './schema'
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {

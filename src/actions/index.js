@@ -2,9 +2,8 @@ export default {
   account: require('./account').default,
   fs: require('./fs').default,
   drive: require('./drive').default,
-  app: require('./app').default,
   client: require('./client').default,
-  socket: require('./socket').default,
+  socket: require('./session').default,
   process: require('./process').default,
   admin: {
     db: {

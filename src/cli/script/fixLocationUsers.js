@@ -9,7 +9,7 @@ const fix = async () => {
     const config = await getConfig();
     const leveldb = await getLevel();
 
-    const location = leveldb.sub('location');
+    const location = leveldb.collection('location');
     const waitToUpdate = []
 
     location.createReadStream()

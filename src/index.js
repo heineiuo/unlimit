@@ -5,6 +5,7 @@ import getConfig from './config'
 import {Db} from './db'
 import createServer from './http'
 import allActionCreators from './actions'
+import {NotFoundError} from './errors'
 
 const start = async () => {
   try {

@@ -1,7 +1,7 @@
 import level from 'levelup'
 import levelSubLevel from 'level-sublevel'
 import ql from 'q-level'
-
+import Graph from './Graph'
 import Collection from './Collection'
 
 let db = null
@@ -22,6 +22,10 @@ class Db {
         if (!!db._collections[lowerName]) return db._collections[lowerName];
         db._collections[lowerName] = new Collection(ql(_db.sublevel(lowerName)))
         return db._collections[lowerName]
+      },
+
+      graph: (db, options) => {
+        return new Graph(db, options)
       },
 
       getCollectionNames: () => {

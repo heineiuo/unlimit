@@ -12,3 +12,4 @@ Dockerfile
 seashell-dev.json
 *.log*
 *.yml
+data

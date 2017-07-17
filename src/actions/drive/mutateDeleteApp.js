@@ -1,4 +1,4 @@
-import removeSocket from '../socket/unbind'
+import removeSocket from '../session/unbind'
 import Joi from 'joi'
 
 

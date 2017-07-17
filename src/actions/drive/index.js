@@ -11,4 +11,13 @@ export default {
   mutateLocation: require('./mutateLocation').default,
   mutateUser: require('./mutateUser').default,
   mutateApproveDomain: require('./mutateApproveDomain').default,
+  app: {
+    querySession: require('./querySession').default,
+    mutateInsertOne: require('./mutateInsertOne').default,
+    remove: require('./mutateDeleteApp').default,
+    queryApp: require('./queryApp').default,
+    mutateCreateToken: require('./mutateCreateToken').default,
+    find: require('./queryOneApp').default,
+    removeItem: require('./mutateDeleteToken').default,
+  }
 }

@@ -47,7 +47,9 @@ export default (getSeashell, config) => {
         headers: {originUrl: '/drive/queryOneByDomain'},
         body: {domain: host, fields: ['locations']}
       });
-      if (requestLocations.body.error) return next(new Error(requestLocations.body.error));
+      if (requestLocations.body.error) {
+        return next(new Error(requestLocations.body.error));
+      }
       const {locations, driveId} = requestLocations.body;
       const {location, url} = await pickLocation(locations, req.url);
 
