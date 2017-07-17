@@ -19,7 +19,7 @@ class Db {
       _collections: {},
       collection: (subname) => {
         const lowerName = subname.toLowerCase();
-        if (db._collections.hasOwnProperty(lowerName)) return db[lowerName];
+        if (!!db._collections[lowerName]) return db._collections[lowerName];
         db._collections[lowerName] = new Collection(ql(_db.sublevel(lowerName)))
         return db._collections[lowerName]
       },
