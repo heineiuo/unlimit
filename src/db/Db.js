@@ -11,6 +11,7 @@ class Db {
     if (db) return db
       
      const _db = levelSubLevel(level(options.dbpath), {
+       
       keyEncoding: options.keyEncoding,
       valueEncoding: options.valueEncoding
     });
@@ -24,8 +25,9 @@ class Db {
         return db._collections[lowerName]
       },
 
-      graph: (db, options) => {
-        return new Graph(db, options)
+      graph: (name) => {
+        const collection = db.collection(`${name}.graph`)
+        return new Graph(collection)
       },
 
       getCollectionNames: () => {

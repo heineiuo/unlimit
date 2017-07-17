@@ -14,6 +14,8 @@ export default (getSeashell) => async (req, res, next) => {
     const seashell = await getSeashell();
     const {location, location: {type, content}, url, driveId} = res.locals;
 
+    // console.log(location)
+
     const handles = {
       JSON: () => new Promise((resolve, reject) => {
         try {
@@ -27,8 +29,10 @@ export default (getSeashell) => async (req, res, next) => {
       BLOCK: () => handleBLOCK(req, res, content),
       FILE: () => handleFILE(req, res, seashell, driveId, url.pathname, req.path),
       REDIRECT: () => handleREDIRECT(req, res, content),
+      PROXY: () => handleREDIRECT(req, res, content),
       DOWNLOAD: () => handleDOWNLOAD(req, res, req.query.path),
       UPLOAD: () => handleUPLOAD(req, res, seashell, content),
+      PROXY: () => proxyHTTP(req, res, next)
     };
 
     /**
@@ -39,7 +43,6 @@ export default (getSeashell) => async (req, res, next) => {
     await handles[type]();
 
   } catch(e){
-    if (e.message === 'USE_PROXY') return proxyHTTP(req, res, next);
     next(e)
   }
 }

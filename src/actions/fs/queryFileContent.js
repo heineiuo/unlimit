@@ -27,9 +27,9 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       if (!indexData) return reject(new Error('Not found'))
       fileId = indexData.fileId
     }
-    const cat = await fileContentdb.findOne({_id: fileId})
-    if (cat === null) return reject(new Error('Not found'))
-    resolve({isFile: true, cat})
+    const fileContent = await fileContentDb.findOne({_id: fileId})
+    if (fileContent === null) return reject(new Error('Not found'))
+    resolve({isFile: true, cat: fileContent.content})
   } catch(e){
     reject(e)
   }

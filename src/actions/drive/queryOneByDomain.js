@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import queryOne from './queryOne'
 import ms from 'ms'
-import {NotFoundError} from '../../errors'
+import CustomError from '../../CustomError'
 
 const queryDomainSchema = Joi.object().keys({
   updateTime: Joi.number().required(),
@@ -63,7 +63,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     const domainDb = db.collection('domain');
     const target = await domainDb.findOne({domain});
     if (!target || target.disable) {
-      reject(new NotFoundError('Cannout find target domain'));
+      reject(new CustomError('NotFoundError', 'Cannout find target domain'));
       return process.nextTick(syncCache)
     }
     resolve(target);

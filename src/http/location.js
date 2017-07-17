@@ -28,6 +28,7 @@ export const pickLocation = (locations, requrl) => new Promise((resolve, reject)
 export const findTargetLocation = (locations, url) => {
   return locations.find(item => {
     const re = pathToRegexp(item.pathname);
+    // console.log(re, item.pathname, url)
     const matches = url.pathname.match(re);
     return matches && matches[0] === url.pathname;
   });
@@ -51,6 +52,7 @@ export default (getSeashell, config) => {
         return next(new Error(requestLocations.body.error));
       }
       const {locations, driveId} = requestLocations.body;
+      // console.log(locations)
       const {location, url} = await pickLocation(locations, req.url);
 
       res.locals.host = host;

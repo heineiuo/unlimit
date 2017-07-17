@@ -14,11 +14,11 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   try {
     const {db, config, request: {headers: {session}}} = getCtx()
     const {userId} = session;
-    const locationDb = db.collection('location');
-    const locationResult = await locationDb.findOne({_id: driveId});
+    const driveDb = db.collection('drive');
+    const locationResult = await driveDb.findOne({_id: driveId});
     locationResult.users = locationResult.users.filter(item => item !== userId).concat([userId]);
     locationResult.locations = locations;
-    await locationDb.findOneAndUpdate({_id: driveId}, {$set: locationResult});
+    await driveDb.findOneAndUpdate({_id: driveId}, {$set: locationResult});
     resolve({success:1});
   } catch(e){
     reject(e)

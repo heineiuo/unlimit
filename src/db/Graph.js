@@ -1,10 +1,9 @@
 import levelgraph from 'levelgraph'
 
 class Graph {
-  constructor(db, options) {
-    this.db = levelgraph(`${options.prefix}_graph`)
+  constructor(db) {
+    this.db = levelgraph(db)
   }
-
 
 }
 

@@ -1,9 +1,10 @@
 /**
  * @key subjectCollection
  * @key subjectId
- * @key predicate
  * @key objectId
  * @key objectCollection
+ * @key predicate
+ * @key predicateData
  */
 
 
