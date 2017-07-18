@@ -10,7 +10,7 @@ import {restoreFileList} from '../file/restoreFileList'
  */
 const commitLocations = (driveId, locations) => async(dispatch, getState) => {
   const {token} = getState().account;
-  const result = await new Fetch(`${API_HOST}/seashell/drive/commitLocations`,{
+  const result = await new Fetch(`${API_HOST}/seashell/drive/mutateLocation`,{
     token,
     driveId,
     locations: locations.map(location => {

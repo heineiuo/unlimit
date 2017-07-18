@@ -3,7 +3,7 @@
   "babel-loader": "babel-loader?-babelrc,+cacheDirectory,presets[]=es2015,presets[]=stage-0,presets[]=react",
   "modulesNeedBabel": [
   ],
-  "port": 8084,
+  "port": 8088,
 
   "externals": [
     {"commonjs": "react", "root": "React","amd": "react"},
@@ -120,14 +120,15 @@
     },
     "devGlobalConstants": {
       "__SMILE_DEV": true,
-      "__SMILE_API": "https://api.youkuohao.com",
-      "API_HOST": "https://api.youkuohao.com",
+      "__SMILE_API": "http://api.youkuohao.dev",
+      "API_HOST": "http://api.youkuohao.dev",
       "__SMILE_OAUTH_UI_URL": "https://www.youkuohao.com/#/oauth"
     },
     "styles": {
       "html": "",
       "body": "margin: 0px; background-color: rgb(239, 239, 244);"
     },
+    "title": "youkuohao",
     "description": "右括号协作空间",
     "author": "右括号工作室"
   }

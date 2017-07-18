@@ -7,7 +7,7 @@ import Body from 'react-sea/lib/Body'
 import AsyncComponent from './components/AsyncComponent'
 import Title from './components/Title'
 import ProfileDropDown from './components/ProfileDropDown'
-import commonStyles from './styles'
+import commonStyles from './components/styles'
 
 const getTitle = () => Title;
 
