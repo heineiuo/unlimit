@@ -21,3 +21,12 @@ build
 !build/README.md
 data
 
+.idea
+.DS_Store
+node_modules
+dist
+Thumb.db
+*.log*
+index.min.html
+# packages
+packages/**/*.js

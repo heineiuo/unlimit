@@ -1,0 +1,8 @@
+{
+	"name": "@unlimit/web",
+	"version": "0.1.18",
+	"description": "unlimit web",
+	"author": "@heineiuo",
+	"license": "MIT",
+	"main": "index.js"
+}

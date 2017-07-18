@@ -1,0 +1,11 @@
+{
+  "targets": [
+    
+  ],
+  "useBabelrc": true,
+  "devPublicPath": "./",
+  "modulesNeedBabel": [
+    "react-lang",
+    "drag-drop-touch-polyfill"
+  ]
+}

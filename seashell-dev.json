@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "entry": "./src/index.js",
+      "entry": "./server/index.js",
       "outputPath": "lib",
       "outputName": "gateway"
     }

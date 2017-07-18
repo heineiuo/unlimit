@@ -1,0 +1,17 @@
+__tests__
+src
+node_modules
+.DS_Store
+Thumb.db
+old
+.idea
+docs
+examples
+scripts
+react-dev.json
+yarn.lock
+react-dev.json
+*.log*
+README.md
+.babelrc
+index.html

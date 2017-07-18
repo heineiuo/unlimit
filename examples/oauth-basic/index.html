@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+<script src="../../src/client.js"></script>
+<script>
+
+  SmileOAuth((err, cross) => {
+    if (err) return console.log(err)
+    cross.requestToken({}, (err, data) => {
+      console.log('get token success: '+ data.token)
+    })
+
+//  cross.destroyToken({}, (err) => {
+//    if (err) return console.log(err)
+//    console.log('destroy token success')
+//  })
+  })
+
+
+
+</script>
+</body>
+</html>

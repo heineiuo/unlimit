@@ -1,0 +1,9 @@
+/**
+ * REQUEST_TOKEN
+ */
+export const REQUEST_TOKEN = 'REQUEST_TOKEN'
+
+/**
+ * DESTROY_TOKEN
+ */
+export const DESTROY_TOKEN = 'DESTROY_TOKEN'
