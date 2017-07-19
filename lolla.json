@@ -28,14 +28,14 @@
       "name": "@unlimit/web",
       "version": "0.1.18",
       "main": "index.js",
-      "devEntry": "./src/index.js",
+      "devEntry": "./web/index.js",
       "externals": ["react", "react-dom"]
     },
     {
       "name": "@unlimit/admin",
       "version": "0.1.4",
       "main": "index.js",
-      "devEntry": "./src/Admin/index.js",
+      "devEntry": "./web/Admin/index.js",
       "externals": [
         "react",
         "react-dom", 
@@ -51,7 +51,7 @@
       "name": "@unlimit/cms-manage",
       "version": "0.1.0",
       "main": "index.js",
-      "devEntry": "./src/CMSManage/index.js",
+      "devEntry": "./web/CMSManage/index.js",
       "externals": [
         "react",
         "react-dom", 
@@ -67,7 +67,7 @@
       "name": "@unlimit/text-editor",
       "version": "0.1.7",
       "main": "index.js",
-      "devEntry": "./src/TextEditor/index.js",
+      "devEntry": "./web/TextEditor/index.js",
       "externals": [
         "react",
         "react-dom", 

@@ -14,7 +14,6 @@ import ConnectCheckLogin from './CheckLogin'
 const {ConnectedRouter} = ReactRouterRedux
 const {Provider} = ReactRedux
 
-console.log(global)
 
 defaults(global, {
   __SMILE_DEV: process.env.NODE_ENV !== 'production',

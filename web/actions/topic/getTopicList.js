@@ -32,7 +32,7 @@ export default (driveId, customOptions) => async (dispatch, getStore) => {
   const {topic: {list}, account: {token}} = getStore();
   let result = null;
   try {
-    result = await new Fetch(`${API_HOST}/catblog/topic/list`, {
+    result = await new Fetch(`${API_HOST}/seashell/topic/list`, {
       token,
       driveId,
       keyword: options.keyword,

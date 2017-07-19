@@ -67,6 +67,14 @@ class Collection {
 
   })
 
+  findOneAndReplace = () => new Promise(async (resolve) => {
+    try {
+      resolve()
+    } catch(e){
+      reject(e)
+    }
+  })
+
   findOneAndDelete = (filter) => new Promise(async (resolve) => {
     if (!!filter._id) {
       await this.db.del(filter._id)
@@ -86,6 +94,14 @@ class Collection {
       const putData = {...data, _id}
       await this.db.put(_id, putData)
       resolve(putData)
+    } catch(e){
+      reject(e)
+    }
+  })
+
+  mapReduce = () => new Promise(async (resolve, reject) => {
+    try {
+      resolve([])
     } catch(e){
       reject(e)
     }

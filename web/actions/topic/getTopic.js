@@ -24,7 +24,7 @@ export default (driveId, topicId) => async (dispatch,getState) => {
 
   let result = null;
   try {
-    result = await new Fetch(`${API_HOST}/catblog/topic/get`, {
+    result = await new Fetch(`${API_HOST}/seashell/topic/get`, {
       token,
       driveId,
       topicId: topicId

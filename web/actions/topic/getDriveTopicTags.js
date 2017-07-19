@@ -22,7 +22,7 @@ export default (driveId) => async (dispatch, getStore) => {
   const { account: {token}} = getStore();
   let result = null;
   try {
-    result = await new Fetch(`${API_HOST}/catblog/tags/getDriveTags`, {
+    result = await new Fetch(`${API_HOST}/seashell/tags/getDriveTags`, {
       token,
       driveId,
     }).post();

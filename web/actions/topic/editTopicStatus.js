@@ -8,7 +8,7 @@ export default (query) => (dispatch, getState) => new Promise(async (resolve, re
   const {account: {token}} = getState();
   const {status, topicId} = query;
   try {
-    result = await new Fetch(`${API_HOST}/catblog/topic/editStatus`, {
+    result = await new Fetch(`${API_HOST}/seashell/topic/editStatus`, {
       status, token, topicId
     }).post();
     if (result.error) {

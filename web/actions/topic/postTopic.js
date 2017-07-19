@@ -14,7 +14,7 @@ export default (query) => async (dispatch, getState) => {
 
   let result = null;
   try {
-    result = await new Fetch(`${API_HOST}/catblog/topic/create`, {
+    result = await new Fetch(`${API_HOST}/seashell/topic/create`, {
       token,
       driveId,
       title,
