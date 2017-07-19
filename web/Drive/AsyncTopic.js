@@ -7,12 +7,10 @@ const Async = (props) => {
   return (
     <AsyncComponent load={
       (callback) => {
-        //callback(require('./Master'));
-        //require.ensure([], (require) => callback(require('./Master')))
-        SystemJS.import('drive-topic').then(admin => {
-          const Admin = admin({injectAsyncReducer});
-          callback(null, Admin)
-        }).catch(e => callback(e));
+        require.ensure([], (require) => {
+          const Topic = require('../CMSManage/Topic').default
+          callback(null, Topic)
+        })
       }
     }>
       {(state, Topic) => (

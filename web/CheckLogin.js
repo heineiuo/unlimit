@@ -94,18 +94,7 @@ class CheckLogin extends Component {
               </AsyncComponent>
             )}
           </Route>
-          <Route path='/cms-manage'>
-            {(props) => (
-              <AsyncComponent 
-                loadKey="cms-manage" 
-                load={callback => SystemJS.import('@unlimit/cms-manage').then(manager => callback(null, manager.default)).catch(e => callback(e))} >
-                {(state, Auth) => (
-                  state < 2 ? null:
-                    <Auth {...props}/>
-                )}
-              </AsyncComponent>
-            )}
-          </Route>
+         
           <Route component={require('./NotFound').default}/>
         </Switch>
       </Router>

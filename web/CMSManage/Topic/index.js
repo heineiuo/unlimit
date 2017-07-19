@@ -8,7 +8,7 @@ import TopicList from './TopicList'
 import TopicDetail from './TopicDetail'
 import {emptyTopicState} from '../../actions/topic/topic'
 
-class PostEdit extends Component {
+class Topic extends Component {
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
@@ -49,4 +49,4 @@ export default connect(
   (dispatch) => bindActionCreators({
     emptyTopicState,
   }, dispatch)
-)(PostEdit)
+)(Topic)

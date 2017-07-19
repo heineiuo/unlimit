@@ -6,6 +6,7 @@ import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
 import {push} from "react-router-redux"
 import {bindActionCreators} from "redux"
+import AsyncTopic from './AsyncTopic'
 
 class DriveWrapper extends Component {
 
@@ -21,17 +22,16 @@ class DriveWrapper extends Component {
     const {match: {params: {driveId}}, location: {pathname}, queryOne} = this.props;
     queryOne(driveId)
 
-    const activeTab = pathname.search('/file') > 0 ? 'file' :
-      pathname.search('/website') > 0 ? 'website' :
-        pathname.search('/topics') > 0 ? 'topics' :
-          pathname.search('/setting') > 0 ? 'setting' :
-            pathname.search('/services') > 0 ? 'services' :
-              pathname.search('/members') > 0 ? 'members' :
-                'file';
-
-    this.setState({
-      activeTab
+    const tabs = ['file', 'website', 'topics', 'setting', 'services', 'members', 'files']
+    const activeTabIndex = tabs.findIndex(item => {
+      return pathname.search(`/${item}`) > 0
     })
+    if (activeTabIndex > -1) {
+      this.setState({
+        activeTab: tabs[activeTabIndex]
+      })
+    }
+
   };
 
   handleSwitchKey = (activeTab) => {
@@ -57,6 +57,7 @@ class DriveWrapper extends Component {
                 <TabPane key="website" style={styles.tabPane._definition}>网站</TabPane>
                 <TabPane key="members" style={styles.tabPane._definition}>成员</TabPane>
                 <TabPane key="services" style={styles.tabPane._definition}>服务</TabPane>
+                <TabPane key="topic" style={styles.tabPane._definition}>文章</TabPane>
                 <TabPane key="setting" style={styles.tabPane._definition}>设置</TabPane>
               </TabBar>
             </div>
@@ -69,9 +70,9 @@ class DriveWrapper extends Component {
               <Route path={`${match.path}/file`} component={require('./File/File').default}/>
               <Route path={`${match.path}/services`}>
                 <div>
-                  <a href={`/#/cms-manage/${params.driveId}`} target='_blank'>cms</a>
                 </div>
               </Route>
+              <Route path={`${match.path}/topic`} component={AsyncTopic} />
               <Route path={`${match.path}/website`} component={require('./Website/Location')}/>
               <Route path={`${match.path}/members`} component={require('./Members')}/>
               <Route path={`${match.path}/setting`} component={require('./Setting')}/>
