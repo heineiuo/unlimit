@@ -13,7 +13,6 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve,rejec
     resolve({list})
 
   } catch(e){
-    console.log(e)
     reject(e)
   }
 });

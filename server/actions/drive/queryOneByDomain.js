@@ -20,7 +20,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;
-  const {db, config} = getCtx()
+  const {db, config, log} = getCtx()
   
   const syncCache = async () => {
     try {
@@ -45,7 +45,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       const domainDb = db.collection('domain');
       await domainDb.findOneAndUpdate({domain}, {$set: cacheValue}, {upsert: true})
     } catch(e){
-      console.log(e)
+      // log(e)
     }
   }
 

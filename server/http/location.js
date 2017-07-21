@@ -49,10 +49,11 @@ export default (getSeashell, config) => {
         body: {domain: host, fields: ['locations']}
       });
       if (requestLocations.body.error) {
-        return next(new Error(requestLocations.body.error));
+        const error = new Error(requestLocations.body.message)
+        error.name = requestLocations.body.name || 'ExceptionError'
+        return next(error);
       }
       const {locations, driveId} = requestLocations.body;
-      // console.log(locations)
       const {location, url} = await pickLocation(locations, req.url);
 
       res.locals.host = host;

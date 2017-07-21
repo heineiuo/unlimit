@@ -16,7 +16,7 @@ export default ({fullPath}) => (dispatch, getCtx) => new Promise(async resolve =
     if (paths.length === 1) {
       const indexData = {type: 2, updateTime: Date.now()}
       await fileIndexDb.findOneAndUpdate({_id: fullPath}, {$set: indexData})
-      console.log('syncIndexData: only drive index, ', fullPath)
+      // ('syncIndexData: only drive index, ', fullPath)
       return resolve({driveId: paths[0], type: 2})
     }
     
@@ -30,7 +30,7 @@ export default ({fullPath}) => (dispatch, getCtx) => new Promise(async resolve =
       indexData = {error: 'NOT_FOUND'}
     }
 
-    console.log('syncIndexData: ', indexData)
+    // 'syncIndexData: ', indexData
     indexData = {...indexData, updateTime: Date.now()}
     await fileIndexDb.findOneAndUpdate({_id: fullPath}, {$set: indexData})
     resolve(indexData)

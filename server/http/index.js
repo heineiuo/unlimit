@@ -65,7 +65,9 @@ const createApp = (config) => {
      */
     if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
     if (err.message === 'NOT_FOUND') return next();
-    console.log('Catch Error: \n' + err.stack || err);
+    if (!['NotFoundError', 'ValidationError'].includes(err.name)) {
+      console.log('Catch Error: \n' + err.stack || err);
+    }
     return res.json({error: err.message});
   });
 

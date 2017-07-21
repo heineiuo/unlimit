@@ -26,6 +26,5 @@ process.nextTick(async () => {
 
   } catch(e){
     fail(`${e.name}: ${e.message}`)
-    // console.log(e.stack)
   }
 })

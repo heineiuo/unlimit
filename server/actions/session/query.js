@@ -16,6 +16,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   const {appName, appId} = validated.value;
   if (validated.error) return reject(validated.error)
+  const {log} = getCtx()
 
   let socketId = null;
   try {
@@ -27,7 +28,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       socketId = result ? result.socketId : null
     }
   } catch(e) {
-    console.log(e)
+    // log(e)
   }
   resolve({socketId})
 })

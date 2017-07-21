@@ -1,3 +1,5 @@
+import CustomError from '../CustomError'
+
 /**
  * 文件下载代理
  */
@@ -14,7 +16,11 @@ const handleFILE = (req, res, seashell, driveId, pathname, reqpath) => new Promi
   }
 
   try {
-    if (result.body.error) return reject(new Error('NOT_FOUND'));
+    if (result.body.error) {
+      const error = new Error(result.body.message)
+      error.name = result.body.name || 'ExceptionError'
+      return reject(error)
+    }
     res.setHeader('CacheControl', true);
     res.setHeader('maxAge', 31536000000);
     res.setHeader('Expires', new Date(Date.now() + 31536000000));

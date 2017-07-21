@@ -42,7 +42,6 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     })
     resolve({ ...insertData, clientId })
   } catch (e) {
-    console.log(e)
     reject(e)
   }
 })

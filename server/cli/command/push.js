@@ -69,9 +69,6 @@ export default () => new Promise(async (resolve, reject) => {
     const {rootDir, driveId, globalConfig} = await getStore();
     const fname = path.join(process.cwd(), argv._[1]);
     const stat = await fs.stat(fname);
-    // console.log(rootDir, driveId, globalConfig)
-    // console.log(stat.isFile())
-    // console.log(stat.isDirectory())
 
     const allFiles = []
     const vpathFileId = {
@@ -123,8 +120,6 @@ export default () => new Promise(async (resolve, reject) => {
     });
 
     walker.on("end", async () => {
-      // console.log("all done");
-      // console.log(allFiles)
       try {
         await walkToPush()
         resolve()

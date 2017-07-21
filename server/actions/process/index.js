@@ -16,7 +16,9 @@ const querySchema = Joi.object().keys({
 })
 const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, querySchema, {allowUnknown: true})
-  if (validated.error) return reject(validated.error)
+  if (validated.error) {
+    return reject(validated.error)
+  }
   const {driveId, processId} = validated.value;
   const {db, config} = getCtx()
   

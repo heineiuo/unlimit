@@ -20,7 +20,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       session = await socketdb.findOne({_id: query.socketId});
     }
   } catch(e){
-    // console.log(e)
+    
   }
   resolve(session);
 });

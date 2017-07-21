@@ -29,6 +29,8 @@ const start = async () => {
       ctx.db = db;
       ctx.config = config;
 
+      ctx.log = (...args) => console.log(...args)
+
       ctx.json = (json) => {
         ctx.response.body = json;
         ctx.response.end();
@@ -40,7 +42,7 @@ const start = async () => {
         ctx.json({
           error: error.name,
           message: error.message,
-          details: error.details
+          errors: error.details || []
         });
       }
 
