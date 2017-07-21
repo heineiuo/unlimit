@@ -10,7 +10,7 @@
     "start": "npm run server",
     "publish-next": "npm run build && npm run build-cli && npm publish --tag=next",
     "test": "jest __tests__",
-    "server": "nodemon --watch ./src --exec sudo babel-node ./src/index.js --debug",
+    "server": " sudo nodemon --watch ./server --exec babel-node ./server/index.js --inspect",
     "build-cli": "babel src/cli -d lib/cli",
     "build": "seashell-dev --build",
     "web:start": "react-sh",

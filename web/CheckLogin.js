@@ -8,6 +8,7 @@ import AsyncComponent from './components/AsyncComponent'
 import Title from './components/Title'
 import ProfileDropDown from './components/ProfileDropDown'
 import commonStyles from './components/styles'
+import {injectAsyncReducer} from './store'
 
 const getTitle = () => Title;
 
@@ -74,22 +75,22 @@ class CheckLogin extends Component {
               </AsyncComponent>
             )}
           </Route>
-          <Route path="/console">
+          <Route path="/admin">
             {(props) => (
               <AsyncComponent loadKey="admin" load={
                 (callback) => {
-                  //callback(require('./Master'));
-                  //require.ensure([], (require) => callback(require('./Master')))
-                  SystemJS.import('drive-admin').then(admin => {
-                    const Admin = admin({injectAsyncReducer});
-                    callback(null, Admin)
-                  }).catch(e => callback(e));
+                  SystemJS.import('@unlimit/admin').then(admin => {
+                    callback(null, admin)
+                  }).catch(e => {
+                    console.log(e)
+                    callback(e)
+                  });
                 }
               }>
                 {(state, Console) => (
                   state < 2 ? null:
                     state === 3 ? <div>加载控制台出错</div>:
-                      <Console {...props} getTitle={getTitle} />
+                      <Console {...props} getTitle={getTitle} injectAsyncReducer={injectAsyncReducer}/>
                 )}
               </AsyncComponent>
             )}

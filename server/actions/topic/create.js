@@ -29,8 +29,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
     const result = await collection.insertOne({
       title, content, html, driveId, drivePathname, createUserId: userId, status
     });
-    const op = result.ops[0]
-    resolve({...op, topicId: op._id})
+    resolve({...result, topicId: result._id})
   } catch(e){
     reject(e)
   }

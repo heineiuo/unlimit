@@ -37,7 +37,7 @@ export const fetchUserList = (formData) => async (dispatch, getState) => {
     });
     const {token} = getState().account;
     console.log(getState());
-    const result = await new Fetch(`${API_HOST}/seashell/user/list`, {
+    const result = await new Fetch(`${API_HOST}/seashell/account/queryAll`, {
       token,
       ...formData
     }).post();

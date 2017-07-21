@@ -29,8 +29,6 @@ class Title extends Component {
           <Link onClick={this.closeContent} className={css(styles.link)} to="/">消息</Link>
           <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">空间</Link>
           <Link onClick={this.closeContent} className={css(styles.link)} to="/account">账号</Link>
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/cms-manage">CMS</Link>
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/service">服务</Link>
         </DropDownContent>
       </DropDown>
     )

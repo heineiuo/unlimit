@@ -22,7 +22,7 @@ class DriveWrapper extends Component {
     const {match: {params: {driveId}}, location: {pathname}, queryOne} = this.props;
     queryOne(driveId)
 
-    const tabs = ['file', 'website', 'topics', 'setting', 'services', 'members', 'files']
+    const tabs = ['file', 'website', 'topic', 'setting', 'services', 'members', 'files']
     const activeTabIndex = tabs.findIndex(item => {
       return pathname.search(`/${item}`) > 0
     })

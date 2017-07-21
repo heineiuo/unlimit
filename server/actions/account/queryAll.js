@@ -8,11 +8,12 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve,rejec
   try {
     const {db} = getCtx()
     const limit = query.limit || 20;
-    const list = [];
     const userDb = db.collection('user')
-    const result = await userDb.find({}).limit(limit)
-    resolve(result)
+    const list = await userDb.find({}).limit(limit).toArray()
+    resolve({list})
+
   } catch(e){
+    console.log(e)
     reject(e)
   }
 });

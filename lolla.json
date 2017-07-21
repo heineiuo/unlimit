@@ -19,7 +19,7 @@
   ],
   "targetsWithHTML": ["@unlimit/web"],
   "ignoreTargets": [
-    "@unlimit/admin",
+    "//@unlimit/admin",
     "//@unlimit/web",
     "//@unlimit/text-editor"
   ],
