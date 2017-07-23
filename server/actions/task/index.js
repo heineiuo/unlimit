@@ -1,21 +1,17 @@
 import Joi from 'joi'
-
-import pick from 'lodash/pick'
-import pm2 from 'pm2'
 import npm from 'npm'
-import selfUpdate from './selfUpdate'
-
 
 /**
  * 查询进程信息
  * @param {*} query 
  */
-const querySchema = Joi.object().keys({
-  processId: Joi.string().required(),
-  driveId: Joi.string()
-})
 const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
-  const validated = Joi.validate(query, querySchema, {allowUnknown: true})
+  const schema = Joi.object().keys({
+    processId: Joi.string().required(),
+    driveId: Joi.string()
+  })
+  const validated = Joi.validate(query, schema, {allowUnknown: true})
+
   if (validated.error) {
     return reject(validated.error)
   }
@@ -36,10 +32,10 @@ const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
  * 查询任务信息
  * @param {*} query 
  */
-const queryTaskSchema = Joi.object().keys({
-  
-})
 const queryTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const queryTaskSchema = Joi.object().keys({
+  
+  })
   const validated = Joi.validate(query, queryTaskSchema, {allowUnknown: true})
   const {db} = getCtx()
   try {
@@ -57,13 +53,13 @@ const queryTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, r
  * 新建任务
  * @param {*} query 
  */
-const insertTaskSchema = Joi.object().keys({
-  name: Joi.string().required(),
-  version: Joi.string().default('latest'),
-  taskType: Joi.string().allow('create', 'upgrade', 'restart').required(),
-  taskConfig: Joi.string()
-})
 const insertTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+  const insertTaskSchema = Joi.object().keys({
+    name: Joi.string().required(),
+    version: Joi.string().default('latest'),
+    taskType: Joi.string().allow('create', 'upgrade', 'restart').required(),
+    taskConfig: Joi.string()
+  })
   const validated = Joi.validate(query, insertSchema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   try {
@@ -77,7 +73,6 @@ const insertTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
 })
 
 export default {
-  selfUpdate,
   query,
   task: {
     query: queryTask,

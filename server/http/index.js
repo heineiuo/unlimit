@@ -34,7 +34,7 @@ const createApp = (config) => {
     
   const app = express();
 
-  // app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
+  app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
   app.use(compression());
 
   app.use(letiny.webrootChallengeMiddleware(tmpdir()));
@@ -96,9 +96,15 @@ const SNICallback = (config) => (servername, callback) => {
   const {https: {approvedDomains}, datadir} = config;
   const pemdir = datadir + '/pem';
   if (ctxMap[servername]) return callback(null, ctxMap[servername]);
-  if (!approvedDomains.includes(servername)) return callback(new Error('Unapproved domain'));
-  fs.readFileSync(`${pemdir}/${servername}/pfx.pem`, (err, pfx) => {
-    if (err) return callback(err)
+  if (!approvedDomains.includes(servername)) {
+    console.log('Unapproved domain')
+    return callback(new Error('Unapproved domain'));
+  }
+  fs.readFile(`${pemdir}/${servername}/pfx.pem`, (err, pfx) => {
+    if (err) {
+      console.log(err)
+      return callback(err)
+    }
     const ctx = ctxMap[servername] = tls.createSecureContext({pfx})
     callback(null, ctx)
   })

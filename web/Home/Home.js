@@ -43,8 +43,12 @@ class Home extends Component {
             <Title color='#FFFFFF' title="首页" style={{textDecoration: 'none', marginRight: 10}}/>
           </div>
         </div>
-        <div>
-          <MessageList postList={[]} />
+        <div style={{marginTop: 50}}>
+          {
+            account.logged ? 
+              <MessageList postList={[]} />:
+              <div>welcome</div>
+          }
         </div>
       </div>
     )

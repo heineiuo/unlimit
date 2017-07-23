@@ -120,8 +120,8 @@
     },
     "devGlobalConstants": {
       "__SMILE_DEV": true,
-      "__SMILE_API": "http://api.youkuohao.dev",
-      "API_HOST": "http://api.youkuohao.dev",
+      "__SMILE_API": "http://api.youkuohao.com",
+      "API_HOST": "http://api.youkuohao.com",
       "__SMILE_OAUTH_UI_URL": "https://www.youkuohao.com/#/oauth"
     },
     "styles": {

@@ -2,8 +2,8 @@
   "targets": [
     {
       "entry": "./server/index.js",
-      "outputPath": "lib",
-      "outputName": "gateway"
+      "outputPath": "packages/@unlimit/server",
+      "outputName": "index"
     }
   ]
 }

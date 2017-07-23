@@ -38,62 +38,72 @@ export const findTargetLocation = (locations, url) => {
 /**e
  * 查找host及其location列表
  */
-export default (getSeashell, config) => {
-  return async (req, res, next) => {
-    try {
-      const seashell = await getSeashell();
-      const {host} = req.headers;
-      const {forceHTTPSDomains} = config.https;
-      const requestLocations = await seashell.requestSelf({
+export default (getSeashell, config) => async (req, res, next) => {
+  try {
+    const seashell = await getSeashell();
+    const {host} = req.headers;
+    const {forceHTTPSDomains} = config.https;
+    let locations = []
+    let driveId = ''
+    if (host === config.apiDomain) {
+      locations = [{
+        "pathname": "*",
+        "cors": true,
+        "type": "SEASHELL",
+        "content": ""
+      }]
+    } else {
+      const {body} = await seashell.requestSelf({
         headers: {originUrl: '/drive/queryOneByDomain'},
         body: {domain: host, fields: ['locations']}
       });
-      if (requestLocations.body.error) {
-        const error = new Error(requestLocations.body.message)
-        error.name = requestLocations.body.name || 'ExceptionError'
+      if (body.error) {
+        const error = new Error(body.message)
+        error.name = body.name || 'ExceptionError'
         return next(error);
       }
-      const {locations, driveId} = requestLocations.body;
-      const {location, url} = await pickLocation(locations, req.url);
-
-      res.locals.host = host;
-      res.locals.driveId = driveId;
-      res.locals.url = url;
-      res.locals.location = location;
-
-      if (location.cors) {
-        res.set('Access-Control-Expose-Headers', '*');
-        // IE8 does not allow domains to be specified, just the *
-        // headers["Access-Control-Allow-Origin"] = req.headers.origin;
-        res.set('Access-Control-Allow-Origin', '*');
-        res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type, X-Requested-With');
-        res.set('Access-Control-Allow-Methods', '*')
-
-        if (req.method === 'OPTIONS') {
-          res.set("Access-Control-Max-Age", '86400')
-          return res.end();
-        }
-      }
-
-      if (location['X-Frame-Options']) {
-        res.set('X-Frame-Options', location['X-Frame-Options']);
-      }
-
-      res.removeHeader("x-powered-by");
-
-      if (forceHTTPSDomains.indexOf(req.headers.host) > -1) {
-        if (req.protocol === 'http') {
-          const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
-          if (browser.name !== 'IE' || (browser.name === 'IE' && Number(browser.major) >= 9)) {
-            return res.redirect(`https://${req.headers.host}${req.originalUrl}`)
-          }
-        }
-      }
-
-      next()
-
-    } catch (e) {
-      next(e)
+      driveId = body.driveId
+      locations = body.locations
     }
+
+    const {location, url} = await pickLocation(locations, req.url);
+    res.locals.host = host;
+    res.locals.driveId = driveId;
+    res.locals.url = url;
+    res.locals.location = location;
+
+    if (location.cors) {
+      res.set('Access-Control-Expose-Headers', '*');
+      // IE8 does not allow domains to be specified, just the *
+      // headers["Access-Control-Allow-Origin"] = req.headers.origin;
+      res.set('Access-Control-Allow-Origin', '*');
+      res.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type, X-Requested-With');
+      res.set('Access-Control-Allow-Methods', '*')
+
+      if (req.method === 'OPTIONS') {
+        res.set("Access-Control-Max-Age", '86400')
+        return res.end();
+      }
+    }
+
+    if (location['X-Frame-Options']) {
+      res.set('X-Frame-Options', location['X-Frame-Options']);
+    }
+
+    res.removeHeader("x-powered-by");
+
+    if (forceHTTPSDomains.indexOf(req.headers.host) > -1) {
+      if (req.protocol === 'http') {
+        const browser = new UAParser().setUA(req.headers['user-agent']).getBrowser();
+        if (browser.name !== 'IE' || (browser.name === 'IE' && Number(browser.major) >= 9)) {
+          return res.redirect(`https://${req.headers.host}${req.originalUrl}`)
+        }
+      }
+    }
+
+    next()
+
+  } catch (e) {
+    next(e)
   }
-};
+}

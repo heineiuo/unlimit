@@ -36,12 +36,13 @@ export default (getSeashell) => {
       const data = Object.assign({}, req.query, req.body);
 
       const content = location.content;
-      const requestUrl = url.pathname.substring(content.length);
+      let requestUrl = url.pathname.substring(content.length);
 
-      if (requestUrl === '/') {
-        Object.assign(res.locals.location, {type: 'JSON', content: INSTANCE_META})
-        return next()
-      }
+      if (requestUrl === '/') requestUrl = '/' + seashell.__SEASHELL_NAME
+      console.log(requestUrl)
+        // Object.assign(res.locals.location, {type: 'JSON', content: INSTANCE_META})
+        // return next()
+      // }
 
       let result = {body: {}};
       if (requestUrl.search(seashell.__SEASHELL_NAME) === 0) {

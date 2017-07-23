@@ -1,10 +1,15 @@
+import version from './version'
+
+console.log(version)
+
 export default {
+  '/': version['/'],
   account: require('./account').default,
   fs: require('./fs').default,
   drive: require('./drive').default,
   client: require('./client').default,
   socket: require('./session').default,
-  process: require('./process').default,
+  version,
   topic: {
     create: require('./topic/create').default,
     edit: require('./topic/edit').default,

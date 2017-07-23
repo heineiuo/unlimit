@@ -3,7 +3,7 @@ import queryOne from './queryOne'
 
 
 const insertSchema = Joi.object().keys({
-  name: Joi.string().regex(/^[a-z]{1,1}[a-z0-9]{5,30}$/).required(),
+  name: Joi.string().regex(/^[a-z]{1,1}[a-z0-9]{3,30}$/).required(),
   description: Joi.string().default(''),
 })
 
