@@ -1,12 +1,12 @@
 import queryOneByFullPath from './queryOneByFullPath'
 import Joi from 'joi'
+import isPlainObject from 'lodash/isPlainObject'
 
 export const schema = Joi.object().keys({
   fullPath /*完整路径*/: Joi.string(),
   fileId /*文件对应的唯一id*/: Joi.string(),
   replaceWithIndexHTMLWhenIsFolder/*如果是文件夹，是否切换目标为文件夹目录下的`index.html`文件*/: Joi.boolean().default(true)
-}).xor(['fullPath', 'fileId']) 
-
+}).xor(['fullPath', 'fileId'])
 
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, schema, {allowUnknown: true})
@@ -24,12 +24,15 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     
     if (!fileId) {
       const indexData = await dispatch(queryOneByFullPath({fullPath, replaceWithIndexHTMLWhenIsFolder}));
-      if (!indexData) return reject(new Error('Not found'))
+      if (!indexData || !!indexData.error || !indexData.fileId) {
+        return reject(new Error('Not found'))
+      }
       fileId = indexData.fileId
     }
     const fileContent = await fileContentDb.findOne({_id: fileId})
-    if (fileContent === null) return reject(new Error('Not found'))
-    resolve({isFile: true, cat: fileContent.content})
+    if (!fileContent) return reject(new Error('Not found'))
+    if (!isPlainObject(fileContent)) return resolve({isFile: true, cat: fileContent})
+    return resolve({isFile: true, cat: fileContent.data || new Buffer([])})
   } catch(e){
     reject(e)
   }

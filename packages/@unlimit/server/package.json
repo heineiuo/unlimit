@@ -1,6 +1,6 @@
 {
   "name": "@unlimit/server",
-  "version": "0.2.2-beta.7",
+  "version": "0.2.2-beta.18",
   "bin": {
     "unlimit": "bin/unlimit"
   },

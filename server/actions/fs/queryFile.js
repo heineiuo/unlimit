@@ -1,6 +1,5 @@
 import Joi from 'joi'
 
-
 export const validate = query => Joi.validate(query, Joi.object().keys({
   keywords: Joi.string().default(''),
   tags: Joi.string().default(''),

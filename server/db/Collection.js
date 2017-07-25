@@ -1,5 +1,6 @@
 import uuidv1 from 'uuid/v1'
 import Cursor from './Cursor'
+import isPlainObject from 'lodash/isPlainObject'
 
 class Collection {
   constructor(db){
@@ -41,6 +42,7 @@ class Collection {
       if (!!filter._id) {
         const data = await this._getEnsureSafe(filter._id)
         const nextData = Object.assign({}, data, update.$set)
+        if (!isPlainObject(nextData)) return reject(new TypeError('Data must be plain object'))        
         await this.db.put(filter._id, nextData)
         return resolve(nextData)
       }
@@ -58,9 +60,9 @@ class Collection {
 
       const doc = found[0]
       const nextDoc = Object.assign({}, doc, update.$set)
+      if (!isPlainObject(nextDoc)) return reject(new TypeError('Data must be plain object'))
       await this.db.put(doc._id, nextDoc)
       return resolve(nextDoc)
-
     } catch(e){
       reject(e)
     }
@@ -76,22 +78,29 @@ class Collection {
   })
 
   findOneAndDelete = (filter) => new Promise(async (resolve) => {
-    if (!!filter._id) {
-      await this.db.del(filter._id)
-      return resolve()
+    let error = null
+    try {
+      const result = await this.find(filter).limit(1).exec()
+      console.log(result)
+      if (result.length > 0) {
+        await this.db.del(result[0]._id)
+      }
+
+    } catch(e){
+      error = e
+    } finally {
+      console.log(error)
+      if (error) return resolve({error: error.message})
+      resolve({message: 'success'})
     }
 
-    const result = this.find(filter).limit(1)
-    if (!!result) {
-      await this.db.del(result._id)
-    }
-    return resolve()
   })
 
   insertOne = (data) => new Promise(async (resolve, reject) => {
     try {
       const _id = data._id || uuidv1()
       const putData = {...data, _id}
+      if (!isPlainObject(putData)) return reject(new TypeError('Data format must be plain json.'))
       await this.db.put(_id, putData)
       resolve(putData)
     } catch(e){

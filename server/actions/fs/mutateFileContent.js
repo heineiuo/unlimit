@@ -13,7 +13,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const fileContentDb = db.collection('fileContent')
-    await fileContentDb.findOneAndUpdate({_id: fileId}, {$set: {content}})
+    await fileContentDb.findOneAndUpdate({_id: fileId}, {$set: {data: content}})
     resolve({success: 1})
   } catch(e){
     reject(e)

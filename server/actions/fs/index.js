@@ -6,7 +6,5 @@ export default {
   mutateInsertOne: require('./mutateInsertOne').default,
   mutateUpload: require('./mutateUpload').default,
   mutateDelete: require('./mutateDelete').default,
-  mutateFileContent: require('./mutateFileContent').default,
-  syncIndexData: require('./syncIndexData').default,
-  syncIndexDataByFile: require('./syncIndexData').syncIndexDataByFile,
+  mutateFileContent: require('./mutateFileContent').default
 }

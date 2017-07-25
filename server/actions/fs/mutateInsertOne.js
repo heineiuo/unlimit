@@ -1,6 +1,5 @@
 import queryOneByFullPath from './queryOneByFullPath'
 import Joi from 'joi'
-import {syncIndexDataByFile} from './syncIndexData'
 
 export const schema = Joi.object().keys({
   name: Joi.string().required(),
@@ -30,22 +29,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     if (result0) return reject(new Error('File Exist'));
 
     const result = await fileDb.insertOne({driveId, type, parentId, name})
-    const id = result._id
-    
-    /**
-     * 文件创建成功后，将文件索引同步到 db > fileIndex
-     * 将文件内容写入 db > fileContent （注意，fileIndex里不保存content）
-     */
-    await dispatch(syncIndexDataByFile({
-      file: {
-        _id: id,
-        driveId, type, parentId, name
-      },
-      fileId: id, 
-      driveId
-    }))
-    
-    if (type === 1) await fileContentDb.findOneAndUpdate({_id: id}, {$set: content})
+    if (type === 1) await fileContentDb.findOneAndUpdate({_id: result._id}, {$set:{data: content}})
     resolve(result.ops[0])
   } catch(e){
     reject(e)

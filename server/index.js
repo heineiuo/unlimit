@@ -13,6 +13,7 @@ const start = async () => {
     const config = await getConfig();
     
     const db = new Db({
+      engine: 'level',
       presets: [],
       dbpath: `${config.datadir}/db`,
       keyEncoding: 'utf8',
@@ -23,7 +24,6 @@ const start = async () => {
 
     // const server = require('http').createServer();
     const app = new Seashell({server});
-
     
     app.use(async (ctx, next) => {
       ctx.db = db;

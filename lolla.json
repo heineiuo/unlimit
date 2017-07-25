@@ -4,7 +4,6 @@
   "modulesNeedBabel": [
   ],
   "port": 8088,
-
   "externals": [
     {"commonjs": "react", "root": "React","amd": "react"},
     {"commonjs": "react-dom", "root": "ReactDOM","amd": "react-dom"},
@@ -120,9 +119,9 @@
     },
     "devGlobalConstants": {
       "__SMILE_DEV": true,
-      "__SMILE_API": "http://api.youkuohao.com",
-      "API_HOST": "http://api.youkuohao.com",
-      "__SMILE_OAUTH_UI_URL": "https://www.youkuohao.com/#/oauth"
+      "__SMILE_API": "https://api.youkuohao.com",
+      "API_HOST": "https://api.youkuohao.com",
+      "__SMILE_OAUTH_UI_URL": "http://www.youkuohao.dev/#/oauth"
     },
     "styles": {
       "html": "",

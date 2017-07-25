@@ -8,6 +8,8 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   replaceWithIndexHTMLWhenIsFolder: Joi.boolean().default(false)
 }), {allowUnknown: true})
 
+
+
 /**
  * 根据文件路径获取文件信息
  * 
@@ -40,21 +42,27 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
 
   try {
     const fileIndexDb = db.collection('fileIndex')
-    let indexData = await fileIndexDb.findOne({_id: fullPath})
 
-    // queryOneByFullPath: ', fullPath, replaceWithIndexHTMLWhenIsFolder, indexData
-    if (!indexData) throw Error('Not found')
-    
-    // if (!indexData || Date.now() > indexData.updateTime + ms(cacheExpireTime) || !indexData.updateTime) {
-    //   indexData = await syncIndexData(fullPath)
-    // }
+    const findAndCheckUpdate = (fullPath) => new Promise(async resolve => {
+      try {
+        let indexData = await fileIndexDb.findOne({_id: fullPath})
+        if (!indexData || !indexData.updateTime) {
+          indexData = await dispatch(syncIndexData({fullPath}))
+        } else if (indexData.updateTime > Date.now() + config.cacheExpireTime) {
+          indexData = await dispatch(syncIndexData({fullPath}))
+        }
+        resolve(indexData)
+      } catch(e){
+        resolve({error: e.name, message: e.message})
+      }
+    })
 
-    // if (indexData.error) return reject(new Error(indexData.error));
-    if (indexData.type === 2 && replaceWithIndexHTMLWhenIsFolder) {
-      fullPath = `${fullPath}/index.html`
-      indexData = await dispatch(syncIndexData({fullPath}))
-    }
-    resolve(indexData)
+    let indexData = await findAndCheckUpdate(fullPath)
+    if (indexData.type === 1 || !replaceWithIndexHTMLWhenIsFolder) return resolve(indexData)
+    fullPath = `${fullPath}/index.html`
+    indexData = await findAndCheckUpdate(fullPath)
+    return resolve(indexData)
+
   } catch(e) {
     reject(e)
   }

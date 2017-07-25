@@ -10,8 +10,8 @@ class Db {
   constructor(options) {
     if (db) return db
       
-     const _db = levelSubLevel(level(options.dbpath), {
-       
+    const engine = level(options.dbpath)
+    const _db = levelSubLevel(engine, {
       keyEncoding: options.keyEncoding,
       valueEncoding: options.valueEncoding
     });

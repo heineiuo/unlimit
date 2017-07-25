@@ -1,4 +1,5 @@
 import sift from 'sift'
+import isPlainObject from 'lodash/isPlainObject'
 
 class Cursor {
   constructor(db, filter){
@@ -9,6 +10,11 @@ class Cursor {
   _limit = null
   _skip = 0
 
+  _fixData = (data) => {
+    const noop = () => {}
+    data.value = {_id: data.key, data: data.value}
+    db.put(data.key, data.value).then(noop).catch(noop)
+  }
 
   isClosed = false
 
@@ -42,7 +48,9 @@ class Cursor {
     const rs = this.db.createReadStream({
     })
     .on('data', (data) => {
+      if (!isPlainObject(data.value)) return this._fixData(data)
       if (validate(data.value)) {
+        if (data.value._id !== data.key) data.value._id = data.key
         result.push(data.value)
         if (this._limit && result.length >= this._limit) {
           rs.destroy()

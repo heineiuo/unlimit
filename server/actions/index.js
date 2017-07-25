@@ -1,7 +1,5 @@
 import version from './version'
 
-console.log(version)
-
 export default {
   '/': version['/'],
   account: require('./account').default,

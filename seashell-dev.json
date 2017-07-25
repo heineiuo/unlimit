@@ -3,7 +3,7 @@
     {
       "entry": "./server/index.js",
       "outputPath": "packages/@unlimit/server",
-      "outputName": "index"
+      "outputName": "index.src"
     }
   ]
 }
