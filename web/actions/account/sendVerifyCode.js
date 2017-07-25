@@ -1,6 +1,6 @@
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-
+import api from '../api'
 
 /**
  * 发送验证码
@@ -21,7 +21,7 @@ const sendVerifyCode = (form) => async (dispatch, getState) => {
     }
   };
 
-  const result = await new Fetch(`${global.__SMILE_API}/seashell/account/mutateCreateVerificationCode`, {
+  const result = await new Fetch(api.mutateCreateVerificationCode, {
     email: form.email
   }).post();
 

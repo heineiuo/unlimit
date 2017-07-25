@@ -27,7 +27,7 @@ let seashell = null;
 
 const getSeashell = () => new Promise((resolve, reject) => {
   if (seashell) return resolve(seashell);
-  rereject(new Error('Seashell not ready'));
+  reject(new Error('Seashell not ready'));
 })
 
 const createApp = (config) => {
@@ -66,7 +66,7 @@ const createApp = (config) => {
     if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
     if (err.message === 'NOT_FOUND') return next();
     if (!['NotFoundError', 'ValidationError'].includes(err.name)) {
-      console.log('Catch Error: \n' + err.stack || err);
+      console.log('Catch Error: \n' + err.message);
     }
     return res.json({error: err.message});
   });

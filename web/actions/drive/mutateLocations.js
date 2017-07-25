@@ -8,7 +8,7 @@ import {restoreFileList} from '../file/restoreFileList'
  * @param driveId
  * @param locations
  */
-const commitLocations = (driveId, locations) => async(dispatch, getState) => {
+export default (driveId, locations) => async(dispatch, getState) => {
   const {token} = getState().account;
   const result = await new Fetch(`${API_HOST}/seashell/drive/mutateLocation`,{
     token,
@@ -30,5 +30,3 @@ const commitLocations = (driveId, locations) => async(dispatch, getState) => {
   })
 };
 
-
-export default commitLocations;

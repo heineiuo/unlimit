@@ -1,9 +1,9 @@
 import Fetch from '@shared/fetch'
-
+import api from '../api'
 
 export default ({email, driveId}) => async (dispatch, getState) => {
   const {account: {token}} = getState();
-  const result = await new Fetch(`${global.__SMILE_API}/seashell/account/queryOne`,{
+  const result = await new Fetch(api.accountQueryOne,{
     token, email
   }).post()
   if (result.error) return alert(result.error)

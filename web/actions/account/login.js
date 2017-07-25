@@ -1,9 +1,9 @@
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-
+import api from '../api'
 
 export default (formData) => async (dispatch, getState) => {
-  const result = await new Fetch(`${global.__SMILE_API}/seashell/account/mutateCreateToken`, {
+  const result = await new Fetch(api.mutateCreateToken, {
     email: formData.email,
     code: formData.code
   }).post();

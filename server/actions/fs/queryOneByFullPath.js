@@ -48,7 +48,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
         let indexData = await fileIndexDb.findOne({_id: fullPath})
         if (!indexData || !indexData.updateTime) {
           indexData = await dispatch(syncIndexData({fullPath}))
-        } else if (indexData.updateTime > Date.now() + config.cacheExpireTime) {
+        } else if (indexData.updateTime > Date.now() + ms(config.cacheExpireTime)) {
           indexData = await dispatch(syncIndexData({fullPath}))
         }
         resolve(indexData)

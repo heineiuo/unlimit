@@ -65,7 +65,7 @@ class Location extends Component {
   addLocation = () => {
     this.setState({
       locations: this.state.locations.slice().concat({
-        pathname: '/^.*$/',
+        pathname: '*',
         type: 'HTML',
         content: ''
       })

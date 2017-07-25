@@ -1,4 +1,5 @@
 import Fetch from '@shared/fetch'
+import api from '../api'
 
 /**
  * 获取授权码
@@ -7,7 +8,7 @@ import Fetch from '@shared/fetch'
 const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
   const {userToken=null} = localStorage;
   const {redirectUrl} = getState().account;
-  const res = await new Fetch(`${global.__SMILE_API}/seashell/account/mutateCreateAuthCode`, {
+  const res = await new Fetch(api.mutateCreateAuthCode, {
     token: userToken
   }).post();
 

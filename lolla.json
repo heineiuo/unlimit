@@ -25,7 +25,7 @@
   "targets": [
     {
       "name": "@unlimit/web",
-      "version": "0.1.18",
+      "version": "0.1.19",
       "main": "index.js",
       "devEntry": "./web/index.js",
       "externals": ["react", "react-dom"]
@@ -64,7 +64,7 @@
     },
     {
       "name": "@unlimit/text-editor",
-      "version": "0.1.7",
+      "version": "0.1.7-beta.1",
       "main": "index.js",
       "devEntry": "./web/TextEditor/index.js",
       "externals": [

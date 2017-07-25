@@ -13,7 +13,6 @@ const start = async () => {
     const config = await getConfig();
     
     const db = new Db({
-      engine: 'level',
       presets: [],
       dbpath: `${config.datadir}/db`,
       keyEncoding: 'utf8',

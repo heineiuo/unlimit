@@ -14,8 +14,6 @@ const queryByDomainSchema = Joi.object().keys({
   forceSync: Joi.boolean().default(false) // 强制更新（有很短的延迟）
 })
 
-
-
 export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);

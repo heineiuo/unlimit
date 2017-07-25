@@ -18,5 +18,4 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   } catch(e){
     reject(e)
   }
-
 })

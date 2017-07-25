@@ -97,32 +97,33 @@ class Ace extends Component {
     } = this.props;
     const mode = this.getMode(fileName);
 
-    return fileContent.createState !== 2 ? 
+    return fileContent.createState === 0 ? 
       <CreateFile
         parentId={parentId}
         driveId={driveId}
       /> : 
-      fileContentState < 2?
-        <Spin /> :
-        <div>
-          {/* 按钮区域 */}
-          <div className={css(styles.header)}>
-            <div>smile text editor</div>
-            <div className={css(styles.fileName)}>{fileName}</div>
-            <div className={css(styles.buttonBar)}>
-              <Button style={{width: 120}} onClick={this.saveFile}>
-                <div>保存</div>
-              </Button>
+      fileContent.createState === 1 ?
+        <Spin />:
+        fileContentState < 2?
+          <Spin /> :
+          <div>
+            {/* 按钮区域 */}
+            <div className={css(styles.header)}>
+              <div>smile text editor</div>
+              <div className={css(styles.fileName)}>{fileName}</div>
+              <div className={css(styles.buttonBar)}>
+                <Button style={{width: 120}} onClick={this.saveFile}>
+                  <div>保存</div>
+                </Button>
+              </div>
             </div>
+            <Textarea 
+              className={css(styles.editor)}
+              useCacheForDOMMeasurements
+              onChange={this.onChange}
+              value={this.state.editorValue}
+            />
           </div>
-          <Textarea 
-            className={css(styles.editor)}
-            useCacheForDOMMeasurements
-            onChange={this.onChange}
-            value={this.state.editorValue}
-          />
-         
-        </div>
   }
 
 }

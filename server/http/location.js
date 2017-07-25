@@ -8,8 +8,14 @@ import pathToRegexp from "path-to-regexp"
 export const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
   try {
     const url = Url.parse(requrl);
-    const targetLocation = findTargetLocation(locations, url);
-    const location = targetLocation ? targetLocation : {
+    const targetLocation = locations.find(item => {
+      const re = pathToRegexp(item.pathname);
+      // console.log(re, item.pathname, url)
+      const matches = url.pathname.match(re);
+      return matches && matches[0] === url.pathname;
+    })
+
+    const location = !!targetLocation ? targetLocation : {
       pathname: '*',
       type: 'FILE'
     };
@@ -24,15 +30,6 @@ export const pickLocation = (locations, requrl) => new Promise((resolve, reject)
     reject(new Error('LOCATION_NOT_FOUND'))
   }
 });
-
-export const findTargetLocation = (locations, url) => {
-  return locations.find(item => {
-    const re = pathToRegexp(item.pathname);
-    // console.log(re, item.pathname, url)
-    const matches = url.pathname.match(re);
-    return matches && matches[0] === url.pathname;
-  });
-};
 
 
 /**e
@@ -62,15 +59,15 @@ export default (getSeashell, config) => async (req, res, next) => {
         error.name = body.name || 'ExceptionError'
         return next(error);
       }
+
       driveId = body.driveId
       locations = body.locations
     }
 
     const {location, url} = await pickLocation(locations, req.url);
-    res.locals.host = host;
-    res.locals.driveId = driveId;
-    res.locals.url = url;
-    res.locals.location = location;
+    Object.assign(res.locals, {
+      host, driveId, url, location
+    })
 
     if (location.cors) {
       res.set('Access-Control-Expose-Headers', '*');
