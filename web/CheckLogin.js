@@ -46,7 +46,7 @@ class CheckLogin extends Component {
             {(props) => (
               <AsyncComponent loadKey="drive" load={
                 (callback) => {
-                  require.ensure([], (require) => callback(null, require('./Drive/Drive').default))
+                  require.ensure([], (require) => callback(null, require('./Drive').default))
                 }
               }>
                 {(state, Master) => (

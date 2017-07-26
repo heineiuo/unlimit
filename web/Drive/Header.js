@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Route, Link} from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
-import HostSelector from './DriveSelector'
+import DriveSelector from './DriveSelector'
 import {StyleSheet, css} from 'aphrodite'
 import Paper from 'react-sea/lib/Paper'
 import Modal from 'react-modal'

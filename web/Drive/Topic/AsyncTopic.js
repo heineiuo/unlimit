@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import AsyncComponent from '../components/AsyncComponent'
-import {injectAsyncReducer} from '../store'
+import AsyncComponent from '../../components/AsyncComponent'
+import {injectAsyncReducer} from '../../store'
 
 
 const Async = (props) => {
@@ -8,7 +8,7 @@ const Async = (props) => {
     <AsyncComponent load={
       (callback) => {
         require.ensure([], (require) => {
-          const Topic = require('../CMSManage/Topic').default
+          const Topic = require('./Topic').default
           callback(null, Topic)
         })
       }
