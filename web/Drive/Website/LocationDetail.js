@@ -1,8 +1,8 @@
 import React, {Component} from "react"
-import {TabBar, TabPane} from "react-sea/lib/Tabbar"
-import Input from "react-sea/lib/Input"
-import Button from "react-sea/lib/Button"
-import Checkbox from "react-sea/lib/Checkbox"
+import {TabBar, TabPane} from "@react-web/tabs"
+import Input from "@react-web/input"
+import Button from "@react-web/button"
+import Checkbox from "@react-web/checkbox"
 import {StyleSheet, css} from "aphrodite"
 
 class LocationDetail extends Component {

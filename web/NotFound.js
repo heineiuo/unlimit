@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
-import Background from 'react-sea/lib/Background'
+import Background from '@react-web/background'
 import {Link} from 'react-router-dom'
 
 

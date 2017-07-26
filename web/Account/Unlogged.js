@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite'
-import Input from 'react-sea/lib/Input'
-import Button from 'react-sea/lib/Button'
+import Input from '@react-web/input'
+import Button from '@react-web/button'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import Body from 'react-sea/lib/Body'
+import Body from '@react-web/body'
 import commonStyles from '../components/styles'
 import Logo from '../components/Logo'
 

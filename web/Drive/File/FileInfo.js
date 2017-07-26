@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite"
-import Button from "react-sea/lib/Button"
+import Button from "@react-web/button"
 import path from 'path'
 // import Modal from "react-modal"
 // import utf8 from 'utf8'

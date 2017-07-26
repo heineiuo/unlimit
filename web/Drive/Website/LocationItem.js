@@ -1,8 +1,6 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
-import MdArrowUpward from "react-sea/lib/Icons/arrow-upward"
-import MdArrowDownward from "react-sea/lib/Icons/arrow-downward"
-import Button from "react-sea/lib/Button"
+import Button from "@react-web/button"
 import {StyleSheet, css} from "aphrodite"
 import LocationDetail from "./LocationDetail"
 

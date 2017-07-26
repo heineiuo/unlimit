@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {Link, Route, Switch} from "react-router-dom"
-import Body from "react-sea/lib/Body"
+import Body from "@react-web/body"
 import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"

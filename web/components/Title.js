@@ -1,8 +1,8 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import {css, StyleSheet} from "aphrodite"
-import {Logo} from "react-sea/lib/Smile"
-import DropDown, {DropDownContent, DropDownTrigger} from "react-sea/lib/DropDown"
+import {Logo} from "@react-web/smile"
+import DropDown, {DropDownContent, DropDownTrigger} from "@react-web/dropdown"
 
 class Title extends Component {
 

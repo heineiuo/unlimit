@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
-import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
+import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import {Link} from 'react-router-dom'
 
 class ProfileDropDown extends Component {

@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
+import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import {StyleSheet, css} from 'aphrodite'
-import Paper from 'react-sea/lib/Paper'
+import Paper from '@react-web/paper'
 import Modal from 'react-modal'
-import Input from 'react-sea/lib/Input'
-import Button from 'react-sea/lib/Button'
+import Input from '@react-web/input'
+import Button from '@react-web/button'
 import Title from './Title'
 
 class Header extends Component {

@@ -1,21 +1,20 @@
 import React, {Component} from "react"
 import {StyleSheet, css} from "aphrodite"
 import {Link, Route} from "react-router-dom"
-import Button from "react-sea/lib/Button"
+import Button from "@react-web/button"
 import Upload from "rc-upload"
 import Spin from "react-spin"
 import urlencode from "form-urlencoded"
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
-import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
+import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
 import IntegrateApp from "./IntegrateApp"
 import {injectAsyncReducer} from '../../store'
-import IconArrowDropdown from '../../components/IconArrowDropdown'
 const {API_HOST} = global
 
 class File extends Component {
@@ -201,7 +200,6 @@ class File extends Component {
                             selected.length > 0 ? `选中文件(${selected.length})`
                               : '选中文件'
                           }
-                          <IconArrowDropdown />
                         </Button>
                       </DropDownTrigger>
                       <DropDownContent className={css(styles.clipboard__content)}>
@@ -228,7 +226,6 @@ class File extends Component {
                           {
                             clipboard.length > 0 ? `剪贴板(${clipboard.length})`: '剪贴板'
                           }
-                          <IconArrowDropdown />
                         </Button>
                       </DropDownTrigger>
                       <DropDownContent className={css(styles.clipboard__content)}>
@@ -264,7 +261,6 @@ class File extends Component {
                       <DropDownTrigger style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
                         <Button type="primary" size="small" style={{userSelect: 'none'}}>
                           {`创建`}
-                          <IconArrowDropdown />
                         </Button>
                       </DropDownTrigger>
                       <DropDownContent className={css(styles.clipboard__content)}>

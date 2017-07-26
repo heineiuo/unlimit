@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
-import {Logo} from 'react-sea/lib/Smile'
+import {Logo} from '@react-web/smile'
 
 
 class Title extends Component {

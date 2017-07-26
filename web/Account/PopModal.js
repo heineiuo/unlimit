@@ -1,8 +1,7 @@
 
 import React, {Component} from 'react'
-import Button from 'react-sea/lib/Button'
-import Input from 'react-sea/lib/Input'
-import MdClose from 'react-sea/lib/Icons/close'
+import Button from '@react-web/button'
+import Input from '@react-web/input'
 import {StyleSheet, css} from 'aphrodite'
 
 class PopModal extends Component {
@@ -24,7 +23,7 @@ class PopModal extends Component {
           }
         </span>
         <span className={css(styles.closeIcon)} onClick={this.props.closeModal} >
-          <MdClose size={24} fill="#999" />
+          ×
         </span>
       </div>
         <div className={css(styles.editContent)}>

@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux'
 import {getFriendList, deleteFriend, resetDeleteFriendState} from '../store/friends'
 import {StyleSheet, css} from 'aphrodite/no-important'
 import {push} from 'react-router-redux'
-import DropDown, {DropDownTrigger, DropDownContent} from 'react-sea/lib/DropDown'
+import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import IconDropMenu from '../componenets/Icons/IconDropMenu'
 
 import SlideModal from '../componenets/SlideModal'

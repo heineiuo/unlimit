@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import Input from 'react-sea/lib/Input'
-import Button from 'react-sea/lib/Button'
+import Input from '@react-web/input'
+import Button from '@react-web/button'
 import {css, StyleSheet} from 'aphrodite'
 import hoverHoc from '../../components/hoverHoc'
 

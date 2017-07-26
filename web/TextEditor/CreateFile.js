@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import Input from 'react-sea/lib/Input'
-import Button from 'react-sea/lib/Button'
+import Input from '@react-web/input'
+import Button from '@react-web/button'
 
 class CreateFile extends Component {
 
