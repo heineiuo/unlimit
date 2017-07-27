@@ -155,7 +155,7 @@
           "__SMILE_API": "https://api.youkuohao.com",
           "API_HOST": "https://api.youkuohao.com",
           "__SMILE_DRIVE_ID": "58f31edd93d6b7ebde4fc6be",
-          "__SMILE_TEMPLATE_NAME": "@unlimit/cms-demo",
+          "__SMILE_TEMPLATE_NAME": "@unlimit/cms-theme-default",
           "__SMILE_OAUTH_UI_URL": "https://www.youkuohao.com/#/oauth"
         },
         "styles": {
@@ -165,6 +165,22 @@
         "description": "cms",
         "author": "右括号工作室"
       }
+    },
+    {
+      "name": "@unlimit/cms-theme-default",
+      "version": "0.0.1-beta.1",
+      "main": "index.js",
+      "devEntry": "./cms/demo/index.js",
+      "externals": [
+        "react",
+        "react-dom", 
+        "aphrodite", 
+        "react-router-dom", 
+        "redux", 
+        "react-redux", 
+        "react-router-redux", 
+        "react-modal"
+      ]
     }
   ]
 }
