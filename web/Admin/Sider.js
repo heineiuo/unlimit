@@ -3,7 +3,7 @@ import {StyleSheet, css} from 'aphrodite'
 import pick from 'lodash/pick'
 import {Route, Link} from 'react-router-dom'
 import trimEnd from 'lodash/trimEnd'
-import {Logo} from '@react-web/smile'
+import Logo from '../components/smile'
 import hoverHoc from '../components/hoverHoc'
 
 const NavItem = hoverHoc(props => (

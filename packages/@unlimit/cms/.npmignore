@@ -1,0 +1,6 @@
+__tests__
+src
+node_modules
+.DS_Store
+Thumb.db
+old
