@@ -1,19 +1,18 @@
 
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../constants'
 
-import signature from './common/signature'
 
 
 const logout = () => async (dispatch, getState) => {
   try {
     console.log('正在登出系统...');
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
+    const result = await new Fetch(API_HOST, {
       reducerName: 'Token',
       action: 'logout',
       token: localStorage.userToken
-    }));
+    }).post();
     if (result.error) throw result.error;
     localStorage.clear();
     dispatch({

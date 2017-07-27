@@ -1,4 +1,4 @@
-import {POSTRawJSON} from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {API_HOST, signature} from '../../constants'
 
 

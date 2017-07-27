@@ -1,9 +1,7 @@
 
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../constants'
-
-import signature from './common/signature'
 
 /**
  * 检查登录
@@ -21,11 +19,11 @@ export default () => async (dispatch, getState) => {
       })
     }
 
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
+    const result = await new Fetch(API_HOST, {
       reducerName: 'token',
       action: 'session',
       token: userToken
-    }));
+    }).post();
 
     if (result.error || result.user === null) {
       return dispatch({

@@ -114,7 +114,7 @@
       "name": "@unlimit/cms",
       "version": "0.1.18",
       "main": "index.js",
-      "devEntry": "./web/index.js",
+      "devEntry": "./cms/index.js",
       "externals": ["react", "react-dom"],
       "html": {
         "SYSTEM_CONFIG_WITHOUT_THIS_REPO_PACKAGES": {
@@ -140,7 +140,7 @@
           "https://unpkg.com/react@15.6.1/dist/react.js",
           "https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"
         ],
-        "preloadPackages": ["@unlimit/cms-web"],
+        "preloadPackages": ["@unlimit/cms"],
         "preloadCSS": [
         ],
         "devPreloadCSS": [

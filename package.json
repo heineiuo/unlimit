@@ -34,6 +34,7 @@
     "@react-web/icons": "0.0.4",
     "@react-web/input": "0.0.1",
     "@react-web/paper": "0.0.1",
+    "@react-web/render": "0.0.1",
     "@react-web/tabs": "0.0.2",
     "@shared/fetch": "^0.4.5",
     "action-creator": "^0.6.5",

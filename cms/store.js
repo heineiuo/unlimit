@@ -3,8 +3,8 @@ import {routerReducer, routerMiddleware} from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 import createHashHistory from 'history/createHashHistory'
 
-import account from './reducers/account'
-import posts from './reducers/posts'
+import account from './actions/account'
+import posts from './actions/posts'
 
 const history = createHashHistory();
 

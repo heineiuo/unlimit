@@ -1,4 +1,4 @@
-import RenderApp from 'react-sea/lib/RenderApp'
+import RenderApp from '@react-web/render'
 import App from './App'
 import * as aphrodite from 'aphrodite'
 

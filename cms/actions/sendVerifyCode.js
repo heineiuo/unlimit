@@ -1,5 +1,5 @@
 
-import {POSTUrlencodeJSON} from 'fetch-tools'
+import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
 import {API_HOST} from '../constants'
 import signature from './common/signature'
