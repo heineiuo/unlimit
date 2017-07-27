@@ -1,5 +1,5 @@
 import showError from './showError'
-import {POSTRawJSON} from "fetch-tools"
+import Fetch from "@shared/fetch"
 import {API_HOST, driveId} from "../constants"
 
 export default ({filter, fields}) => async (dispatch, getState) => {

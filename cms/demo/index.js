@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import Body from 'react-sea/lib/Body'
+import Body from '@react-web/body'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {StyleSheet, css} from 'aphrodite'
