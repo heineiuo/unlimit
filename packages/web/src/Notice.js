@@ -1,113 +1,54 @@
-import React, {Component} from 'react'
-import Modal from 'react-modal'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
+/**
+ * 全局通知
+ */
 
+import uuid from 'uuid'
+import { handleActions } from 'redux-actions'
+import { injectAsyncReducer } from '@react-web/store'
 
-class Notice extends Component {
+const initialState = {
+  stack: []
+};
 
-  state = {
-    stack: [],
-    modalOpen: false
-  };
+injectAsyncReducer('notice', handleActions({
 
-  timeToClearThisError = (id) => {
-    setTimeout(() => {
-      const nextStack = this.state.stack.slice().filter(item => item.id !== id )
-      this.setState({
-        stack: nextStack,
-        modalOpen: nextStack.length > 0
-      })
-    }, 4000)
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    const {stack} = this.state
-    const that = this
-    if (nextProps.notice.stack.length > 0) {
-      const nextStack = stack.slice()
-      nextProps.notice.stack.forEach(item => {
-        that.timeToClearThisError(item.id)
-        nextStack.push(item)
-      });
-      this.setState({
-        modalOpen: true,
-        stack: nextStack
-      });
-      this.props.actions.clearStoreNotice()
-    }
-  };
-
-  requestCloseFn = () => {
-    this.setState({
-      modalOpen: false
-    })
-  };
-
-  render () {
-
-    if (!this.state.modalOpen) return null
-
-    return (
-      <Modal
-        contentLabel="notice"
-        onRequestClose={this.requestCloseFn}
-        style={modalStyle}
-        shouldCloseOnOverlayClick={false}
-        isOpen={this.state.modalOpen} >
-        {
-          this.state.stack.map((item, index) => (
-            <div
-              style={noticeStyle}
-              key={index}>{item.title}</div>
-          ))
-        }
-      </Modal>
-    )
-
-  }
-}
-
-
-const modalStyle = {
-  overlay : {
-    position: 'fixed',
-    top: 'auto',
-    left: 'auto',
-    bottom: 20,
-    right: 20,
-    zIndex: 100,
-    backgroundColor: 'transparent'
+  /**
+   * 初始化
+   */
+  notice__init (state, action) {
+    return Object.assign({}, initialState)
   },
-  content : {
-    position: 'relative',
-    top: 'auto',
-    left: 'auto',
-    right: 'auto',
-    bottom: 'auto',
-    padding: 0,
-    margin: 0,
-    border: 0,
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: 0,
-    outline: 'none',
-    backgroundColor: 'transparent'
-  }
+
+  /**
+   */
+  notice__pushError (state, action) {
+    const nextStack = state.stack.slice();
+    const id = uuid.v4();
+    nextStack.push(Object.assign({}, action.notice, {
+      id,
+      type: 'error',
+    }));
+    return Object.assign({}, state, {stack: nextStack})
+  },
+
+  /**
+   */
+  notice__clear (state, action) {
+    return Object.assign({}, state, {
+      stack: []
+    })
+  },
+
+}, initialState))
+
+
+
+export const showError = (error) => (dispatch, getState) => {
+  dispatch({
+    type: 'notice__pushError',
+    payload: {
+      type: 'error',
+      notice: error
+    }
+  })
 };
-
-const noticeStyle = {
-  margin: '4px 0',
-  maxWidth: 200,
-  backgroundColor: 'rgb(244, 67, 54)',
-  padding: '10px 20px',
-  color: '#fff'
-};
-
-export default module.exports = connect(
-  (state) => ({
-    notice: state.notice,
-  }),
-  (dispatch) => bindActionCreators({
-
-  }, dispatch)
-)(Notice)

@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import Spin from "react-spin"
 import {css, StyleSheet} from "aphrodite"
 import {appmeta} from './appmeta'
-import AsyncLoader from '@react-shared/async-loader'
+import Loader from '@react-web/async-loader'
 import {withRouter, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
@@ -89,7 +89,7 @@ class IntegrateApp extends Component {
     if (!appName) return <div></div>;
 
     return (
-      <AsyncLoader 
+      <Loader 
         {...{fullScreen, appState, appName, driveId, fileName, fileId, isCreated}}
         load={cb => SystemJS.import(appName).then(CurrentApp => cb(null, CurrentApp)).catch(cb)}
         loadKey={appName}

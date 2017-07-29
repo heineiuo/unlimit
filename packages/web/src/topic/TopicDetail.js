@@ -5,12 +5,13 @@ import {bindActionCreators} from 'redux'
 import {css, StyleSheet} from 'aphrodite'
 import Button from '@react-web/button'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
-import TagsEditor from './TagsEditor'
-import makeCancelable from '../../makeCancelable'
 import {withHover} from '@react-web/hover'
-import {allStatus} from '../../actions/topic/editTopicStatus'
+import TagsEditor from './TagsEditor'
+import {allStatus, postTopic, putTopic, editTopicTags, 
+  editTopicStatus, getTopic} from './actions'
 import TopicCommentList from './TopicCommentList'
-import DraftWithPlugin from '../../components/DraftWithPlugin'
+import DraftWithPlugin from '../DraftWithPlugin'
+import makeCancelable from '../makeCancelable'
 
 const StatusItem = withHover(props => (
   <div
@@ -284,10 +285,10 @@ export default connect(
     current: store.topic.current
   }),
   (dispatch) => bindActionCreators({
-    postTopic: require('../../actions/topic/postTopic').default,
-    putTopic: require('../../actions/topic/putTopic').default,
-    editTopicTags: require('../../actions/topic/editTopicTags').default,
-    editTopicStatus: require('../../actions/topic/editTopicStatus').default,
-    getTopic: require('../../actions/topic/getTopic').default
+    postTopic,
+    putTopic,
+    editTopicTags,
+    editTopicStatus,
+    getTopic
   }, dispatch)
 )(TopicDetail)

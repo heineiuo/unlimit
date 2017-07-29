@@ -9,6 +9,8 @@ import defaults from 'lodash/defaults'
 import {store, history, injectAsyncReducer, AppWrapper} from '@react-web/store'
 import React, {Component } from 'react'
 import {HashRouter} from 'react-router-dom'
+import './notice'
+import './nav'
 
 import ConnectCheckLogin from './CheckLogin'
 
@@ -23,12 +25,6 @@ defaults(global, {
   __SMILE_API: `https://api.youkuohao.com`
 })
 
-injectAsyncReducer('account', require('./actions/account/account').default)
-injectAsyncReducer('drive', require('./actions/drive/drive').default)
-injectAsyncReducer('file', require('./actions/file/file').default)
-injectAsyncReducer('topic', require('./actions/topic/topic').default)
-injectAsyncReducer('nav', require('./actions/nav').default)
-injectAsyncReducer('notice', require('./actions/notice').default)
 
 SystemJS.set(SystemJS.normalizeSync('react'), SystemJS.newModule({'default': global.React , __useDefault: true }) );
 SystemJS.set(SystemJS.normalizeSync('react-dom'), SystemJS.newModule({'default': global.ReactDOM , __useDefault: true }) );
@@ -46,6 +42,7 @@ ReactDOM.render(
   <AppWrapper>
     <Router>
       <ConnectCheckLogin />
+
     </Router>
   </AppWrapper>,
   document.getElementById('app')

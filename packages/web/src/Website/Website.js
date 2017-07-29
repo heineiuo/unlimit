@@ -4,10 +4,14 @@ import Input from '@react-web/input'
 import { StyleSheet, css } from 'aphrodite'
 import Button from '@react-web/button'
 import Spin from 'react-spin'
-import LocationItem from './LocationItem'
 import {push} from 'react-router-redux'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
+import LocationItem from './LocationItem'
+import { setTitle } from '../nav'
+import { getHostList as queryList, 
+  mutateLocations as commitLocations  } from '../drive'
+import { restoreFileList } from '../file'
 
 class Location extends Component {
 
@@ -161,9 +165,9 @@ export default module.exports = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    setTitle: require('../../actions/setNavTitle').default,
-    getHostList: require('../../actions/drive/queryList').default,
-    commitLocations: require('../../actions/drive/mutateLocations').default,
-    restoreFileList: require('../../actions/file/restoreFileList').default,
+    setTitle,
+    getHostList,
+    commitLocations,
+    restoreFileList,
   }, dispatch)
 )(Location)

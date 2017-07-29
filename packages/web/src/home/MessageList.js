@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
 import {Link} from 'react-router-dom'
-
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 class MessageList extends Component {
 
@@ -34,11 +35,7 @@ class MessageList extends Component {
   }
 }
 
-
-
-
 const styles = StyleSheet.create({
-
 
   item: {
     backgroundColor: '#FFF',
@@ -46,10 +43,11 @@ const styles = StyleSheet.create({
     borderBottom: '1px solid #D9D9D9'
   }
 
-
 });
 
 
-
-
-export default MessageList;
+export default connect(
+  store => ({
+    account: store.account
+  })
+)(MessageList)

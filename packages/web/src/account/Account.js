@@ -4,7 +4,9 @@ import {bindActionCreators} from 'redux'
 import Spin from 'react-spin'
 import Logged from "./Logged"
 import UnLogged from './Unlogged'
-import Header from './AccountHeader'
+import Header from './accountHeader'
+
+import {checkLogin, sendVerifyCode, getAuthCodeAndRedirect} from './'
 
 class Check extends Component {
 
@@ -47,8 +49,8 @@ export default connect(
     postList: store.postList,
   }),
   (dispatch) => bindActionCreators({
-    checkLogin: require('../actions/account/checkLogin'),
-    sendVerifyCode: require('../actions/account/sendVerifyCode'),
-    getAuthCodeAndRedirect: require('../actions/account/getAuthCodeAndRedirect')
+    checkLogin, 
+    sendVerifyCode, 
+    getAuthCodeAndRedirect
   }, dispatch)
 )(Check)

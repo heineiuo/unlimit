@@ -17,7 +17,6 @@ class NotFound extends Component {
 }
 
 
-
 const styles = StyleSheet.create({
 
   notFound: {

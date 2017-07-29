@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import {css, StyleSheet} from "aphrodite"
-import Logo from '../components/smile'
+import Logo from './smile'
 import DropDown, {DropDownContent, DropDownTrigger} from "@react-web/dropdown"
 
 class Title extends Component {

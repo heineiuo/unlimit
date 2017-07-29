@@ -9,12 +9,16 @@ import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
+import {injectAsyncReducer} from '@react-web/store'
 import FileItem from './FileItem'
 import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
 import IntegrateApp from "./IntegrateApp"
-import {injectAsyncReducer} from '@react-web/store'
+import { getFileList, deleteFile, setTitle, getHostList, restoreFileList,
+    pushFileToClipboard, emptyClipboard, } from './'
+
+
 const {API_HOST} = global
 
 class File extends Component {
@@ -437,13 +441,13 @@ export default connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    getFileList: require('../../actions/file/getFileList').default,
-    deleteFile: require('../../actions/file/deleteFile').default,
-    setTitle: require('../../actions/setNavTitle').default,
-    getHostList: require('../../actions/drive/queryList').default,
-    restoreFileList: require('../../actions/file/restoreFileList').default,
-    pushFileToClipboard: require('../../actions/file/pushFileToClipboard').default,
-    emptyClipboard: require('../../actions/file/emptyClipboard').default,
+    getFileList,
+    deleteFile,
+    setTitle,
+    getHostList,
+    restoreFileList,
+    pushFileToClipboard,
+    emptyClipboard,
   }, dispatch)
 )(File);
 

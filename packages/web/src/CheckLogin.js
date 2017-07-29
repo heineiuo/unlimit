@@ -6,9 +6,10 @@ import {connect} from 'react-redux'
 import Body from '@react-web/body'
 import Loader from '@react-web/async-loader'
 import {injectAsyncReducer} from '@react-web/store'
-import Title from './components/Title'
-import ProfileDropDown from './components/ProfileDropDown'
-import commonStyles from './components/styles'
+import Title from './Title'
+import ProfileDropDown from './ProfileDropDown'
+import commonStyles from './styles'
+import { checkLogin } from './account'
 
 const getTitle = () => Title;
 
@@ -20,7 +21,6 @@ class CheckLogin extends Component {
   };
 
   render () {
-
     return (
       <Router>
         <Switch>
@@ -29,7 +29,7 @@ class CheckLogin extends Component {
               <Loader 
                 {...props}
                 load={cb => require.ensure([], 
-                  require => cb(null, require('./Home/Home').default)
+                  require => cb(null, require('./home/Home').default)
                 )}
                 loadKey="home" 
               />
@@ -40,7 +40,7 @@ class CheckLogin extends Component {
               <Loader 
                 {...props}
                 load={cb => require.ensure([], 
-                  require => cb(null, require('./Account/Account').default)
+                  require => cb(null, require('./account/Account').default)
                 )}
                 loadKey="account" 
               />
@@ -52,7 +52,7 @@ class CheckLogin extends Component {
                 {...props}
                 loadKey="drive" 
                 load={cb => require.ensure([], 
-                  require => cb(null, require('./Drive').default)
+                  require => cb(null, require('./drive/Drive').default)
                 )}
               />
             )}
@@ -100,10 +100,9 @@ const ConnectCheckLogin = connect(
     postList: store.postList
   }),
   (dispatch) => bindActionCreators({
-    checkLogin: require('./actions/account/checkLogin'),
+    checkLogin
   }, dispatch)
 )(CheckLogin);
-
 
 export {CheckLogin, ConnectCheckLogin}
 export default ConnectCheckLogin;

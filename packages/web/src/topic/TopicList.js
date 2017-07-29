@@ -5,8 +5,9 @@ import {bindActionCreators} from "redux"
 import {css, StyleSheet} from "aphrodite"
 import Input from "@react-web/input"
 import Button from "@react-web/button"
-import commonStyles from "../../components/styles"
 import {withHover} from "@react-web/hover"
+import commonStyles from "../styles"
+import { getTopicList, getDriveTopicTags } from './actions'
 
 const TopicListItem = withHover((props) => {
   const {url, title, _id, tags = '', status} = props;
@@ -176,8 +177,7 @@ export default connect(
     listUpdateState: store.topic.listUpdateState,
   }),
   (dispatch) => bindActionCreators({
-    getTopicList: require('../../actions/topic/getTopicList').default,
-    getDriveTopicTags: require('../../actions/topic/getDriveTopicTags').default,
-
+    getTopicList,
+    getDriveTopicTags,
   }, dispatch)
 )(TopicList)

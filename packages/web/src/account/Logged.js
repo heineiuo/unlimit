@@ -2,14 +2,15 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Modal from 'react-modal'
 import Button from '@react-web/button'
-import Logo from '../components/smile'
+import Logo from '../smile'
 import DropDown,{DropDownTrigger,DropDownContent}from '@react-web/dropdown'
 import {StyleSheet, css} from 'aphrodite'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import PopModal from './PopModal'
-import commonStyles from '../components/styles'
+import commonStyles from '../styles'
 import ImageUpload from './ImageUpload'
+import {logout} from './'
 
 class Profile extends Component {
 
@@ -280,6 +281,6 @@ export default module.exports = connect(
     account: store.account,
   }),
   (dispatch) => bindActionCreators({
-    logout: require('../actions/account/logout'),
+    logout
   }, dispatch)
 )(Profile)

@@ -5,6 +5,9 @@ import Input from '@react-web/input'
 import Button from '@react-web/button'
 import {css, StyleSheet} from 'aphrodite'
 import {withHover} from '@react-web/hover'
+import { queryUserList,
+    queryOneByEmail,
+    mutateUsers, } from './'
 
 const MemberItem = withHover(props => (
   <div className={css(styles.memberItem)}>
@@ -76,8 +79,8 @@ export default module.exports = connect(
     adminId: state.drive.adminId
   }),
   (dispatch) => bindActionCreators({
-    queryUserList: require('../actions/drive/queryUserList').default,
-    queryOneByEmail: require('../actions/account/queryOneByEmail').default,
-    mutateUsers: require('../actions/drive/mutateUsers').default
+    queryUserList,
+    queryOneByEmail,
+    mutateUsers,
   }, dispatch)
 )(Members)

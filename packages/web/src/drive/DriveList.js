@@ -8,7 +8,12 @@ import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {withHover} from '@react-web/hover'
-import commonStyles from '../components/styles'
+import commonStyles from '../styles'
+import { queryOne,  
+    deleteHost,
+    setTitle,
+    getHostList,
+    restoreFileList } from './'
 
 const DriveListItem = withHover((props) => (
   <div>
@@ -145,10 +150,10 @@ export default module.exports = connect(
   }),
   (dispatch) => bindActionCreators({
     push,
-    deleteHost: require('../actions/drive/mutateDeleteOne').default,
-    setTitle: require('../actions/setNavTitle').default,
-    getHostList: require('../actions/drive/queryList').default,
-    restoreFileList: require('../actions/file/restoreFileList').default,
+    deleteHost,
+    setTitle,
+    getHostList,
+    restoreFileList,
   }, dispatch)
 )(DriveList);
 

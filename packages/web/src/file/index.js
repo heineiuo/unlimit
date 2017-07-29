@@ -1,5 +1,7 @@
 import { handleActions } from 'redux-actions'
 import Fetch from '@shared/fetch'
+import { injectAsyncReducer } from '@react-web/store'
+
 
 const initialState = {
   ls: [],
@@ -14,7 +16,7 @@ const initialState = {
   clipboard: []
 };
 
-export default handleActions({
+injectAsyncReducer('file', handleActions({
 
   "@@file/state/update" (state, action) {
     return Object.assign({}, state, action.payload)
@@ -24,7 +26,7 @@ export default handleActions({
     return Object.assign({}, state, action.payload, {fileState: 2})
   },
 
-   "@@file/content/update" (state, action) {
+    "@@file/content/update" (state, action) {
     return Object.assign({}, state, action.payload, {
       fileContentState: 2,
       createState: 2
@@ -51,6 +53,23 @@ export default handleActions({
     })
   }
 
-}, initialState)
+}, initialState))
 
+
+export default {
+  copyFilesFromClipboard: require('./actions/copyFilesFromClipboard'),
+  createFile: require('./actions/createFile'),
+  deleteFile: require('./actions/deleteFile'),
+  downloadFile: require('./actions/downloadFile'),
+  emptyClipboard: require('./actions/emptyClipboard'),
+  getFileContent: require('./actions/getFileContent'),
+  getFileList: require('./actions/getFileList'),
+  initFile: require('./actions/initFile'),
+  pushFileToClipboard: require('./actions/pushFileToClipboard'),
+  renameFile: require('./actions/renameFile'),
+  resotreFileList: require('./actions/restoreFileList'),
+  updateFile: require('./actions/updateFile'),
+  updateFileMeta: require('./actions/updateFileMeta'),
+  uploadFiltToPath: require('./actions/uploadFileToPath'),
+}
 
