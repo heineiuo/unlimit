@@ -1,0 +1,9 @@
+{
+  "name": "@unlimit/cms-theme-default",
+  "version": "1.0.0",
+  "description": "cms default theme",
+  "main": "index.js",
+  "keywords": [],
+  "author": "@heineiuo",
+  "license": "MIT"
+}

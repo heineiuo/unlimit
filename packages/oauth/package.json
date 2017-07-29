@@ -1,0 +1,9 @@
+{
+  "name": "@unlimit/oauth",
+  "version": "1.0.0",
+  "description": "oauth",
+  "main": "index.js",
+  "keywords": [],
+  "author": "@heineiuo",
+  "license": "MIT"
+}
