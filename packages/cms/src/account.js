@@ -81,3 +81,6 @@ export default handleActions({
 
 }, initialState)
 
+export const checkLogin = () => (dispatch, getState) => {
+  
+}

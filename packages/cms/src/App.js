@@ -7,7 +7,7 @@ const {__SMILE_TEMPLATE_NAME} = global
 import { injectAsyncReducer } from '@react-web/store'
 import Loader from '@react-web/async-loader'
 import posts from './posts'
-import account from './account'
+import account, {checkLogin} from './account'
 
 injectAsyncReducer('account', account)
 injectAsyncReducer('posts', posts)
@@ -55,7 +55,7 @@ export default module.exports = connect(
   (dispatch) => bindActionCreators({
     getPostList: require('./getPostList').default,
     queryPostDetail: require('./queryPostDetail').default,
-    checkLogin: require('./checkLogin').default,
+    checkLogin,
     login: require('./login').default,
   }, dispatch)
 )(CheckLogin);
