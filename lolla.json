@@ -1,5 +1,5 @@
 {
-  "devPublicPath": "./packages",
+  "devPublicPath": "./",
   "babel-loader": "babel-loader?-babelrc,+cacheDirectory,presets[]=es2015,presets[]=stage-0,presets[]=react",
   "modulesNeedBabel": [
   ],

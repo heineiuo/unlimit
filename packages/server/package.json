@@ -8,6 +8,7 @@
   "author": "@heineiuo",
   "license": "MIT",
   "dependencies": {
+    "@unlimit/cli": "latest",
     "action-creator": "^0.6.5",
     "ali-push": "^0.1.6",
     "babel-runtime": "^6.9.2",

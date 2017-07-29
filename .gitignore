@@ -30,3 +30,4 @@ Thumb.db
 index.min.html
 # packages
 packages/**/*.js
+!packages/*/src/**/*.js
