@@ -9,7 +9,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import LocationItem from './LocationItem'
 import { setTitle } from '../nav'
-import { getHostList as queryList, 
+import { queryList as getHostList,
   mutateLocations as commitLocations  } from '../drive'
 import { restoreFileList } from '../file'
 

@@ -6,9 +6,9 @@ import {connect} from 'react-redux'
 import Body from '@react-web/body'
 import Loader from '@react-web/async-loader'
 import {injectAsyncReducer} from '@react-web/store'
-import Title from './Title'
-import ProfileDropDown from './ProfileDropDown'
-import commonStyles from './styles'
+import Title from './components/Title'
+import ProfileDropDown from './components/ProfileDropDown'
+import commonStyles from './components/commonStyles'
 import { checkLogin } from './account'
 
 const getTitle = () => Title;
@@ -82,7 +82,7 @@ class CheckLogin extends Component {
               />
             )}
           </Route>
-          <Route component={require('./NotFound').default}/>
+          <Route component={require('./components/NotFound').default}/>
         </Switch>
       </Router>
     )

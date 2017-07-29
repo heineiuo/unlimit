@@ -6,7 +6,8 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import HostList from "./DriveList"
 import DriveHeader from "./Header"
-import { getHostList,
+import DriveWrapper from './DriveWrapper'
+import { queryList as getHostList,
     deleteHost,
     createHost } from './'
 
@@ -35,7 +36,7 @@ class Drive extends Component {
                   createHost={this.props.createHost}/>
                 <Switch>
                   <Route exact path={`${match.path}`} component={HostList}/>
-                  <Route path={`${match.path}/:driveId`} component={require('./DriveWrapper')}/>
+                  <Route path={`${match.path}/:driveId`} component={DriveWrapper}/>
                 </Switch>
               </div>
         }

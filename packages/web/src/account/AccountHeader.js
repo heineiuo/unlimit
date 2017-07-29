@@ -6,9 +6,9 @@ import Paper from '@react-web/paper'
 import Modal from 'react-modal'
 import Input from '@react-web/input'
 import Button from '@react-web/button'
-import Title from '../Title'
-import ProfileDropDown from '../ProfileDropDown'
-import commonStyles from '../styles'
+import Title from '../components/Title'
+import ProfileDropDown from '../components/ProfileDropDown'
+import commonStyles from '../components/commonStyles'
 
 class Header extends Component {
 

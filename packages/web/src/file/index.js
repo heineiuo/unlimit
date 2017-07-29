@@ -56,20 +56,47 @@ injectAsyncReducer('file', handleActions({
 }, initialState))
 
 
-export default {
-  copyFilesFromClipboard: require('./actions/copyFilesFromClipboard'),
-  createFile: require('./actions/createFile'),
-  deleteFile: require('./actions/deleteFile'),
-  downloadFile: require('./actions/downloadFile'),
-  emptyClipboard: require('./actions/emptyClipboard'),
-  getFileContent: require('./actions/getFileContent'),
-  getFileList: require('./actions/getFileList'),
-  initFile: require('./actions/initFile'),
-  pushFileToClipboard: require('./actions/pushFileToClipboard'),
-  renameFile: require('./actions/renameFile'),
-  resotreFileList: require('./actions/restoreFileList'),
-  updateFile: require('./actions/updateFile'),
-  updateFileMeta: require('./actions/updateFileMeta'),
-  uploadFiltToPath: require('./actions/uploadFileToPath'),
-}
+
+export const copyFilesFromClipboard = require('./actions/copyFilesFromClipboard')
+export const createFile = require('./actions/createFile')
+export const deleteFile = require('./actions/deleteFile')
+export const downloadFile = require('./actions/downloadFile')
+export const emptyClipboard = require('./actions/emptyClipboard')
+export const getFileContent = require('./actions/getFileContent')
+
+export const getFileList =  (driveId, parentId=null) => async (dispatch, getState) => {
+  dispatch({
+    type: '@@file/meta/update',
+    payload: {
+      fileState: 1
+    }
+  });
+
+  const {account: {token}} = getState();
+  const result = await new Fetch(`${global.__SMILE_API}/seashell/fs/queryFile`, {
+    driveId, parentId, token,
+    replaceWithFileMetaIfIsFile: true
+  }).post();
+
+  const isFile = result.hasOwnProperty('data')
+  if (isFile) result.ls = result.data
+  result.fileName = result.name 
+  result.isFile = result.isFile 
+
+  if (result.error) return console.log(result.error)
+  dispatch({
+    type: '@@file/meta/update',
+    payload: result
+  })
+
+};
+
+
+export const initFile = require('./actions/initFile')
+export const pushFileToClipboard = require('./actions/pushFileToClipboard')
+export const renameFile = require('./actions/renameFile')
+export const resotreFileList = require('./actions/restoreFileList')
+export const updateFile = require('./actions/updateFile')
+export const updateFileMeta = require('./actions/updateFileMeta')
+export const uploadFiltToPath = require('./actions/uploadFileToPath')
 

@@ -6,11 +6,11 @@ import Background from '@react-web/background'
 import {Link} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import Title from '../Title'
-import Logo from '../smile'
-import ProfileDropDown from '../ProfileDropDown'
+import Title from '../components/Title'
+import Logo from '../components/smile'
+import ProfileDropDown from '../components/ProfileDropDown'
 import MessageList from './MessageList'
-import commonStyles from '../styles'
+import commonStyles from '../components/commonStyles'
 
 class Home extends Component {
 

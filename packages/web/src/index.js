@@ -12,7 +12,7 @@ import {HashRouter} from 'react-router-dom'
 import './notice'
 import './nav'
 
-import ConnectCheckLogin from './CheckLogin'
+import App from './App'
 
 const {ConnectedRouter} = ReactRouterRedux
 const {Provider} = ReactRedux
@@ -38,11 +38,10 @@ SystemJS.set(SystemJS.normalizeSync('aphrodite'), SystemJS.newModule({'default':
 SystemJS.config(global.__SYSTEM_CONFIG)
 
 
-ReactDOM.render( 
+ReactDOM.render(
   <AppWrapper>
     <Router>
-      <ConnectCheckLogin />
-
+      <App />
     </Router>
   </AppWrapper>,
   document.getElementById('app')

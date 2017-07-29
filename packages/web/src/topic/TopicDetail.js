@@ -8,10 +8,9 @@ import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import {withHover} from '@react-web/hover'
 import TagsEditor from './TagsEditor'
 import {allStatus, postTopic, putTopic, editTopicTags, 
-  editTopicStatus, getTopic} from './actions'
+  editTopicStatus, getTopic} from './'
 import TopicCommentList from './TopicCommentList'
-import DraftWithPlugin from '../DraftWithPlugin'
-import makeCancelable from '../makeCancelable'
+import DraftWithPlugin from './DraftWithPlugin'
 
 const StatusItem = withHover(props => (
   <div
@@ -62,19 +61,13 @@ class TopicDetail extends Component {
   };
 
   componentWillUnmount = () => {
-    try {
-      this.editTagPromise.cancel()
-      this.editStatusPromise.cancel()
-    } catch(e){
-      // console.log(e)
-    }
+    this.__UNMOUNT = true
   };
 
   onTagsChange = async (tags) => {
     const {match: {params: {topicId}}} = this.props;
-    this.editTagPromise = makeCancelable(this.props.editTopicTags({tags: tags.join(','), topicId}))
     try {
-      await this.editTagPromise
+      await this.props.editTopicTags({tags: tags.join(','), topicId})
     } catch(e){
       // console.log(e)
     }
@@ -101,13 +94,12 @@ class TopicDetail extends Component {
     const {match: {params: {topicId}}} = this.props;
     const {isCreated} = this.state;
     this.setState({status})
-    this.editStatusPromise = makeCancelable(this.props.editTopicStatus({status, topicId}))
     try {
-      await this.editStatusPromise
+      await this.props.editTopicStatus({status, topicId})
     } catch(e){
       console.log(e)
     }
-    this.statusDropDown.hide()
+    if (!this.__UNMOUNT) this.statusDropDown.hide()
   }
 
   render(){

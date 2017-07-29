@@ -8,7 +8,7 @@ const Async = (props) => {
     <Loader 
       loadKey={'topic'}
       load={cb => require.ensure([], 
-        require => callback(null, require('./Topic').default)
+        require => cb(null, require('./Topic').default)
       )}
     />
   );

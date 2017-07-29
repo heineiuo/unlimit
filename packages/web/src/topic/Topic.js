@@ -6,7 +6,7 @@ import {css, StyleSheet} from 'aphrodite'
 import Button from '@react-web/button'
 import TopicList from './TopicList'
 import TopicDetail from './TopicDetail'
-import {emptyTopicState} from './actions'
+import {emptyTopicState} from './'
 
 class Topic extends Component {
 

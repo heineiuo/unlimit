@@ -8,11 +8,11 @@ import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {withHover} from '@react-web/hover'
-import commonStyles from '../styles'
+import commonStyles from '../components/commonStyles'
 import { queryOne,  
     deleteHost,
     setTitle,
-    getHostList,
+    queryList as getHostList,
     restoreFileList } from './'
 
 const DriveListItem = withHover((props) => (

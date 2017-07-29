@@ -4,7 +4,6 @@ import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
 import api from '../api'
 
-
 const initialState = {
   loginChecked: false,
   logged: false,
