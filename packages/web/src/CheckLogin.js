@@ -55,19 +55,15 @@ class CheckLogin extends Component {
               </AsyncComponent>
             )}
           </Route>
-          <Route path="/oauth/iframe">
-            {props => (
-              <AsyncComponent loadKey="oauth-iframe" load={(callback) => require.ensure([], (require) => callback(null, require('./OAuth/Iframe').default))}>
-                {(state, Auth) => (
-                  state < 2 ? null:
-                    <Auth {...props}/>
-                )}
-              </AsyncComponent>
-            )}
-          </Route>
           <Route path="/oauth">
-            {(props) => (
-              <AsyncComponent loadKey="oauth" load={(callback) => require.ensure([], (require) => callback(null, require('./OAuth').default))}>
+            {props => (
+              <AsyncComponent 
+                loadKey="oauth" 
+                load={(callback) => {
+                  SystemJS.import('@unlimit/oauth')
+                    .then(Com => callback(null, Com))
+                    .catch(e => callback(e))
+                }}>
                 {(state, Auth) => (
                   state < 2 ? null:
                     <Auth {...props}/>

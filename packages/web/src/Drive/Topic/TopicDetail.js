@@ -7,12 +7,12 @@ import Button from '@react-web/button'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import TagsEditor from './TagsEditor'
 import makeCancelable from '../../makeCancelable'
-import hoverHoc from '../../components/hoverHoc'
+import {withHover} from '@react-web/hover'
 import {allStatus} from '../../actions/topic/editTopicStatus'
 import TopicCommentList from './TopicCommentList'
 import DraftWithPlugin from '../../components/DraftWithPlugin'
 
-const StatusItem = hoverHoc(props => (
+const StatusItem = withHover(props => (
   <div
     onClick={() => props.onSelect(props.status)}
     className={css(styles.statusItem, props.hovered && styles.statusItem_hover)}

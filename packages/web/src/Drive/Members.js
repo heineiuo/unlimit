@@ -4,9 +4,9 @@ import {bindActionCreators} from 'redux'
 import Input from '@react-web/input'
 import Button from '@react-web/button'
 import {css, StyleSheet} from 'aphrodite'
-import hoverHoc from '../components/hoverHoc'
+import {withHover} from '@react-web/hover'
 
-const MemberItem = hoverHoc(props => (
+const MemberItem = withHover(props => (
   <div className={css(styles.memberItem)}>
     <div>{props.item.email}</div>
     <div onClick={() => props.removeDriveUser(props.item)}>移出</div>

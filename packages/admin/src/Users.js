@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import Spin from 'react-spin'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {fetchUserList} from '../actions/admin'
+import {fetchUserList} from './admin'
 import UserItem from './UserItem'
 
 class Users extends Component {

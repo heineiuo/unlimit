@@ -11,8 +11,10 @@ process.nextTick(async () => {
   if (!!package) {
     shelljs.cd(`packages/${package}`)
     shelljs.exec(`rm -f *.js`)
+    shelljs.exec(`rm -f images`)
     shelljs.exec(`babel src -d .`)
     shelljs.exec(`npm publish --access=public`)
     shelljs.exec(`rm -f *.js`)
+    shelljs.exec(`rm -f images`)
   }
 })

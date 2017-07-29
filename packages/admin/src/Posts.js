@@ -5,11 +5,10 @@ import Button from '@react-web/button'
 import {Route, Switch, Link} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import hoverHoc from '../components/hoverHoc'
-import commonStyle from '../components/styles'
-import tableViewStyle from '../components/styles/tableView'
+import {withHover} from '@react-web/hover'
+import {getTopicList} from './admin'
 
-const TableRow = hoverHoc(props => (
+const TableRow = withHover(props => (
   <Link to={`${props.path}/${props.item._id}`} className={css(styles.link)}>
     <div className={css(styles.tableView__line, props.hovered && styles.tableView__line_hover)}>
       <div className={css(styles.tableView__cell)}>{props.item.title}</div>
@@ -95,8 +94,6 @@ class TopicList extends Component {
 }
 
 const styles = StyleSheet.create({
-  ...commonStyle,
-  ...tableViewStyle,
   searchInput: {
     width: 300,
   },
@@ -114,6 +111,6 @@ export default connect(
     topic: store.topic
   }),
   dispatch => bindActionCreators({
-    getTopicList: require('../actions/topic/getTopicList').default
+    getTopicList,
   }, dispatch)
 )(TopicList)

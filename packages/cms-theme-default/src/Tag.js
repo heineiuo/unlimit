@@ -184,6 +184,5 @@ export default module.exports = connect(
     posts: store.posts,
   }),
   (dispatch) => bindActionCreators({
-    getPostList: require('../actions/getPostList').default
   }, dispatch)
 )(CategoryDetail)

@@ -13,12 +13,8 @@ import Users from './Users'
 import IntegrateApp from './IntegrateApp'
 
 
-import admin from '../actions/admin'
+import admin, {fetchUserList} from './admin'
 
-
-
-
-import {fetchUserList} from '../actions/admin'
 
 /**
  * 集成APP

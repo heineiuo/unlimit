@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Input from '@react-web/input'
 import Button from '@react-web/button'
+import { createFile } from './actions'
 
 class CreateFile extends Component {
 
@@ -49,6 +50,6 @@ export default module.exports = connect(
     fileContent: store.file,
   }),
   (dispatch) => bindActionCreators({
-    createFile: require('../actions/file/createFile').default
+    createFile
   }, dispatch)
 )(CreateFile);

@@ -18,6 +18,10 @@ import SideLeft from './SideLeft'
 class Demo extends Component {
 
   render () {
+    const {
+      queryPostDetail,
+      getPostList
+    } = this.props
 
     const managePath = '/manage';
     const {Manage} = this.props;
@@ -43,8 +47,18 @@ class Demo extends Component {
                         </div>
                         <div className={css(styles.col9)}>
                           <Switch>
-                            <Route path="/page/:pageName" component={Page} />
-                            <Route path="/tag/:tagName" component={Tag} />
+                            <Route path="/page/:pageName" component={Page} >
+                             {
+                                props => <Page  queryPostDetail={queryPostDetail} />
+                              }
+                            </Route>
+                            <Route path="/tag/:tagName" >
+                              {
+                                props => <Tag  
+                                  getPostList={getPostList}
+                                  queryPostDetail={queryPostDetail} />
+                              }
+                            </Route>
                             <Route path="/post/:postId" component={PostDetail} />
                           </Switch>
                         </div>

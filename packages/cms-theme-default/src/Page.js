@@ -7,9 +7,9 @@ import commonStyle from './styles'
 import Loading from 'react-spin'
 
 const pageNameToTopicId = {
-  '联系我们': '58f1d0ef981fccd2fbd73a7e',
-  '关于我们': '58efbbed9383ca9b492cf087',
-  '合作流程': '58f1d097981fccd2fbd73a7d'
+  'xxx': '58f1d0ef981fccd2fbd73a7e',
+  'xxxx': '58efbbed9383ca9b492cf087',
+  'xxx': '58f1d097981fccd2fbd73a7d'
 }
 
 class SpecialPage extends Component {
@@ -76,7 +76,4 @@ export default module.exports = connect(
     currentTopicId: store.posts.currentTopicId,
     currentTopicDetail: store.posts.currentTopicDetail,
   }),
-  (dispatch) => bindActionCreators({
-    queryPostDetail: require('../actions/queryPostDetail').default
-  }, dispatch)
 )(SpecialPage)

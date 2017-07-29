@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import Input from '@react-web/input'
 import Button from '@react-web/button'
 import {css, StyleSheet} from 'aphrodite'
-import hoverHoc from '../../components/hoverHoc'
+import {withHover} from '@react-web/hover'
 
-const TagItem = hoverHoc(props => (
+const TagItem = withHover(props => (
   <div className={css(styles.tag, props.hovered && styles.tag_hover)}>
     {props.value}
     <div

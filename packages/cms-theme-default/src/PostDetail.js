@@ -56,8 +56,5 @@ export default module.exports =  connect(
   (store) => ({
     account: store.account,
     posts: store.posts,
-  }),
-  (dispatch) => bindActionCreators({
-    queryPostDetail: require('../actions/queryPostDetail').default
-  }, dispatch)
+  })
 )(PostDetail)

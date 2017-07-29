@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions'
+import Fetch from '@shared/fetch'
 
 const initialState = {
   ls: [],

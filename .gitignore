@@ -9,6 +9,7 @@ Thumb.db
 .psd
 .grunt-cache
 .grunt
+.env
 docs/apidoc
 
 *.log*
@@ -30,4 +31,5 @@ Thumb.db
 index.min.html
 # packages
 packages/**/*.js
+packages/*/images
 !packages/*/src/**/*.js

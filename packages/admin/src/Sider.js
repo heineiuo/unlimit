@@ -3,10 +3,9 @@ import {StyleSheet, css} from 'aphrodite'
 import pick from 'lodash/pick'
 import {Route, Link} from 'react-router-dom'
 import trimEnd from 'lodash/trimEnd'
-import Logo from '../components/smile'
-import hoverHoc from '../components/hoverHoc'
+import {withHover} from '@react-web/hover'
 
-const NavItem = hoverHoc(props => (
+const NavItem = withHover(props => (
   <Route path={props.to} exact={props.activeOnlyWhenExact} children={({match}) => (
     <div className={css(styles.navItem, match && styles.navItem_active)}>
       <Link to={props.to} className={css(styles.navItem__link, (props.hovered || match) && styles.navItem__link_hovered)}>
@@ -29,7 +28,7 @@ class Sider extends Component {
         <div className={css(styles.sider__nav)}>
           <div className={css(styles.sider__nav__main)}>
             <Link to="/">
-              <div style={{paddingLeft: 14}} color="#FFF"><Logo /></div>
+              <div style={{paddingLeft: 14}} color="#FFF">UNLIMIT</div>
             </Link>
           </div>
           <div className={css(styles.sider__nav__sub)}>

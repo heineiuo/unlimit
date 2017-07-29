@@ -1,13 +1,11 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
-import Logo from '../components/smile'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import 'react-vis/dist/style.css'
 import {RadialChart} from 'react-vis'
-import commonStyles from '../components/styles'
 
 class Dashboard extends Component {
 
@@ -53,7 +51,6 @@ class Dashboard extends Component {
 }
 
 const styles = StyleSheet.create({
-  ...commonStyles
 
 });
 

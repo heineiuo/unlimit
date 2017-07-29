@@ -6,9 +6,9 @@ import {css, StyleSheet} from "aphrodite"
 import Input from "@react-web/input"
 import Button from "@react-web/button"
 import commonStyles from "../../components/styles"
-import hoverHoc from "../../components/hoverHoc"
+import {withHover} from "@react-web/hover"
 
-const TopicListItem = hoverHoc((props) => {
+const TopicListItem = withHover((props) => {
   const {url, title, _id, tags = '', status} = props;
 
   return (

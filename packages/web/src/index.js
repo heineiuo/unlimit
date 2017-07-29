@@ -25,7 +25,6 @@ injectAsyncReducer('account', require('./actions/account/account').default)
 injectAsyncReducer('drive', require('./actions/drive/drive').default)
 injectAsyncReducer('file', require('./actions/file/file').default)
 injectAsyncReducer('topic', require('./actions/topic/topic').default)
-injectAsyncReducer('admin', require('./actions/admin').default)
 injectAsyncReducer('nav', require('./actions/nav').default)
 injectAsyncReducer('notice', require('./actions/notice').default)
 

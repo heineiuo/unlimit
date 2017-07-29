@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
-import Logo from '../components/smile'
 
 class Title extends Component {
 
@@ -14,7 +13,7 @@ class Title extends Component {
     const {title, color, style} = this.props;
     return (
       <div style={Object.assign({display: 'flex'}, style)}>
-        <Logo />
+        Smile
         <div style={{color}}>{title}</div>
       </div>
     )

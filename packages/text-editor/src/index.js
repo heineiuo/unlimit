@@ -8,6 +8,7 @@ import {StyleSheet, css} from 'aphrodite/no-important'
 import path from 'path'
 import CreateFile from './CreateFile'
 import Textarea from 'react-textarea-autosize'
+import { getFileContent, updateFile, initFile, updateFileMeta, createFile } from './actions'
 
 // import 'brace/theme/monokai'
 // import 'brace/mode/javascript'
@@ -164,10 +165,6 @@ export default module.exports = connect(
     fileContent: store.file,
   }),
   (dispatch) => bindActionCreators({
-    getFileContent: require('../actions/file/getFileContent').default,
-    updateFile: require('../actions/file/updateFile').default,
-    initFile: require('../actions/file/initFile').default,
-    updateFileMeta: require('../actions/file/updateFileMeta').default,
-    createFile: require('../actions/file/createFile').default
+    getFileContent, updateFile, initFile, updateFileMeta, createFile
   }, dispatch)
 )(Ace);

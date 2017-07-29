@@ -22,8 +22,9 @@
     {
       "name": "@unlimit/web",
       "version": "0.1.19",
+      "outputDir": "./packages/web",      
       "main": "index.js",
-      "devEntry": "./web/index.js",
+      "devEntry": "./packages/web/src/index.js",
       "externals": ["react", "react-dom"],
       "html": {
         "SYSTEM_CONFIG_WITHOUT_THIS_REPO_PACKAGES": {
@@ -81,8 +82,9 @@
     {
       "name": "@unlimit/admin",
       "version": "0.1.4",
+      "outputDir": "./packages/admin",      
       "main": "index.js",
-      "devEntry": "./web/Admin/index.js",
+      "devEntry": "./packages/admin/src/index.js",
       "externals": [
         "react",
         "react-dom", 
@@ -97,8 +99,26 @@
     {
       "name": "@unlimit/text-editor",
       "version": "0.1.7-beta.1",
+      "outputDir": "./packages/text-editor",      
       "main": "index.js",
-      "devEntry": "./web/TextEditor/index.js",
+      "devEntry": "./packages/text-editor/src/index.js",
+      "externals": [
+        "react",
+        "react-dom", 
+        "aphrodite", 
+        "react-router-dom", 
+        "redux", 
+        "react-redux", 
+        "react-router-redux", 
+        "react-modal"
+      ]
+    },
+    {
+      "name": "@unlimit/oauth",
+      "version": "0.1.0-beta.1",
+      "outputDir": "./packages/oauth",      
+      "main": "index.js",
+      "devEntry": "./packages/oauth/src/index.js",
       "externals": [
         "react",
         "react-dom", 
@@ -114,7 +134,8 @@
       "name": "@unlimit/cms",
       "version": "0.1.18",
       "main": "index.js",
-      "devEntry": "./cms/index.js",
+      "outputDir": "./packages/cms",      
+      "devEntry": "./packages/cms/src/index.js",
       "externals": ["react", "react-dom"],
       "html": {
         "SYSTEM_CONFIG_WITHOUT_THIS_REPO_PACKAGES": {
@@ -168,9 +189,10 @@
     },
     {
       "name": "@unlimit/cms-theme-default",
+      "outputDir": "./packages/cms-theme-default",
       "version": "0.0.1-beta.1",
       "main": "index.js",
-      "devEntry": "./cms/demo/index.js",
+      "devEntry": "./packages/cms-theme-default/src/index.js",
       "externals": [
         "react",
         "react-dom", 

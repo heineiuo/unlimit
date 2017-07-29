@@ -5,9 +5,7 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
 class Bot extends Component {
-
   render () {
-
     return (
       <div>
         <div>

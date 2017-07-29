@@ -7,10 +7,10 @@ import Spin from 'react-spin'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import hoverHoc from '../components/hoverHoc'
+import {withHover} from '@react-web/hover'
 import commonStyles from '../components/styles'
 
-const DriveListItem = hoverHoc((props) => (
+const DriveListItem = withHover((props) => (
   <div>
     <div className={css(styles.hostItem__title)}>
       {props.item.name || `未命名(${props.item._id.substr(0, 8)})`}
