@@ -1,9 +1,7 @@
 
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../constants'
-
-import signature from './common/signature'
+const {API_HOST} = global
 
 
 export default (formData) => async (dispatch, getState) => {

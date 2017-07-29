@@ -1,6 +1,6 @@
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST, signature} from '../../constants'
+const {API_HOST} = global
 import {stateToHTML} from 'draft-js-export-html'
 import {convertToRaw} from 'draft-js'
 
@@ -14,13 +14,13 @@ export default (query) => async (dispatch, getState) => {
 
   let result = null;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/topic/create`, signature({
+    result = await POSTRawJSON(`${API_HOST}/catblog/topic/create`, {
       token,
       driveId,
       title,
       content,
       html
-    }))
+    })
     if (result.error) return console.log(result.error)
   } catch(e){
     return console.log(e)

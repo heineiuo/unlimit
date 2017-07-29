@@ -1,5 +1,5 @@
 import Fetch from '@shared/fetch'
-import {API_HOST, signature} from '../../constants'
+const {API_HOST} = global
 
 
 export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
@@ -7,9 +7,9 @@ export default (query) => (dispatch, getState) => new Promise(async (resolve, re
   const {account: {token}} = getState();
   const {tags, topicId} = query;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/topic/editTags`, signature({
+    result = await POSTRawJSON(`${API_HOST}/catblog/topic/editTags`, {
       tags, token, topicId
-    }))
+    })
     if (result.error) {
       return reject(result.error)
     }

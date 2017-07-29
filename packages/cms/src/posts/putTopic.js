@@ -1,6 +1,6 @@
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST, signature} from '../../constants'
+const {API_HOST} = global
 import {stateToHTML} from 'draft-js-export-html'
 import {convertToRaw} from 'draft-js'
 
@@ -12,19 +12,15 @@ export default (query) => async (dispatch, getState) => {
   const html = stateToHTML(contentState);
   const content = convertToRaw(contentState);
 
-  let result = null;
-  try {
-    result = await new Fetch(`${API_HOST}/catblog/topic/edit`, {
-      token,
-      title,
-      topicId,
-      content,
-      html
-    })
-    if (result.error) return console.log(result.error)
-  } catch(e){
-    return console.log(e)
-  }
+  const result = await new Fetch(`${API_HOST}/catblog/topic/edit`, {
+    token,
+    title,
+    topicId,
+    content,
+    html
+  }).post()
+  if (result.error) return console.log(result.error)
+
 
   dispatch({
     type: 'topic__currentTopicUpdate',

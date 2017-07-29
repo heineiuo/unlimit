@@ -1,5 +1,5 @@
 import Fetch from "@shared/fetch"
-import {API_HOST, signature} from "../../constants"
+const {API_HOST} = global
 
 export default (driveId) => async (dispatch, getStore) => {
   dispatch({
@@ -22,10 +22,10 @@ export default (driveId) => async (dispatch, getStore) => {
   const { account: {token}} = getStore();
   let result = null;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/tags/getDriveTags`, signature({
+    result = await POSTRawJSON(`${API_HOST}/catblog/tags/getDriveTags`, {
       token,
       driveId,
-    }))
+    })
     if (result.error) return handleError(result.error)
   } catch (e) {
     return handleError(e)

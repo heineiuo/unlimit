@@ -1,5 +1,5 @@
 import Fetch from "@shared/fetch"
-import {API_HOST} from "../../constants"
+const {API_HOST} = global
 
 const defaultOptions = {
   sort: {

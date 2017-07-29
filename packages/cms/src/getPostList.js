@@ -1,6 +1,6 @@
 import showError from './showError'
 import Fetch from "@shared/fetch"
-import {API_HOST, driveId} from "../constants"
+const {API_HOST, driveId} = global
 
 export default ({filter, fields}) => async (dispatch, getState) => {
   let result = {};

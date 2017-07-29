@@ -47,14 +47,15 @@ class Demo extends Component {
                         </div>
                         <div className={css(styles.col9)}>
                           <Switch>
-                            <Route path="/page/:pageName" component={Page} >
+                            <Route path="/page/:pageName" >
                              {
-                                props => <Page  queryPostDetail={queryPostDetail} />
+                                props => <Page {...props} queryPostDetail={queryPostDetail} />
                               }
                             </Route>
                             <Route path="/tag/:tagName" >
                               {
                                 props => <Tag  
+                                  {...props}
                                   getPostList={getPostList}
                                   queryPostDetail={queryPostDetail} />
                               }

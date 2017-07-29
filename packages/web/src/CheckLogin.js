@@ -4,11 +4,11 @@ import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Body from '@react-web/body'
-import AsyncComponent from './components/AsyncComponent'
+import Loader from '@react-web/async-loader'
+import {injectAsyncReducer} from '@react-web/store'
 import Title from './components/Title'
 import ProfileDropDown from './components/ProfileDropDown'
 import commonStyles from './components/styles'
-import {injectAsyncReducer} from './store'
 
 const getTitle = () => Title;
 
@@ -26,72 +26,62 @@ class CheckLogin extends Component {
         <Switch>
           <Route exact path="/">
             {props => (
-              <AsyncComponent 
-                load={callback => require.ensure([], require => callback(null, require('./Home/Home').default))}
-                loadKey="home" >
-                {(state, Com) => state < 2 ? null: <Com {...props}/>}
-              </AsyncComponent>
+              <Loader 
+                {...props}
+                load={cb => require.ensure([], 
+                  require => cb(null, require('./Home/Home').default)
+                )}
+                loadKey="home" 
+              />
             )}
           </Route>
-          <Route path="/account" >
+          <Route path="/account">
             {props => (
-              <AsyncComponent 
-                load={callback => require.ensure([], require => callback(null, require('./Account/Account').default))}
-                loadKey="account" >
-                {(state, Account) => state < 2 ? null: <Account {...props}/>}
-              </AsyncComponent>
+              <Loader 
+                {...props}
+                load={cb => require.ensure([], 
+                  require => cb(null, require('./Account/Account').default)
+                )}
+                loadKey="account" 
+              />
             )}
           </Route>
           <Route path="/drive">
             {(props) => (
-              <AsyncComponent loadKey="drive" load={
-                (callback) => {
-                  require.ensure([], (require) => callback(null, require('./Drive').default))
-                }
-              }>
-                {(state, Master) => (
-                  state < 2 ? null: <Master {...props}/>
+              <Loader 
+                {...props}
+                loadKey="drive" 
+                load={cb => require.ensure([], 
+                  require => cb(null, require('./Drive').default)
                 )}
-              </AsyncComponent>
+              />
             )}
           </Route>
           <Route path="/oauth">
             {props => (
-              <AsyncComponent 
+              <Loader 
+                {...props}
                 loadKey="oauth" 
                 load={(callback) => {
                   SystemJS.import('@unlimit/oauth')
                     .then(Com => callback(null, Com))
                     .catch(e => callback(e))
-                }}>
-                {(state, Auth) => (
-                  state < 2 ? null:
-                    <Auth {...props}/>
-                )}
-              </AsyncComponent>
+                }} />
             )}
           </Route>
           <Route path="/admin">
             {(props) => (
-              <AsyncComponent loadKey="admin" load={
-                (callback) => {
-                  SystemJS.import('@unlimit/admin').then(admin => {
-                    callback(null, admin)
-                  }).catch(e => {
-                    console.log(e)
-                    callback(e)
-                  });
-                }
-              }>
-                {(state, Console) => (
-                  state < 2 ? null:
-                    state === 3 ? <div>加载控制台出错</div>:
-                      <Console {...props} getTitle={getTitle} injectAsyncReducer={injectAsyncReducer}/>
-                )}
-              </AsyncComponent>
+              <Loader
+                {...props}
+                loadKey="admin" 
+                load={cb => {
+                  SystemJS.import('@unlimit/admin')
+                    .then(admin => cb(null, admin))
+                    .catch(e => cb(e));
+                }}
+              />
             )}
           </Route>
-         
           <Route component={require('./NotFound').default}/>
         </Switch>
       </Router>

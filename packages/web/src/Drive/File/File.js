@@ -14,7 +14,7 @@ import FilePathBar from './FilePathBar'
 import FileInfo from './FileInfo'
 import CreateFileModal from './CreateFileModal'
 import IntegrateApp from "./IntegrateApp"
-import {injectAsyncReducer} from '../../store'
+import {injectAsyncReducer} from '@react-web/store'
 const {API_HOST} = global
 
 class File extends Component {

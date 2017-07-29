@@ -1,24 +1,16 @@
 import React, {Component} from 'react'
-import AsyncComponent from '../../components/AsyncComponent'
-import {injectAsyncReducer} from '../../store'
+import Loader from '@react-web/async-loader'
+import {injectAsyncReducer} from '@react-web/store'
 
 
 const Async = (props) => {
   return (
-    <AsyncComponent load={
-      (callback) => {
-        require.ensure([], (require) => {
-          const Topic = require('./Topic').default
-          callback(null, Topic)
-        })
-      }
-    }>
-      {(state, Topic) => (
-        state < 2 ? null:
-          state === 3 ? <div>加载Topic模块出错</div>:
-            <Topic {...props} />
+    <Loader 
+      loadKey={'topic'}
+      load={cb => require.ensure([], 
+        require => callback(null, require('./Topic').default)
       )}
-    </AsyncComponent>
+    />
   );
 };
 

@@ -4,16 +4,18 @@ import * as ReactRedux from 'react-redux'
 import * as aphrodite from 'aphrodite'
 import * as ReactRouterRedux from 'react-router-redux'
 import ReactModal from 'react-modal'
-import RenderApp from '@react-shared/render-app'
+import RenderApp from '@react-web/render'
 import defaults from 'lodash/defaults'
-import {store, history, injectAsyncReducer} from './store'
+import {store, history, injectAsyncReducer, AppWrapper} from '@react-web/store'
 import React, {Component } from 'react'
+import {HashRouter} from 'react-router-dom'
 
 import ConnectCheckLogin from './CheckLogin'
 
 const {ConnectedRouter} = ReactRouterRedux
 const {Provider} = ReactRedux
 
+const Router = HashRouter
 
 defaults(global, {
   __SMILE_DEV: process.env.NODE_ENV !== 'production',
@@ -41,10 +43,10 @@ SystemJS.config(global.__SYSTEM_CONFIG)
 
 
 ReactDOM.render( 
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
+  <AppWrapper>
+    <Router>
       <ConnectCheckLogin />
-    </ConnectedRouter>
-  </Provider>, 
+    </Router>
+  </AppWrapper>,
   document.getElementById('app')
 );

@@ -1,8 +1,7 @@
 
 import Fetch from '@shared/fetch'
 import {push} from 'react-router-redux'
-import {API_HOST} from '../constants'
-import signature from './common/signature'
+const {API_HOST} = global
 
 /**
  * 发送验证码
@@ -14,11 +13,11 @@ export default (form) => async (dispatch, getState) => {
     const {registerVerifyCodeCount} = getState().account;
     if (registerVerifyCodeCount>0) return console.log('count not finish.');
 
-    const result = await POSTUrlencodeJSON(API_HOST, signature({
+    const result = await POSTUrlencodeJSON(API_HOST, {
       action: "createLoginCode",
       reducerName: 'EmailCode',
       email: form.email
-    }));
+    });
     if (result.error) throw result.error;
 
     const countdown = (count) => {

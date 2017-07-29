@@ -1,5 +1,5 @@
 import Fetch from '@shared/fetch'
-import {API_HOST} from '../../constants'
+const {API_HOST} = global
 
 export const allStatus = ['草稿', '已发布', '已下线']
 

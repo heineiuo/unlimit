@@ -1,5 +1,5 @@
 import Fetch from '@shared/fetch'
-import {API_HOST, signature} from '../../constants'
+const {API_HOST} = global
 
 const methodTypes = ['getMore', 'getLatest']
 
@@ -24,11 +24,11 @@ export default (driveId, topicId) => async (dispatch,getState) => {
 
   let result = null;
   try {
-    result = await POSTRawJSON(`${API_HOST}/catblog/topic/get`, signature({
+    result = await POSTRawJSON(`${API_HOST}/catblog/topic/get`, {
       token,
       driveId,
       topicId: topicId
-    }))
+    })
     if (result.error) return handleError(result.error)
   } catch(e){
     return handleError(e)

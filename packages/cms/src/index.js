@@ -1,10 +1,13 @@
 import RenderApp from '@react-web/render'
-import App from './App'
 import * as aphrodite from 'aphrodite'
-
+import React, {Component} from 'react'
 import * as ReactRouterDOM from 'react-router-dom'
 import * as Redux from 'redux'
 import * as ReactRedux from 'react-redux'
+import {store, history, AppWrapper} from '@react-web/store'
+import {HashRouter} from 'react-router-dom'
+
+import App from './App'
 
 window.ReactRouterDOM = ReactRouterDOM
 window.Redux = Redux
@@ -19,7 +22,10 @@ SystemJS.set(SystemJS.normalizeSync('aphrodite'), SystemJS.newModule({'default':
 
 SystemJS.config(global.__SYSTEM_CONFIG)
 
-const start = () => {
-  const app = new RenderApp(App, document.getElementById('app'));
-};
-start()
+const Router = HashRouter
+
+const app = new RenderApp(() => 
+  <AppWrapper>
+    <App />
+  </AppWrapper>, 
+document.getElementById('app'))
