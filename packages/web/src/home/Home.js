@@ -34,14 +34,13 @@ class Home extends Component {
 
     return  (
       <div>
-        <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
-        <Background bgColor="#efeff4" />
         
         <div className={css(styles.globalHeaderBar)}>
-          <div style={{display: 'flex'}}>
+          <div style={{display: 'flex', margin: '0 auto', width:'100%', maxWidth: 1000}}>
             <Title color='#FFFFFF' title="首页" style={{textDecoration: 'none', marginRight: 10}}/>
           </div>
         </div>
+
         <div style={{marginTop: 50}}>
           {
             account.logged ? 

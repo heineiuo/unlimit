@@ -44,7 +44,7 @@ class Header extends Component {
     const {match} = this.props;
     return (
       <div className={css(styles.globalHeaderBar)}>
-        <div style={{display: 'flex'}}>
+        <div style={{display: 'flex', margin: '0 auto', width: '100%', maxWidth: 1000}}>
           <Title color='#EEE' title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
           <span>
             <Link to='/drive' style={{color: '#666', fontSize: 13}}>全部空间</Link>

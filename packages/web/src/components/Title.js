@@ -20,15 +20,19 @@ class Title extends Component {
     const {title, color, style} = this.props;
     return (
       <DropDown ref={ref => this.dropDown = ref} className={css(styles.title)} style={style}>
-        <DropDownTrigger style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
-          <Logo color={color} />
-          <div style={{color, userSelect: 'none'}}>{title}</div>
+        <DropDownTrigger>
+          <div style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
+            <Logo color={color} />
+            <div style={{color, userSelect: 'none'}}>{title}</div>
+          </div>
         </DropDownTrigger>
-        <DropDownContent className={css(styles.title__content)}>
-          <div className={css(styles.triangle)} />
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/">消息</Link>
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">空间</Link>
-          <Link onClick={this.closeContent} className={css(styles.link)} to="/account">账号</Link>
+        <DropDownContent>
+          <div className={css(styles.title__content)}>
+            <div className={css(styles.triangle)} />
+            <Link onClick={this.closeContent} className={css(styles.link)} to="/">消息</Link>
+            <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">空间</Link>
+            <Link onClick={this.closeContent} className={css(styles.link)} to="/account">账号</Link>
+          </div>
         </DropDownContent>
       </DropDown>
     )

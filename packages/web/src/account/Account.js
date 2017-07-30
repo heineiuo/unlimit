@@ -21,6 +21,7 @@ class Check extends Component {
 
     return (
       <div>
+        <Header />
         {
           !loginChecked? (
             <div>

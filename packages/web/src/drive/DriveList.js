@@ -7,7 +7,7 @@ import Spin from 'react-spin'
 import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {withHover} from '@react-web/hover'
+import { withHover, Hover } from '@react-web/hover'
 import commonStyles from '../components/commonStyles'
 import { queryOne,  
     deleteHost,
@@ -15,19 +15,22 @@ import { queryOne,
     queryList as getHostList,
     restoreFileList } from './'
 
-const DriveListItem = withHover((props) => (
-  <div>
-    <div className={css(styles.hostItem__title)}>
-      {props.item.name || `未命名(${props.item._id.substr(0, 8)})`}
-    </div>
-    <div className={css(styles.hostItem__info)}>
-      简介: ...
-    </div>
-    <div className={css(styles.hostItem__bottomBar)}>
-      <Link className={css(styles.link, styles.hostItem__bottomBar__btn)} to={`/drive/${props.item._id}`}>文件</Link>
-    </div>
-  </div>
-))
+const DriveListItem = props => (
+  <Hover className={props.className}>
+    {({isHovered}) => 
+    <div>
+      <div className={css(styles.hostItem__title)}>
+        {props.item.name || `未命名(${props.item._id.substr(0, 8)})`}
+      </div>
+      <div className={css(styles.hostItem__info)}>
+        简介: ...
+      </div>
+      <div className={css(styles.hostItem__bottomBar)}>
+        <Link className={css(styles.link, styles.hostItem__bottomBar__btn)} to={`/drive/${props.item._id}`}>文件</Link>
+      </div>
+    </div>}
+  </Hover>
+)
 
 class DriveList extends Component {
 
@@ -111,14 +114,14 @@ const styles = StyleSheet.create({
     boxSizing: 'border-box',
     margin: 8,
     width: '100%',
-    maxWidth: '300px',
-    backgroundColor: '#fff',
+    // maxWidth: '300px',
+    // backgroundColor: '#fff',
     borderBottom: '1px solid #ddd',
   },
 
   hostItem__title: {
-    backgroundColor: '#597aff',
-    color: '#FFF',
+    // backgroundColor: '#597aff',
+    color: '#666',
     height: 50,
     padding: '0 10px',
     lineHeight: '50px'
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   hostItem__bottomBar: {
-    backgroundColor: '#FFF',
+    // backgroundColor: '#FFF',
     color: '#333',
     height: 50,
     padding: '0 10px',
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
   },
 
   hostItem__bottomBar__btn: {
-    backgroundColor: '#effdff',
+    // backgroundColor: '#effdff',
     padding: 4
   },
 
