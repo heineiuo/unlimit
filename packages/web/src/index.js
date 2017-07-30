@@ -23,20 +23,25 @@ defaults(global, {
   __SMILE_DEV: process.env.NODE_ENV !== 'production',
   API_HOST: `https://api.youkuohao.com`,
   __SMILE_API: `https://api.youkuohao.com`
+});
+
+[
+  {name: 'react', default: global.React},
+  {name: 'react-dom', default: global.ReactDOM},
+  {name: 'react-router-dom', default: ReactRouterDOM},
+  {name: 'react-redux', default: ReactRedux},
+  {name: 'react-router-redux', default: ReactRouterRedux},
+  {name: 'redux', default: Redux},
+  {name: 'react-modal', default: ReactModal},
+  {name: 'aphrodite', default: aphrodite},
+].forEach(item => {
+  SystemJS.registry.set(
+    SystemJS.resolveSync(item.name), 
+    SystemJS.newModule(item.default) 
+  );
 })
 
-
-SystemJS.set(SystemJS.normalizeSync('react'), SystemJS.newModule({'default': global.React , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-dom'), SystemJS.newModule({'default': global.ReactDOM , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-router-dom'), SystemJS.newModule({'default': ReactRouterDOM , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-redux'), SystemJS.newModule({'default': ReactRedux , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-router-redux'), SystemJS.newModule({'default': ReactRouterRedux , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('redux'), SystemJS.newModule({'default': Redux , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('react-modal'), SystemJS.newModule({'default': ReactModal , __useDefault: true }) );
-SystemJS.set(SystemJS.normalizeSync('aphrodite'), SystemJS.newModule({'default': aphrodite , __useDefault: true }) );
-
 SystemJS.config(global.__SYSTEM_CONFIG)
-
 
 ReactDOM.render(
   <AppWrapper>

@@ -107,7 +107,7 @@
         "react-dom", 
         "aphrodite", 
         "react-router-dom", 
-        "redux", 
+        "redux",
         "react-redux", 
         "react-router-redux", 
         "react-modal"

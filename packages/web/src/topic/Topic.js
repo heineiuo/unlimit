@@ -25,7 +25,7 @@ class Topic extends Component {
     const {match} = this.props;
     return (
       <div style={{padding: 20}}>
-        <div style={{marginBottom: 20, display: 'flex', alignItems: 'center'}}>
+        <div style={{marginBottom: 20, display: 'flex', alignItems: 'center', borderBottom: '1px solid #EEE'}}>
           <div style={{marginRight: 20}}>文章</div>
           <Link to={`${match.url}/new`}>
             <Button style={{width: 80, backgroundColor: '#fff', borderColor: '#CCC', color: '#666'}} size='small'>添加</Button>

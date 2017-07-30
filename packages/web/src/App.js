@@ -47,7 +47,7 @@ class CheckLogin extends Component {
             )}
           </Route>
           <Route path="/drive">
-            {(props) => (
+            {props => (
               <Loader 
                 {...props}
                 loadKey="drive" 
@@ -70,10 +70,14 @@ class CheckLogin extends Component {
             )}
           </Route>
           <Route path="/admin">
-            {(props) => (
+            {props => (
               <Loader
                 {...props}
                 loadKey="admin" 
+                renderError={e => {
+                  console.error(e)
+                  return <pre>{e.stack}</pre>
+                }}
                 load={cb => {
                   SystemJS.import('@unlimit/admin')
                     .then(admin => cb(null, admin))

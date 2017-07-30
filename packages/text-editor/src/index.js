@@ -1,21 +1,14 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import Spin from 'react-spin'
+import Spin from '@react-web/spin'
 import Button from '@react-web/button'
-// import AceEditor from 'react-ace'
 import {StyleSheet, css} from 'aphrodite/no-important'
 import path from 'path'
-import CreateFile from './CreateFile'
+import { match, when } from 'match-when'
 import Textarea from 'react-textarea-autosize'
+import CreateFile from './CreateFile'
 import { getFileContent, updateFile, initFile, updateFileMeta, createFile } from './actions'
-
-// import 'brace/theme/monokai'
-// import 'brace/mode/javascript'
-// import 'brace/mode/css'
-// import 'brace/mode/json'
-// import 'brace/mode/html'
-// import 'brace/mode/plain_text'
 
 const ext2mode = {
   js: 'javascript',
@@ -98,33 +91,40 @@ class Ace extends Component {
     } = this.props;
     const mode = this.getMode(fileName);
 
-    return fileContent.createState === 0 ? 
-      <CreateFile
-        parentId={parentId}
-        driveId={driveId}
-      /> : 
-      fileContent.createState === 1 ?
-        <Spin />:
-        fileContentState < 2?
-          <Spin /> :
-          <div>
-            {/* 按钮区域 */}
-            <div className={css(styles.header)}>
-              <div>smile text editor</div>
-              <div className={css(styles.fileName)}>{fileName}</div>
-              <div className={css(styles.buttonBar)}>
-                <Button style={{width: 120}} onClick={this.saveFile}>
-                  <div>保存</div>
-                </Button>
+    return match(fileContent.createState, {
+      [when(0)]: () => 
+        <CreateFile
+          parentId={parentId}
+          driveId={driveId}
+        />,
+      [when(1)]: () => 
+        <div>Loading</div>,
+      [when()]: () => 
+        match(fileContentState, {
+          [when(2)]: () => 
+            <div>
+              {/* 按钮区域 */}
+              <div className={css(styles.header)}>
+                <div>smile text editor</div>
+                <div className={css(styles.fileName)}>{fileName}</div>
+                <div className={css(styles.buttonBar)}>
+                  <Button style={{width: 120}} onClick={this.saveFile}>
+                    <div>保存</div>
+                  </Button>
+                </div>
               </div>
-            </div>
-            <Textarea 
-              className={css(styles.editor)}
-              useCacheForDOMMeasurements
-              onChange={this.onChange}
-              value={this.state.editorValue}
-            />
-          </div>
+              <Textarea 
+                className={css(styles.editor)}
+                useCacheForDOMMeasurements
+                onChange={this.onChange}
+                value={this.state.editorValue}
+              />
+            </div>,
+          [when()]: () => 
+            <div>Loading</div>,
+        })
+    })
+
   }
 
 }
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default module.exports = connect(
+export default connect(
   (store) => ({
     account: store.account,
     fileName: store.file.fileName,

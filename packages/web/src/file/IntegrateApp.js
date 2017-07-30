@@ -1,11 +1,11 @@
 import React, {Component} from "react"
 import Spin from "react-spin"
 import {css, StyleSheet} from "aphrodite"
-import {appmeta} from './appmeta'
 import Loader from '@react-web/async-loader'
 import {withRouter, Route} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {appmeta} from './appmeta'
 
 class IntegrateApp extends Component {
   static defaultProps = {
@@ -23,7 +23,6 @@ class IntegrateApp extends Component {
   };
 
   open = (options) => {
-    console.log(options)
     const {injectAsyncReducer} = this.props;
     const {driveId, fileId, fileName, appName, isCreated=true} = options;
     
@@ -37,31 +36,7 @@ class IntegrateApp extends Component {
     })
     return null;
     
-    // const nextState = {appName, fileId, fileName, driveId, appState: 1, isCreated};
-    // if (appmeta.findIndex(app => app.appName === appName) === -1 || !SystemJS.map.hasOwnProperty(appName)) {
-    //   nextState.appState = 3;
-    //   return this.setState(nextState);
-    // }
-    // this.setState(nextState);
-    // try {
-    //   const hoc = await SystemJS.import(appName);
-    //   // todo consider if  injectAsyncReducer is safety or need.
-    //   this.component = hoc({injectAsyncReducer});
-    //   nextState.appState = 2
-    // } catch (e) {
-    //   console.error(e);
-    //   nextState.appState = 4
-    // } finally {
-    //   console.log('integrate app open finally');
-    //   console.log(nextState.appState)
-    //   this.setState(nextState)
-    // }
-
   };
-
-  componentWillUnmount = () => {
-    console.log('integrate app: unmount')
-  }
 
   close = () => {
     this.setState({
@@ -96,40 +71,6 @@ class IntegrateApp extends Component {
       />
     )
 
-  //   console.log(`appState: ${appState}`)
-
-  //   return appState === 4 ? 
-  //     <div style={{color: 'red', fontFamily: 'monospace', fontSize: 13}}>
-  //       <div onClick={this.close} className={css(styles.appToolBar__btn)} style={{width: 100}}>关闭应用</div>
-  //       <div>{`app(${appName})加载失败:(`}</div>
-  //     </div> :
-  //     appState === 3 ? 
-  //       <div>
-  //         <div>{`app(${appName}）不存在:( `}</div>
-  //         <a href="/">回到首页</a>
-  //       </div> :
-  //       appState === 1 ? 
-  //         <Spin /> :
-  //         appState === 2? 
-  //           <div className={css(styles.edit, fullScreen && styles.edit_fullScreen)}>
-  //             <div className={css(styles.appToolBar)} style={fullScreen?{position: 'absolute'}:{}}>
-  //               <div onClick={this.toggleFullScreen} className={css(styles.appToolBar__btn)}>全屏</div>
-  //               <div onClick={this.close} className={css(styles.appToolBar__btn)}>关闭应用</div>
-  //             </div>
-  //               {
-  //                 React.createElement(this.component, {
-  //                   appState,
-  //                   appName,
-  //                   driveId,
-  //                   fileId,
-  //                   fileName,
-  //                   isCreated
-  //                 })
-  //               }
-  //           </div>: 
-  //           appState === 0 ?
-  //             <div>还未初始化</div> :
-  //             <div>出错了</div>
   }
 }
 

@@ -6,7 +6,7 @@ import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
 import {push} from "react-router-redux"
 import {bindActionCreators} from "redux"
-import AsyncTopic from '../topic/AsyncTopic'
+import Loader from '@react-web/async-loader'
 import { queryOne } from './'
 
 class DriveWrapper extends Component {
@@ -73,7 +73,16 @@ class DriveWrapper extends Component {
                 <div>
                 </div>
               </Route>
-              <Route path={`${match.path}/topic`} component={AsyncTopic} />
+              <Route path={`${match.path}/topic`} >
+                {props => 
+                  <Loader
+                    {...props}
+                    loadKey={'topic'}
+                    load={cb => require.ensure([], 
+                      require => cb(null, require('../topic/Topic').default)
+                    )}
+                  />}
+              </Route>
               <Route path={`${match.path}/website`} component={require('../website/Website')}/>
               <Route path={`${match.path}/members`} component={require('./Members')}/>
               <Route path={`${match.path}/setting`} component={require('./Setting')}/>

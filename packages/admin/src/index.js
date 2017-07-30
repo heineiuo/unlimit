@@ -10,9 +10,6 @@ import {Switch, Route} from 'react-router-dom'
 import Header from './Header'
 import Bot from './Bot'
 import Users from './Users'
-import IntegrateApp from './IntegrateApp'
-
-
 import admin, {fetchUserList} from './admin'
 
 
@@ -76,9 +73,6 @@ class Admin extends Component {
               <Switch>
                 <Route path={`${match.path}/service`} component={Bot}/>
                 <Route path={`${match.path}/users`} component={Users}/>
-                <Route path={`${match.path}/tags`} component={IntegrateApp}/>
-                <Route path={`${match.path}/drive`} component={IntegrateApp}/>
-                <Route path={`${match.path}/messages`} component={IntegrateApp}/>
               </Switch>
           }
         </Paper>

@@ -167,7 +167,7 @@ class TopicDetail extends Component {
               {/*修改状态*/}
               <DropDown ref={ref => this.statusDropDown = ref}>
                 <DropDownTrigger>{allStatus[status]}</DropDownTrigger>
-                <DropDownContent>
+                <DropDownContent style={{position: 'absolute'}}>
                   {
                     allStatus.map((item, index) => (
                       <StatusItem key={item} status={index} onSelect={this.changeTopicStatus}/>
@@ -194,7 +194,8 @@ class TopicDetail extends Component {
 const styles = StyleSheet.create({
   topicContent: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    borderBottom: '1px solid #EEE',
   },
 
   content: {
@@ -203,7 +204,9 @@ const styles = StyleSheet.create({
 
   content__titleBar: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    borderBottom: '1px solid #EEE',
+    
   },
 
   statusItem: {
@@ -213,6 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#AADDFf'
   },
   commentListWrapper: {
+    borderTop: '1px solid #EEE'
 
   },
 
