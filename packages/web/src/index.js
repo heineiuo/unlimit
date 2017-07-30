@@ -23,9 +23,9 @@ defaults(global, {
   __SMILE_DEV: process.env.NODE_ENV !== 'production',
   API_HOST: `https://api.youkuohao.com`,
   __SMILE_API: `https://api.youkuohao.com`
-});
+})
 
-[
+;[
   {name: 'react', default: global.React},
   {name: 'react-dom', default: global.ReactDOM},
   {name: 'react-router-dom', default: ReactRouterDOM},
