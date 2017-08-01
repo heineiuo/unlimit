@@ -10,17 +10,20 @@ import {Db} from './db'
 import createServer from './http'
 import allActionCreators from './actions'
 
-try {
-  dotenv.config()
-} catch(e){
+const defaultEnv = `# unlimit
+DATA_DIR = ./data
+`
+
+let env = dotenv.config()
+if (env.error) {
   shell.exec(`mkdir -p ${homedir()}/.unlimit`)
   const envPath = `${homedir()}/.unlimit/.env`
-  try {
-    fs.openSync(envPath)
-  } catch(err2){
-    fs.writeFileSync(envPath, '', 'utf8')
+  env = dotenv.config({path: envPath})
+  if (env.error) {
+    console.log(env.error)
+    fs.writeFileSync(envPath, defaultEnv, 'utf8')
+    env = dotenv.config({path: envPath})
   }
-  dotenv.config({path: envPath})
 }
 
 const {

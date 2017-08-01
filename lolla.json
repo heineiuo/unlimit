@@ -185,7 +185,7 @@
     {
       "name": "@unlimit/server",
       "outputDir": "./packages/server",
-      "version": "0.2.2-beta.19",
+      "version": "0.2.2-beta.22",
       "main": "index.js",
       "platform": "node",
       "babel-loader": "babel-loader",
