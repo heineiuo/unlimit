@@ -13,7 +13,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const {name, description} = validated.value;
   
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     const {session} = getCtx().request.headers;
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const userId = session ? session.userId : '123';

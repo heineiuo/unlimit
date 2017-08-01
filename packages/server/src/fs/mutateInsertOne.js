@@ -20,7 +20,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   let {driveId, type, parentId, name, content} = validated.value;
-  const {db, config} = getCtx();
+  const {db} = getCtx();
 
   try {
     const fileContentDb = db.collection('fileContent');

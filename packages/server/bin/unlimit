@@ -2,4 +2,4 @@
 
 'use strict';
 
-require('../node_modules/@unlimit/cli/index.js');
+require('@unlimit/cli');

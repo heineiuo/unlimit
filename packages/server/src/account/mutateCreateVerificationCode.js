@@ -3,6 +3,8 @@ import Joi from 'joi'
 
 let client = null;
 
+
+
 /**
  * 生成数字验证码
  * @param length 验证码长度
@@ -27,7 +29,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error)
   const {email} = validated.value;
   try {
-    const {config, db} = getCtx();
+    const {db} = getCtx();
     const emailcodedb = db.collection('emailcode');
     const code = createNumberCode();
     await emailcodedb.insertOne({_id: email, code, createTime: Date.now()});
@@ -39,13 +41,20 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
       TextBody: `您的验证码为${code}`
     };
 
-    if (config.debug) return resolve({email})
+    const { 
+      NODE_ENV,
+      ALIYUN_ACCESS_ID,
+      ALIYUN_ACCESS_SECRET,
+      ALIYUN_DMS_ACCOUNT_NAME,
+    } = process.env
+
+    if (!(NODE_ENV === 'production')) return resolve({email})
 
     if (!client) {
       client = new AliPush({
-        AccessKeyId: config.aliyun.accessid,
-        AccessKeySecret: config.aliyun.accesskey,
-        AccountName: config.aliyun.dms.accountName
+        AccessKeyId: ALIYUN_ACCESS_ID,
+        AccessKeySecret: ALIYUN_ACCESS_SECRET,
+        AccountName: ALIYUN_DMS_ACCOUNT_NAME
       });
     }
 

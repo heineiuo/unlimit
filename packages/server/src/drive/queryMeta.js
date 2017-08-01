@@ -10,7 +10,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value;
   const filter = {}
-  const {db, config, request} = getCtx()
+  const {db, request} = getCtx()
   const {session} = request.headers;
   if (!session) return reject('PERMISSION_DENIED')
   const userId = session.userId

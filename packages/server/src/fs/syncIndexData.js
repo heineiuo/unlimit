@@ -36,7 +36,7 @@ const walkLeftToRight = (paths, fileDb, parentId, driveId) => new Promise(async 
  * fileIndex 里保存路径 -> 文件信息的键值对
  */
 export default ({fullPath}) => (dispatch, getCtx) => new Promise(async resolve => {
-  const {db, config} = getCtx()
+  const {db} = getCtx()
   let indexData = {error: 'NOT_FOUND', updateTime: Date.now()}
   
   try {
@@ -84,7 +84,7 @@ const walkRightToLeft = (paths, filedb, id, driveId) => new Promise(async (resol
  */
 export const syncIndexDataByFile = ({file, fileId, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     const fileDb = db.collection('file')
     if (!file) {
       file = await fileDb.findOne({_id: fileId})

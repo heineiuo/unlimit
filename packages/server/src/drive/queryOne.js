@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import CustomError from '../../CustomError'
 
 const queryOneSchema = Joi.object().keys({
   domain: Joi.string().regex(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/),
@@ -14,13 +13,15 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {domain, driveId, name, fields} = validated.value;
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     const driveDb = db.collection('drive');
     const filter = driveId ? {_id: driveId} :
       name ? {name} :
       {domains: {$elemMatch: {$eq: domain}}}
     const result = await driveDb.findOne(filter, {fields})
-    if (!result) return reject(new CustomError('NotFoundError', 'Cannot find target drive'))
+    const error = new Error('Cannot find target drive')
+    error.name = 'NotFoundError'
+    if (!result) return reject(error)
     resolve({...result, driveId: result._id})
   } catch(e){
     reject(e)

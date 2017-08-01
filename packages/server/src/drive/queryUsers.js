@@ -10,7 +10,7 @@ export default query => (dispatch, geCtx) => new Promise(async (resolve, reject)
   if (validated.error) return reject(validated.error);
   const {driveId} = validated.value;
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     const driveDb = db.collection('drive');
     const filter = {_id: driveId};
     const result = await driveDb.findOne(filter, {fields: {users: 1}})

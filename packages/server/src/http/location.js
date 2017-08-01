@@ -2,6 +2,8 @@ import Url from "url"
 import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
 
+
+
 /**
  * 通过比对pathname, 找到路由
  */
@@ -35,14 +37,15 @@ export const pickLocation = (locations, requrl) => new Promise((resolve, reject)
 /**e
  * 查找host及其location列表
  */
-export default (getSeashell, config) => async (req, res, next) => {
+export default (getSeashell) => async (req, res, next) => {
   try {
+    const { HTTPS_FORCE_DOMAINS, API_DOMAIN } = process.env
+    const forceHTTPSDomains = HTTPS_FORCE_DOMAINS.split(',')
     const seashell = await getSeashell();
     const {host} = req.headers;
-    const {forceHTTPSDomains} = config.https;
     let locations = []
     let driveId = ''
-    if (host === config.apiDomain) {
+    if (host === API_DOMAIN) {
       locations = [{
         "pathname": "*",
         "cors": true,

@@ -1,9 +1,0 @@
-{
-  "targets": [
-    {
-      "entry": "./server/index.js",
-      "outputPath": "packages/@unlimit/server",
-      "outputName": "index.src"
-    }
-  ]
-}

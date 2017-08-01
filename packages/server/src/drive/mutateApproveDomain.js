@@ -2,6 +2,7 @@ import letiny from 'letiny'
 import Joi from 'joi'
 import {tmpdir} from 'os'
 import mkdirp from 'mkdirp'
+import path from 'path'
 
 const mutateApproveDomainSchema = Joi.object().keys({
   domain: Joi.string().required(),
@@ -13,13 +14,13 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   if (validated.error) return reject(validated.error);
   const {domain, driveId} = validated.value;
   try {
-    const {config} = getCtx()
+    const {HTTPS_EMAIL, DATA_DIR} = process.env;
+    
     // todo check rate limit
-    const {https: {email}, datadir} = config;
-    const pemdir = datadir + '/pem';
+    const pemdir = path.resolve(DATA_DIR, './pem')
     mkdirp.sync(`${pemdir}/${domain}`);
     letiny.getCert({
-      email,
+      email: HTTPS_EMAIL,
       domains: domain, //'example.com,www.example.com',
       webroot: `${tmpdir()}`,
       pfxFile: `${pemdir}/${domain}/pfx.pem`,

@@ -1,4 +1,4 @@
-import CustomError from '../CustomError'
+
 
 /**
  * 文件下载代理

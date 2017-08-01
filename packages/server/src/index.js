@@ -1,32 +1,50 @@
 import Seashell from 'seashell'
 import chalk from 'chalk'
 import {createDispatch, pathsToActions} from 'action-creator'
-import getConfig from './config'
+import dotenv from 'dotenv'
+import shell from 'shelljs'
+import {homedir} from 'os'
+import path from 'path'
+import fs from 'fs'
 import {Db} from './db'
 import createServer from './http'
 import allActionCreators from './actions'
-import CustomError from './CustomError'
+
+try {
+  dotenv.config()
+} catch(e){
+  shell.exec(`mkdir -p ${homedir()}/.unlimit`)
+  const envPath = `${homedir()}/.unlimit/.env`
+  try {
+    fs.openSync(envPath)
+  } catch(err2){
+    fs.writeFileSync(envPath, '', 'utf8')
+  }
+  dotenv.config({path: envPath})
+}
+
+const {
+  DATA_DIR,
+  NODE_ENV
+} = process.env
 
 const start = async () => {
   try {
 
-    const config = await getConfig();
-    
     const db = new Db({
       presets: [],
-      dbpath: `${config.datadir}/db`,
+      dbpath: path.resolve(DATA_DIR, './db'),
       keyEncoding: 'utf8',
       valueEncoding: 'json'
     });
 
-    const server = createServer(config);
+    const server = createServer();
 
     // const server = require('http').createServer();
     const app = new Seashell({server});
     
     app.use(async (ctx, next) => {
       ctx.db = db;
-      ctx.config = config;
 
       ctx.log = (...args) => console.log(...args)
 
@@ -46,7 +64,7 @@ const start = async () => {
       }
 
       ctx.on('error', (err) => {
-        if (config.debug) console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
+        if (!(process.env.NODE_ENV === 'production')) console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
         if (err.name === 'ValidationError') return ctx.error('PARAM_ILLEGAL');
         if (err.message === 'Command failed') return ctx.error('COMMAND_FAILED');
         return ctx.error(err.message);
@@ -68,8 +86,7 @@ const start = async () => {
         paths,
         allActionCreators,
         ctx.json,
-        ctx.error,
-        config
+        ctx.error
       )
     });
 

@@ -16,7 +16,7 @@ const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
     return reject(validated.error)
   }
   const {driveId, processId} = validated.value;
-  const {db, config} = getCtx()
+  const {db} = getCtx()
   
   try {
     const processDb = db.collection('process')

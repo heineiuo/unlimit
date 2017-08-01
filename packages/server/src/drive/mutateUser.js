@@ -13,7 +13,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const {driveId, add, remove} = validated.value;
 
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     if (add.length > 0 || remove.length > 0) {
       const driveDb = db.collection('drive');
       const driveData = await driveDb.findOne({_id: driveId});

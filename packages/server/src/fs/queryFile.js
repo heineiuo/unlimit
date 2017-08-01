@@ -14,7 +14,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {keywords, tags, limit, fields, parentId, driveId, replaceWithFileMetaIfIsFile} = validated.value;
-  const {db, config} = getCtx()
+  const {db} = getCtx()
   try {
     const fileDb = db.collection('file');
     if (parentId) {

@@ -12,7 +12,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
   const {locations, driveId} = validated.value;
   
   try {
-    const {db, config, request: {headers: {session}}} = getCtx()
+    const {db, request: {headers: {session}}} = getCtx()
     const {userId} = session;
     const driveDb = db.collection('drive');
     const locationResult = await driveDb.findOne({_id: driveId});

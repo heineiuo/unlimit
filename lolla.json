@@ -17,6 +17,12 @@
     {"commonjs": "ckeditor","root": "CKEDITOR"}
   ],
   "ignorePackages": [
+    "@unlimit/web", 
+    "@unlimit/admin", 
+    "@unlimit/text-editor",
+    "@unlimit/cms",
+    "@unlimit/oauth",
+    "@unlimit/cms-theme-default"
   ],
   "packages": [
     {
@@ -86,14 +92,7 @@
       "main": "index.js",
       "devEntry": "./packages/admin/src/index.js",
       "externals": [
-        "react",
-        "react-dom", 
-        "aphrodite", 
-        "react-router-dom", 
-        "redux", 
-        "react-redux", 
-        "react-router-redux", 
-        "react-modal"
+        "react","react-dom", "aphrodite", "react-router-dom", "redux", "react-redux", "react-router-redux", "react-modal"
       ]
     },
     {
@@ -103,14 +102,7 @@
       "main": "index.js",
       "devEntry": "./packages/text-editor/src/index.js",
       "externals": [
-        "react",
-        "react-dom", 
-        "aphrodite", 
-        "react-router-dom", 
-        "redux",
-        "react-redux", 
-        "react-router-redux", 
-        "react-modal"
+        "react", "react-dom",  "aphrodite",  "react-router-dom",  "redux", "react-redux",  "react-router-redux",  "react-modal"
       ]
     },
     {
@@ -120,14 +112,7 @@
       "main": "index.js",
       "devEntry": "./packages/oauth/src/index.js",
       "externals": [
-        "react",
-        "react-dom", 
-        "aphrodite", 
-        "react-router-dom", 
-        "redux", 
-        "react-redux", 
-        "react-router-redux", 
-        "react-modal"
+        "react", "react-dom",  "aphrodite",  "react-router-dom",  "redux",  "react-redux",  "react-router-redux",  "react-modal"
       ]
     },
     {
@@ -194,15 +179,17 @@
       "main": "index.js",
       "devEntry": "./packages/cms-theme-default/src/index.js",
       "externals": [
-        "react",
-        "react-dom", 
-        "aphrodite", 
-        "react-router-dom", 
-        "redux", 
-        "react-redux", 
-        "react-router-redux", 
-        "react-modal"
+        "react", "react-dom", "aphrodite", "react-router-dom", "redux", "react-redux", "react-router-redux", "react-modal"
       ]
+    },
+    {
+      "name": "@unlimit/server",
+      "outputDir": "./packages/server",
+      "version": "0.2.2-beta.19",
+      "main": "index.js",
+      "platform": "node",
+      "babel-loader": "babel-loader",
+      "devEntry": "./packages/server/src/index.js"
     }
   ]
 }

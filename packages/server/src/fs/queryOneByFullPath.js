@@ -38,17 +38,18 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
    */
   fullPath = trimEnd(fullPath, '/')
 
-  const {db, config} = getCtx()
+  const {db} = getCtx()
 
   try {
     const fileIndexDb = db.collection('fileIndex')
 
     const findAndCheckUpdate = (fullPath) => new Promise(async resolve => {
       try {
+        const { CACHE_EXPIRE_TIME } = process.env
         let indexData = await fileIndexDb.findOne({_id: fullPath})
         if (!indexData || !indexData.updateTime) {
           indexData = await dispatch(syncIndexData({fullPath}))
-        } else if (indexData.updateTime > Date.now() + ms(config.cacheExpireTime)) {
+        } else if (indexData.updateTime > Date.now() + ms(CACHE_EXPIRE_TIME)) {
           indexData = await dispatch(syncIndexData({fullPath}))
         }
         resolve(indexData)

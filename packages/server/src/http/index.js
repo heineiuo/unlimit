@@ -30,7 +30,7 @@ const getSeashell = () => new Promise((resolve, reject) => {
   reject(new Error('Seashell not ready'));
 })
 
-const createApp = (config) => {
+const createApp = () => {
     
   const app = express();
 
@@ -46,7 +46,7 @@ const createApp = (config) => {
    *  否则更新res.locals.location， 并交给execLocation继续处理
    * 3. execLocation能处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
    */
-  app.use(pickLocation(getSeashell, config));
+  app.use(pickLocation(getSeashell));
   app.use(proxySeashell(getSeashell));
   app.use(execLocation(getSeashell));
 
@@ -92,11 +92,11 @@ const run = (s, server, secureServer) => {
 
 const ctxMap = {}
 
-const SNICallback = (config) => (servername, callback) => {
-  const {https: {approvedDomains}, datadir} = config;
-  const pemdir = datadir + '/pem';
+const SNICallback = (servername, callback) => {
+  const { HTTPS_APPROVED_DOMAINS, DATA_DIR } = process.env
+  const pemdir = path.resolve(DATA_DIR, './pem')
   if (ctxMap[servername]) return callback(null, ctxMap[servername]);
-  if (!approvedDomains.includes(servername)) {
+  if (!HTTPS_APPROVED_DOMAINS.includes(servername)) {
     console.log('Unapproved domain')
     return callback(new Error('Unapproved domain'));
   }
@@ -110,16 +110,15 @@ const SNICallback = (config) => (servername, callback) => {
   })
 }
 
-export default (config) => {
-  const app = createApp(config);
+export default () => {
+  const app = createApp();
   const server = http.createServer(app);
-  const enableHttps = config.https.enable || false;
-  if (!enableHttps) {
+  if (!process.env.HTTPS_ENABLE) {
     server.run = (s) => run(s, server);
     return server;
   }
 
-  const secureServer = https.createServer({SNICallback: SNICallback(config)}, app);
+  const secureServer = https.createServer({SNICallback}, app);
   secureServer.run = (s) => run(s, server, secureServer);
   return secureServer
 

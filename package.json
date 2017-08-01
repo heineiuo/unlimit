@@ -120,6 +120,7 @@
     "seashell-dev": "^0.1.0",
     "seashell-proxy": "^0.2.4",
     "selection-range": "^1.1.0",
+    "shelljs": "^0.7.8",
     "sift": "^3.3.12",
     "sketch-js": "^1.1.3",
     "smile-web": "^0.0.4",

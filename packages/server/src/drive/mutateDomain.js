@@ -14,7 +14,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const {driveId,add, remove} = validated.value;
   
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     const driveDb = db.collection('drive');
     const driveData = await dispatch(queryOne({driveId, fields: ['domains']}));
     if (!driveData) return reject(new Error('DRIVE_NOT_FOUND'));

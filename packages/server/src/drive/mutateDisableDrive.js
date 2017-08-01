@@ -8,7 +8,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, mutateDisableSchema, {allowUnknown: true})
   const {driveId} = validated.value;
   try {
-    const {db, config} = getCtx()
+    const {db} = getCtx()
     const driveDb = db.collection('drive');
     await driveDb.findOneAndUpdate({_id: driveId}, {$set: {status: 0}})
     resolve({ok: 'ok'})

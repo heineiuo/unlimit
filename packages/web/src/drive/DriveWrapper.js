@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react"
 import Paper from "@react-web/paper"
 import {Route, Switch, Link} from "react-router-dom"
-import {TabBar, TabPane} from "@react-web/tabs"
+import { TabBar, TabPane } from "@react-web/tabs"
 import {css, StyleSheet} from "aphrodite"
 import {connect} from "react-redux"
 import {push} from "react-router-redux"
@@ -52,7 +52,8 @@ class DriveWrapper extends Component {
               <TabBar
                 underlineStyle={{borderBottomWidth: 2, borderColor: '#e36209'}}
                 activeKey={this.state.activeTab}
-                onSwitchKey={this.handleSwitchKey}>
+                onSwitchKey={this.handleSwitchKey}
+              >
                 <TabPane key="file" style={styles.tabPane._definition}>文件</TabPane>
                 {/*<TabPane key="topics" style={styles.tabPane._definition}>主题</TabPane>*/}
                 <TabPane key="website" style={styles.tabPane._definition}>网站</TabPane>

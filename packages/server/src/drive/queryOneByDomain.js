@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import queryOne from './queryOne'
 import ms from 'ms'
-import CustomError from '../../CustomError'
+
 
 const queryDomainSchema = Joi.object().keys({
   updateTime: Joi.number().required(),
@@ -18,12 +18,12 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   const validated = Joi.validate(query, queryByDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {domain, forceSync} = validated.value;
-  const {db, config, log} = getCtx()
+  const {db, log} = getCtx()
+  const { PAGE_DOMAIN, CACHE_EXPIRE_TIME, API_DOMAIN } = process.env
   
   const syncCache = async () => {
     try {
-      const {pageDomain} = config;
-      const pageDomainRegex = new RegExp(`.${pageDomain}$`);
+      const pageDomainRegex = new RegExp(`.${PAGE_DOMAIN}$`);
       const index = domain.search(pageDomainRegex);
       const filter = index === -1 ? {domain} : {
         name: domain.substring(0, index)
@@ -48,8 +48,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
   }
 
   try {
-    const {cacheExpireTime, apiDomain} = config;
-    if (domain === apiDomain) return resolve({
+    if (domain === API_DOMAIN) return resolve({
       driveId: '',
       locations: [{
         "pathname": "*",
@@ -61,11 +60,13 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
     const domainDb = db.collection('domain');
     const target = await domainDb.findOne({domain});
     if (!target || target.disable) {
-      reject(new CustomError('NotFoundError', 'Cannout find target domain'));
+      const error = new Error('Cannout find target domain')
+      error.name = 'NotFoundError'
+      reject(error);
       return process.nextTick(syncCache)
     }
     resolve(target);
-    if (forceSync || Date.now() > target.updateTime + ms(cacheExpireTime)) process.nextTick(syncCache)
+    if (forceSync || Date.now() > target.updateTime + ms(CACHE_EXPIRE_TIME)) process.nextTick(syncCache)
   } catch(e){
     reject(e)
   }

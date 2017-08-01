@@ -4,7 +4,7 @@ const uuid = require('uuid')
 const fs = require('fs')
 const pkg = JSON.parse(fs.readFileSync(`${process.cwd()}/package.json`))
 
-const config = {
+const cache = {
   upgrading: false,
   switch_version_log: []
 }
@@ -12,11 +12,11 @@ const config = {
 const log = query => (dispatch, getCtx) => {
   if (!query.id) {
     return {
-      log: config.switch_version_log
+      log: cache.switch_version_log
     }
   }
 
-  const target = config.switch_version_log.find(log => log.switch_version_log_id === query.id)
+  const target = cache.switch_version_log.find(log => log.switch_version_log_id === query.id)
   return !target ? {error: 'NotFoundError'} : target
 }
 
@@ -33,14 +33,14 @@ const upgrade = query => (dispatch, getCtx) => new Promise(async (resolve, rejec
     message: `Current version is ${version} too`
   })
 
-  if (config.upgrading) return resolve({
+  if (cache.upgrading) return resolve({
     message: `Program is upgrading, please retry later`
   })
-  config.upgrading = true
+  cache.upgrading = true
 
   npm.load({global: true}, (err) => {
     if (err) {
-      config.upgrading = false
+      cache.upgrading = false
       return resolve({error: 'NpmError', message: 'An error occurred before npm install, maybe you have to manually upgrade'})
     }
 
@@ -53,13 +53,13 @@ const upgrade = query => (dispatch, getCtx) => new Promise(async (resolve, rejec
 
     npm.commands.install([`${pkg.name}@${version}`], (err) => {
       if (err) {
-        config.upgrading = false
-        config.switch_version_log.unshift({
+        cache.upgrading = false
+        cache.switch_version_log.unshift({
           switch_version_log_id,
           time: new Date(),
           error: err
         })
-        if (config.switch_version_log.length > 100) config.switch_version_log.pop()
+        if (cache.switch_version_log.length > 100) cache.switch_version_log.pop()
         return null
       }
       process.exit(0)
