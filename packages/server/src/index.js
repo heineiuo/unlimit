@@ -6,7 +6,7 @@ import shell from 'shelljs'
 import {homedir} from 'os'
 import path from 'path'
 import fs from 'fs'
-import {Db} from './db'
+import {Db} from '../../db/src'
 import createServer from './http'
 import allActionCreators from './actions'
 

@@ -21,7 +21,7 @@ export default (req, res, next) => {
     });
 
     proxy.on('error', (err, req, res) => {
-      res.next(err)
+      next(err)
     });
 
     proxy.on('proxyRes', (proxyRes, req, res) => {
