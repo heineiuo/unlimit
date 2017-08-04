@@ -17,12 +17,12 @@
     {"commonjs": "ckeditor","root": "CKEDITOR"}
   ],
   "ignorePackages": [
-    "@unlimit/web", 
-    "@unlimit/admin", 
-    "@unlimit/text-editor",
-    "@unlimit/cms",
-    "@unlimit/oauth",
-    "@unlimit/cms-theme-default"
+    "//@unlimit/web", 
+    "//@unlimit/admin", 
+    "//@unlimit/text-editor",
+    "//@unlimit/cms",
+    "//@unlimit/oauth",
+    "//@unlimit/cms-theme-default"
   ],
   "packages": [
     {
@@ -72,8 +72,8 @@
         },
         "devGlobalConstants": {
           "__SMILE_DEV": true,
-          "__SMILE_API": "https://api.youkuohao.com",
-          "API_HOST": "https://api.youkuohao.com",
+          "__SMILE_API": "http://api.youkuohao.dev",
+          "API_HOST": "http://api.youkuohao.dev",
           "__SMILE_OAUTH_UI_URL": "http://www.youkuohao.dev/#/oauth"
         },
         "styles": {

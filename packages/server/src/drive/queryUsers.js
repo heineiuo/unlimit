@@ -5,7 +5,7 @@ const queryUserSchema =  Joi.object().keys({
 })
 
 
-export default query => (dispatch, geCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryUserSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId} = validated.value;

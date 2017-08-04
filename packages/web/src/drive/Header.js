@@ -7,9 +7,12 @@ import Paper from '@react-web/paper'
 import Modal from 'react-modal'
 import Input from '@react-web/input'
 import Button from '@react-web/button'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import Title from '../components/Title'
 import ProfileDropDown from '../components/ProfileDropDown'
 import commonStyles from '../components/commonStyles'
+import { mutateInsertOne } from './index'
 
 class Header extends Component {
 
@@ -90,4 +93,11 @@ const styles = StyleSheet.create({
   ...commonStyles
 });
 
-export default module.exports = Header
+export default module.exports = connect(
+  store => ({
+    
+  }),
+  dispatch => bindActionCreators({
+    createHost: mutateInsertOne
+  }, dispatch)
+)(Header)

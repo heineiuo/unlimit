@@ -1,11 +1,9 @@
-import { handleActions } from 'redux-actions'
-import { injectAsyncReducer } from '@react-web/store'
 import Fetch from '@shared/fetch'
 const {API_HOST} = global
 import {push} from 'react-router-redux'
+import { match, when } from 'match-when'
 
-
-const initialState = {
+const defaultState = {
   currentDriveId: '',
   currentDriveName: '',
 
@@ -23,59 +21,60 @@ const initialState = {
   locations: {},
 };
 
-injectAsyncReducer('drive', handleActions({
-  host__stateUpdate (state, action) {
-    return Object.assign({}, state, action.payload)
-  },
+export default (state=defaultState, action) => {
+  return match(action.type, {
+    [when('@@host/STATE_UPDATE')]: () => 
+      Object.assign({}, state, action.payload),
 
-  host__hostListUpdate (state, action) {
-    return Object.assign({}, state, action.payload, {
-      hostListState: 2,
-    })
-  },
+    [when('@@host/LIST_UPDATE')]: () => 
+      Object.assign({}, state, action.payload, {
+        hostListState: 2,
+      }),
 
-  host__metaUpdate (state, action) {
-    const {payload: {driveId, domains, name, locations, adminId}} = action;
-    return Object.assign({}, state, {
-      currentDriveId: driveId,
-      currentDriveName: name,
-      locations,
-      locationState: 2,
-      adminId,
-      domains,
-    })
-  },
+    [when('@@host/META_UPDATE')]: () => {
+      const {payload: {driveId, domains, name, locations, adminId}} = action;
+      return Object.assign({}, state, {
+        currentDriveId: driveId,
+        currentDriveName: name,
+        locations,
+        locationState: 2,
+        adminId,
+        domains,
+      })
+    },
+    
+    [when('@@host/ADD')]: () => {
+      const {name, _id, description=''} = action.payload;
+      const nextHostList = state.hostList.concat({
+        name, _id, description
+      });
+      return Object.assign({}, state, {hostList: nextHostList})
+    },
 
-  host__add (state, action) {
-    const {name, _id, description=''} = action.payload;
-    const nextHostList = state.hostList.concat({
-      name, _id, description
-    });
-    return Object.assign({}, state, {hostList: nextHostList})
-  },
+    [when('@@host/REMOVE')]: () => {
+      const nextHostList = state.hostList.filter(item => {
+        return item.hostname !== action.payload.hostname
+      });
+      return Object.assign({}, state, {hostList: nextHostList})
+    },
 
-  host__remove (state, action) {
-    const nextHostList = state.hostList.filter(item => {
-      return item.hostname !== action.payload.hostname
-    });
-    return Object.assign({}, state, {hostList: nextHostList})
-  },
+    [when('@@host/LOCATION_UPDATE')]: () => {
+      return Object.assign({}, state, action.payload, {
+        locationState: 2
+      })
+    },
 
-  host__locationUpdate (state, action) {
-    return Object.assign({}, state, action.payload, {
-      locationState: 2
-    })
-  },
+    [when('@@host/DRIVE_USER_UPDATE')]: () => {
+      const {driveUserState, driveUserError='', driveUserList, driveUserAdmin} = action.payload;
+      return Object.assign({}, state, {driveUserState, driveUserError},
+        driveUserList ? {driveUserList} : {},
+        driveUserAdmin ? {driveUserAdmin} : {}
+      )
+    },
 
-  host__driveUserUpdate (state, action) {
-    const {driveUserState, driveUserError='', driveUserList, driveUserAdmin} = action.payload;
-    return Object.assign({}, state, {driveUserState, driveUserError},
-      driveUserList ? {driveUserList} : {},
-      driveUserAdmin ? {driveUserAdmin} : {}
-    )
-  },
-
-}, initialState))
+    [when()]: state
+  })
+}
 
 
 /**
@@ -92,7 +91,7 @@ export const mutateDeleteOne = (driveId) => async (dispatch, getState) => {
   if (result.error) return console.log(result.error)
 
   dispatch({
-    type: 'host__remove',
+    type: '@@host/REMOVE',
     payload: {driveId}
   })
 
@@ -112,7 +111,7 @@ export const mutateInsertOne = (query) => async (dispatch, getState) => {
   if (result.error) return alert(result.error);
 
   dispatch({
-    type: 'host__add',
+    type: '@@host/ADD',
     payload: {
       name: query.name
     }
@@ -141,7 +140,7 @@ export const mutateLocations = (driveId, locations) => async(dispatch, getState)
 
   if (result.error) return console.log(result.error);
   dispatch({
-    type: "host__locationUpdate",
+    type: "@@host/LOCATION_UPDATE",
     payload: {
       driveId,
       locations
@@ -160,7 +159,7 @@ export const mutateUsers = (query) => async (dispatch, getState) => {
   const handleError = (e) => {
     alert(e)
     dispatch({
-      type: 'host__driveUserUpdate',
+      type: '@@host/DRIVE_USER_UPDATE',
       payload: {
         driveUserState: 2,
         driveUserList: backup
@@ -173,7 +172,7 @@ export const mutateUsers = (query) => async (dispatch, getState) => {
     .concat(add)
 
   dispatch({
-    type: "host__driveUserUpdate",
+    type: "@@host/DRIVE_USER_UPDATE",
     payload: {
       driveUserState: 3,
       driveUserList: nextDriveUserList
@@ -189,7 +188,7 @@ export const mutateUsers = (query) => async (dispatch, getState) => {
   if (result.error) return handleError(result.error)
 
   dispatch({
-    type: "host__driveUserUpdate",
+    type: "@@host/DRIVE_USER_UPDATE",
     payload: {
       driveUserState: 2,
     }
@@ -207,7 +206,7 @@ export const queryList = () => async (dispatch, getState) => {
   const handleError = (e) => console.error(e);
 
   dispatch({
-    type: 'host__stateUpdate',
+    type: '@@host/STATE_UPDATE',
     payload: {
       hostListState: 1,
     }
@@ -219,7 +218,7 @@ export const queryList = () => async (dispatch, getState) => {
 
   if (result.error) return handleError(result.error);
   dispatch({
-    type: "host__hostListUpdate",
+    type: "@@host/LIST_UPDATE",
     payload: {
       hostList: result.data,
     }
@@ -239,7 +238,7 @@ export const queryOne =  (driveId) => async (dispatch, getState) => {
   if (result.error) throw new Error(result.error);
   const {domains, locations, name, adminId} = result;
   dispatch({
-    type: "host__metaUpdate",
+    type: "@@host/META_UPDATE",
     payload: {
       driveId, domains, locations, name, adminId
     }
@@ -256,7 +255,7 @@ export const queryUserList = (query) => async (dispatch, getState) => {
   if (result.error) return console.log(result.error);
 
   dispatch({
-    type: 'host__driveUserUpdate',
+    type: '@@host/DRIVE_USER_UPDATE',
     payload: {
       driveUserState: 2,
       driveUserList: result.data,

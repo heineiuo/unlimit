@@ -95,7 +95,7 @@ injectAsyncReducer('account', handleActions({
  * @returns {function()}
  */
 export const checkLogin = () => async (dispatch, getState) => {
-  const userToken = localStorage.userToken || null;
+  const userToken = localStorage.__SMILE_TOKEN || null;
   if (!userToken) {
     return dispatch({
       type: "account__checkedLogin",
@@ -139,7 +139,7 @@ export const checkLogin = () => async (dispatch, getState) => {
  * @returns {function()}
  */
 export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
-  const {userToken=null} = localStorage;
+  const {__SMILE_TOKEN=null} = localStorage;
   const {redirectUrl} = getState().account;
   const res = await new Fetch(api.mutateCreateAuthCode, {
     token: userToken
@@ -167,7 +167,7 @@ export const login = (formData) => async (dispatch, getState) => {
     })
   }
   localStorage.userId = result.userId;
-  localStorage.userToken = result.token;
+  localStorage.__SMILE_TOKEN = result.token;
   dispatch({
     type: 'account__loginSuccess',
     payload: {
@@ -181,7 +181,7 @@ export const login = (formData) => async (dispatch, getState) => {
 export const logout = () => async (dispatch, getState) => {
   console.log('正在登出系统...');
   const result = await new Fetch(api.mutateDeleteToken, {
-    token: localStorage.userToken
+    token: localStorage.__SMILE_TOKEN
   });
 
   if (result.error) return console.log(result.error);

@@ -5,21 +5,25 @@ import {bindActionCreators} from 'redux'
 import {css, StyleSheet} from 'aphrodite'
 import Button from '@react-web/button'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
-import {withHover} from '@react-web/hover'
+import { Hover } from '@react-web/hover'
 import TagsEditor from './TagsEditor'
 import {allStatus, postTopic, putTopic, editTopicTags, 
-  editTopicStatus, getTopic} from './'
+  editTopicStatus, getTopic} from './index'
 import TopicCommentList from './TopicCommentList'
 import DraftWithPlugin from './DraftWithPlugin'
 
-const StatusItem = withHover(props => (
-  <div
-    onClick={() => props.onSelect(props.status)}
-    className={css(styles.statusItem, props.hovered && styles.statusItem_hover)}
-  >
-    {allStatus[props.status]}
-  </div>
-))
+const StatusItem = props => (
+  <Hover>
+    {({isHovered}) => (
+      <div
+        onClick={() => props.onSelect(props.status)}
+        className={css(styles.statusItem, isHovered && styles.statusItem_hover)}
+      >
+        {allStatus[props.status]}
+      </div>
+    )}
+  </Hover>
+)
 
 class TopicDetail extends Component {
 
@@ -103,91 +107,104 @@ class TopicDetail extends Component {
   }
 
   render(){
-    const {isCreated, isEditing, title, tags, html, status, content} = this.state;
-    return (
-      <div>
+    try {
+      const {isCreated, isEditing, title, tags, html, status, content} = this.state;
+
+      return (
         <div>
-          <div className={css(styles.topicContent)}>
-            <div className={css(styles.content)}>
-              <div className={css(styles.content__titleBar)}>
-                <div style={{flex: 1}}>
-                  {
-                    !isCreated || isEditing ?
-                      <div>
-                        <input
-                          placeholder="输入标题"
-                          type="text"
-                          onChange={(e) => this.setState({title: e.target.value})}
-                          value={this.state.title}
-                          className={css(styles.titleInput)}/>
-                      </div> :
-                      <div>{title}</div>
-                  }
+          <div>
+            <div className={css(styles.topicContent)}>
+              <div className={css(styles.content)}>
+                <div className={css(styles.content__titleBar)}>
+                  <div style={{flex: 1}}>
+                    {
+                      !isCreated || isEditing ?
+                        <div>
+                          <input
+                            placeholder="输入标题"
+                            type="text"
+                            onChange={(e) => this.setState({title: e.target.value})}
+                            value={this.state.title}
+                            className={css(styles.titleInput)}/>
+                        </div> :
+                        <div>{title}</div>
+                    }
+                  </div>
+                  <div>
+                    {
+                      isEditing || !isCreated ?
+                        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                          {/*不保存，退出编辑模式*/}
+                          {
+                            !isCreated ? null :
+                              <Button style={{flex: 1}} type="primary" size="large" onClick={this.exitEditMode}>退出编辑</Button>
+                          }
+                          {/*保存, 不退出编辑模式*/}
+                          <Button style={{flex: 1}} type="primary" size="large" onClick={this.saveArticle}>保存</Button>
+                        </div> :
+                        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                          {/*进入编辑模式*/}
+                          <Button style={{width: 100}} type="primary" size="large" onClick={this.openEditMode}>编辑</Button>
+                        </div>
+                    }
+                  </div>
                 </div>
+
+                {
+                  !isCreated || isEditing ?
+                    <div className={css(styles.editorContainer)}>
+                      {/*<Draft />*/}
+                      {/*<RichText />*/}
+                      <DraftWithPlugin rawContent={content} ref={ref => this.contentEditor = ref}/>
+                    </div> :
+                    <div dangerouslySetInnerHTML={{__html: html}} />
+                }
+              </div>
+              {/* sidebar start */}
+              <div className={css(styles.center__side)}>
+                <div>标签:</div>
                 <div>
-                  {
-                    isEditing || !isCreated ?
-                      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                        {/*不保存，退出编辑模式*/}
-                        {
-                          !isCreated ? null :
-                            <Button style={{flex: 1}} type="primary" size="large" onClick={this.exitEditMode}>退出编辑</Button>
-                        }
-                        {/*保存, 不退出编辑模式*/}
-                        <Button style={{flex: 1}} type="primary" size="large" onClick={this.saveArticle}>保存</Button>
-                      </div> :
-                      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                        {/*进入编辑模式*/}
-                        <Button style={{width: 100}} type="primary" size="large" onClick={this.openEditMode}>编辑</Button>
-                      </div>
-                  }
+                  <TagsEditor
+                    ref={ref => this.tagsEditor = ref}
+                    tags={tags.split(',')}
+                    onTagsChange={this.onTagsChange} />
                 </div>
+
+                {/*修改状态*/}
+                <DropDown ref={ref => this.statusDropDown = ref}>
+                  <DropDownTrigger>
+                    <div>{allStatus[status]}</div>
+                  </DropDownTrigger>
+                  <DropDownContent style={{position: 'absolute'}}>
+                    <div>
+                      {
+                        allStatus.map((item, index) => (
+                          <StatusItem 
+                            key={item} 
+                            status={index} 
+                            onSelect={this.changeTopicStatus}/>
+                        ))
+                      }
+                    </div>
+                  </DropDownContent>
+                </DropDown>
+
               </div>
-
-              {
-                !isCreated || isEditing ?
-                  <div className={css(styles.editorContainer)}>
-                    {/*<Draft />*/}
-                    {/*<RichText />*/}
-                    <DraftWithPlugin rawContent={content} ref={ref => this.contentEditor = ref}/>
-                  </div> :
-                  <div dangerouslySetInnerHTML={{__html: html}} />
-              }
+              {/*sidebar end*/}
             </div>
-            {/* sidebar start */}
-            <div className={css(styles.center__side)}>
-              <div>标签:</div>
-              <div>
-                <TagsEditor
-                  ref={ref => this.tagsEditor = ref}
-                  tags={tags.split(',')}
-                  onTagsChange={this.onTagsChange} />
-              </div>
-
-              {/*修改状态*/}
-              <DropDown ref={ref => this.statusDropDown = ref}>
-                <DropDownTrigger>{allStatus[status]}</DropDownTrigger>
-                <DropDownContent style={{position: 'absolute'}}>
-                  {
-                    allStatus.map((item, index) => (
-                      <StatusItem key={item} status={index} onSelect={this.changeTopicStatus}/>
-                    ))
-                  }
-                </DropDownContent>
-              </DropDown>
-
-            </div>
-            {/*sidebar end*/}
+          </div>
+          <div className={css(styles.commentListWrapper)}>
+            {
+              !isCreated ? null :
+                <TopicCommentList />
+            }
           </div>
         </div>
-        <div className={css(styles.commentListWrapper)}>
-          {
-            !isCreated ? null :
-              <TopicCommentList />
-          }
-        </div>
-      </div>
-    )
+      )    
+  
+    } catch(e){
+      console.log(e)
+    }
   }
 }
 

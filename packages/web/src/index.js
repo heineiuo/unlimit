@@ -11,6 +11,9 @@ import React, {Component } from 'react'
 import {HashRouter} from 'react-router-dom'
 import './notice'
 import './nav'
+import drive from './drive'
+
+injectAsyncReducer('drive', drive)
 
 import App from './App'
 

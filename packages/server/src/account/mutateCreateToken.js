@@ -50,7 +50,7 @@ const createUser = (email, db) => new Promise(async (resolve, reject) => {
     const result = await userdb.insertOne({
       email, createTime: Date.now()
     })
-    const user = result.ops[0];
+    const user = result
     resolve({ ...user, userId: user._id })
   } catch (e) {
     reject(e)
