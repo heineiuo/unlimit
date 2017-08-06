@@ -1,31 +1,21 @@
 import React, { Component } from 'react'
-import Editor, {createEditorStateWithText} from 'draft-js-plugins-editor'
-import createImagePlugin from 'draft-js-image-plugin'
 import {StyleSheet, css} from 'aphrodite'
-import {convertFromRaw, EditorState } from 'draft-js'
-import ImageAdd from './plugins/Image/ImageAdd'
-import createToolbarPlugin from './Toolbar'
-
-const toolbarPlugin = createToolbarPlugin();
-const imagePlugin = createImagePlugin()
-const plugins = [
-  toolbarPlugin,
-  imagePlugin
-]
-
-const { Toolbar } = toolbarPlugin
+import {Editor, convertFromRaw, EditorState } from 'draft-js'
 
 class DraftWithPlugin extends Component {
+
+  state = {
+  }
 
   componentWillMount = () => {
     if (this.props.rawContent) {
       this.setEditorStateFromRaw(this.props.rawContent)
+    } else {
+      this.setState({
+        editorState: EditorState.createEmpty()
+      })
     }
   }
-
-  state = {
-    editorState: createEditorStateWithText(''),
-  };
 
   getEditorState = () => {
     return this.state.editorState
@@ -43,24 +33,17 @@ class DraftWithPlugin extends Component {
   }
 
   focus = () => {
-    this.editor.focus();
-  };
+    this.editor.focus()
+  }
 
   render(){
-    const {editorState} = this.state;
+    const {editorState} = this.state
     return (
       <div>
-        <Toolbar />
-        <ImageAdd
-          editorState={editorState}
-          onChange={this.setEditorState}
-          modifier={imagePlugin.addImage}
-        />
         <div className={css(styles.editor)} onClick={this.focus}>
           <Editor
             editorState={editorState}
             onChange={this.setEditorState}
-            plugins={plugins}
             ref={(ref) => this.editor = ref}
           />
         </div>
@@ -70,7 +53,11 @@ class DraftWithPlugin extends Component {
 }
 
 const styles = StyleSheet.create({
-
+  editor: {
+    border: '1px solid #EEE',
+    padding: '20px',
+    minHeight: 400
+  }
 })
 
 export default DraftWithPlugin

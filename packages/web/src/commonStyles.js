@@ -12,8 +12,8 @@ export default {
     boxSizing: 'border-box',
     height: `${globalHeaderBarHeight}px`,
     // borderBottom: '1px solid #e2e2e2',
-    // backgroundColor: '#FFF',
-    backgroundColor: '#24292e',
+    backgroundColor: '#FFF',
+    // backgroundColor: '#24292e',
     padding: '0 20px',
     lineHeight: `${globalHeaderBarHeight}px`,
     marginBottom: 10,
@@ -22,10 +22,10 @@ export default {
     textDecoration: 'none',
     color: '#333',
     ":hover": {
-      color: '#0366d6'
+      color: '#FFF'
     },
     ":active": {
-      color: '#0366d6'
+      color: '#FFF'
     }
   },
 

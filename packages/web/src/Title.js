@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     alignSelf: 'center',
     flexDirection: 'column',
-    backgroundColor: '#FFF',
   },
 
   triangle: {
@@ -67,12 +66,12 @@ const styles = StyleSheet.create({
   link: {
     padding: '0 20px',
     height: '30px',
-    color: '#665445',
+    color: '#555',
     lineHeight: '30px',
     textDecoration: 'none',
     ':hover': {
       backgroundColor: '#1077ff',
-      color: '#FFF'
+      color: '#222'
     }
   }
 });

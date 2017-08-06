@@ -12,10 +12,10 @@ class Uploader extends Component {
     this.setState({
       urls: result.urls
     })
-  };
+  }
 
   render(){
-    const {banner} = this.state;
+    const {banner} = this.state
 
     return (
       <Upload
