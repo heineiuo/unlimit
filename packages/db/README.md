@@ -16,7 +16,7 @@ const userDb = db.collection('user')
 ### collection.find  [=> cursor]
 
 ```js
-userDb.find({}) 
+userDb.find({})
 ```
 
 ### collection.findOne  [=> cursor]

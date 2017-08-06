@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
-import Spin from 'react-spin'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import Spin from '@react-web/spin'
+import { match, when } from 'match-when'
 import Logged from "./Logged"
 import UnLogged from './Unlogged'
 import Header from './accountHeader'
-
-import {checkLogin, sendVerifyCode, getAuthCodeAndRedirect} from './'
+import { checkLogin, sendVerifyCode, getAuthCodeAndRedirect } from './'
 
 class Check extends Component {
 
@@ -18,25 +18,17 @@ class Check extends Component {
 
   render (){
     const {loginChecked, logged} = this.props;
-
     return (
       <div>
         <Header />
-        {
-          !loginChecked? (
-            <div>
-              <Spin />
-            </div>
-          ): (
-            <div>
-              {
-                logged ?
-                  <Logged/> :
-                  <UnLogged />
-              }
-            </div>
-          )
-        }
+          {match(loginChecked, {
+            [when(false)]: () => <Spin />,
+            [when()]: () => 
+              match(logged, {
+                [when(true)]: () => <Logged />,
+                [when()]: () => <UnLogged />
+              })
+          })}
       </div>
     )
   }

@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {css, StyleSheet} from 'aphrodite'
+import Upload from 'rc-upload'
 
-class Upload extends Component {
+class Uploader extends Component {
 
   state = {
     urls: []
@@ -33,4 +34,4 @@ class Upload extends Component {
   }
 }
 
-export default Upload
+export default Uploader

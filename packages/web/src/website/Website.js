@@ -103,7 +103,8 @@ class Location extends Component {
                   </div>
                   <div className={css(styles.table__body)}>
                     {
-                      locations.length === 0 ? <div>路由列表为空</div>:
+                      locations.length === 0 ? 
+                        <div>路由列表为空</div> :
                         locations.map((location, index) => (
                           <LocationItem
                             locationLength={locations.length}
@@ -159,11 +160,11 @@ const styles = StyleSheet.create({
 });
 
 
-export default module.exports = connect(
-  (state) => ({
+export default connect(
+  state => ({
     host: state.drive,
   }),
-  (dispatch) => bindActionCreators({
+  dispatch => bindActionCreators({
     push,
     setTitle,
     getHostList,

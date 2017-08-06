@@ -1,7 +1,6 @@
-import { handleActions } from 'redux-actions'
-import Fetch from '@shared/fetch'
+import { match, when } from 'match-when'
 import { injectAsyncReducer } from '@react-web/store'
-
+import api from '../api'
 
 const initialState = {
   ls: [],
@@ -16,53 +15,112 @@ const initialState = {
   clipboard: []
 };
 
-injectAsyncReducer('file', handleActions({
+const reducer = (state=initialState, action) => match(action.type, {
 
-  "@@file/state/update" (state, action) {
+  [when("@@file/state/update")]: () => {
     return Object.assign({}, state, action.payload)
   },
 
-  "@@file/meta/update" (state, action) {
+  [when("@@file/meta/update")]: () => {
     return Object.assign({}, state, action.payload, {fileState: 2})
   },
 
-    "@@file/content/update" (state, action) {
+  [when("@@file/content/update")]:  () => {
     return Object.assign({}, state, action.payload, {
       fileContentState: 2,
       createState: 2
     })
   },
 
-  "@@file/clipboard/update" (state, action) {
+  [when("@@file/clipboard/update")]: () => {
     return Object.assign({}, state, {clipboard: action.payload.clipboard})
   },
 
-  '@@file/clipboard/empty' (state, action) {
+  [when('@@file/clipboard/empty')]: () => {
     return Object.assign({}, state, {clipboard: []})
   },
 
   // 更新创建文件的状态，并且，
   // 如果创建成功，文件状态也变成同步成功
   // 如果创建失败，文件状态为未同步
-  '@@file/createState/update' (state, action) {
+  [when('@@file/createState/update')]: () => {
     const {createState, fileId} = action.payload;
     return Object.assign({}, state, {
       fileId: fileId ? fileId: undefined,
       fileState: createState === 2?2:0,
       createState
     })
-  }
+  },
+  [when()]: state
+})
 
-}, initialState))
+
+injectAsyncReducer('file', reducer)
+
+
+/**
+ * 将剪贴板里的文件拷贝到当前目录
+ * @param targetPathname 目标目录
+ * @param keepOrigin true保留文件，false删除源文件
+ */
+export const copyFilesFromClipboard = (targetPathname, keepOrigin=true) => (dispatch, getState) => {
+
+};
 
 
 
-export const copyFilesFromClipboard = require('./actions/copyFilesFromClipboard')
-export const createFile = require('./actions/createFile')
-export const deleteFile = require('./actions/deleteFile')
-export const downloadFile = require('./actions/downloadFile')
-export const emptyClipboard = require('./actions/emptyClipboard')
-export const getFileContent = require('./actions/getFileContent')
+
+/**
+ * 创建文件
+ * @param query
+ */
+export const createFile = (query) => async (dispatch, getState) => {
+
+  let createState = 1;
+  const {driveId, name, parentId} = query;
+  const {account: {token}} = getState();
+
+  dispatch({
+    type: '@@file/createState/update',
+    payload: {
+      createState
+    }
+  });
+  const result = await api.fsInsertOne({
+    token,
+    driveId,
+    name,
+    parentId,
+    content: '',
+  })
+  createState = 2;
+
+
+  if (result.error) return console.log(result.error)
+
+  dispatch({
+    type: '@@file/createState/update',
+    payload: {
+      fileId: result._id,
+      createState
+    }
+  })
+};
+
+
+
+
+export const deleteFile = (driveId, fileId) => async (dispatch, getState) => {
+  const {token} = getState().account;
+  const result = await api.fsRemoveOne({
+    token,
+    driveId,
+    fileId
+  }).post();
+  if (result.error) return console.log(result.error)
+};
+
+
 
 export const getFileList =  (driveId, parentId=null) => async (dispatch, getState) => {
   dispatch({
@@ -92,11 +150,144 @@ export const getFileList =  (driveId, parentId=null) => async (dispatch, getStat
 };
 
 
-export const initFile = require('./actions/initFile')
-export const pushFileToClipboard = require('./actions/pushFileToClipboard')
-export const renameFile = require('./actions/renameFile')
-export const resotreFileList = require('./actions/restoreFileList')
-export const updateFile = require('./actions/updateFile')
-export const updateFileMeta = require('./actions/updateFileMeta')
-export const uploadFiltToPath = require('./actions/uploadFileToPath')
+export const downloadFile = (path)=> async (dispatch, getState) => {
+  const {token} = getState().account
+  const result = await api.fsDownload({token, path})
+  if (result.error) return console.log(result.error)
+  window.open(result.url)
+};
 
+
+export const initFile = (payload) => ({
+  type: '@@file/init',
+  payload
+});
+
+
+/**
+ * 清空剪贴板
+ */
+export const emptyClipboard = () => ({
+  type: '@@file/clipboard/empty',
+});
+
+
+export const getFileContent = (driveId) => async (dispatch, getState) => {
+  dispatch({
+    type: '@@file/state/update',
+    payload: {
+      fileContentState: 1
+    }
+  });
+
+  const {account: {token}, file: {fileId}} = getState();
+  const result = await api.fsQueryContent({
+    driveId,
+    fileId,
+    token
+  })
+
+  if (result.error) return console.log(result.error)
+
+  if (typeof result.cat === 'object' && result.cat.data instanceof Array) {
+    result.cat = new Buffer(result.cat).toString('utf8')
+  }
+
+  dispatch({
+    type: '@@file/content/update',
+    payload: result
+  })
+}
+
+
+/**
+ * 将文件添加到剪贴板
+ */
+export const pushFileToClipboard = (files) => (dispatch, getState) => {
+  const {clipboard} = getState().file;
+  const nextClipboard = clipboard.slice().filter(item => {
+    return files.indexOf(item) === -1
+  }).concat(files);
+  dispatch({
+    type: '@@file/clipboard/update',
+    payload: {
+      clipboard: nextClipboard
+    }
+  })
+};
+
+/**
+ * 重命名文件
+ * @returns {function()}
+ */
+export const renameFile = (query) => async (dispatch, getState) => {
+  const {account: {token}, file: {fileId}} = getState();
+  const {fileName} = query;
+  const result = await api.fsMutateName({
+    token,
+    fileId,
+    fileName
+  })
+
+  if (result.error) console.log(result.error);
+};
+
+
+export const resotreFileList = () => ({
+  type: '@@file/state/update',
+  payload: {fileState: 0}
+});
+
+
+export const updateFile = (query) => async (dispatch, getState) => {
+  const {account: {token}, file: {fileId}} = getState();
+  const {driveId, content} = query;
+  const result = await api.fsMutateContent({
+    token,
+    driveId,
+    fileId,
+    content,
+  })
+  if (result.error) return console.error(result.error);
+  dispatch({
+    type: '@@file/content/update',
+    payload: {cat: content}
+  })
+};
+
+
+export const updateFileMeta = (payload) => ({
+  type: '@@file/state/update',
+  payload
+});
+
+
+export const uploadFileToPath = () => async (dispatch, getState) => {
+  try {
+    const {token} = getState().account;
+
+    // url: api['uploadImage'][2]+'?'+encodeQuery(formData),
+
+  } catch(e){
+    console.log(e);
+  }
+};
+
+
+
+
+/**
+ * Converts an array buffer to a string
+ *
+ * @private
+ * @param {ArrayBuffer} buf The buffer to convert
+ * @param {Function} callback The function to call when conversion is complete
+ */
+function _arrayBufferToString(buf, callback) {
+  var bb = new Blob([new Uint8Array(buf)]);
+  var f = new FileReader();
+  f.onload = function(e) {
+    callback(e.target.result);
+  };
+  f.readAsText(bb);
+}

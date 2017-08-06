@@ -5,8 +5,8 @@ import Button from '@react-web/button'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Body from '@react-web/body'
-import commonStyles from '../components/commonStyles'
-import Logo from '../components/Logo'
+import commonStyles from '../commonStyles'
+import Logo from '../Logo'
 import { login, sendVerifyCode } from './'
 
 class UnLogged extends Component {

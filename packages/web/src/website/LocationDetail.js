@@ -5,6 +5,8 @@ import Button from "@react-web/button"
 import Checkbox from "@react-web/checkbox"
 import {StyleSheet, css} from "aphrodite"
 
+const bodyTypes = ['HTML', 'JSON', 'API', 'PROXY', 'SEASHELL', 'REDIRECT', 'FILE']
+
 class LocationDetail extends Component {
 
   static defaultProps = {
@@ -15,16 +17,14 @@ class LocationDetail extends Component {
     this.props.onChange(changePart);
   };
 
-  bodyTypes = ['HTML', 'JSON', 'API', 'PROXY', 'SEASHELL', 'REDIRECT', 'FILE'];
-
   render() {
     const {isOpen, pathname, content, cors, type} = this.props;
     if (!isOpen) return null;
     return (
       <div className={css(styles.detail)}>
-        <div className="formGroup row">
+        <div>
           {/*路由匹配*/}
-          <div className="col-xs-12">
+          <div>
             <Input
               label={'路由'}
               noBorder={true}
@@ -35,8 +35,8 @@ class LocationDetail extends Component {
               placeholder="请输入正则表达式"/>
           </div>
           {/*跨域*/}
-          <div className="form-group row">
-            <div className="col-xs-12">
+          <div>
+            <div>
               <label>跨域</label>
               <Checkbox
                 label="是"
@@ -45,20 +45,18 @@ class LocationDetail extends Component {
             </div>
           </div>
           {/*类型*/}
-          <div className="form-group">
+          <div>
             <label>类型</label>
             <div style={{width: '100%', height: '50px', position: 'relative'}}>
               <TabBar
                 activeKey={type.toUpperCase()}
                 onSwitchKey={(key) => this.changeState({type: key})}>
-                {
-                  this.bodyTypes.map(type => (
-                    <TabPane key={type}>{type}</TabPane>
-                  ))
-                }
+                {bodyTypes.map(type => (
+                  <TabPane key={type}>{type}</TabPane>
+                ))}
               </TabBar>
             </div>
-            <div className="tab-content">
+            <div>
               <label>{type}</label>
               <div>
                 <Input

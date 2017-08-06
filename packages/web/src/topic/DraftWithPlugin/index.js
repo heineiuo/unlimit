@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Editor, {createEditorStateWithText} from 'draft-js-plugins-editor'
-import createToolbarPlugin from './plugins/Toolbar'
 import createImagePlugin from 'draft-js-image-plugin'
 import {StyleSheet, css} from 'aphrodite'
-import ImageAdd from './plugins/Image/ImageAdd'
 import {convertFromRaw, EditorState } from 'draft-js'
+import ImageAdd from './plugins/Image/ImageAdd'
+import createToolbarPlugin from './Toolbar'
 
 const toolbarPlugin = createToolbarPlugin();
 const imagePlugin = createImagePlugin()

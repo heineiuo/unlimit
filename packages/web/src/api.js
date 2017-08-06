@@ -1,8 +1,36 @@
-export default {
-  session: `${global.__SMILE_API}/seashell/account/session`,
-  mutateCreateAuthCode: `${global.__SMILE_API}/seashell/account/mutateCreateAuthCode`,
-  mutateCreateToken: `${global.__SMILE_API}/seashell/account/mutateCreateToken`,
-  mutateDeleteToken: `${global.__SMILE_API}/seashell/account/mutateDeleteToken`,
-  accountQueryOne: `${global.__SMILE_API}/seashell/account/queryOne`,
-  mutateCreateVerificationCode: `${global.__SMILE_API}/seashell/account/mutateCreateVerificationCode`
+import Fetch from '@shared/fetch'
+
+export const apimap = {
+  session: '/seashell/account/session',
+  mutateCreateAuthCode: '/seashell/account/mutateCreateAuthCode',
+  mutateCreateToken: '/seashell/account/mutateCreateToken',
+  mutateDeleteToken: '/seashell/account/mutateDeleteToken',
+  accountQueryOne: '/seashell/account/queryOne',
+  mutateCreateVerificationCode: '/seashell/account/mutateCreateVerificationCode',
+  driveInsertOne: '/seashell/drive/mutateInsertOne',
+  driveRemove: '/seashell/drive/remove',
+  driveMutateLocation: '/seashell/drive/mutateLocation',
+  driveMudateUser: '/seashell/drive/mutateUser',
+  driveMeta: '/seashell/drive/queryMeta',
+  driveQueryOne: '/seashell/drive/queryOne',
+  topicStatusChange: '/seashell/topic/editStatus',
+  topicTagChange: '/seashell/topic/editTags',
+  topicGet: '/seashell/topic/get',
+  topicList: '/seashell/topic/list',
+  topicCreate: '/seashell/topic/create',
+  topicEdit: '/seashell/topic/edit',
+  driveTags: '/seashell/drive/getDriveTags',
+  fsInsertOne: '/seashell/fs/mutateInsertOne',
+  fsRemoveOne: '/seashell/fs/mutateDelete',
+  fsDownload: '/seashell/fs/download',
+  fsMutateContent: '/seashell/fs/mutateFileContent',
+  fsQueryContent: '/seashell/fs/queryFileContent',
+  fsMutateName: '/seashell/fs/mutateFileName'
 }
+
+const api = Object.keys(apimap).reduce((left, right) => {
+  left[right] = query => new Fetch(`${global.__SMILE_API}${apimap[right]}`, query).post()
+  return left
+}, {})
+
+export default api

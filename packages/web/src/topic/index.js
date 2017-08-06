@@ -1,12 +1,10 @@
-import { handleActions } from 'redux-actions'
-import Fetch from '@shared/fetch'
-const {API_HOST} = global
-import {push} from 'react-router-redux'
-import {stateToHTML} from 'draft-js-export-html'
-import {convertToRaw} from 'draft-js'
-import {injectAsyncReducer} from '@react-web/store'
+import { match, when } from 'match-when'
+import { push } from 'react-router-redux'
+import { stateToHTML } from 'draft-js-export-html'
+import { convertToRaw } from 'draft-js'
+import { injectAsyncReducer } from '@react-web/store'
 
-const initialState = {
+const defaultState = {
   ls: [],
   isFile: false,
   // isDirectory: true,
@@ -32,94 +30,64 @@ const initialState = {
 };
 
 
-injectAsyncReducer('topic', handleActions({
+injectAsyncReducer('topic', reducer)
 
-  topic__stateUpdate (state, action) {
-    return Object.assign({}, state, action.payload)
-  },
-  topic__init (state, action) {
-    return Object.assign({}, initialState)
-  },
+const reducer = (state=defaultState, action) => {
+  return match(action.type, {
+    [when('@@topic/STATE_CHANGE')]: () => Object.assign({}, state, action.payload),
+    [when('@@topic/TAGS_CHANGE')]: () => Object.assign({}, state, action.payload),
+    [when('@@topic/INIT')]: () => Object.assign({}, defaultState),
+    [when('@@topic/LIST_UPDATE')]: () => Object.assign({}, state, action.payload),
 
-  topic__listUpdate (state, action) {
-    return Object.assign({}, state, action.payload)
-  },
 
-  topic__tagsUpdate (state, action) {
-    return Object.assign({}, state, action.payload)
-  },
+    // 更新创建文件的状态，并且，
+    // 如果创建成功，文件状态也变成同步成功
+    // 如果创建失败，文件状态为未同步
+    [when('@@topic/POST_STATE_CHANGE')]: () => {
+      const {createState} = action.payload;
+      return Object.assign({}, state, {
+        fileState: createState === 2?2:0,
+        createState
+      })
+    },
 
-  // 更新创建文件的状态，并且，
-  // 如果创建成功，文件状态也变成同步成功
-  // 如果创建失败，文件状态为未同步
-  topic__postStateUpdate (state, action) {
-    const {createState} = action.payload;
-    return Object.assign({}, state, {
-      fileState: createState === 2?2:0,
-      createState
-    })
-  },
+    // 更新当前文件
+    [when('@@topic/CURRENT_STATE_CHANGE')]: () => {
+      return Object.assign({}, state, {
+        currentState: action.payload.currentState
+      })
+    },
 
-  // 更新当前文件
-  topic__currentStateUpdate (state, action) {
-    return Object.assign({}, state, {
-      currentState: action.payload.currentState
-    })
-  },
-  topic__currentTopicUpdate (state, action) {
-    const nextCurrent = Object.assign({tags: ''}, action.payload);
-    return Object.assign({}, state, {current: nextCurrent, currentState: 2});
-  }
+    [when('@@topic/CURRENT_TOPIC_UPDATE')]: () => {
+      const nextCurrent = Object.assign({tags: ''}, action.payload);
+      return Object.assign({}, state, {current: nextCurrent, currentState: 2});
+    },
 
-}, initialState))
-
+    [when()]: state
+  })
+}
 
 
 export const allStatus = ['草稿', '已发布', '已下线'] 
 export const methodTypes = ['getMore', 'getLatest']
 
-
 export const emptyTopicState = () => ({
-  type: 'topic__init'
+  type: '@@topic/INIT'
 });
 
 export const editTopicStatus = (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
-  let result = null
-
   const {account: {token}} = getState();
   const {status, topicId} = query;
-  try {
-    result = await new Fetch(`${API_HOST}/seashell/topic/editStatus`, {
-      status, token, topicId
-    }).post();
-    if (result.error) {
-      return reject(result.error)
-    }
-  } catch(e){
-    return reject(e)
-  }
-
+  const result = await api.topicStatusChange({status, token, topicId})
+  if (result.error) return reject(result.error)
   resolve()
 })
 
-
-
-
 export const editTopicTags = (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
-  let result = null
   const {account: {token}} = getState();
   const {tags, topicId} = query;
-  try {
-    result = await new Fetch(`${API_HOST}/seashell/topic/editTags`, {
-      tags, token, topicId
-    }).post();
-    if (result.error) {
-      return reject(result.error)
-    }
-  } catch(e){
-    return reject(e)
-  }
-
+  const result = await api.topicTagChange({tags, token, topicId})
+  if (result.error) return reject(result.error)
   resolve()
 })
 
@@ -127,7 +95,7 @@ export const editTopicTags = (query) => (dispatch, getState) => new Promise(asyn
 
 export const getDriveTopicTags = (driveId) => async (dispatch, getStore) => {
   dispatch({
-    type: "topic__tagsUpdate",
+    type: "@@topic/TAGS_CHANGE",
     payload: {
       tagsUpdateState: 1
     }
@@ -136,7 +104,7 @@ export const getDriveTopicTags = (driveId) => async (dispatch, getStore) => {
   const handleError = (e) => process.nextTick(() => {
     console.log(e);
     dispatch({
-      type: "topic__tagsUpdate",
+      type: "@@topic/TAGS_CHANGE",
       payload: {
         tagsUpdateState: 3
       }
@@ -144,19 +112,14 @@ export const getDriveTopicTags = (driveId) => async (dispatch, getStore) => {
   })
 
   const { account: {token}} = getStore();
-  let result = null;
-  try {
-    result = await new Fetch(`${API_HOST}/seashell/tags/getDriveTags`, {
-      token,
-      driveId,
-    }).post();
-    if (result.error) return handleError(result.error)
-  } catch (e) {
-    return handleError(e)
-  }
+  const result = await api.driveTags({
+    token,
+    driveId,
+  })
+  if (result.error) return handleError(result.error)
 
   dispatch({
-    type: "topic__tagsUpdate",
+    type: "@@topic/TAGS_CHANGE",
     payload: {
       tagsUpdateState: 2,
       tags: result.list
@@ -165,15 +128,12 @@ export const getDriveTopicTags = (driveId) => async (dispatch, getStore) => {
 }
 
 
-
-
 export const getTopic = (driveId, topicId) => async (dispatch,getState) => {
 
-  
   const handleError = (e) => process.nextTick(() => {
     console.log(e);
     dispatch({
-      type: "topic__currentStateUpdate",
+      type: "@@topic/CURRENT_STATE_CHANGE",
       payload: {
         currentState: 3
       }
@@ -183,27 +143,21 @@ export const getTopic = (driveId, topicId) => async (dispatch,getState) => {
   const { account: {token}, topic: {current}} = getState();
 
   dispatch({
-    type: "topic__currentStateUpdate",
+    type: "@@topic/CURRENT_STATE_CHANGE",
     payload: {currentState: 1}
   })
 
-  let result = null;
-  try {
-    result = await new Fetch(`${API_HOST}/seashell/topic/get`, {
-      token,
-      driveId,
-      topicId: topicId
-    }).post();
-    if (result.error) return handleError(result.error)
-  } catch(e){
-    return handleError(e)
-  }
+  const result = await api.topicGet({
+    token,
+    driveId,
+    topicId: topicId
+  });
+  if (result.error) return handleError(result.error)
 
   dispatch({
-    type: "topic__currentTopicUpdate",
+    type: "@@topic/CURRENT_TOPIC_UPDATE",
     payload: result
   })
-
 
 }
 
@@ -229,7 +183,7 @@ export const getTopicList = (driveId, customOptions) => async (dispatch, getStor
   }
 
   dispatch({
-    type: "topic__listUpdate",
+    type: "@@topic/LIST_UPDATE",
     payload: {
       listUpdateState: 1
     }
@@ -240,7 +194,7 @@ export const getTopicList = (driveId, customOptions) => async (dispatch, getStor
   const handleError = (e) => process.nextTick(() => {
     console.log(e);
     dispatch({
-      type: "topic__listUpdate",
+      type: "@@topic/LIST_UPDATE",
       payload: {
         listUpdateState: 3
       }
@@ -248,30 +202,24 @@ export const getTopicList = (driveId, customOptions) => async (dispatch, getStor
   })
 
   const {topic: {list}, account: {token}} = getStore();
-  let result = null;
-  try {
-    result = await new Fetch(`${API_HOST}/seashell/topic/list`, {
-      token,
-      driveId,
-      keyword: options.keyword,
-      fields: ['title', 'tags', 'status'],
-      afterId: options.afterId,
-    }).post();
-    if (result.error) return handleError(result.error)
-  } catch (e) {
-    return handleError(e)
-  }
+
+  const result = await api.topicList({
+    token,
+    driveId,
+    keyword: options.keyword,
+    fields: ['title', 'tags', 'status'],
+    afterId: options.afterId,
+  })
+  if (result.error) return handleError(result.error)
 
   dispatch({
-    type: "topic__listUpdate",
+    type: "@@topic/LIST_UPDATE",
     payload: {
       listUpdateState: 2,
       list: options.afterId ? list.concat(result.list) : result.list
     }
   })
 }
-
-
 
 
 /**
@@ -286,17 +234,18 @@ export const postTopic = (query) => async (dispatch, getState) => {
   const html = stateToHTML(contentState);
   const content = convertToRaw(contentState);
 
-  const result = await new Fetch(`${API_HOST}/seashell/topic/create`, {
+  
+  const result = await api.topicCreate({
     token,
     driveId,
     title,
     content,
     html
-  }).post();
+  })
   if (result.error) return console.log(result.error)
 
   dispatch({
-    type: 'topic__currentTopicUpdate',
+    type: '@@topic/CURRENT_TOPIC_UPDATE',
     payload: {
       title,
       content,
@@ -321,17 +270,17 @@ export const putTopic = (query) => async (dispatch, getState) => {
   const html = stateToHTML(contentState);
   const content = convertToRaw(contentState);
 
-  const result = await new Fetch(`${API_HOST}/seashell/topic/edit`, {
+  const result = await api.topicEdit({
     token,
     title,
     topicId,
     content,
     html
-  }).post();
+  })
   if (result.error) return console.log(result.error)
 
   dispatch({
-    type: 'topic__currentTopicUpdate',
+    type: '@@topic/CURRENT_TOPIC_UPDATE',
     payload: {
       title,
       content,

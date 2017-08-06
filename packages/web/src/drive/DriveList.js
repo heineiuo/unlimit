@@ -8,7 +8,7 @@ import {push} from 'react-router-redux'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import { withHover, Hover } from '@react-web/hover'
-import commonStyles from '../components/commonStyles'
+import commonStyles from '../commonStyles'
 import { queryOne,  
     deleteHost,
     setTitle,

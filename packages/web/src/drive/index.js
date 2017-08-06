@@ -83,16 +83,16 @@ export default (state=defaultState, action) => {
  */
 export const mutateDeleteOne = (driveId) => async (dispatch, getState) => {
   const {account: {token}} = getState();
-  const result = await new Fetch(`${API_HOST}/seashell/drive/remove`, {
+  const result = await api.driveRemove({
     driveId,
     token
-  }).post();
+  })
 
   if (result.error) return console.log(result.error)
 
   dispatch({
     type: '@@host/REMOVE',
-    payload: {driveId}
+    payload: { driveId }
   })
 
 };
@@ -103,11 +103,11 @@ export const mutateDeleteOne = (driveId) => async (dispatch, getState) => {
 export const mutateInsertOne = (query) => async (dispatch, getState) => {
   const {name, description} = query;
   const {account: {token}} = getState();
-  const result = await new Fetch(`${API_HOST}/seashell/drive/mutateInsertOne`, {
+  const result = await api.driveInsertOne({
     token,
     name,
     description,
-  }).post();
+  })
   if (result.error) return alert(result.error);
 
   dispatch({
@@ -128,7 +128,7 @@ export const mutateInsertOne = (query) => async (dispatch, getState) => {
  */
 export const mutateLocations = (driveId, locations) => async(dispatch, getState) => {
   const {token} = getState().account;
-  const result = await new Fetch(`${API_HOST}/seashell/drive/mutateLocation`,{
+  const result = await api.driveMudateLocation({
     token,
     driveId,
     locations: locations.map(location => {
@@ -136,7 +136,7 @@ export const mutateLocations = (driveId, locations) => async(dispatch, getState)
       delete location.contentType;
       return location
     })
-  }).post();
+  })
 
   if (result.error) return console.log(result.error);
   dispatch({
@@ -179,11 +179,11 @@ export const mutateUsers = (query) => async (dispatch, getState) => {
     }
   })
 
-  const result = await new Fetch(`${API_HOST}/seashell/drive/mutateUser`, {
+  const result = await api.driveMutateUser({
     token, driveId,
     add: add.map(item => item.id),
     remove: remove.map(item => item.id),
-  }).post();
+  })
 
   if (result.error) return handleError(result.error)
 
@@ -212,9 +212,9 @@ export const queryList = () => async (dispatch, getState) => {
     }
   });
 
-  const result = await new Fetch(`${API_HOST}/seashell/drive/queryMeta`, {
+  const result = await api.driveMeta({
     limit: 0, token, fields: ['name']
-  }).post();
+  })
 
   if (result.error) return handleError(result.error);
   dispatch({
@@ -229,11 +229,11 @@ export const queryList = () => async (dispatch, getState) => {
 export const queryOne =  (driveId) => async (dispatch, getState) => {
 
   const {account: {token}} = getState();
-  const result = await await new Fetch(`${API_HOST}/seashell/drive/queryOne`, {
+  const result = await api.driveQueryOne({
     driveId,
     token,
     fields: ['domains', 'locations', 'name', 'adminId']
-  }).post();
+  })
 
   if (result.error) throw new Error(result.error);
   const {domains, locations, name, adminId} = result;

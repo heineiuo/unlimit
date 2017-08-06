@@ -9,9 +9,9 @@ import Input from '@react-web/input'
 import Button from '@react-web/button'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import Title from '../components/Title'
-import ProfileDropDown from '../components/ProfileDropDown'
-import commonStyles from '../components/commonStyles'
+import Title from '../Title'
+import ProfileDropDown from '../ProfileDropDown'
+import commonStyles from '../commonStyles'
 import { mutateInsertOne } from './index'
 
 class Header extends Component {

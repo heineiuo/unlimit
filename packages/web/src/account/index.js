@@ -1,7 +1,7 @@
-import {handleActions} from 'redux-actions'
-import { injectAsyncReducer } from '@react-web/store' 
+import { match, when } from 'match-when'
+import { injectAsyncReducer } from '@react-web/store'
 import Fetch from '@shared/fetch'
-import {push} from 'react-router-redux'
+import { push } from 'react-router-redux'
 import api from '../api'
 
 const initialState = {
@@ -11,78 +11,78 @@ const initialState = {
   registerVerifyCodeCount: 0,
   registerError: '',
   loginError: '',
-  resetPasswordError:'',
+  resetPasswordError: '',
   profile: {},
-  questions:[],
-  title:'',
-  token:'',
+  questions: [],
+  title: '',
+  token: '',
   key: '',
-  description:'初始值'
+  description: '初始值'
 };
 
 
 injectAsyncReducer('account', handleActions({
 
-  account__logout (state, action) {
+  account__logout(state, action) {
     return Object.assign({}, initialState, {
       loginChecked: true
     })
   },
 
-  account__checkedLogin (state, action ) {
+  account__checkedLogin(state, action) {
     return Object.assign({}, state, action.payload, {
       loginChecked: true
     })
   },
 
-  account__resetPasswordError (state,action) {
-    return Object.assign({},state,{
-      resetPasswordError:action.error
+  account__resetPasswordError(state, action) {
+    return Object.assign({}, state, {
+      resetPasswordError: action.error
     })
   },
 
-  account__resetPasswordSuccess (state,action) {
-    return Object.assign({},state,{
-      resetPasswordError:'',
+  account__resetPasswordSuccess(state, action) {
+    return Object.assign({}, state, {
+      resetPasswordError: '',
       logged: true
     })
   },
 
-  account__registerError (state, action) {
+  account__registerError(state, action) {
     return Object.assign({}, state, {
       registerError: action.error
     })
   },
 
-  account__registerSuccess (state, action) {
+  account__registerSuccess(state, action) {
     return Object.assign({}, state, {
       registerError: '',
       logged: true
     })
   },
 
-  account__loginError (state, action) {
+  account__loginError(state, action) {
     return Object.assign({}, state, {
       loginError: action.error
     })
   },
 
-  account__loginSuccess (state, action) {
+  account__loginSuccess(state, action) {
     return Object.assign({}, state, {
-      loginError:'',
+      loginError: '',
       email: action.payload.email,
       token: action.payload.token,
       logged: true
     })
   },
 
-  account__updateRegisterVerifyCodeCount (state, action) {
+  account__updateRegisterVerifyCodeCount(state, action) {
     return Object.assign({}, state, {
       registerVerifyCodeCount: action.count
     })
   },
 
-  account__helpQuestionUpdate (state, action) {
+  account__helpQuestionUpdate(state, action) {
     return Object.assign({}, state, {
       questions: action.questions || []
     })
@@ -139,8 +139,8 @@ export const checkLogin = () => async (dispatch, getState) => {
  * @returns {function()}
  */
 export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
-  const {__SMILE_TOKEN=null} = localStorage;
-  const {redirectUrl} = getState().account;
+  const { __SMILE_TOKEN = null } = localStorage;
+  const { redirectUrl } = getState().account;
   const res = await new Fetch(api.mutateCreateAuthCode, {
     token: userToken
   }).post();
@@ -154,10 +154,10 @@ export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
 
 
 export const login = (formData) => async (dispatch, getState) => {
-  const result = await new Fetch(api.mutateCreateToken, {
+  const result = await api.mutateCreateToken({
     email: formData.email,
     code: formData.code
-  }).post();
+  });
 
   if (result.error) {
     console.log(result.error);
@@ -194,11 +194,11 @@ export const logout = () => async (dispatch, getState) => {
 
 
 
-export const queryOneByEmail = ({email, driveId}) => async (dispatch, getState) => {
-  const {account: {token}} = getState();
-  const result = await new Fetch(api.accountQueryOne,{
+export const queryOneByEmail = ({ email, driveId }) => async (dispatch, getState) => {
+  const { account: { token } } = getState();
+  const result = await api.accountQueryOne({
     token, email
-  }).post()
+  })
   if (result.error) return alert(result.error)
   // todo 将结果放到搜索框提示菜单
 }
@@ -212,22 +212,22 @@ export const queryOneByEmail = ({email, driveId}) => async (dispatch, getState) 
  * @returns {function()}
  */
 export const sendVerifyCode = (form) => async (dispatch, getState) => {
-  const {registerVerifyCodeCount} = getState().account;
+  const { registerVerifyCodeCount } = getState().account;
   if (registerVerifyCodeCount > 0) return console.log('count not finish.');
   const countdown = (count) => {
     dispatch({
       type: 'account__updateRegisterVerifyCodeCount',
       count: count
     });
-    if (count > 0){
-      count --;
-      setTimeout(()=>{countdown(count)}, 1000)
+    if (count > 0) {
+      count--;
+      setTimeout(() => { countdown(count) }, 1000)
     }
   };
 
-  const result = await new Fetch(api.mutateCreateVerificationCode, {
+  const result = await api.mutateCreateVerificationCode({
     email: form.email
-  }).post();
+  })
 
   if (result.error) return console.log(result.error);
   countdown(60)

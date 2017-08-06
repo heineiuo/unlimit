@@ -2,6 +2,21 @@ import React, {Component} from 'react'
 import {StyleSheet, css} from 'aphrodite'
 import Upload from 'rc-upload'
 
+class ImageUpload extends Component {
+  render  () {
+    return (
+      <div className={css(styles.imgInfo)}>
+        <div className={css(styles.imgUpload)}>
+          <Upload {...props}>
+            <img className={css(styles.personalImg)} src="" alt="我" />
+            <span className={css(styles.imgMask)}>修改头像</span>
+          </Upload>
+        </div>
+      </div>
+    )
+  }
+}
+
 const styles = StyleSheet.create({
   imgInfo: {
     marginTop: 0,
@@ -80,20 +95,5 @@ const props = {
     console.log('onError', err);
   },
 };
-
-class ImageUpload extends Component {
-  render  () {
-    return (
-      <div className={css(styles.imgInfo)}>
-        <div className={css(styles.imgUpload)}>
-          <Upload {...props}>
-            <img className={css(styles.personalImg)} src="" alt="我" />
-            <span className={css(styles.imgMask)}>修改头像</span>
-          </Upload>
-        </div>
-      </div>
-    )
-  }
-}
 
 export default ImageUpload

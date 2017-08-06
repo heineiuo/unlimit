@@ -6,7 +6,7 @@ import {css, StyleSheet} from "aphrodite"
 import Input from "@react-web/input"
 import Button from "@react-web/button"
 import {withHover} from "@react-web/hover"
-import commonStyles from "../components/commonStyles"
+import commonStyles from "../commonStyles"
 import { getTopicList, getDriveTopicTags } from './'
 
 const TopicListItem = withHover((props) => {

@@ -6,9 +6,9 @@ import {connect} from 'react-redux'
 import Body from '@react-web/body'
 import Loader from '@react-web/async-loader'
 import {injectAsyncReducer} from '@react-web/store'
-import Title from './components/Title'
-import ProfileDropDown from './components/ProfileDropDown'
-import commonStyles from './components/commonStyles'
+import Title from './Title'
+import ProfileDropDown from './ProfileDropDown'
+import commonStyles from './commonStyles'
 import { checkLogin } from './account'
 
 const getTitle = () => Title;
@@ -18,7 +18,7 @@ class CheckLogin extends Component {
   componentWillMount = () => {
     const {account, checkLogin} = this.props;
     if (!account.loginChecked) checkLogin();
-  };
+  }
 
   render () {
     return (
@@ -86,7 +86,7 @@ class CheckLogin extends Component {
               />
             )}
           </Route>
-          <Route component={require('./components/NotFound').default}/>
+          <Route component={require('./NotFound').default}/>
         </Switch>
       </Router>
     )

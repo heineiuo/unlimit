@@ -1,12 +1,12 @@
-import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Link } from "react-router-dom"
 import Button from "@react-web/button"
-import {StyleSheet, css} from "aphrodite"
+import { StyleSheet, css } from "aphrodite"
 import LocationDetail from "./LocationDetail"
 
 class LocationItem extends Component {
   static defaultProps = {
-    onChange: () => {}
+    onChange: () => { }
   };
 
   state = {
@@ -59,25 +59,25 @@ class LocationItem extends Component {
   };
 
   editLocationSort = (e, diff) => {
-    const {location, editLocationSort} = this.props;
+    const { location, editLocationSort } = this.props;
     editLocationSort(location, location.sort + diff);
     e.preventDefault();
     e.stopPropagation();
   };
 
   render() {
-    const {location, locationLength} = this.props;
-    const {showDetail, mouseOver} = this.state;
+    const { location, locationLength } = this.props;
+    const { showDetail, mouseOver } = this.state;
     return (
       <div
-        className={css( mouseOver && styles.item_hover, showDetail && styles.item_opened)}
+        className={css(mouseOver && styles.item_hover, showDetail && styles.item_opened)}
         onMouseOut={this.handleMouseOut}
         onMouseOver={this.handleMouseOver}>
         <div className={css(styles.item)} onClick={this.toggleDetail}>
-          <div style={{width: 100}}>{location.sort}</div>
-          <div style={{flex: 1}}><code>{location.pathname}</code></div>
-          <div style={{flex: 1}}><code>{location.type}</code></div>
-          <div style={{flex: 1}}>
+          <div style={{ width: 100 }}>{location.sort}</div>
+          <div style={{ flex: 1 }}><code>{location.pathname}</code></div>
+          <div style={{ flex: 1 }}><code>{location.type}</code></div>
+          <div style={{ flex: 1 }}>
             <div className={css(styles.item__sort, mouseOver && styles.item__sort_show)}>
               <Button
                 type="danger"
@@ -88,16 +88,14 @@ class LocationItem extends Component {
                 type="secondary"
                 size="small"
                 className={css(styles.arrow && location.sort === 1 && styles.arrow_disabled)}
-                onClick={this.editLocationSortUp}>
-                上移
-              </Button>
+                onClick={this.editLocationSortUp}
+              >上移</Button>
               <Button
                 type="secondary"
                 size="small"
                 className={css(styles.arrow && location.sort === locationLength && styles.arrow_disabled)}
-                onClick={this.editLocationSortDown}>
-                下移
-              </Button>
+                onClick={this.editLocationSortDown}
+              >下移</Button>
             </div>
           </div>
         </div>
