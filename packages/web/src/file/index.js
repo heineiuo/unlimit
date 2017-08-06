@@ -13,7 +13,7 @@ const initialState = {
   fileName: '',
   fileContentState: 0,
   clipboard: []
-};
+}
 
 const reducer = (state=initialState, action) => match(action.type, {
 
@@ -44,7 +44,7 @@ const reducer = (state=initialState, action) => match(action.type, {
   // 如果创建成功，文件状态也变成同步成功
   // 如果创建失败，文件状态为未同步
   [when('@@file/createState/update')]: () => {
-    const {createState, fileId} = action.payload;
+    const {createState, fileId} = action.payload
     return Object.assign({}, state, {
       fileId: fileId ? fileId: undefined,
       fileState: createState === 2?2:0,
@@ -65,7 +65,7 @@ injectAsyncReducer('file', reducer)
  */
 export const copyFilesFromClipboard = (targetPathname, keepOrigin=true) => (dispatch, getState) => {
 
-};
+}
 
 
 
@@ -76,16 +76,16 @@ export const copyFilesFromClipboard = (targetPathname, keepOrigin=true) => (disp
  */
 export const createFile = (query) => async (dispatch, getState) => {
 
-  let createState = 1;
-  const {driveId, name, parentId} = query;
-  const {account: {token}} = getState();
+  let createState = 1
+  const {driveId, name, parentId} = query
+  const {account: {token}} = getState()
 
   dispatch({
     type: '@@file/createState/update',
     payload: {
       createState
     }
-  });
+  })
   const result = await api.fsInsertOne({
     token,
     driveId,
@@ -93,7 +93,7 @@ export const createFile = (query) => async (dispatch, getState) => {
     parentId,
     content: '',
   })
-  createState = 2;
+  createState = 2
 
 
   if (result.error) return console.log(result.error)
@@ -105,20 +105,20 @@ export const createFile = (query) => async (dispatch, getState) => {
       createState
     }
   })
-};
+}
 
 
 
 
 export const deleteFile = (driveId, fileId) => async (dispatch, getState) => {
-  const {token} = getState().account;
+  const {token} = getState().account
   const result = await api.fsRemoveOne({
     token,
     driveId,
     fileId
-  }).post();
+  }).post()
   if (result.error) return console.log(result.error)
-};
+}
 
 
 
@@ -128,13 +128,13 @@ export const getFileList =  (driveId, parentId=null) => async (dispatch, getStat
     payload: {
       fileState: 1
     }
-  });
+  })
 
-  const {account: {token}} = getState();
-  const result = await new Fetch(`${global.__SMILE_API}/seashell/fs/queryFile`, {
+  const {account: {token}} = getState()
+  const result = await api.fsList({
     driveId, parentId, token,
     replaceWithFileMetaIfIsFile: true
-  }).post();
+  })
 
   const isFile = result.hasOwnProperty('data')
   if (isFile) result.ls = result.data
@@ -147,7 +147,7 @@ export const getFileList =  (driveId, parentId=null) => async (dispatch, getStat
     payload: result
   })
 
-};
+}
 
 
 export const downloadFile = (path)=> async (dispatch, getState) => {
@@ -155,13 +155,13 @@ export const downloadFile = (path)=> async (dispatch, getState) => {
   const result = await api.fsDownload({token, path})
   if (result.error) return console.log(result.error)
   window.open(result.url)
-};
+}
 
 
 export const initFile = (payload) => ({
   type: '@@file/init',
   payload
-});
+})
 
 
 /**
@@ -169,7 +169,7 @@ export const initFile = (payload) => ({
  */
 export const emptyClipboard = () => ({
   type: '@@file/clipboard/empty',
-});
+})
 
 
 export const getFileContent = (driveId) => async (dispatch, getState) => {
@@ -178,9 +178,9 @@ export const getFileContent = (driveId) => async (dispatch, getState) => {
     payload: {
       fileContentState: 1
     }
-  });
+  })
 
-  const {account: {token}, file: {fileId}} = getState();
+  const {account: {token}, file: {fileId}} = getState()
   const result = await api.fsQueryContent({
     driveId,
     fileId,
@@ -204,74 +204,74 @@ export const getFileContent = (driveId) => async (dispatch, getState) => {
  * 将文件添加到剪贴板
  */
 export const pushFileToClipboard = (files) => (dispatch, getState) => {
-  const {clipboard} = getState().file;
+  const {clipboard} = getState().file
   const nextClipboard = clipboard.slice().filter(item => {
     return files.indexOf(item) === -1
-  }).concat(files);
+  }).concat(files)
   dispatch({
     type: '@@file/clipboard/update',
     payload: {
       clipboard: nextClipboard
     }
   })
-};
+}
 
 /**
  * 重命名文件
  * @returns {function()}
  */
 export const renameFile = (query) => async (dispatch, getState) => {
-  const {account: {token}, file: {fileId}} = getState();
-  const {fileName} = query;
+  const {account: {token}, file: {fileId}} = getState()
+  const {fileName} = query
   const result = await api.fsMutateName({
     token,
     fileId,
     fileName
   })
 
-  if (result.error) console.log(result.error);
-};
+  if (result.error) console.log(result.error)
+}
 
 
 export const resotreFileList = () => ({
   type: '@@file/state/update',
   payload: {fileState: 0}
-});
+})
 
 
 export const updateFile = (query) => async (dispatch, getState) => {
-  const {account: {token}, file: {fileId}} = getState();
-  const {driveId, content} = query;
+  const {account: {token}, file: {fileId}} = getState()
+  const {driveId, content} = query
   const result = await api.fsMutateContent({
     token,
     driveId,
     fileId,
     content,
   })
-  if (result.error) return console.error(result.error);
+  if (result.error) return console.error(result.error)
   dispatch({
     type: '@@file/content/update',
     payload: {cat: content}
   })
-};
+}
 
 
 export const updateFileMeta = (payload) => ({
   type: '@@file/state/update',
   payload
-});
+})
 
 
 export const uploadFileToPath = () => async (dispatch, getState) => {
   try {
-    const {token} = getState().account;
+    const {token} = getState().account
 
     // url: api['uploadImage'][2]+'?'+encodeQuery(formData),
 
   } catch(e){
-    console.log(e);
+    console.log(e)
   }
-};
+}
 
 
 
@@ -284,10 +284,10 @@ export const uploadFileToPath = () => async (dispatch, getState) => {
  * @param {Function} callback The function to call when conversion is complete
  */
 function _arrayBufferToString(buf, callback) {
-  var bb = new Blob([new Uint8Array(buf)]);
-  var f = new FileReader();
+  var bb = new Blob([new Uint8Array(buf)])
+  var f = new FileReader()
   f.onload = function(e) {
-    callback(e.target.result);
-  };
-  f.readAsText(bb);
+    callback(e.target.result)
+  }
+  f.readAsText(bb)
 }

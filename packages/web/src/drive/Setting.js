@@ -14,4 +14,4 @@ class Setting extends Component {
 }
 
 
-export default module.exports = Setting
+export default Setting

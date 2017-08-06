@@ -1,27 +1,23 @@
-/**
- * 全局通知
- */
-
 import uuid from 'uuid'
-import { handleActions } from 'redux-actions'
+import { match, when } from 'match-when'
 import { injectAsyncReducer } from '@react-web/store'
 
 const initialState = {
   stack: []
 };
 
-injectAsyncReducer('notice', handleActions({
+const reducer = (state=initialState, action) => match(action.type, {
 
   /**
    * 初始化
    */
-  notice__init (state, action) {
+  [when('@@notice/init')]: () => {
     return Object.assign({}, initialState)
   },
 
   /**
    */
-  notice__pushError (state, action) {
+  [when('@@notice/ERROR_PUSH')]: () => {
     const nextStack = state.stack.slice();
     const id = uuid.v4();
     nextStack.push(Object.assign({}, action.notice, {
@@ -33,19 +29,23 @@ injectAsyncReducer('notice', handleActions({
 
   /**
    */
-  notice__clear (state, action) {
+  [when('@@notice/clear')]: () => {
     return Object.assign({}, state, {
       stack: []
     })
   },
 
-}, initialState))
+  [when()]: state
 
+})
 
+export default reducer
+
+injectAsyncReducer('notice', reducer)
 
 export const showError = (error) => (dispatch, getState) => {
   dispatch({
-    type: 'notice__pushError',
+    type: '@@notice/ERROR_PUSH',
     payload: {
       type: 'error',
       notice: error

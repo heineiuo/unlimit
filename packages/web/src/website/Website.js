@@ -8,7 +8,6 @@ import {push} from 'react-router-redux'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import LocationItem from './LocationItem'
-import { setTitle } from '../nav'
 import { queryList as getHostList,
   mutateLocations as commitLocations  } from '../drive'
 import { restoreFileList } from '../file'
@@ -166,7 +165,6 @@ export default connect(
   }),
   dispatch => bindActionCreators({
     push,
-    setTitle,
     getHostList,
     commitLocations,
     restoreFileList,

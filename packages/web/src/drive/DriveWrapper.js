@@ -84,9 +84,9 @@ class DriveWrapper extends Component {
                     )}
                   />}
               </Route>
-              <Route path={`${match.path}/website`} component={require('../website/Website')}/>
-              <Route path={`${match.path}/members`} component={require('./Members')}/>
-              <Route path={`${match.path}/setting`} component={require('./Setting')}/>
+              <Route path={`${match.path}/website`} component={require('../website/Website').default}/>
+              <Route path={`${match.path}/members`} component={require('./Members').default}/>
+              <Route path={`${match.path}/setting`} component={require('./Setting').default}/>
             </Switch>
           </div>
         </Paper>

@@ -19,13 +19,15 @@ export const apimap = {
   topicList: '/seashell/topic/list',
   topicCreate: '/seashell/topic/create',
   topicEdit: '/seashell/topic/edit',
-  driveTags: '/seashell/drive/getDriveTags',
+  driveTags: '/seashell/tags/getDriveTags',
   fsInsertOne: '/seashell/fs/mutateInsertOne',
   fsRemoveOne: '/seashell/fs/mutateDelete',
+  fsList: '/seashell/fs/queryFile',
   fsDownload: '/seashell/fs/download',
   fsMutateContent: '/seashell/fs/mutateFileContent',
   fsQueryContent: '/seashell/fs/queryFileContent',
-  fsMutateName: '/seashell/fs/mutateFileName'
+  fsMutateName: '/seashell/fs/mutateFileName',
+  userList: '/seashell/drive/queryUsers',
 }
 
 const api = Object.keys(apimap).reduce((left, right) => {

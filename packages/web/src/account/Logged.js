@@ -17,24 +17,24 @@ class Profile extends Component {
   state = {
     modalIsOpen: false,
     tabItem: ''
-  };
+  }
 
   openModal = (e,clicktab) => {
     this.setState({
       modalIsOpen: true,
       tabItem: clicktab
     })
-  };
+  }
 
   closeModal = () => {
     this.setState({
       modalIsOpen: false
     })
-  };
+  }
 
   handleLogout = () => {
     this.props.logout()
-  };
+  }
 
   render () {
     return (
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     }
   }
 
-});
+})
 
 
 const customStyles = {
@@ -263,7 +263,7 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
   }
-};
+}
 
 const buttonStyle = {
   backgroundColor: '#fff',
@@ -273,7 +273,7 @@ const buttonStyle = {
   marginTop: '25px',
   lineHeight: '35px',
   borderRadius: 2,
-};
+}
 
 
 export default module.exports = connect(

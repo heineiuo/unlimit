@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default module.exports = connect(
+export default connect(
   (state) => ({
     host: state.drive,
     driveUserAdmin: state.drive.driveUserAdmin,

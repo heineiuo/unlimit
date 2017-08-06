@@ -1,6 +1,5 @@
 import { match, when } from 'match-when'
 import { injectAsyncReducer } from '@react-web/store'
-import Fetch from '@shared/fetch'
 import { push } from 'react-router-redux'
 import api from '../api'
 
@@ -18,56 +17,56 @@ const initialState = {
   token: '',
   key: '',
   description: '初始值'
-};
+}
 
 
-injectAsyncReducer('account', handleActions({
+const reducer = (state=initialState, action) => match(action.type, {
 
-  account__logout(state, action) {
+  [when('@@account/logout')]: () => {
     return Object.assign({}, initialState, {
       loginChecked: true
     })
   },
 
-  account__checkedLogin(state, action) {
+  [when('@@account/checkedLogin')]: () => {
     return Object.assign({}, state, action.payload, {
       loginChecked: true
     })
   },
 
-  account__resetPasswordError(state, action) {
+  [when('@@account/resetPasswordError')]: () => {
     return Object.assign({}, state, {
       resetPasswordError: action.error
     })
   },
 
-  account__resetPasswordSuccess(state, action) {
+  [when('@@account/resetPasswordSuccess')]: () => {
     return Object.assign({}, state, {
       resetPasswordError: '',
       logged: true
     })
   },
 
-  account__registerError(state, action) {
+  [when('@@account/registerError')]: () => {
     return Object.assign({}, state, {
       registerError: action.error
     })
   },
 
-  account__registerSuccess(state, action) {
+  [when('@@account/registerSuccess')]: () => {
     return Object.assign({}, state, {
       registerError: '',
       logged: true
     })
   },
 
-  account__loginError(state, action) {
+  [when('@@account/loginError')]: () => {
     return Object.assign({}, state, {
       loginError: action.error
     })
   },
 
-  account__loginSuccess(state, action) {
+  [when('@@account/loginSuccess')]: () => {
     return Object.assign({}, state, {
       loginError: '',
       email: action.payload.email,
@@ -76,42 +75,48 @@ injectAsyncReducer('account', handleActions({
     })
   },
 
-  account__updateRegisterVerifyCodeCount(state, action) {
+  [when('@@account/updateRegisterVerifyCodeCount')]: () => {
     return Object.assign({}, state, {
       registerVerifyCodeCount: action.count
     })
   },
 
-  account__helpQuestionUpdate(state, action) {
+  [when('@@account/helpQuestionUpdate')]: () => {
     return Object.assign({}, state, {
       questions: action.questions || []
     })
   },
 
-}, initialState))
+  [when()]: state
+})
+
+
+export default reducer
+
+injectAsyncReducer('account', reducer)
 
 /**
  * 检查登录
  * @returns {function()}
  */
 export const checkLogin = () => async (dispatch, getState) => {
-  const userToken = localStorage.__SMILE_TOKEN || null;
+  const userToken = localStorage.__SMILE_TOKEN || null
   if (!userToken) {
     return dispatch({
-      type: "account__checkedLogin",
+      type: "@@account/checkedLogin",
       payload: {
         logged: false
       }
     })
   }
 
-  const result = await new Fetch(api.session, {
+  const result = await api.session({
     token: userToken
-  }).post();
+  })
 
   if (result.error || !result.hasOwnProperty('userId')) {
     return dispatch({
-      type: 'account__checkedLogin',
+      type: '@@account/checkedLogin',
       payload: {
         logged: false
       }
@@ -119,7 +124,7 @@ export const checkLogin = () => async (dispatch, getState) => {
   }
 
   dispatch({
-    type: 'account__checkedLogin',
+    type: '@@account/checkedLogin',
     payload: {
       logged: true,
       email: result.email,
@@ -127,7 +132,7 @@ export const checkLogin = () => async (dispatch, getState) => {
       profile: result
     },
   })
-};
+}
 
 
 
@@ -139,16 +144,16 @@ export const checkLogin = () => async (dispatch, getState) => {
  * @returns {function()}
  */
 export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
-  const { __SMILE_TOKEN = null } = localStorage;
-  const { redirectUrl } = getState().account;
-  const res = await new Fetch(api.mutateCreateAuthCode, {
+  const { __SMILE_TOKEN = null } = localStorage
+  const { redirectUrl } = getState().account
+  const res = await api.mutateCreateAuthCode({
     token: userToken
-  }).post();
+  })
 
-  if (res.error) return console.log(res.error);
+  if (res.error) return console.log(res.error)
   location.href = `${redirectUrl}?code=${res.code}`
 
-};
+}
 
 
 
@@ -157,45 +162,45 @@ export const login = (formData) => async (dispatch, getState) => {
   const result = await api.mutateCreateToken({
     email: formData.email,
     code: formData.code
-  });
+  })
 
   if (result.error) {
-    console.log(result.error);
+    console.log(result.error)
     return dispatch({
-      type: "account__loginError",
+      type: "@@account/loginError",
       error: result.error
     })
   }
-  localStorage.userId = result.userId;
-  localStorage.__SMILE_TOKEN = result.token;
+  localStorage.userId = result.userId
+  localStorage.__SMILE_TOKEN = result.token
   dispatch({
-    type: 'account__loginSuccess',
+    type: '@@account/loginSuccess',
     payload: {
       token: result.token,
       email: result.email
     }
   })
-};
+}
 
 
 export const logout = () => async (dispatch, getState) => {
-  console.log('正在登出系统...');
-  const result = await new Fetch(api.mutateDeleteToken, {
+  console.log('正在登出系统...')
+  const result = await api.mutateDeleteToken({
     token: localStorage.__SMILE_TOKEN
-  });
+  })
 
-  if (result.error) return console.log(result.error);
-  localStorage.clear();
+  if (result.error) return console.log(result.error)
+  localStorage.clear()
   dispatch({
-    type: 'account__logout'
-  });
-  dispatch(push('/'));
-};
+    type: '@@account/logout'
+  })
+  dispatch(push('/'))
+}
 
 
 
 export const queryOneByEmail = ({ email, driveId }) => async (dispatch, getState) => {
-  const { account: { token } } = getState();
+  const { account: { token } } = getState()
   const result = await api.accountQueryOne({
     token, email
   })
@@ -212,23 +217,23 @@ export const queryOneByEmail = ({ email, driveId }) => async (dispatch, getState
  * @returns {function()}
  */
 export const sendVerifyCode = (form) => async (dispatch, getState) => {
-  const { registerVerifyCodeCount } = getState().account;
-  if (registerVerifyCodeCount > 0) return console.log('count not finish.');
+  const { registerVerifyCodeCount } = getState().account
+  if (registerVerifyCodeCount > 0) return console.log('count not finish.')
   const countdown = (count) => {
     dispatch({
-      type: 'account__updateRegisterVerifyCodeCount',
+      type: '@@account/updateRegisterVerifyCodeCount',
       count: count
-    });
+    })
     if (count > 0) {
-      count--;
+      count--
       setTimeout(() => { countdown(count) }, 1000)
     }
-  };
+  }
 
   const result = await api.mutateCreateVerificationCode({
     email: form.email
   })
 
-  if (result.error) return console.log(result.error);
+  if (result.error) return console.log(result.error)
   countdown(60)
-};
+}
