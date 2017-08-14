@@ -11,7 +11,7 @@ import createServer from './http'
 import allActionCreators from './actions'
 
 const defaultEnv = `# unlimit
-DATA_DIR = ./data
+DATA_DIR = ${path.resolve(process.cwd(), './unlimit')}
 `
 
 let env = dotenv.config()
@@ -20,7 +20,6 @@ if (env.error) {
   const envPath = `${homedir()}/.unlimit/.env`
   env = dotenv.config({path: envPath})
   if (env.error) {
-    console.log(env.error)
     fs.writeFileSync(envPath, defaultEnv, 'utf8')
     env = dotenv.config({path: envPath})
   }
