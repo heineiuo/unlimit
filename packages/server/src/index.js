@@ -7,27 +7,25 @@ import {homedir} from 'os'
 import path from 'path'
 import fs from 'fs'
 import {Db} from '../../db/src'
-import createServer from './http'
+import createServer from '../../http/src'
 import allActionCreators from './actions'
 
-const defaultEnv = `# unlimit
-DATA_DIR = ${path.resolve(process.cwd(), './unlimit')}
-`
+const { NODE_ENV='development'} = process.env
 
-let env = dotenv.config()
-if (env.error) {
-  shell.exec(`mkdir -p ${homedir()}/.unlimit`)
-  const envPath = `${homedir()}/.unlimit/.env`
-  env = dotenv.config({path: envPath})
-  if (env.error) {
+if (NODE_ENV === 'development') {
+  const dataDir = path.resolve(process.cwd(), './.unlimit')
+  const envPath = path.resolve(dataDir, './.env')
+  if (dotenv.config({path: envPath}).error) {
+    const defaultEnv = `# unlimit
+DATA_DIR = ${dataDir}`
+    shell.exec(`mkdir -p ${dataDir}`)
     fs.writeFileSync(envPath, defaultEnv, 'utf8')
-    env = dotenv.config({path: envPath})
+    dotenv.config({path: envPath})
   }
 }
 
 const {
-  DATA_DIR,
-  NODE_ENV
+  DATA_DIR
 } = process.env
 
 const start = async () => {

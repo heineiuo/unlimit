@@ -1,37 +1,7 @@
 import Url from "url"
 import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
-
-
-
-/**
- * 通过比对pathname, 找到路由
- */
-export const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
-  try {
-    const url = Url.parse(requrl);
-    const targetLocation = locations.find(item => {
-      const re = pathToRegexp(item.pathname);
-      // console.log(re, item.pathname, url)
-      const matches = url.pathname.match(re);
-      return matches && matches[0] === url.pathname;
-    })
-
-    const location = !!targetLocation ? targetLocation : {
-      pathname: '*',
-      type: 'FILE'
-    };
-
-    try {
-      location.content = JSON.parse(location.content);
-    } catch (e) {
-    }
-
-    resolve({url, location});
-  } catch (e) {
-    reject(new Error('LOCATION_NOT_FOUND'))
-  }
-});
+import isIp from 'is-ip'
 
 
 /**e
@@ -45,6 +15,13 @@ export default (getSeashell) => async (req, res, next) => {
     const {host} = req.headers;
     let locations = []
     let driveId = ''
+    if (isIp(host)) {
+      res.status(403)
+      return res.json({
+        error: 'ForbiddenError',
+        message: 'Cound not access by ip address'
+      })
+    }
     if (host === API_DOMAIN) {
       locations = [{
         "pathname": "*",
@@ -107,3 +84,32 @@ export default (getSeashell) => async (req, res, next) => {
     next(e)
   }
 }
+
+/**
+ * 通过比对pathname, 找到路由
+ */
+export const pickLocation = (locations, requrl) => new Promise((resolve, reject) => {
+  try {
+    const url = Url.parse(requrl);
+    const targetLocation = locations.find(item => {
+      const re = pathToRegexp(item.pathname);
+      // console.log(re, item.pathname, url)
+      const matches = url.pathname.match(re);
+      return matches && matches[0] === url.pathname;
+    })
+
+    const location = !!targetLocation ? targetLocation : {
+      pathname: '*',
+      type: 'FILE'
+    };
+
+    try {
+      location.content = JSON.parse(location.content);
+    } catch (e) {
+    }
+
+    resolve({url, location});
+  } catch (e) {
+    reject(new Error('LOCATION_NOT_FOUND'))
+  }
+});

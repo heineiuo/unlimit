@@ -21,7 +21,7 @@ lib/**/*.js
 build
 !build/README.md
 data
-
+.unlimit
 .idea
 .DS_Store
 node_modules

@@ -4,6 +4,9 @@
   "description": "unlimit command line tool",
   "main": "index.js",
   "keywords": [],
+  "bin": {
+		"unlimit": "bin/unlimit"
+	},
   "author": "heineiuo <heineiuo@gmail.com>",
   "license": "MIT"
 }
