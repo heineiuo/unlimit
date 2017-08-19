@@ -24,12 +24,12 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * @apiName EmailCodeForLogin
  * @apiParam {string} email 邮箱
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query)
   if (validated.error) return reject(validated.error)
   const {email} = validated.value;
   try {
-    const {db} = getCtx();
+    const {db} = getState();
     const emailcodedb = db.collection('emailcode');
     const code = createNumberCode();
     await emailcodedb.insertOne({_id: email, code, createTime: Date.now()});

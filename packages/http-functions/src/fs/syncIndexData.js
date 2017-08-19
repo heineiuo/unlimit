@@ -35,8 +35,8 @@ const walkLeftToRight = (paths, fileDb, parentId, driveId) => new Promise(async 
  * file 里保存的是文件信息和文件之间的关系，是一个tree
  * fileIndex 里保存路径 -> 文件信息的键值对
  */
-export default ({fullPath}) => (dispatch, getCtx) => new Promise(async resolve => {
-  const {db} = getCtx()
+export default ({fullPath}) => (dispatch, getState) => new Promise(async resolve => {
+  const {db} = getState()
   let indexData = {error: 'NOT_FOUND', updateTime: Date.now()}
   
   try {
@@ -82,9 +82,9 @@ const walkRightToLeft = (paths, filedb, id, driveId) => new Promise(async (resol
  * 根据 [ 文件id, 父文件id和文件名 ] 更新索引
  * 先获取完整路径，再写入索引
  */
-export const syncIndexDataByFile = ({file, fileId, driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export const syncIndexDataByFile = ({file, fileId, driveId}) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const fileDb = db.collection('file')
     if (!file) {
       file = await fileDb.findOne({_id: fileId})

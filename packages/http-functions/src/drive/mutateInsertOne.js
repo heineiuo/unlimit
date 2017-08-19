@@ -7,14 +7,14 @@ const insertSchema = Joi.object().keys({
   description: Joi.string().default(''),
 })
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, insertSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error)
   const {name, description} = validated.value;
   
   try {
-    const {db} = getCtx()
-    const {session} = getCtx().request.headers;
+    const {db} = getState()
+    const {session} = getState().request.headers;
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const userId = session ? session.userId : '123';
     const driveData = await new Promise(async resolve => {

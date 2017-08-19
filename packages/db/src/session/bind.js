@@ -12,7 +12,7 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * @param query.registerInfo
  * @returns {Promise}
  */
-export default (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async(resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {socketId, registerInfo: {appName, appId, appSecret}} = validated.value;

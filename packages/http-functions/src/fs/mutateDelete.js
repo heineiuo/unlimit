@@ -6,11 +6,11 @@ const validate = query => Joi.validate(query, Joi.object().keys({
   driveId: Joi.string()
 }), {allowUnknown: true})
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {driveId, fileId} = validated.value;
-  const {db} = getCtx()
+  const {db} = getState()
 
   try {
     const fileDb = db.collection('file')

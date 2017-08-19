@@ -15,17 +15,17 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
  * 下次打开的时候通过读取文件里的topicId打开内容
  * @param query
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
-    const {session} = getCtx().request.headers;
+    const {session} = getState().request.headers;
     const {title, content, driveId, html, drivePathname, status=0} = validated.value;
     // 检查该用户是否拥有该空间的权限
     const userId = session.userId || session.appId || session.id || session.Id;
     // const permission = await dispatch(checkDrivePermission({userId, driveId}));
     // if (permission.error) return reject(permission.error);
-    const collection = getCtx().db.collection('post');
+    const collection = getState().db.collection('post');
     const result = await collection.insertOne({
       title, content, html, driveId, drivePathname, createUserId: userId, status
     });

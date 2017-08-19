@@ -8,13 +8,13 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 /**
  * 获取处理请求的app, 并作负载均衡
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(new Error('NOT_FOUND'))
   const {appName, appId, filter} = validated.error;
 
   try {
-    const appDb = getCtx().db.collection('app');
+    const appDb = getState().db.collection('app');
     const app = await appDb.findOne({_id: appName});
     if (app === null) return reject(new Error('NOT_FOUND'))
     const onlineItems = app.list.filter(service => service.status === 1);

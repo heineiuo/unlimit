@@ -10,14 +10,14 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 /**
  * app create
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
 
   try {
-    const {db} = getCtx()
-    const {session} = getCtx().request.headers;
+    const {db} = getState()
+    const {session} = getState().request.headers;
     if (!session) return reject(new Error('PERMISSION_DENIED'))
     const appDb = db.collection('app');
     const tokenDb = db.collection('apptoken');

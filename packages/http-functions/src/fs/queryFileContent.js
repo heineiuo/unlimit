@@ -8,11 +8,11 @@ export const schema = Joi.object().keys({
   replaceWithIndexHTMLWhenIsFolder/*如果是文件夹，是否切换目标为文件夹目录下的`index.html`文件*/: Joi.boolean().default(true)
 }).xor(['fullPath', 'fileId'])
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   let {fullPath, fileId, replaceWithIndexHTMLWhenIsFolder} = validated.value;
-  const {db} = getCtx();
+  const {db} = getState();
   try {
     const fileContentDb = db.collection('fileContent');
 

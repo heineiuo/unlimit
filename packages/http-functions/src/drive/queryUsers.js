@@ -5,12 +5,12 @@ const queryUserSchema =  Joi.object().keys({
 })
 
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryUserSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId} = validated.value;
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const driveDb = db.collection('drive');
     const filter = {_id: driveId};
     const result = await driveDb.findOne(filter, {fields: {users: 1}})

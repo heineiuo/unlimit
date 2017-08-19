@@ -10,16 +10,16 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * get app list
  * @returns {Promise}
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value
   const filter = {}
-  const {session} = getCtx().request.headers;
+  const {session} = getState().request.headers;
   if (!session) return reject(new Error('PERMISSION_DENIED'))
   filter.adminId = session.userId;
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const appDb = db.collection('app');
     const data = await appDb.find(filter, {fields}).limit(limit).toArray();
     resolve({data})

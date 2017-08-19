@@ -9,9 +9,9 @@ import mutateInsertOne from '../client/mutateInsertOne'
 /**
  * 检查验证码
  */
-const checkCode = ({ email, code }) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+const checkCode = ({ email, code }) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
-    const { db } = getCtx();
+    const { db } = getState();
     const emailcodeDb = db.collection('emailcode');
     const result = await emailcodeDb.findOne({ _id: email });
     if (!result) return reject(new Error('ILLEGAL_CODE_A'));
@@ -74,13 +74,13 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * @apiParam {string} email
  * @apiSuccess {string} token
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const { code, email, driveId } = validated.value;
   // todo 发放OAuth授权令牌
   try {
-    const { db } = getCtx()
+    const { db } = getState()
     await dispatch(checkCode({ email, code }));
     const result = await dispatch(queryOne({ email, enableNull: true }));
     const userId = result === null ? (await createUser(email, db)).userId : result.userId;

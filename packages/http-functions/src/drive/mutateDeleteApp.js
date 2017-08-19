@@ -7,13 +7,13 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 }), {allowUnknown: true})
 
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName} = validated.value;
 
   try {
-    const appDb = getCtx().db.collection('app');
+    const appDb = getState().db.collection('app');
     const detail = await appDb.findOneAndDelete({appName});
 
     await Promise.all(detail.list.map(item => {

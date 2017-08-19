@@ -5,12 +5,12 @@ const queryMetaSchema = Joi.object().keys({
   fields: Joi.array().default(['name', 'locations'])
 })
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryMetaSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {limit, fields} = validated.value;
   const filter = {}
-  const {db, request} = getCtx()
+  const {db, request} = getState()
   const {session} = request.headers;
   if (!session) return reject('PERMISSION_DENIED')
   const userId = session.userId

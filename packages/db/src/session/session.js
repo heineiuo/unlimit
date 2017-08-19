@@ -5,7 +5,7 @@ import queryOne from '../client/queryOne'
  * 根据 socketId / switch-identify 获取app信息
  * @returns {Promise}
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const {headers} = query;
   let session = {};
   try {
@@ -16,7 +16,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
         session = await dispatch(queryOne({token, withSourceData: true}))
       }
     } else if (query.socketId) {
-      const socketdb = getCtx().db.collection('socket');
+      const socketdb = getState().db.collection('socket');
       session = await socketdb.findOne({_id: query.socketId});
     }
   } catch(e){

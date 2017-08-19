@@ -5,7 +5,7 @@ import npm from 'npm'
  * 查询进程信息
  * @param {*} query 
  */
-const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+const query = (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const schema = Joi.object().keys({
     processId: Joi.string().required(),
     driveId: Joi.string()
@@ -16,7 +16,7 @@ const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
     return reject(validated.error)
   }
   const {driveId, processId} = validated.value;
-  const {db} = getCtx()
+  const {db} = getState()
   
   try {
     const processDb = db.collection('process')
@@ -32,12 +32,12 @@ const query = (query) => (dispatch, getCtx) => new Promise(async (resolve, rejec
  * 查询任务信息
  * @param {*} query 
  */
-const queryTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+const queryTask = (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const queryTaskSchema = Joi.object().keys({
   
   })
   const validated = Joi.validate(query, queryTaskSchema, {allowUnknown: true})
-  const {db} = getCtx()
+  const {db} = getState()
   try {
     const taskDb = db.collection('process_task')
     const result = await taskDb.find({}).toArray()
@@ -53,7 +53,7 @@ const queryTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, r
  * 新建任务
  * @param {*} query 
  */
-const insertTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+const insertTask = (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const insertTaskSchema = Joi.object().keys({
     name: Joi.string().required(),
     version: Joi.string().default('latest'),
@@ -63,7 +63,7 @@ const insertTask = (query) => (dispatch, getCtx) => new Promise(async (resolve, 
   const validated = Joi.validate(query, insertSchema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   try {
-    const processDb = getCtx().db.collection('process')
+    const processDb = getState().db.collection('process')
     if (await processDb.findOne({name: validated.name}) !== null) return reject(new Error('PROCESS_EXIST'));
     const processId = (await processDb.insertOne(validated))._id;
     resolve({...validated, processId})

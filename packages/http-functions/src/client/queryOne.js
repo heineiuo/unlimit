@@ -5,13 +5,13 @@ import queryOneUser from '../account/queryOne'
 import queryOneApp from '../drive/queryOneApp'
 import {queryOneSchema} from './schema'
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryOneSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {clientId, socketId, token, withSourceData} = validated.value;
 
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const tokenDb = db.collection('token')
     const clientDb = db.collection('client')
     let client = await tokenDb.findOne({_id: token})

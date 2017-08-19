@@ -7,13 +7,13 @@ const mutateUserScheme = Joi.object().keys({
   remove: Joi.array().default([])
 })
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateUserScheme, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId, add, remove} = validated.value;
 
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     if (add.length > 0 || remove.length > 0) {
       const driveDb = db.collection('drive');
       const driveData = await driveDb.findOne({_id: driveId});

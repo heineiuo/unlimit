@@ -12,11 +12,11 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * 如果没有appId，默认随机返回一个
  * 如果没找到socketId（都不在线），则返回null
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   const {appName, appId} = validated.value;
   if (validated.error) return reject(validated.error)
-  const {log} = getCtx()
+  const {log} = getState()
 
   let socketId = null;
   try {

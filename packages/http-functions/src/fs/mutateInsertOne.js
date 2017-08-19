@@ -16,11 +16,11 @@ export const schema = Joi.object().keys({
  * 并同步文件信息到 fileIndex, 
  *  同步文件内容到 fileContent
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
   let {driveId, type, parentId, name, content} = validated.value;
-  const {db} = getCtx();
+  const {db} = getState();
 
   try {
     const fileContentDb = db.collection('fileContent');

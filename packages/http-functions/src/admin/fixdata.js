@@ -1,7 +1,7 @@
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
-    const db = getCtx().db
+    const db = getState().db
     
     resolve({data})
   } catch(e){

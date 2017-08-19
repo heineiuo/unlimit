@@ -8,13 +8,13 @@ const mutateDomainSchema = Joi.object().keys({
   remove: Joi.array().default([])
 })
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateDomainSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {driveId,add, remove} = validated.value;
   
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const driveDb = db.collection('drive');
     const driveData = await dispatch(queryOne({driveId, fields: ['domains']}));
     if (!driveData) return reject(new Error('DRIVE_NOT_FOUND'));

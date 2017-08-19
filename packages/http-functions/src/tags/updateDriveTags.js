@@ -3,9 +3,9 @@
  * an aggregate result
  */
 
-export default ({driveId}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({driveId}) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
-    const {db} = getCtx();
+    const {db} = getState();
     const postDb = db.collection('post')
     const results = await postDb.mapReduce(function(){
       this.tags.split(',').forEach(item => {

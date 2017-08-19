@@ -11,6 +11,6 @@ const schema = Joi.object().keys({
   predicateData: Joi.object()
 })
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   
 })

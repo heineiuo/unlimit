@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import {querySchema} from './schema'
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, querySchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   let {limit, fields, name, id} = validated.value;
 
   try {
-    const clientDb = getCtx().db.collection('client');
+    const clientDb = getState().db.collection('client');
     const filter = {$or: []}
     fields = fields.filter(item => item !== 'token');
     if (name) filter.$or.push({name})

@@ -8,12 +8,12 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   enableNull: Joi.boolean().default(false)
 }).xor(['userId', 'email']), {allowUnknown: true})
 
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   const {userId, email, enableNull} = validated.value;
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const filter = {};
     if (userId) {
       filter._id = userId

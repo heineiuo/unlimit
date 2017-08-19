@@ -9,7 +9,7 @@ const cache = {
   switch_version_log: []
 }
 
-const log = query => (dispatch, getCtx) => {
+const log = query => (dispatch, getState) => {
   if (!query.id) {
     return {
       log: cache.switch_version_log
@@ -20,13 +20,13 @@ const log = query => (dispatch, getCtx) => {
   return !target ? {error: 'NotFoundError'} : target
 }
 
-const index = query => (dispatch, getCtx) => ({
+const index = query => (dispatch, getState) => ({
   name: pkg.name,
   version: pkg.version,
   description: pkg.description
 })
 
-const upgrade = query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+const upgrade = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
 
   const {version} = query
   if (version === pkg.version) return resolve({

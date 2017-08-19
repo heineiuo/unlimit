@@ -8,7 +8,7 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
 /**
  * delete socket
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query)
   if (validated.error) return reject(validated.error);
   const {socketId} = validated.value;

@@ -10,11 +10,11 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
   uploadKey: Joi.string().default('file')
 }), {allowUnknown: true})
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {driveId, parentId, uploadKey, fileId, name} = validated.value;
-  getCtx().setHeader({__UPLOAD: true});
+  getState().setHeader({__UPLOAD: true});
 
   try {
     resolve({parentId, driveId, uploadKey, fileId, name})

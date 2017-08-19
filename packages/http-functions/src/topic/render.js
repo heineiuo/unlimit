@@ -1,10 +1,10 @@
 import getPost from './get'
 
-export default (query) => async (dispatch, getCtx) =>{
+export default (query) => async (dispatch, getState) =>{
   try {
     const post = await dispatch(getPost)(query)
-    getCtx().render(post.html);
+    getState().render(post.html);
   } catch(e){
-    getCtx().render('<div>500</div>');
+    getState().render('<div>500</div>');
   }
 }

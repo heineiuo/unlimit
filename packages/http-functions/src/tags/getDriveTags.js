@@ -4,9 +4,9 @@
 import Joi from 'joi'
 import updateDriveTags from './updateDriveTags'
 
-export default (query) => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async(resolve, reject) => {
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     let {error, value} = Joi.validate(query, Joi.object().keys({
       driveId: Joi.string().required()
     }), {allowUnknown: true});

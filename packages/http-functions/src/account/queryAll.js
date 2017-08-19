@@ -4,9 +4,9 @@
  * @apiGroup Account
  * @apiParam {string} model model名, user
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve,reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve,reject) => {
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const limit = query.limit || 20;
     const userDb = db.collection('user')
     const list = await userDb.find({}).limit(limit).toArray()

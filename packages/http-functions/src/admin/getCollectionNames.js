@@ -1,7 +1,7 @@
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
-    resolve({result: getCtx().db.getCollectionNames()})
+    resolve({result: getState().db.getCollectionNames()})
   } catch(e){
     reject(e)
   }

@@ -6,13 +6,13 @@ const mutateLocationSchema = Joi.object().keys({
   locations: Joi.array().required(),
 })
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, mutateLocationSchema, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {locations, driveId} = validated.value;
   
   try {
-    const {db, request: {headers: {session}}} = getCtx()
+    const {db, request: {headers: {session}}} = getState()
     const {userId} = session;
     const driveDb = db.collection('drive');
     const locationResult = await driveDb.findOne({_id: driveId});

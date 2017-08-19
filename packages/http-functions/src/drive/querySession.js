@@ -9,13 +9,13 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * get app detail
  * @returns {Promise}
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
   const {appName, appToken} = validated.value;
 
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const apptokenDb = db.collection('apptoken');
     const detail = await apptokenDb.findOne({_id: appToken});
     resolve(detail)

@@ -4,11 +4,11 @@
  * @apiGroup Account
  * @apiParam {string} token token
  */
-export default ({token}) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default ({token}) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
-    const {db} = getCtx()
+    const {db} = getState()
     const tokenDb = db.collection('token')
-    if (getCtx().request.headers.session.user) {
+    if (getState().request.headers.session.user) {
       await tokenDb.findOneAndDelete({_id: token})
     }
     resolve({})

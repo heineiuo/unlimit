@@ -11,7 +11,7 @@ const queryPermissionSchame = Joi.object().keys({
  * 获取空间和用户的权限关系
  * @param query
  */
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = Joi.validate(query, queryPermissionSchame, {allowUnknown: true});
   if (validated.error) return reject(validated.error);
   const {userId, driveId} = validated.value;

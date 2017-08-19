@@ -6,7 +6,7 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
 }), {allowUnknown: true});
 
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
@@ -18,7 +18,7 @@ export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reje
       return left
     })
     tags = tags.join(',')
-    const postDb = getCtx().db.collection('post');
+    const postDb = getState().db.collection('post');
     const result = await postDb.findOneAndUpdate({_id: topicId}, {$set: {tags}});
     resolve({success: 1})
   } catch(e){

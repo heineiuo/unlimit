@@ -28,7 +28,7 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * 方案3： 重构索引
  * 将一个路径对应一个file的情况，改成一个路径对应多个file
  */
-export default query => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validated = validate(query);
   if (validated.error) return reject(validated.error)
   let {fullPath, replaceWithIndexHTMLWhenIsFolder} = validated.value;
@@ -38,7 +38,7 @@ export default query => (dispatch, getCtx) => new Promise(async (resolve, reject
    */
   fullPath = trimEnd(fullPath, '/')
 
-  const {db} = getCtx()
+  const {db} = getState()
 
   try {
     const fileIndexDb = db.collection('fileIndex')

@@ -11,11 +11,11 @@ const validate = (query) => Joi.validate(query, Joi.object().keys({
 }), {allowUnknown: true});
 
 
-export default (query) => (dispatch, getCtx) => new Promise(async (resolve, reject) => {
+export default (query) => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
     const validated = validate(query);
     if (validated.error) return reject(validated.error);
-    const {db} = getCtx();
+    const {db} = getState();
     const {limit=20, filter={}, driveId=null, tags=[], fields=['html'], afterId=null, keyword=''} = validated.value;
     let allTags = tags ? tags : [];
     const mergedFilter = {

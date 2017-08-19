@@ -16,8 +16,8 @@ export const validate = query => Joi.validate(query, Joi.object().keys({
  * @apiParam {string} token 令牌
  * @apiSuccess {object} user
  */
-export default query => (dispatch, getCtx) => new Promise(async(resolve, reject) => {
-  return resolve(getCtx().request.headers.session)
+export default query => (dispatch, getState) => new Promise(async(resolve, reject) => {
+  return resolve(getState().request.headers.session)
 
 });
 
