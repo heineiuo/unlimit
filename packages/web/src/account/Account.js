@@ -5,7 +5,6 @@ import Spin from '@react-web/spin'
 import { match, when } from 'match-when'
 import Logged from "./Logged"
 import UnLogged from './Unlogged'
-import Header from './accountHeader'
 import { checkLogin, sendVerifyCode, getAuthCodeAndRedirect } from './'
 
 class Check extends Component {
@@ -20,15 +19,14 @@ class Check extends Component {
     const {loginChecked, logged} = this.props;
     return (
       <div>
-        <Header />
-          {match(loginChecked, {
-            [when(false)]: () => <Spin />,
-            [when()]: () => 
-              match(logged, {
-                [when(true)]: () => <Logged />,
-                [when()]: () => <UnLogged />
-              })
-          })}
+        {match(loginChecked, {
+          [when(false)]: () => <Spin />,
+          [when()]: () => 
+            match(logged, {
+              [when(true)]: () => <Logged />,
+              [when()]: () => <UnLogged />
+            })
+        })}
       </div>
     )
   }

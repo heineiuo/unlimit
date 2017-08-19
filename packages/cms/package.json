@@ -1,8 +1,0 @@
-{
-  "name": "catcms-web",
-  "version": "0.0.1",
-  "license": "MIT",
-  "dependencies": {
-    "@react-web/async-loader": "^0.1.1"
-  }
-}

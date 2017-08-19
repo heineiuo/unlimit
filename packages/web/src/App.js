@@ -24,13 +24,15 @@ class CheckLogin extends Component {
   render () {
     return (
       <Router>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/account" component={Account} />
-          <Route path="/drive" component={Db} />
-          <Route component={NotFound}/>
-        </Switch>
+        <div>
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/account" component={Account} />
+            <Route path="/drive" component={Db} />
+            <Route component={NotFound}/>
+          </Switch>
+        </div>
       </Router>
     )
   }

@@ -6,10 +6,14 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import HostList from "./DriveList"
 import DriveWrapper from './DriveWrapper'
-import { queryList as getHostList,
+import { injectAsyncReducer } from '@react-web/store'
+import drive, { queryList as getHostList,
     deleteHost,
     createHost } from './'
 
+injectAsyncReducer('drive', drive)
+
+    
 class Drive extends Component {
 
   state = {

@@ -74,17 +74,7 @@ class DriveWrapper extends Component {
                 <div>
                 </div>
               </Route>
-              <Route path={`${match.path}/topic`} >
-                {props => 
-                  <Loader
-                    {...props}
-                    loadKey={'topic'}
-                    load={cb => require.ensure([], 
-                      require => cb(null, require('../topic/Topic').default)
-                    )}
-                  />}
-              </Route>
-              <Route path={`${match.path}/website`} component={require('../website/Website').default}/>
+              <Route path={`${match.path}/website`} component={require('../location/Website').default}/>
               <Route path={`${match.path}/members`} component={require('./Members').default}/>
               <Route path={`${match.path}/setting`} component={require('./Setting').default}/>
             </Switch>

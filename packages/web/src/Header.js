@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Route, Link} from 'react-router-dom'
+import { withRouter, Route, Link } from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
 import {StyleSheet, css} from 'aphrodite'
 import Paper from '@react-web/paper'
@@ -8,9 +8,8 @@ import Input from '@react-web/input'
 import Button from '@react-web/button'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import Title from './Title'
 import ProfileDropDown from './account/ProfileDropDown'
-import commonStyles from './styles'
+import commonStyles from './common/styles'
 import { mutateInsertOne } from './db'
 import Logo from './common/smile'
 
@@ -145,11 +144,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default module.exports = connect(
+export default withRouter(connect(
   store => ({
     
   }),
   dispatch => bindActionCreators({
     createHost: mutateInsertOne
   }, dispatch)
-)(Header)
+)(Header))

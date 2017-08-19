@@ -9,10 +9,6 @@ import defaults from 'lodash/defaults'
 import {store, history, injectAsyncReducer, AppWrapper} from '@react-web/store'
 import React, {Component } from 'react'
 import {HashRouter} from 'react-router-dom'
-import './notice'
-import drive from './drive'
-
-injectAsyncReducer('drive', drive)
 
 import App from './App'
 

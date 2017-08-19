@@ -17,6 +17,7 @@
     {"commonjs": "ckeditor","root": "CKEDITOR"}
   ],
   "ignorePackages": [
+    "@unlimt/server",
     "//@unlimit/web", 
     "//@unlimit/admin", 
     "//@unlimit/text-editor",
@@ -93,16 +94,6 @@
       "devEntry": "./packages/admin/src/index.js",
       "externals": [
         "react","react-dom", "aphrodite", "react-router-dom", "redux", "react-redux", "react-router-redux", "react-modal"
-      ]
-    },
-    {
-      "name": "@unlimit/text-editor",
-      "version": "0.1.7-beta.1",
-      "outputDir": "./packages/text-editor",      
-      "main": "index.js",
-      "devEntry": "./packages/text-editor/src/index.js",
-      "externals": [
-        "react", "react-dom",  "aphrodite",  "react-router-dom",  "redux", "react-redux",  "react-router-redux",  "react-modal"
       ]
     },
     {
