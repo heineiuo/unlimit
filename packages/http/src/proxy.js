@@ -1,6 +1,7 @@
 import {Router} from "express"
 import bodyParser from "body-parser"
 import pick from "lodash/pick"
+import httpProxy from 'http-proxy'
 
 const INSTANCE_META = {
   version: '0.0.1',
@@ -109,3 +110,38 @@ export default (getSeashell) => {
 
 };
 
+
+/**
+ * 反向代理
+ */
+
+
+
+export const proxyHttp = (req, res, next) => {
+  try {
+    const {location} = res.locals;
+    if (location.type !== 'PROXY') return next();
+
+    const proxy = httpProxy.createProxyServer({
+      // protocolRewrite: 'http'
+    });
+
+    // todo handle ssl cert to options
+    proxy.web(req, res, {
+      target: location.content
+    });
+
+    proxy.on('error', (err, req, res) => {
+      next(err)
+    });
+
+    proxy.on('proxyRes', (proxyRes, req, res) => {
+      Object.keys(proxyRes.headers).forEach(key => {
+        res.set(key, proxyRes.headers[key])
+      })
+    });
+    
+  } catch(e){
+    next(e)
+  }
+};

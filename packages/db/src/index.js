@@ -6,8 +6,7 @@ import shell from 'shelljs'
 import {homedir} from 'os'
 import path from 'path'
 import fs from 'fs'
-import {Db} from '../../db/src'
-import createServer from '../../http/src'
+import {Db} from './classes/Db'
 import allActionCreators from './actions'
 
 const { NODE_ENV='development'} = process.env
@@ -25,67 +24,58 @@ DATA_DIR = ${dataDir}`
 }
 
 const {
-  DATA_DIR
+  DATA_DIR,
+  PORT
 } = process.env
 
-const start = async () => {
-  try {
 
-    const db = new Db({
-      presets: [],
-      dbpath: path.resolve(DATA_DIR, './db'),
-      keyEncoding: 'utf8',
-      valueEncoding: 'json'
-    });
+const db = new Db({
+  presets: [],
+  dbpath: path.resolve(DATA_DIR, './db'),
+  keyEncoding: 'utf8',
+  valueEncoding: 'json'
+})
 
-    const server = createServer();
 
-    // const server = require('http').createServer();
-    const app = new Seashell({server});
-    
-    app.use(async (ctx, next) => {
-      ctx.db = db;
-      ctx.log = (...args) => console.log(...args)
-      ctx.json = (json) => {
-        ctx.response.body = json;
-        ctx.response.end();
-      };
-      ctx.setHeader = (header) => {
-        Object.assign(ctx.response.headers, header);
-      };
-      ctx.error = (error) => {
-        ctx.json({
-          error: error.name,
-          message: error.message,
-          errors: error.details || []
-        });
-      }
-      ctx.on('error', (err) => {
-        if (process.env.NODE_ENV === 'development') console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
-        return ctx.error(err);
-      });
-      ctx.on('end', () => {
-        if (!ctx.state.isHandled) {
-          ctx.json({error: 'NotFoundError', message: 'Can not handle this request'})
-        }
-      })
+const app = new Seashell({})
 
-      // const dispatch = createDispatch(ctx)
-      // ctx.session = await dispatch(allActionCreators.account.session(ctx.request.body))
-      const paths = ctx.request.headers.originUrl.split('/').filter(item => item !== '')
-      pathsToActions(
-        ctx,
-        paths,
-        allActionCreators,
-        ctx.json,
-        ctx.error
-      )
-    });
-    server.run(app);
-  } catch (e) {
-    console.log('START FAIL\n'+e.stack||e);
-    process.cwd(1);
+app.use(async (ctx, next) => {
+  ctx.db = db
+  ctx.log = (...args) => console.log(...args)
+  ctx.json = (json) => {
+    ctx.response.body = json
+    ctx.response.end()
   }
-};
+  ctx.setHeader = (header) => {
+    Object.assign(ctx.response.headers, header)
+  }
+  ctx.error = (error) => {
+    ctx.json({
+      error: error.name,
+      message: error.message,
+      errors: error.details || []
+    })
+  }
+  ctx.on('error', (err) => {
+    if (process.env.NODE_ENV === 'development') console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack))
+    return ctx.error(err)
+  })
+  ctx.on('end', () => {
+    if (!ctx.state.isHandled) {
+      ctx.json({error: 'NotFoundError', message: 'Can not handle this request'})
+    }
+  })
 
-process.nextTick(start);
+  // const dispatch = createDispatch(ctx)
+  // ctx.session = await dispatch(allActionCreators.account.session(ctx.request.body))
+  const paths = ctx.request.headers.originUrl.split('/').filter(item => item !== '')
+  pathsToActions(
+    ctx,
+    paths,
+    allActionCreators,
+    ctx.json,
+    ctx.error
+  )
+})
+
+app.start({port: PORT})

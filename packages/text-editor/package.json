@@ -1,8 +1,0 @@
-{
-	"name": "@unlimit/text-editor",
-	"version": "0.1.7-beta.1",
-	"description": "text editor",
-	"author": "@heineiuo",
-	"license": "MIT",
-	"main": "index.js"
-}

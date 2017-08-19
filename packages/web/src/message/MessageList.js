@@ -7,10 +7,10 @@ import { bindActionCreators } from 'redux'
 class MessageList extends Component {
 
   state = {
-  };
+  }
 
   render () {
-    const {postList} = this.props;
+    const {postList} = this.props
 
     return (
       <div>
@@ -30,20 +30,17 @@ class MessageList extends Component {
           }
         </div>
       </div>
-
     )
   }
 }
 
 const styles = StyleSheet.create({
-
   item: {
     backgroundColor: '#FFF',
     minHeight: 80,
     borderBottom: '1px solid #D9D9D9'
   }
-
-});
+})
 
 
 export default connect(

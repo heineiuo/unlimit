@@ -11,13 +11,13 @@ export default (getSeashell) => async (req, res, next) => {
 
   try {
 
-    const seashell = await getSeashell();
-    const {location, location: {type, content}, url, driveId} = res.locals;
+    const seashell = await getSeashell()
+    const {location, location: {type, content}, url, driveId} = res.locals
 
     const handles = {
       JSON: () => new Promise((resolve, reject) => {
         try {
-          res.json(location.content);
+          res.json(location.content)
           resolve()
         } catch (e) {
           reject(e)
@@ -31,7 +31,7 @@ export default (getSeashell) => async (req, res, next) => {
       DOWNLOAD: () => handleDOWNLOAD(req, res, req.query.path),
       UPLOAD: () => handleUPLOAD(req, res, seashell, content),
       PROXY: () => proxyHTTP(req, res, next)
-    };
+    }
 
     /**
      * 未定义的type类型, 报非法请求错误
@@ -42,7 +42,7 @@ export default (getSeashell) => async (req, res, next) => {
       return next(error)
     }
 
-    await handles[type]();
+    await handles[type]()
 
   } catch(e){
     next(e)

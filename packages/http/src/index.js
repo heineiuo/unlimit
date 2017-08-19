@@ -18,81 +18,39 @@ import {tmpdir} from 'os'
 import fs from 'mz/fs'
 import path from 'path'
 import tls from 'tls'
+import dotenv from 'dotenv'
+import cluster from 'cluster'
+import { createRequestHandler } from 'express-unpkg'
+import { cpus } from 'os' 
+import router from "./router"
 
-import pickLocation from "./location"
-import execLocation from "./handle"
-import proxySeashell from "./SeashellProxy"
+const { NODE_ENV='development'} = process.env
 
-let seashell = null;
-
-const unExceptionErrors = ['NotFoundError', 'ValidationError', 'ForbiddenError', 'ServerError']
-
-const getSeashell = () => new Promise((resolve, reject) => {
-  if (seashell) return resolve(seashell);
-  const error = new Error('Seashell not ready')
-  error.name = ServerError
-  reject(error);
-})
-
-const createApp = () => {
-    
-  const app = express();
-
-  app.use(morgan('[SEASHELL][:req[host]:url][:status][:response-time ms]', {}));
-  app.use(compression());
-
-  app.use(letiny.webrootChallengeMiddleware(tmpdir()));
-
-  /**
-   * 1. 先获取location， 并处理http-https跳转
-   * 2. 如果location.type是seashell，则先请求seashell，
-   *  如果seashell请求结果是直接返回结果，则直接返回，不经过execLocation，
-   *  否则更新res.locals.location， 并交给execLocation继续处理
-   * 3. execLocation能处理各种http请求响应情况，比如html，json，下载文件，上传文件等。
-   */
-  app.use(pickLocation(getSeashell));
-  app.use(proxySeashell(getSeashell));
-  app.use(execLocation(getSeashell));
-
-  app.use((err, req, res, next) => {
-    if (!err) return next();
-    /**
-     * 即没有找到host，返回404
-     */
-    if (err.message === 'HOST_NOT_FOUND') return next();
-    /**
-     * 即没有找到location，404
-     */
-    if (err.message === 'LOCATION_NOT_FOUND') return res.end(`${req.headers.host}: \n LOCATION NOT FOUND`);
-    /**
-     * 用户非法请求
-     */
-    if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
-    if (err.message === 'NOT_FOUND') return next();
-    if (!unExceptionErrors.includes(err.name)) {
-      console.log('Catch Exception Error: \n' + err.message);
-    }
-    return res.json({error: err.name, message: err.message});
-  });
-
-  app.use((req, res) => {
-    res.status(404);
-    res.json({error: 'NotFoundError'})
-  });
-
-  return app
+if (NODE_ENV === 'development') {
+  const dataDir = path.resolve(process.cwd(), './.unlimit')
+  const envPath = path.resolve(dataDir, './.env')
+  if (dotenv.config({path: envPath}).error) {
+    const defaultEnv = `# unlimit
+NPM_REGISTRY = https://registry.npmjs.org
+DATA_DIR = ${dataDir}`
+    shell.exec(`mkdir -p ${dataDir}`)
+    fs.writeFileSync(envPath, defaultEnv, 'utf8')
+    dotenv.config({path: envPath})
+  }
 }
 
-/**
- * @param seashell
- * @param server
- * @param [secureServer]
- */
-const run = (s, server, secureServer) => {
-  seashell = s;
-  server.listen(80, () => console.log('http on port 80'))
-  if (secureServer) secureServer.listen(443, () => console.log('http on port 443'))
-}
+const {
+  DATA_DIR,
+  PORT,
+  NPM_REGISTRY
+} = process.env
+
+const unExceptionErrors = [
+  'NotFoundError', 
+  'ValidationError', 
+  'ForbiddenError', 
+  'ServerError'
+]
 
 const ctxMap = {}
 
@@ -115,17 +73,48 @@ const SNICallback = (servername, callback) => {
   })
 }
 
-export default () => {
-  const app = createApp()
-  const server = http.createServer(app)
-  if (!process.env.HTTPS_ENABLE) {
-    server.run = (s) => run(s, server)
-    return server
+const app = express()
+
+app.use(morgan('[:req[host]:url][:status][:response-time ms]', {}))
+app.use(compression())
+app.use(letiny.webrootChallengeMiddleware(tmpdir()))
+app.use(router())
+app.use(createRequestHandler({
+  registryURL: NPM_REGISTRY
+}))
+
+app.use((err, req, res, next) => {
+  if (!err) return next()
+  if (!unExceptionErrors.includes(err.name)) {
+    console.log('Catch Exception Error: \n' + err.message)
   }
+  res.json({
+    error: err.name, 
+    message: err.message
+  })
+})
 
-  const secureServer = https.createServer({SNICallback}, app)
-  secureServer.run = (s) => run(s, server, secureServer)
-  return secureServer
+app.use((req, res) => {
+  res.status(404)
+  res.json({
+    error: 'NotFoundError'
+  })
+})
 
+
+if (cluster.isMaster) {
+  console.log(`Master ${process.pid} is running`)
+  Array.from({length: cpus().length}, (v, k) => {
+    cluster.fork()
+  })
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`)
+  })
+} else {
+  const httpServer = http.createServer(app)
+  httpServer.listen(80, () => console.log(`Worker http ${process.pid} started`))
+  if (process.env.HTTPS_ENABLE) {
+    const httpsServer = https.createServer({SNICallback}, app)
+    httpsServer.listen(443, () => console.log(`Worker https ${process.pid} started`))
+  }
 }
-

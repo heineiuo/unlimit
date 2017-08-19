@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Route, Link} from 'react-router-dom'
 import DropDown, {DropDownTrigger, DropDownContent} from '@react-web/dropdown'
-import DriveSelector from './DriveSelector'
 import {StyleSheet, css} from 'aphrodite'
 import Paper from '@react-web/paper'
 import Modal from 'react-modal'
@@ -9,10 +8,11 @@ import Input from '@react-web/input'
 import Button from '@react-web/button'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import Title from '../Title'
-import ProfileDropDown from '../ProfileDropDown'
-import commonStyles from '../commonStyles'
-import { mutateInsertOne } from './index'
+import Title from './Title'
+import ProfileDropDown from './account/ProfileDropDown'
+import commonStyles from './styles'
+import { mutateInsertOne } from './db'
+import Logo from './common/smile'
 
 class Header extends Component {
 
@@ -44,11 +44,28 @@ class Header extends Component {
   };
 
   render(){
-    const {match} = this.props;
+    const {match, title, color, style} = this.props;
+    
     return (
       <div className={css(styles.globalHeaderBar)}>
         <div style={{display: 'flex', margin: '0 auto', width: '100%', maxWidth: 1000}}>
-          <Title color='#EEE' title="协作空间" style={{textDecoration: 'none', marginRight: 10}}/>
+        <DropDown ref={ref => this.dropDown = ref} className={css(styles.title)} style={style}>
+          <DropDownTrigger>
+            <div style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
+              <Logo color={color} />
+              <div style={{color, userSelect: 'none'}}>{title}</div>
+            </div>
+          </DropDownTrigger>
+          <DropDownContent>
+            <div className={css(styles.title__content)}>
+              <div className={css(styles.triangle)} />
+              <Link onClick={this.closeContent} className={css(styles.link)} to="/">消息</Link>
+              <Link onClick={this.closeContent} className={css(styles.link)} to="/drive">空间</Link>
+              <Link onClick={this.closeContent} className={css(styles.link)} to="/account">账号</Link>
+            </div>
+          </DropDownContent>
+        </DropDown>
+
           <span>
             <Link to='/drive' style={{color: '#666', fontSize: 13}}>全部空间</Link>
             <Route path={`${match.path}/`} exact render={() => (
@@ -90,7 +107,42 @@ class Header extends Component {
 
 
 const styles = StyleSheet.create({
-  ...commonStyles
+  ...commonStyles,
+
+  title: {
+    display: 'flex',
+    cursor: 'pointer'
+  },
+
+  title__content: {
+    display: 'flex',
+    position: 'relative',
+    alignSelf: 'center',
+    flexDirection: 'column',
+  },
+
+  triangle: {
+    position: 'absolute',
+    left: '50%',
+    width: 0,
+    height: 0,
+    marginLeft: '-10px',
+    marginTop: '-20px',
+    border: '10px solid transparent',
+    borderBottomColor: '#FFF'
+  },
+
+  link: {
+    padding: '0 20px',
+    height: '30px',
+    color: '#555',
+    lineHeight: '30px',
+    textDecoration: 'none',
+    ':hover': {
+      backgroundColor: '#1077ff',
+      color: '#222'
+    }
+  }
 });
 
 export default module.exports = connect(

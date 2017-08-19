@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: "@unlimit/server",
+    name: "@unlimit/http",
     script: __dirname + "/index.js",
     watch: false,
     cwd: __dirname,
