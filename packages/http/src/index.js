@@ -25,9 +25,13 @@ import proxySeashell from "./SeashellProxy"
 
 let seashell = null;
 
+const unExceptionErrors = ['NotFoundError', 'ValidationError', 'ForbiddenError', 'ServerError']
+
 const getSeashell = () => new Promise((resolve, reject) => {
   if (seashell) return resolve(seashell);
-  reject(new Error('Seashell not ready'));
+  const error = new Error('Seashell not ready')
+  error.name = ServerError
+  reject(error);
 })
 
 const createApp = () => {
@@ -65,15 +69,15 @@ const createApp = () => {
      */
     if (err.message === 'UNDEFINED_TYPE') return res.end(`${req.headers.host}: \n CONFIGURE ERROR`);
     if (err.message === 'NOT_FOUND') return next();
-    if (!['NotFoundError', 'ValidationError'].includes(err.name)) {
-      console.log('Catch Error: \n' + err.message);
+    if (!unExceptionErrors.includes(err.name)) {
+      console.log('Catch Exception Error: \n' + err.message);
     }
-    return res.json({error: err.message});
+    return res.json({error: err.name, message: err.message});
   });
 
   app.use((req, res) => {
     res.status(404);
-    res.end('NOT FOUND \n SEASHELL SERVER.')
+    res.json({error: 'NotFoundError'})
   });
 
   return app
@@ -95,10 +99,11 @@ const ctxMap = {}
 const SNICallback = (servername, callback) => {
   const { HTTPS_APPROVED_DOMAINS, DATA_DIR } = process.env
   const pemdir = path.resolve(DATA_DIR, './pem')
-  if (ctxMap[servername]) return callback(null, ctxMap[servername]);
+  if (ctxMap[servername]) return callback(null, ctxMap[servername])
   if (!HTTPS_APPROVED_DOMAINS.includes(servername)) {
-    console.log('Unapproved domain')
-    return callback(new Error('Unapproved domain'));
+    const error = new Error('Unapproved domain')
+    error.name = 'ForbiddenError'
+    return callback(error)
   }
   fs.readFile(`${pemdir}/${servername}/pfx.pem`, (err, pfx) => {
     if (err) {
@@ -111,16 +116,16 @@ const SNICallback = (servername, callback) => {
 }
 
 export default () => {
-  const app = createApp();
-  const server = http.createServer(app);
+  const app = createApp()
+  const server = http.createServer(app)
   if (!process.env.HTTPS_ENABLE) {
-    server.run = (s) => run(s, server);
-    return server;
+    server.run = (s) => run(s, server)
+    return server
   }
 
-  const secureServer = https.createServer({SNICallback}, app);
-  secureServer.run = (s) => run(s, server, secureServer);
+  const secureServer = https.createServer({SNICallback}, app)
+  secureServer.run = (s) => run(s, server, secureServer)
   return secureServer
 
-};
+}
 

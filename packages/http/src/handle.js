@@ -14,8 +14,6 @@ export default (getSeashell) => async (req, res, next) => {
     const seashell = await getSeashell();
     const {location, location: {type, content}, url, driveId} = res.locals;
 
-    // console.log(location)
-
     const handles = {
       JSON: () => new Promise((resolve, reject) => {
         try {
@@ -38,7 +36,11 @@ export default (getSeashell) => async (req, res, next) => {
     /**
      * 未定义的type类型, 报非法请求错误
      */
-    if (!handles.hasOwnProperty(type)) return next(new Error('ILLEGAL_HTTP_REQUEST'))
+    if (!handles.hasOwnProperty(type)) {
+      const error = new Error('Illegal http request')
+      error.name = 'ForbiddenError'
+      return next(error)
+    }
 
     await handles[type]();
 

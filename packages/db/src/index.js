@@ -45,9 +45,7 @@ const start = async () => {
     
     app.use(async (ctx, next) => {
       ctx.db = db;
-
       ctx.log = (...args) => console.log(...args)
-
       ctx.json = (json) => {
         ctx.response.body = json;
         ctx.response.end();
@@ -62,25 +60,19 @@ const start = async () => {
           errors: error.details || []
         });
       }
-
       ctx.on('error', (err) => {
-        if (!(process.env.NODE_ENV === 'production')) console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
-        if (err.name === 'ValidationError') return ctx.error('PARAM_ILLEGAL');
-        if (err.message === 'Command failed') return ctx.error('COMMAND_FAILED');
-        return ctx.error(err.message);
+        if (process.env.NODE_ENV === 'development') console.error(chalk.red('[SEASHELL][INTEGRATE SERVICE] '+err.message + err.stack));
+        return ctx.error(err);
       });
-
       ctx.on('end', () => {
         if (!ctx.state.isHandled) {
-          ctx.response.body = {error: 'CAN_NOT_HANDLE_TIS_REQUEST'};
-          ctx.response.end()
+          ctx.json({error: 'NotFoundError', message: 'Can not handle this request'})
         }
-      });
+      })
 
       // const dispatch = createDispatch(ctx)
       // ctx.session = await dispatch(allActionCreators.account.session(ctx.request.body))
       const paths = ctx.request.headers.originUrl.split('/').filter(item => item !== '')
-      
       pathsToActions(
         ctx,
         paths,
@@ -89,9 +81,7 @@ const start = async () => {
         ctx.error
       )
     });
-
     server.run(app);
-
   } catch (e) {
     console.log('START FAIL\n'+e.stack||e);
     process.cwd(1);

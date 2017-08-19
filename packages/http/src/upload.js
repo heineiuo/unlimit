@@ -32,7 +32,11 @@ export default (req, res, seashell, options) => new Promise(async (resolve, reje
      * 移动文件
      */
     const filesFile = uploaded.files[uploadKey];
-    if (!filesFile) return reject(new Error('UPLOAD_FAIL'))
+    if (!filesFile) {
+      const error = new Error('Upload fail')
+      error.name = 'ServerError'
+      return reject(filesFile)
+    }
     const fileList = filesFile.length > 0 ? filesFile : [filesFile];
     const result = await Promise.all(fileList.map(file => new Promise(async (resolve, reject) => {
       try {
@@ -49,7 +53,11 @@ export default (req, res, seashell, options) => new Promise(async (resolve, reje
           }
         });
 
-        if (transferResult.body.error) return reject(new Error(transferResult.body.error));
+        if (transferResult.body.error) {
+          const errorr = new Error(transferResult.body.message)
+          error.name = transferResult.body.error
+          return reject(error)
+        }
         await fs.unlink(tmpPath);
         resolve(transferResult.body)
       } catch (e) {

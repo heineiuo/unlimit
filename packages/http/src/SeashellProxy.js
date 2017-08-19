@@ -13,15 +13,15 @@ export default (getSeashell) => {
 
   router.use((req, res, next) => {
     const {location} = res.locals;
-    if (location.type === 'SEASHELL') return next();
-    return next(new Error('NOT_SEASHELL'))
+    if (location.type === 'SEASHELL') return next()
+    return next('NOT_IN_SEASHELL')
   });
 
-  router.use(bodyParser.urlencoded({extended: true}));
-  router.use(bodyParser.json());
-  router.use(bodyParser.json({type: 'application/*+json'}));
-  router.use(bodyParser.json({type: 'text/html'}));
-  router.use(bodyParser.json({type: 'text/plain'}));
+  router.use(bodyParser.urlencoded({extended: true}))
+  router.use(bodyParser.json())
+  router.use(bodyParser.json({type: 'application/*+json'}))
+  router.use(bodyParser.json({type: 'text/html'}))
+  router.use(bodyParser.json({type: 'text/plain'}))
 
   router.use(async (req, res, next) => {
 
@@ -101,7 +101,7 @@ export default (getSeashell) => {
   });
 
   router.use((err, req, res, next) => {
-    if (!err || err.message === 'NOT_SEASHELL') return next()
+    if (err === 'NOT_IN_SEASHELL') return next()
     next(err)
   })
 

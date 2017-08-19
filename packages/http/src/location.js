@@ -35,9 +35,7 @@ export default (getSeashell) => async (req, res, next) => {
         body: {domain: host, fields: ['locations']}
       });
       if (body.error) {
-        const error = new Error(body.message)
-        error.name = body.name || 'ExceptionError'
-        return next(error);
+        return res.json(body);
       }
 
       driveId = body.driveId
@@ -110,6 +108,8 @@ export const pickLocation = (locations, requrl) => new Promise((resolve, reject)
 
     resolve({url, location});
   } catch (e) {
-    reject(new Error('LOCATION_NOT_FOUND'))
+    const error = new Error('Location not found')
+    error.name = 'NotFoundError'
+    reject(error)
   }
 });
