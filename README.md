@@ -19,7 +19,7 @@ JavaScript first cloud database system.
 ```mermaid
 gantt
     dateFormat  YYYY-MM-DD
-    title Roadmao of unlimitdb
+    title Roadmap of unlimitdb
     section v1
         http     :active, 2017-05-30, 2017-09-30
         http-functions : active, 2017-08-30, 2017-09-30
