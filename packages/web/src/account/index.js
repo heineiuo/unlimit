@@ -1,5 +1,4 @@
 import { match, when } from 'match-when'
-import { injectAsyncReducer } from '@react-web/store'
 import { push } from 'react-router-redux'
 import { api, client } from '../api'
 
@@ -20,7 +19,7 @@ const initialState = {
 }
 
 
-const reducer = (state=initialState, action) => match(action.type, {
+export default (state=initialState, action) => match(action.type, {
 
   [when('@@account/logout')]: () => {
     return Object.assign({}, initialState, {
@@ -91,9 +90,7 @@ const reducer = (state=initialState, action) => match(action.type, {
 })
 
 
-export default reducer
 
-injectAsyncReducer('account', reducer)
 
 /**
  * 检查登录
@@ -110,9 +107,13 @@ export const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  const result = await api.session({
+  const res = await client.query(async (db) => {
+    return await db.actions.session(db.params.token)
+  }, {
     token: userToken
   })
+
+  const result = await res.json()
 
   if (result.error || !result.hasOwnProperty('userId')) {
     return dispatch({
