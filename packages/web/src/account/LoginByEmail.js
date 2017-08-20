@@ -15,51 +15,51 @@ class UnLogged extends Component {
     account: {},
     checkLogin: () => {},
     getAuthCodeAndRedirect: () => {}
-  };
+  }
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
-  };
+  }
 
   componentWillUpdate = () => {
-    const {account, getAuthCodeAndRedirect} = this.props;
+    const {account, getAuthCodeAndRedirect} = this.props
     if (account.logged && this.props.location.query.redirectTo > 0) {
-      // getAuthCodeAndRedirect();
+      // getAuthCodeAndRedirect()
       this.props.push(this.props.location.query.redirectTo)
     }
-  };
+  }
 
   componentWillReceiveProps = (nextProps) => {
-    const {account, location} = this.props;
+    const {account, location} = this.props
     if (nextProps.account.logged && location.query.redirectTo) {
       if (
         (!account.loginChecked && nextProps.account.loginChecked) ||
         !account.logged
       ) {
-        window.location.href = location.query.redirectTo;
+        window.location.href = location.query.redirectTo
       }
     }
-  };
+  }
 
   state = {
     email: '',
     code: '',
     registerError: ''
-  };
+  }
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') this.submit()
-  };
+  }
 
   submit = () => {
-    const {email,  code} = this.state;
+    const {email,  code} = this.state
     this.props.login({email, code})
-  };
+  }
 
   sendVerifyCode = () => {
-    const {email} = this.state;
-    this.props.sendVerifyCode({email});
-  };
+    const {email} = this.state
+    this.props.sendVerifyCode({email})
+  }
 
 
   componentWillUnmount = () => {
@@ -68,7 +68,7 @@ class UnLogged extends Component {
 
 
   render (){
-    const {account} = this.props;
+    const {account} = this.props
 
     return (
       <div>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2a7be0',
   }
 
-});
+})
 
 
 export default module.exports = connect(

@@ -8,22 +8,13 @@ import RenderApp from '@react-web/render'
 import defaults from 'lodash/defaults'
 import {store, history, injectAsyncReducer, AppWrapper} from '@react-web/store'
 import React, {Component } from 'react'
-import {HashRouter} from 'react-router-dom'
-
+import { HashRouter } from 'react-router-dom'
 import App from './App'
 
 const {ConnectedRouter} = ReactRouterRedux
 const {Provider} = ReactRedux
-
 const Router = HashRouter
-
-defaults(global, {
-  __SMILE_DEV: process.env.NODE_ENV !== 'production',
-  API_HOST: `https://api.youkuohao.com`,
-  __SMILE_API: `https://api.youkuohao.com`
-})
-
-;[
+const registerPackages = [
   {name: 'react', default: global.React},
   {name: 'react-dom', default: global.ReactDOM},
   {name: 'react-router-dom', default: ReactRouterDOM},
@@ -32,11 +23,20 @@ defaults(global, {
   {name: 'redux', default: Redux},
   {name: 'react-modal', default: ReactModal},
   {name: 'aphrodite', default: aphrodite},
-].forEach(item => {
+]
+
+registerPackages.forEach(item => {
   SystemJS.registry.set(
     SystemJS.resolveSync(item.name), 
     SystemJS.newModule(item.default) 
-  );
+  )
+})
+
+
+defaults(global, {
+  __SMILE_DEV: process.env.NODE_ENV !== 'production',
+  API_HOST: `https://api.youkuohao.com`,
+  __SMILE_API: `https://api.youkuohao.com`
 })
 
 SystemJS.config(global.__SYSTEM_CONFIG)
@@ -48,4 +48,4 @@ ReactDOM.render(
     </Router>
   </AppWrapper>,
   document.getElementById('app')
-);
+)

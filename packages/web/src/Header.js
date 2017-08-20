@@ -19,31 +19,32 @@ class Header extends Component {
     name: '',
     driveId: '',
     modalOpen: false,
-  };
+  }
 
   closeDropdown = () => {
     this.dropdown.hide()
-  };
+  }
 
   _createHost = () => {
-    this.props.createHost({name: this.state.name});
+    this.props.createHost({name: this.state.name})
     this.setState({modalOpen: false})
-  };
+  }
 
   handleClickOpenModal = () => {
     this.setState({
       modalOpen: true
     })
-  };
+  }
 
   cancel = () => {
     this.setState({
       modalOpen: false
     })
-  };
+  }
 
   render(){
-    const {match, title, color, style} = this.props;
+    const {match, title, color, style, account} = this.props
+    if (!account.logged) return null
     
     return (
       <div className={css(styles.globalHeaderBar)}>
@@ -142,11 +143,11 @@ const styles = StyleSheet.create({
       color: '#222'
     }
   }
-});
+})
 
 export default withRouter(connect(
   store => ({
-    
+    account: store.account
   }),
   dispatch => bindActionCreators({
     createHost: mutateInsertOne

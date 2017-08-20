@@ -1,94 +1,64 @@
-import React, {Component, PropTypes} from 'react'
-import Paper from '@react-web/paper'
-import Body from '@react-web/body'
-import Spin from 'react-spin'
-import {TabBar, TabPane} from '@react-web/tabs'
-import {bindActionCreators} from 'redux'
-import {connect} from 'react-redux'
-import {Switch, Route} from 'react-router-dom'
+import {handleActions} from 'redux-actions'
+import {push} from 'react-router-redux'
+import Fetch from '@shared/fetch'
 
-import Header from './Header'
-import Bot from './Bot'
-import Users from './Users'
-import admin, {fetchUserList} from './admin'
+const {API_HOST} = global;
 
+const initialState = {
+  userListState: 0,
+  userList: []
+};
 
-/**
- * 集成APP
- * 用户
- * TAG
- * 消息
- * 空间
- */
+export default handleActions({
 
-class Admin extends Component {
-
-  static contextTypes = {
-    router: PropTypes.object
-  };
-
-  state = {
-    activeTab: 'file'
-  };
-
-  componentWillMount = () => {
-    const {location, location: {pathname}} = this.props;
-    this.props.injectAsyncReducer('admin', admin);
-    const lastParam = location.pathname.split('/').reverse()[0];
-    const activeTab = ['service', 'users', 'tags', 'drive', 'messages',
-      ].indexOf(lastParam) > -1 ?lastParam:'users';
-
-    this.setState({
-      activeTab
+  ADMIN_USER_LIST_STATE_UPDATE (state, action) {
+    return Object.assign({}, state, {
+      userListState: action.payload.userListState
     })
-  };
+  },
+  ADMIN_USER_LIST_UPDATE (state, action) {
+    return Object.assign({}, state, {
+      userListState: 2,
+      userList: action.payload.userList
+    })
+  },
 
-  handleSwitchKey = (activeTab) => {
-    const {match} = this.props
-    this.context.router.history.push(`${match.url}/${activeTab}`);
-    this.setState({activeTab});
-  };
+}, initialState)
 
-  render () {
 
-    const {children, account, getTitle, match} = this.props;
+export const fetchUserList = (formData) => async (dispatch, getState) => {
+  try {
 
-    return (
-      <div style={{paddingTop: 65}}>
-        <Body style={{margin: 0, backgroundColor: '#efeff4'}} />
-        <Header getTitle={getTitle} />
-        <Paper style={{boxShadow: 'none'}}>
-          <div>管理面板</div>
-          <div style={{position: 'relative', height: 40, width: 400}}>
-            <TabBar activeKey={this.state.activeTab} onSwitchKey={this.handleSwitchKey}>
-              <TabPane key="service">服务</TabPane>
-              <TabPane key="users">用户</TabPane>
-              <TabPane key="drive">空间</TabPane>
-              <TabPane key="tags">标签</TabPane>
-              <TabPane key="messages">消息</TabPane>
-            </TabBar>
-          </div>
-          {
-            !account.loginChecked?<Spin /> :
-              <Switch>
-                <Route path={`${match.path}/service`} component={Bot}/>
-                <Route path={`${match.path}/users`} component={Users}/>
-              </Switch>
-          }
-        </Paper>
-      </div>
-    )
+    dispatch({
+      type: 'ADMIN_USER_LIST_STATE_UPDATE',
+      payload: {
+        userListState: 1,
+      }
+    });
+    const {token} = getState().account;
+    console.log(getState());
+    const result = await new Fetch(`${API_HOST}/seashell/account/queryAll`, {
+      token,
+      ...formData
+    }).post();
+
+    if (result.error) throw result.error;
+
+    dispatch({
+      type: 'ADMIN_USER_LIST_UPDATE',
+      payload: {
+        userList: result.list
+      }
+    });
+
+  } catch(e){
+
+    console.error(e);
+    dispatch({
+      type: 'ADMIN_USER_LIST_STATE_UPDATE',
+      payload: {
+        userListState: 3,
+      }
+    });
   }
-}
-
-
-
-export default module.exports = connect(
-  (store) => ({
-    admin: store.admin,
-    account: store.account
-  }),
-  (dispatch) => bindActionCreators({
-    fetchUserList
-  }, dispatch)
-)(Admin)
+};

@@ -22,6 +22,7 @@
   "author": "@heineiuo",
   "license": "MIT",
   "dependencies": {
+    "@jql/client": "0.0.2",
     "@jql/server": "0.0.1",
     "@react-web/async-loader": "^0.1.1",
     "@react-web/background": "0.0.1",
@@ -116,7 +117,7 @@
     "react-spin": "^0.6.2",
     "react-textarea-autosize": "^5.0.7",
     "react-view-pager": "^0.5.1",
-    "react-vis": "^2.0.0-beta.4",
+    "react-vis": "^1.5.3",
     "readdirp": "^2.1.0",
     "redux-actions": "^1.2.1",
     "redux-thunk": "^2.2.0",

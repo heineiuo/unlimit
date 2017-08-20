@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux'
 import Spin from '@react-web/spin'
 import { match, when } from 'match-when'
 import Logged from "./Logged"
-import UnLogged from './Unlogged'
+import LoginByEmail from './LoginByEmail'
+import Login from './Login'
 import { checkLogin, sendVerifyCode, getAuthCodeAndRedirect } from './'
 
 class Check extends Component {
@@ -13,10 +14,10 @@ class Check extends Component {
     account: {},
     checkLogin: () => {},
     getAuthCodeAndRedirect: () => {}
-  };
+  }
 
   render (){
-    const {loginChecked, logged} = this.props;
+    const {loginChecked, logged} = this.props
     return (
       <div>
         {match(loginChecked, {
@@ -24,7 +25,7 @@ class Check extends Component {
           [when()]: () => 
             match(logged, {
               [when(true)]: () => <Logged />,
-              [when()]: () => <UnLogged />
+              [when()]: () => <Login />
             })
         })}
       </div>

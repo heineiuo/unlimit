@@ -9,6 +9,8 @@ import {connect} from 'react-redux'
 import ProfileDropDown from './account/ProfileDropDown'
 import MessageList from './message/MessageList'
 import commonStyles from './common/styles'
+import {RadialChart} from 'react-vis'
+import 'react-vis/dist/style.css'
 
 class Home extends Component {
 
@@ -42,9 +44,25 @@ class Home extends Component {
 
     return  (
       <div style={{marginTop: 50}}>
+      
         {
           account.logged ? 
-            <MessageList postList={[]} />:
+            <div>
+              <RadialChart
+                innerRadius={100}
+                radius={140}
+                data={[
+                  {angle: 2},
+                  {angle: 6},
+                  {angle: 2},
+                  {angle: 3},
+                  {angle: 1}
+                ]}
+                width={300}
+                height={300}
+              />
+              <MessageList postList={[]} />
+            </div>:
             <div>welcome</div>
         }
       </div>

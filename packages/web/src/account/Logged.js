@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import Modal from 'react-modal'
 import Button from '@react-web/button'
-import DropDown,{DropDownTrigger,DropDownContent}from '@react-web/dropdown'
-import {StyleSheet, css} from 'aphrodite'
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
+import DropDown, { DropDownTrigger, DropDownContent } from '@react-web/dropdown'
+import { StyleSheet, css } from 'aphrodite'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import PopModal from './PopModal'
 import Logo from '../common/Logo'
 import commonStyles from '../common/styles'
 import ImageUpload from './ImageUpload'
-import {logout} from './'
+import { logout } from './'
 
 class Profile extends Component {
 
@@ -19,7 +19,7 @@ class Profile extends Component {
     tabItem: ''
   }
 
-  openModal = (e,clicktab) => {
+  openModal = (e, clicktab) => {
     this.setState({
       modalIsOpen: true,
       tabItem: clicktab
@@ -36,7 +36,7 @@ class Profile extends Component {
     this.props.logout()
   }
 
-  render () {
+  render() {
     return (
       <div className={css(styles.card)}>
         <div className={css(styles.profileLeft)}>
@@ -47,34 +47,34 @@ class Profile extends Component {
             <span className={css(styles.itemInfo__itemName)} >昵称</span>
             <span>
               <span className={css(styles.itemInfo__itemSpan)} />
-              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'UserName')}>修改昵称</span>
+              <span className={css(styles.itemInfo__itemEdit)} onClick={(e) => this.openModal(e, 'UserName')}>修改昵称</span>
             </span>
           </div>
           <div className={css(styles.itemInfo)}>
             <span className={css(styles.itemInfo__itemName)}>邮箱</span>
             <span>
               <span>{this.props.account.email}</span>
-              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'Email')}>修改邮箱</span>
+              <span className={css(styles.itemInfo__itemEdit)} onClick={(e) => this.openModal(e, 'Email')}>修改邮箱</span>
             </span>
           </div>
           <div className={css(styles.itemInfo)}>
             <span className={css(styles.itemInfo__itemName)}>电话</span>
             <span>
               <span>...</span>
-              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'Phone')}>修改号码</span>
+              <span className={css(styles.itemInfo__itemEdit)} onClick={(e) => this.openModal(e, 'Phone')}>修改号码</span>
             </span>
           </div>
           <div className={css(styles.itemInfo)}>
             <span className={css(styles.itemInfo__itemName)}>密码</span>
             <span>
               <span>******</span>
-              <span className={css(styles.itemInfo__itemEdit)}  onClick={(e) => this.openModal(e,'Password')}>修改密码</span>
+              <span className={css(styles.itemInfo__itemEdit)} onClick={(e) => this.openModal(e, 'Password')}>修改密码</span>
             </span>
           </div>
           <Button style={buttonStyle} onClick={this.handleLogout}>退出</Button>
-          <div style={{position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', lineHeight: '50px', borderTop: '1px solid #EEE'}}>
-            <Link to="/" style={{textDecoration: 'none', color: '#666', display: 'flex', justifyContent: 'center'}}>
-              <div style={{marginBottom: 5}}><Logo /></div>
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', lineHeight: '50px', borderTop: '1px solid #EEE' }}>
+            <Link to="/" style={{ textDecoration: 'none', color: '#666', display: 'flex', justifyContent: 'center' }}>
+              <div style={{ marginBottom: 5 }}><Logo /></div>
             </Link>
           </div>
           <Modal
@@ -241,8 +241,8 @@ const styles = StyleSheet.create({
 
 
 const customStyles = {
-  overlay : {
-    position : 'fixed',
+  overlay: {
+    position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -251,7 +251,7 @@ const customStyles = {
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
 
-  content : {
+  content: {
     top: '50%',
     left: '50%',
     right: 'auto',
@@ -259,7 +259,7 @@ const customStyles = {
     width: '380px',
     padding: '0px',
     borderRadius: 0,
-    border:0,
+    border: 0,
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
   }

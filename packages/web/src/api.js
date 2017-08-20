@@ -1,4 +1,5 @@
 import Fetch from '@shared/fetch'
+import { HttpClient } from '@jql/client'
 
 export const apimap = {
   session: '/seashell/account/session',
@@ -35,4 +36,11 @@ const api = Object.keys(apimap).reduce((left, right) => {
   return left
 }, {})
 
-export default api
+const client = new HttpClient({
+  url: global.__SMILE_JQL
+})
+
+export {
+  api,
+  client
+}

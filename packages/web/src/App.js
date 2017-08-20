@@ -5,14 +5,17 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Body from '@react-web/body'
 import Loader from '@react-web/async-loader'
-import {injectAsyncReducer} from '@react-web/store'
+import { injectAsyncReducer } from '@react-web/store'
+import { match, when } from 'match-when'
 import Header from './Header'
 import commonStyles from './common/styles'
-import { checkLogin } from './account'
 import Home from './Home'
-import Account from './account/Account'
 import Db from './db/Drive'
 import NotFound from './NotFound'
+import accountReducer, { checkLogin } from './account'
+import Login from './account/Account'
+
+injectAsyncReducer('account', accountReducer)
 
 class CheckLogin extends Component {
 
@@ -22,16 +25,22 @@ class CheckLogin extends Component {
   }
 
   render () {
+    const {account, checkLogin} = this.props
+    
     return (
       <Router>
         <div>
           <Header />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/account" component={Account} />
-            <Route path="/drive" component={Db} />
-            <Route component={NotFound}/>
-          </Switch>
+          {match(account.logged, {
+            [when(true)]: () => 
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/account" component={Account} />
+                <Route path="/drive" component={Db} />
+                <Route component={NotFound}/>
+              </Switch>,
+            [when()]: () => <Login />
+          })}
         </div>
       </Router>
     )

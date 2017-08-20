@@ -1,7 +1,7 @@
 import { match, when } from 'match-when'
 import { injectAsyncReducer } from '@react-web/store'
 import { push } from 'react-router-redux'
-import api from '../api'
+import { api, client } from '../api'
 
 const initialState = {
   loginChecked: false,

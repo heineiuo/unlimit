@@ -1,6 +1,6 @@
 import {push} from 'react-router-redux'
 import { match, when } from 'match-when'
-import api from '../api'
+import { api, client } from '../api'
 
 const defaultState = {
   currentDriveId: '',
