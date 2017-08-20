@@ -25,7 +25,7 @@ gantt
         http-functions : active, 2017-08-30, 2017-09-30
         db     :active, 2017-07-30, 2017-10-30
         web  :  active, 2017-05-30, 2017-10-30
-    section v1
+    section v2
         db     :active, 2017-10-30, 2017-12-30
     
 ```
