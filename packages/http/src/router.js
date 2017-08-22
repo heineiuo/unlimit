@@ -8,8 +8,9 @@ import { expressJQL } from '@jql/server'
 /**e
  * 查找host及其location列表
  */
-export default () => async (req, res, next) => {
+export default (options) => async (req, res, next) => {
   try {
+    const { db } = options
     const {host} = req.headers
     if (isIp(host)) {
       res.status(403)

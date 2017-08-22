@@ -21,8 +21,10 @@ import tls from 'tls'
 import dotenv from 'dotenv'
 import cluster from 'cluster'
 import { createRequestHandler } from 'express-unpkg'
-import { cpus } from 'os' 
+import { cpus } from 'os'
+import { match, when } from 'match-when'
 import router from "./router"
+import { SNICallback, updateCert } from './sni'
 
 const { NODE_ENV='development'} = process.env
 
@@ -39,52 +41,47 @@ DATA_DIR = ${dataDir}`
   }
 }
 
+
 const {
   DATA_DIR,
   PORT,
-  NPM_REGISTRY
+  NPM_REGISTRY,
+  DB_ADAPTER,
+  MONGODB_URL
 } = process.env
 
-const unExceptionErrors = [
-  'NotFoundError', 
-  'ValidationError', 
-  'ForbiddenError', 
-  'ServerError'
-]
-
-const ctxMap = {}
-
-const SNICallback = (servername, callback) => {
-  const { HTTPS_APPROVED_DOMAINS, DATA_DIR } = process.env
-  const pemdir = path.resolve(DATA_DIR, './pem')
-  if (ctxMap[servername]) return callback(null, ctxMap[servername])
-  if (!HTTPS_APPROVED_DOMAINS.includes(servername)) {
-    const error = new Error('Unapproved domain')
-    error.name = 'ForbiddenError'
-    return callback(error)
+const db = match(DB_ADAPTER, {
+  [when()]: async () => {
+    const mongodb = await import('./adapter/mongodb')
+    return await mongodb.default({
+      mongodbUrl: MONGODB_URL
+    })
   }
-  fs.readFile(`${pemdir}/${servername}/pfx.pem`, (err, pfx) => {
-    if (err) {
-      console.log(err)
-      return callback(err)
-    }
-    const ctx = ctxMap[servername] = tls.createSecureContext({pfx})
-    callback(null, ctx)
-  })
-}
+})
+
+
+
 
 const app = express()
 
 app.use(morgan('[:req[host]:url][:status][:response-time ms]', {}))
 app.use(compression())
 app.use(letiny.webrootChallengeMiddleware(tmpdir()))
-app.use(router())
+app.use(router({
+  db,
+}))
 app.use(createRequestHandler({
   registryURL: NPM_REGISTRY
 }))
 
 app.use((err, req, res, next) => {
   if (!err) return next()
+  const unExceptionErrors = [
+    'NotFoundError', 
+    'ValidationError', 
+    'ForbiddenError', 
+    'ServerError'
+  ]
   if (!unExceptionErrors.includes(err.name)) {
     console.log('Catch Exception Error: \n' + err.message)
   }
@@ -101,8 +98,10 @@ app.use((req, res) => {
   })
 })
 
-
-if (cluster.isMaster) {
+if (NODE_ENV === 'development') {
+  const httpServer = http.createServer(app)
+  httpServer.listen(80, () => console.log(`dev http ${process.pid} started`))
+} else if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`)
   Array.from({length: cpus().length}, (v, k) => {
     cluster.fork()
