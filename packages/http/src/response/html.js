@@ -6,6 +6,6 @@ import ent from "ent"
 const handleHTML = (req, res, content) => new Promise(resolve => {
   res.end(ent.decode(content))
   resolve()
-});
+})
 
 export default handleHTML

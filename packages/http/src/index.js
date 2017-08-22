@@ -13,8 +13,6 @@ import express from "express"
 import {homedir} from "os"
 import http from "http"
 import https from "https"
-import letiny from 'letiny'
-import {tmpdir} from 'os'
 import fs from 'mz/fs'
 import path from 'path'
 import tls from 'tls'
@@ -23,28 +21,28 @@ import cluster from 'cluster'
 import { createRequestHandler } from 'express-unpkg'
 import { cpus } from 'os'
 import { match, when } from 'match-when'
-import router from "./router"
-import { SNICallback, updateCert } from './sni'
+import { routerMiddleware } from "./router"
+import { SNICallback, SNIMiddleware, updateCert } from './sni'
 
-const { NODE_ENV='development'} = process.env
+let { NODE_ENV = 'development', DATA_DIR = path.resolve(homedir(), './.unlimit') } = process.env
 
-if (NODE_ENV === 'development') {
-  const dataDir = path.resolve(process.cwd(), './.unlimit')
-  const envPath = path.resolve(dataDir, './.env')
-  if (dotenv.config({path: envPath}).error) {
-    const defaultEnv = `# unlimit
-NPM_REGISTRY = https://registry.npmjs.org
-DATA_DIR = ${dataDir}`
-    shell.exec(`mkdir -p ${dataDir}`)
-    fs.writeFileSync(envPath, defaultEnv, 'utf8')
-    dotenv.config({path: envPath})
-  }
+if (NODE_ENV === 'development'){
+  DATA_DIR = process.env.DATA_DIR = path.resolve(process.cwd(), './.unlimit')
 }
 
+const envPath = path.resolve(DATA_DIR, './.env')
+if (dotenv.config({path: envPath}).error) {
+  const defaultEnv = 
+`# unlimit
+DB_ADAPTER = mongodb
+MONGODB_URL = mongodb://localhost
+NPM_REGISTRY = https://registry.npmjs.org`
+  shell.exec(`mkdir -p ${DATA_DIR}`)
+  fs.writeFileSync(envPath, defaultEnv, 'utf8')
+  dotenv.config({path: envPath})
+}
 
 const {
-  DATA_DIR,
-  PORT,
   NPM_REGISTRY,
   DB_ADAPTER,
   MONGODB_URL
@@ -60,14 +58,12 @@ const db = match(DB_ADAPTER, {
 })
 
 
-
-
 const app = express()
 
-app.use(morgan('[:req[host]:url][:status][:response-time ms]', {}))
+app.use(morgan('dev'))
 app.use(compression())
-app.use(letiny.webrootChallengeMiddleware(tmpdir()))
-app.use(router({
+app.use(SNIMiddleware())
+app.use(routerMiddleware({
   db,
 }))
 app.use(createRequestHandler({

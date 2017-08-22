@@ -1,8 +1,8 @@
 import {MongoClient} from 'mongodb'
 
-let isConnected = false;
-let isConnecting = false;
-let db = null;
+let isConnected = false
+let isConnecting = false
+let db = null
 
 const connectPromise = (mongodbUrl) => {
   return MongoClient.connect(mongodbUrl, {
@@ -27,7 +27,7 @@ const reconnect = async (mongodbUrl) => {
 
 const firstConnect = (mongodbUrl) => new Promise(async (resolve, reject) => {
   try {
-    isConnecting = true;
+    isConnecting = true
     db = await connectPromise(mongodbUrl)
     isConnected = true
     isConnecting = false
@@ -45,9 +45,9 @@ const attach = (db) => {
   })
   db.once('close', () => {
     console.log('mongodb close')
-    db.removeAllListeners();
-    isConnected = false;
-    isConnecting = true;
+    db.removeAllListeners()
+    isConnected = false
+    isConnecting = true
     process.nextTick(reconnect)
   })
 }

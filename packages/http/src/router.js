@@ -3,12 +3,12 @@ import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
 import isIp from 'is-ip'
 import { expressJQL } from '@jql/server'
-
+import { proxySeashell, proxyHttp, proxyWs } from './proxy'
 
 /**e
  * 查找host及其location列表
  */
-export default (options) => async (req, res, next) => {
+export const routerMiddleware = (options) => async (req, res, next) => {
   try {
     const { db } = options
     const {host} = req.headers

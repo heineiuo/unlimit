@@ -48,3 +48,7 @@ export const updateCert = ({domain}) => new Promise(async (resolve, reject) => {
   })
 
 })
+
+export const SNIMiddleware = (options) => {
+  return letiny.webrootChallengeMiddleware(tmpdir())
+}
