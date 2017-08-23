@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import mutateUpdateStatus from '../client/mutateUpdateStatus'
+import mutateUpdateStatus from './client/mutateUpdateStatus'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   socketId: Joi.string().required()

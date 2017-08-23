@@ -1,8 +1,8 @@
 /* @private */
 
 import Joi from 'joi'
-import queryOneUser from '../account/queryOne'
-import queryOneApp from '../drive/queryOneApp'
+import queryOneUser from './queryOneUser'
+import queryOneApp from './queryOneApp'
 import {queryOneSchema} from './schema'
 
 export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {

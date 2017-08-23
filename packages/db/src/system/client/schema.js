@@ -1,7 +1,5 @@
 import Joi from 'joi'
 
-
-
 export const mutateInsertOneSchema = Joi.object().keys({
   id: Joi.string().required(),
   name: Joi.string().required(),

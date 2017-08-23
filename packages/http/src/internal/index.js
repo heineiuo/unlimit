@@ -1,6 +1,6 @@
 import version from './version'
 
-export default {
+export const actions = {
   '/': version['/'],
   account: require('./account').default,
   fs: require('./fs').default,

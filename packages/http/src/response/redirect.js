@@ -1,7 +1,8 @@
 /**
  * 重定向
  */
-export default (req, res, content) => new Promise((resolve, reject) => {
-  res.redirect(content)
+export default url => (getState) => new Promise((resolve, reject) => {
+  const { response: res } = getState()
+  res.redirect(url)
   resolve()
 })

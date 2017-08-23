@@ -1,4 +1,4 @@
-import queryOne from '../client/queryOne'
+import queryOne from './client/queryOne'
 
 
 /**

@@ -10,7 +10,7 @@
 import morgan from "morgan"
 import compression from "compression"
 import express from "express"
-import {homedir} from "os"
+import { homedir } from "os"
 import http from "http"
 import https from "https"
 import fs from 'mz/fs'
@@ -18,11 +18,13 @@ import path from 'path'
 import tls from 'tls'
 import dotenv from 'dotenv'
 import cluster from 'cluster'
+import bodyParser from "body-parser"
 import { createRequestHandler } from 'express-unpkg'
 import { cpus } from 'os'
 import { match, when } from 'match-when'
-import { routerMiddleware } from "./router"
-import { SNICallback, SNIMiddleware, updateCert } from './sni'
+import { routerMiddleware, routerUpdate } from "./router"
+import { SNICallback, SNIMiddleware, SNIUpdate } from './sni'
+import { getDb } from './adapter'
 
 let { NODE_ENV = 'development', DATA_DIR = path.resolve(homedir(), './.unlimit') } = process.env
 
@@ -48,23 +50,19 @@ const {
   MONGODB_URL
 } = process.env
 
-const db = match(DB_ADAPTER, {
-  [when()]: async () => {
-    const mongodb = await import('./adapter/mongodb')
-    return await mongodb.default({
-      mongodbUrl: MONGODB_URL
-    })
-  }
-})
-
 
 const app = express()
 
 app.use(morgan('dev'))
 app.use(compression())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.use(bodyParser.json({type: 'application/*+json'}))
+app.use(bodyParser.json({type: 'text/html'}))
+app.use(bodyParser.json({type: 'text/plain'}))
 app.use(SNIMiddleware())
 app.use(routerMiddleware({
-  db,
+  getDb,
 }))
 app.use(createRequestHandler({
   registryURL: NPM_REGISTRY

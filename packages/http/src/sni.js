@@ -26,7 +26,7 @@ export const SNICallback = (servername, callback) => {
   })
 }
 
-export const updateCert = ({domain}) => new Promise(async (resolve, reject) => {
+export const SNIUpdate = ({domain}) => new Promise(async (resolve, reject) => {
   const {HTTPS_EMAIL, DATA_DIR} = process.env
   
   // todo check rate limit

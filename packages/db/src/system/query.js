@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import queryOne from '../client/queryOne'
-import queryClient from '../client/query'
+import queryOne from './client/queryOne'
+import queryClient from './client/query'
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
   appId: Joi.string(),

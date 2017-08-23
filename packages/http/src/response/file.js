@@ -3,8 +3,11 @@
  */
 export default query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const {
-    req, res, seashell, driveId, pathname, reqpath
+    seashell, driveId, pathname, reqpath
   } = query
+
+  const { DATA_DIR } = process.env
+  const { response: res } = getState()
 
   let result = {body: {}}
   try {

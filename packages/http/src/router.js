@@ -4,14 +4,15 @@ import pathToRegexp from "path-to-regexp"
 import isIp from 'is-ip'
 import { expressJQL } from '@jql/server'
 import { proxySeashell, proxyHttp, proxyWs } from './proxy'
+import { actions as internalActions } from './internal'
 
 /**e
  * 查找host及其location列表
  */
 export const routerMiddleware = (options) => async (req, res, next) => {
   try {
-    const { db } = options
-    const {host} = req.headers
+    const { getDb } = options
+    const { host } = req.headers
     if (isIp(host)) {
       res.status(403)
       return res.json({
@@ -33,9 +34,15 @@ export const routerMiddleware = (options) => async (req, res, next) => {
       }
     }
 
-    const domainData = {
-      locations: [],
-      driveId: ''
+    const db = await getDb()
+
+    /**
+     * {
+     *   locations: []
+     * }
+     */
+    let domainData = {
+      locations: []
     }
 
     if (host === API_DOMAIN) {
@@ -52,7 +59,6 @@ export const routerMiddleware = (options) => async (req, res, next) => {
         fields: ['locations']
       })
 
-      domainData.driveId = body.driveId
       domainData.locations = body.locations
     }
 
@@ -62,12 +68,13 @@ export const routerMiddleware = (options) => async (req, res, next) => {
     const {location, url} = await pickLocation(domainData.locations, req.url)
     Object.assign(res.locals, {
       host, 
-      driveId: domainData.driveId, 
       url, 
       location
     })
 
-    if (domainData.location.cors) {
+    // TODO use jql rewrite, do not handle in next middlewales, just in a sandbox
+
+    if (location.cors) {
       res.set('Access-Control-Expose-Headers', '*')
       // IE8 does not allow domains to be specified, just the *
       // headers["Access-Control-Allow-Origin"] = req.headers.origin
@@ -81,8 +88,8 @@ export const routerMiddleware = (options) => async (req, res, next) => {
       }
     }
 
-    if (domainData.location['X-Frame-Options']) {
-      res.set('X-Frame-Options', domainData.location['X-Frame-Options'])
+    if (location['X-Frame-Options']) {
+      res.set('X-Frame-Options', location['X-Frame-Options'])
     }
 
     next()
@@ -91,6 +98,10 @@ export const routerMiddleware = (options) => async (req, res, next) => {
     next(e)
   }
 }
+
+export const routerUpdate = () => new Promise((resolve, reject) => {
+  
+})
 
 /**
  * 通过比对pathname, 找到路由

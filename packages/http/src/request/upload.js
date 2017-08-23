@@ -2,8 +2,9 @@ import formidable from "formidable"
 import path from "path"
 import fs from "mz/fs"
 
-export default (req, res, seashell, options) => new Promise(async (resolve, reject) => {
+export default options => (dispatch, getState) => new Promise(async (resolve, reject) => {
   try {
+    const { request: req, response: res} = getState()
     /**
      *  uploadKey: the key in formData, default is 'file'
      *  uploadDir: the real directory on server, like `/root/gateway/data/app/superuser.youkuohao.com/public/upload`,
@@ -17,7 +18,7 @@ export default (req, res, seashell, options) => new Promise(async (resolve, reje
      */
     const uploaded = await new Promise((resolve, reject) => {
       const form = new formidable.IncomingForm()
-      form.encoding = 'utf-8'
+      form.encoding = 'utf8'
       form.hash = 'md5'
       form.keepExtensions = true
       form.multiples = true
