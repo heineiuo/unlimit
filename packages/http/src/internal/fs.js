@@ -3,9 +3,15 @@ import ms from 'ms'
 import trimEnd from 'lodash/trimEnd'
 import path from 'path'
 import isPlainObject from 'lodash/isPlainObject'
+import { match, when } from 'match-when'
 
+const defaultState = {
+  
+}
 
-
+export default (state=defaultState, action) => match(action.type, {
+  [when()]: state
+})
 
 /**
  * 根据路径获取文件
@@ -19,14 +25,14 @@ import isPlainObject from 'lodash/isPlainObject'
  */
 const walkLeftToRight = (paths, fileDb, parentId, driveId) => new Promise(async (resolve, reject) => {
   try {
-    const name = paths.shift();
-    let fields = [];
-    if (paths.length === 0) fields = fields.concat(['tags', 'type']);
-    const result = await fileDb.findOne({driveId, name, parentId}, {fields});
-    if (!result) return reject(new Error('NOT_FOUND'));
-    result.fileId = result._id;
-    if (paths.length === 0) return resolve(result);
-    parentId = result.fileId;
+    const name = paths.shift()
+    let fields = []
+    if (paths.length === 0) fields = fields.concat(['tags', 'type'])
+    const result = await fileDb.findOne({driveId, name, parentId}, {fields})
+    if (!result) return reject(new Error('NOT_FOUND'))
+    result.fileId = result._id
+    if (paths.length === 0) return resolve(result)
+    parentId = result.fileId
     resolve(await walkLeftToRight(paths, fileDb, parentId, driveId))
   } catch(e){
     reject(e)
@@ -49,12 +55,12 @@ export const syncIndexData = ({fullPath}) => (dispatch, getState) => new Promise
     const fileDb = db.collection('file')
     const paths = fullPath.split('/').filter(item => item !== '')
     if (paths.length < 1) return resolve({error: 'fullPath illegal'})
-    indexData.driveId = paths.shift();
+    indexData.driveId = paths.shift()
     
     if (paths.length === 0) {
       indexData.type = 2
     } else {
-      const result = await walkLeftToRight(paths, fileDb, null, indexData.driveId);
+      const result = await walkLeftToRight(paths, fileDb, null, indexData.driveId)
       indexData.fileId = result._id,
       indexData.type = result.type
     }
@@ -75,8 +81,8 @@ export const syncIndexData = ({fullPath}) => (dispatch, getState) => new Promise
  */
 const walkRightToLeft = (paths, filedb, id, driveId) => new Promise(async (resolve, reject) => {
   try {
-    const result = await filedb.findOne({_id: id});
-    if (result.parentId === null) return resulve(paths.join('/'));
+    const result = await filedb.findOne({_id: id})
+    if (result.parentId === null) return resulve(paths.join('/'))
     resolve(await walkRightToLeft(paths.unshift(result.name), filedb, result.parentId, driveId))
   } catch(e){
     reject(e)
@@ -137,9 +143,9 @@ export default query => (dispatch, getState) => new Promise(async (resolve, reje
     fullPath: Joi.string(), // include driveId
     replaceWithIndexHTMLWhenIsFolder: Joi.boolean().default(false)
   }), {allowUnknown: true})
-  const validated = validate(query);
+  const validated = validate(query)
   if (validated.error) return reject(validated.error)
-  let {fullPath, replaceWithIndexHTMLWhenIsFolder} = validated.value;
+  let {fullPath, replaceWithIndexHTMLWhenIsFolder} = validated.value
 
   /**
    * 所有的路径都以 '/' 开头， 以 '非/' 结尾 
@@ -183,9 +189,9 @@ export const delFile = query => (dispatch, getState) => new Promise(async (resol
     fileId: Joi.string().required(),
     driveId: Joi.string()
   }), {allowUnknown: true})
-  const validated = validate(query);
+  const validated = validate(query)
   if (validated.error) return reject(validated.error)
-  const {driveId, fileId} = validated.value;
+  const {driveId, fileId} = validated.value
   const {db} = getState()
 
   try {
@@ -206,9 +212,9 @@ export const mutateFileContent = query => (dispatch, getState) => new Promise(as
     fileId: Joi.string().required(),
     content: Joi.any()
   }), {allowUnknown: true})
-  const validated = validate(query);
-  if (validated.error) return reject(validated.error);
-  const {fileId, content} = validated.value;
+  const validated = validate(query)
+  if (validated.error) return reject(validated.error)
+  const {fileId, content} = validated.value
   const {db} = getState()
 
   try {
@@ -264,14 +270,14 @@ export const putFile = query => (dispatch, getState) => new Promise(async (resol
   })
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
-  let {driveId, type, parentId, name, content} = validated.value;
-  const {db} = getState();
+  let {driveId, type, parentId, name, content} = validated.value
+  const {db} = getState()
 
   try {
-    const fileContentDb = db.collection('fileContent');
-    const fileDb = db.collection('file');
-    const result0 = await fileDb.findOne({driveId, parentId, name});
-    if (result0) return reject(new Error('File Exist'));
+    const fileContentDb = db.collection('fileContent')
+    const fileDb = db.collection('file')
+    const result0 = await fileDb.findOne({driveId, parentId, name})
+    if (result0) return reject(new Error('File Exist'))
 
     const result = await fileDb.insertOne({driveId, type, parentId, name})
     if (type === 1) await fileContentDb.findOneAndUpdate({_id: result._id}, {$set:{data: content}})
@@ -288,9 +294,9 @@ export const mutateTag = query => (dispatch, getState) => new Promise(async (res
     fileId: Joi.string().required(),
     tags: Joi.string().required()
   }), {allowUnknown: true})
-  const validated = validate(query);
-  if (validated.error) return reject(validated.error);
-  const {fileId, tags} = validated.value;
+  const validated = validate(query)
+  if (validated.error) return reject(validated.error)
+  const {fileId, tags} = validated.value
   const {db} = getState()
 
   try {
@@ -312,17 +318,17 @@ export const upload = (query) => (dispatch, getState) => new Promise(async (reso
     parentId: Joi.string().allow(null).default(null),
     uploadKey: Joi.string().default('file')
   }), {allowUnknown: true})
-  const validated = validate(query);
-  if (validated.error) return reject(validated.error);
-  const {driveId, parentId, uploadKey, fileId, name} = validated.value;
-  getState().setHeader({__UPLOAD: true});
+  const validated = validate(query)
+  if (validated.error) return reject(validated.error)
+  const {driveId, parentId, uploadKey, fileId, name} = validated.value
+  getState().setHeader({__UPLOAD: true})
 
   try {
     resolve({parentId, driveId, uploadKey, fileId, name})
   } catch(e){
     reject(e)
   }
-});
+})
 
 
 export const getFileInfo = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
@@ -335,12 +341,12 @@ export const getFileInfo = query => (dispatch, getState) => new Promise(async (r
     replaceWithFileMetaIfIsFile: Joi.boolean().default(false),
     fields: Joi.array().default(['name', 'type']),
   }), {allowUnknown: true})
-  const validated = validate(query);
-  if (validated.error) return reject(validated.error);
-  const {keywords, tags, limit, fields, parentId, driveId, replaceWithFileMetaIfIsFile} = validated.value;
+  const validated = validate(query)
+  if (validated.error) return reject(validated.error)
+  const {keywords, tags, limit, fields, parentId, driveId, replaceWithFileMetaIfIsFile} = validated.value
   const {db} = getState()
   try {
-    const fileDb = db.collection('file');
+    const fileDb = db.collection('file')
     if (parentId) {
       const parentMeta = await fileDb.findOne({_id: parentId})
       if (!parentMeta) return reject(new Error('PARENT_NOT_EXIST'))
@@ -349,7 +355,7 @@ export const getFileInfo = query => (dispatch, getState) => new Promise(async (r
         return reject(new Error('ILLEGAL_PARENT'))
       }
     }
-    const keywordRegex = keywords.split(' ').join('|');
+    const keywordRegex = keywords.split(' ').join('|')
     const filter = {
       driveId,
       parentId,
@@ -375,8 +381,8 @@ export const getFileInfo = query => (dispatch, getState) => new Promise(async (r
 export const walkToBuildPrevFullPath = (currentPath, fileId, fileDb) => new Promise(async (resolve, reject) => {
   try {
     const fileData = await fileDb.findOne({_id: fileId})
-    const {name, parentId} = fileData;
-    currentPath = `${name}/${currentPath}`;
+    const {name, parentId} = fileData
+    currentPath = `${name}/${currentPath}`
     if (parentId) return resolve(await walkToBuildPrevFullPath(currentPath, parentId, fileDb))
     resolve(currentPath)
   } catch(e) {
@@ -389,9 +395,9 @@ export const queryOneById = query => (dispatch, getState) => new Promise(async (
     fileId: Joi.string().required(),
     includePath: Joi.boolean().default(false)
   }))
-  const validated = validate(query);
-  if (validated.error) return reject(validated.error);
-  const {includePath, fileId} = validated.value;
+  const validated = validate(query)
+  if (validated.error) return reject(validated.error)
+  const {includePath, fileId} = validated.value
   const {db} = getState()
   
   try {
@@ -420,10 +426,10 @@ export const getFileContent = query => (dispatch, getState) => new Promise(async
   }).xor(['fullPath', 'fileId'])
   const validated = Joi.validate(query, schema, {allowUnknown: true})
   if (validated.error) return reject(validated.error)
-  let {fullPath, fileId, replaceWithIndexHTMLWhenIsFolder} = validated.value;
-  const {db} = getState();
+  let {fullPath, fileId, replaceWithIndexHTMLWhenIsFolder} = validated.value
+  const {db} = getState()
   try {
-    const fileContentDb = db.collection('fileContent');
+    const fileContentDb = db.collection('fileContent')
 
     /**
      * 如果根据fileId来获取内容，则必须传入fileId, 否则必须传入fullPath
@@ -432,7 +438,7 @@ export const getFileContent = query => (dispatch, getState) => new Promise(async
      */
     
     if (!fileId) {
-      const indexData = await dispatch(queryOneByFullPath({fullPath, replaceWithIndexHTMLWhenIsFolder}));
+      const indexData = await dispatch(queryOneByFullPath({fullPath, replaceWithIndexHTMLWhenIsFolder}))
       if (!indexData || !!indexData.error || !indexData.fileId) {
         return reject(new Error('Not found'))
       }

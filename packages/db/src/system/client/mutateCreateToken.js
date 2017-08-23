@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import mutateInsertOne from '../client/mutateInsertOne'
+import mutateInsertOne from './mutateInsertOne'
 
 
 export const validate = query => Joi.validate(query, Joi.object().keys({
