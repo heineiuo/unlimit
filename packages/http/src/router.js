@@ -4,7 +4,7 @@ import pathToRegexp from "path-to-regexp"
 import isIp from 'is-ip'
 import { expressJQL } from '@jql/server'
 import { proxySeashell, proxyHttp, proxyWs } from './proxy'
-import { actions as internalActions } from './internal'
+import { actions as internalActions, locations as internalLocations } from './internal'
 
 /**e
  * 查找host及其location列表
@@ -46,12 +46,7 @@ export const routerMiddleware = (options) => async (req, res, next) => {
     }
 
     if (host === API_DOMAIN) {
-      domainData.locations = [{
-        "pathname": "*",
-        "cors": true,
-        "type": "SEASHELL",
-        "content": ""
-      }]
+      domainData.locations = internalLocations
     } else {
       const result = await db.collection('domains').findOne({
         domain: host,

@@ -1,4 +1,8 @@
-import version from './version'
+import versionReducer, { log, index } from './version'
+
+export const reducers = {
+  version: versionReducer
+}
 
 export const actions = {
   '/': version['/'],
@@ -8,4 +12,13 @@ export const actions = {
   version
 }
 
-export const locations = []
+export const locations = [
+  {
+    "pathname": "*",
+    // "cors": true,
+    // "type": "FILE",
+    "function": `async (db) => {
+      return db.Folder()
+    }`
+  }
+]

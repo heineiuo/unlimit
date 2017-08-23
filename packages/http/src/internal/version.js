@@ -2,14 +2,29 @@ const express = require('express')
 const npm = require('npm')
 const uuid = require('uuid')
 const fs = require('fs')
+import { match, when } from 'match-when'
+
 const pkg = JSON.parse(fs.readFileSync(`${process.cwd()}/package.json`))
+
+const defaultState = {
+  
+}
+
+export default (state=defaultState, action) => match(action.type, {
+  [when()]: state
+})
 
 const cache = {
   upgrading: false,
   switch_version_log: []
 }
 
-const log = query => (dispatch, getState) => {
+
+export default (state=defaultState, action) => match(action.type, {
+  [when()]: state
+})
+
+export const log = query => (dispatch, getState) => {
   if (!query.id) {
     return {
       log: cache.switch_version_log
@@ -20,13 +35,13 @@ const log = query => (dispatch, getState) => {
   return !target ? {error: 'NotFoundError'} : target
 }
 
-const index = query => (dispatch, getState) => ({
+export const index = query => (dispatch, getState) => ({
   name: pkg.name,
   version: pkg.version,
   description: pkg.description
 })
 
-const upgrade = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
+export const upgrade = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
 
   const {version} = query
   if (version === pkg.version) return resolve({
@@ -67,9 +82,3 @@ const upgrade = query => (dispatch, getState) => new Promise(async (resolve, rej
   })
 
 })
-
-export default {
-  '/': index,
-  upgrade,
-  log
-}
