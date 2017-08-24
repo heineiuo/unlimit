@@ -9,10 +9,6 @@ export default (state=defaultState, action) => match(action.type, {
   [when()]: state
 })
 
-export const session = ({token}) => (dispatch, getState) => new Promise((resolve, reject) => {
-  
-})
-
 export const login = query => (dispatch, getState) => new Promise((resolve, reject) => {
   
 })
@@ -28,7 +24,7 @@ export const logout = ({token}) => (dispatch, getState) => new Promise((resolve,
  * get app detail
  * @returns {Promise}
  */
-export default querySession = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
+export const session = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   const validate = query => Joi.validate(query, Joi.object().keys({
     appName: Joi.string().required(),
     appToken: Joi.string().length(96).required()

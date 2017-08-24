@@ -2,9 +2,9 @@ import Url from "url"
 import UAParser from "ua-parser-js"
 import pathToRegexp from "path-to-regexp"
 import isIp from 'is-ip'
-import { expressJQL } from '@jql/server'
-import { proxySeashell, proxyHttp, proxyWs } from './proxy'
-import { actions as internalActions, locations as internalLocations } from './internal'
+import { proxySeashell, proxyHttp, proxyWs } from './response/proxy'
+import { internalLocations, middleware } from './internal'
+
 
 let isInit = false
 
@@ -47,8 +47,7 @@ export const routerMiddleware = (options) => async (req, res, next) => {
     })
 
     // TODO use jql rewrite, do not handle in next middlewales, just in a sandbox
-
-    next()
+    await middleware(req, res, host, location, {})
 
   } catch (e) {
     next(e)

@@ -19,11 +19,6 @@ const cache = {
   switch_version_log: []
 }
 
-
-export default (state=defaultState, action) => match(action.type, {
-  [when()]: state
-})
-
 export const log = query => (dispatch, getState) => {
   if (!query.id) {
     return {

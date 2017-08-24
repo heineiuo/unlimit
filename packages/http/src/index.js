@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
     'ServerError'
   ]
   if (!unExceptionErrors.includes(err.name)) {
-    console.log('Catch Exception Error: \n' + err.message)
+    console.log('Catch Exception Error: \n' + err.stack)
   }
   res.json({
     error: err.name, 

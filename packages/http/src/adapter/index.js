@@ -1,8 +1,10 @@
+import { match, when } from 'match-when'
+
 let db = null
 
 export const getDb = () => new Promise(async (resolve, reject) => {
   try {
-    const { DB_ADAPTER } = process.env
+    const { DB_ADAPTER, MONGODB_URL } = process.env
     if (db) return resolve(db)
     db = await match(DB_ADAPTER, {
       [when()]: async () => {

@@ -9,11 +9,11 @@ export default query => (dispatch, getState) => new Promise(async (resolve, reje
   const { DATA_DIR } = process.env
   const { response: res } = getState()
 
-  let result = {body: {}}
+  let result = { body: {} }
   try {
     result = await seashell.requestSelf({
-      headers: {originUrl: '/fs/queryFileContent'},
-      body: {fullPath: `/${driveId}${reqpath}`}
+      headers: { originUrl: '/fs/queryFileContent' },
+      body: { fullPath: `/${driveId}${reqpath}` }
     })
   } catch (e) {
     result.body.error = e
@@ -27,7 +27,7 @@ export default query => (dispatch, getState) => new Promise(async (resolve, reje
     res.write(new Buffer(result.body.cat))
     res.end()
     resolve()
-  } catch(e){
+  } catch (e) {
     reject(e)
   }
 
