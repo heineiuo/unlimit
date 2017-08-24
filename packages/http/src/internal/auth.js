@@ -1,72 +1,80 @@
 import { match, when } from 'match-when'
 import Joi from 'joi'
+import crypto from 'crypto'
 
 const defaultState = {
-  
+  checked: false,
+  logged: false
 }
 
 export default (state=defaultState, action) => match(action.type, {
+  [when('@@auth/SUCCESS')]: () => {
+    return action.payload
+  },
   [when()]: state
 })
 
+const tokens = {}
+
 export const login = query => (dispatch, getState) => new Promise((resolve, reject) => {
-  
-})
-
-export const logout = ({token}) => (dispatch, getState) => new Promise((resolve, reject) => {
-  
-})
-
-
-
-
-/**
- * get app detail
- * @returns {Promise}
- */
-export const session = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
+  const { UNLIMIT_USERNAME, UNLIMIT_PASSWORD } = process.env
   const validate = query => Joi.validate(query, Joi.object().keys({
-    appName: Joi.string().required(),
-    appToken: Joi.string().length(96).required()
+    username: Joi.string().required(),
+    password: Joi.string().required()
   }), {allowUnknown: true})
   const validated = validate(query);
   if (validated.error) return reject(validated.error);
-  const {appName, appToken} = validated.value;
+  const {username, password} = validated.value;
 
-  try {
-    const {db} = getState()
-    const apptokenDb = db.collection('apptoken');
-    const detail = await apptokenDb.findOne({_id: appToken});
-    resolve(detail)
-  } catch(e){
-    if (e.name !== 'NotFoundError') return reject(new Error('NO_SESSION'));
-    reject(e)
+  if (!(username === UNLIMIT_USERNAME && password === UNLIMIT_PASSWORD)){
+    const error = new Error('Error username or password')
+    error.name = 'ForbiddenError'
+    return reject(error)
   }
-})
-
-export const queryUsers = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
-  const queryUserSchema =  Joi.object().keys({
-    driveId: Joi.string(),
+  crypto.randomBytes(90, async (err, buf) => {
+    if (err) return reject(err)
+    try {
+      const token = buf.toString('hex')
+      tokens[token] = {logged: true, createTime: new Date(), token}
+      await dispatch(session({token}))
+      resolve(tokens[token])
+    } catch(e){
+      reject(e)
+    }
   })
-  const validated = Joi.validate(query, queryUserSchema, {allowUnknown: true});
-  if (validated.error) return reject(validated.error);
-  const {driveId} = validated.value;
-  try {
-    const {db} = getState()
-    const driveDb = db.collection('drive');
-    const filter = {_id: driveId};
-    const result = await driveDb.findOne(filter, {fields: {users: 1}})
-    if (!result) return reject(new Error('NOT_FOUND'))
-    const userDb = db.collection('user')
-    let data = await Promise.all(result.users.map(userId => {
-      return new Promise(resolve => userDb.findOne({_id: userId})
-        .then(resolve)
-        .catch(() => resolve(null))
-      )
-    }))
-    data = data.filter(item => item !== null)
-    resolve({data})
-  } catch(e){
-    reject(e)
-  }
 })
+
+export const logout = ({token}) => (dispatch, getState) => new Promise((resolve, reject) => {
+  delete tokens[token]
+  resolve()
+})
+
+/**
+ * @returns {Promise}
+ */
+export const session = query => (dispatch, getState) => new Promise(async resolve => {
+  if (getState().auth.checked) return resolve(getState().auth)
+  const validate = query => Joi.validate(query, Joi.object().keys({
+    token: Joi.string().required(),
+  }), {allowUnknown: true})
+  const validated = validate(query);
+  if (validated.error) return reject(validated.error);
+  const { token } = validated.value;
+
+  if (tokens.hasOwnProperty(token)) {
+    const payload = {
+      checked: true,
+      logged: true
+    }
+    dispatch({
+      type: '@@auth/SUCCESS',
+      payload
+    })
+    return resolve(payload)
+  }
+  return resolve({
+    checked: true,    
+    logged: false
+  })
+})
+

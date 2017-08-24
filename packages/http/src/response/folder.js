@@ -19,6 +19,10 @@ export default query => (dispatch, getState) => new Promise(async (resolve, reje
     if (err.message.indexOf('EISDIR') === 0) {
       return res.sendFile(path.resolve(resolvedFullPath, './index.html'), (err) => {
         if (!err) return resolve()
+        if (err.message.indexOf('ENOENT') === 0) {
+          res.sendStatus(404)
+          return resolve()
+        }
         return reject(err)
       })
     }

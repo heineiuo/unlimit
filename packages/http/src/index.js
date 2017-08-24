@@ -47,7 +47,9 @@ NPM_REGISTRY = https://registry.npmjs.org`
 const {
   NPM_REGISTRY,
   DB_ADAPTER,
-  MONGODB_URL
+  MONGODB_URL,
+  HTTP_PORT,
+  HTTPS_PORT
 } = process.env
 
 
@@ -94,7 +96,7 @@ app.use((req, res) => {
 
 if (NODE_ENV === 'development') {
   const httpServer = http.createServer(app)
-  httpServer.listen(80, () => console.log(`dev http ${process.pid} started`))
+  httpServer.listen(HTTP_PORT, () => console.log(`dev http ${process.pid} started`))
 } else if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`)
   Array.from({length: cpus().length}, (v, k) => {
@@ -105,9 +107,9 @@ if (NODE_ENV === 'development') {
   })
 } else {
   const httpServer = http.createServer(app)
-  httpServer.listen(80, () => console.log(`Worker http ${process.pid} started`))
+  httpServer.listen(HTTP_PORT, () => console.log(`Worker http ${process.pid} started`))
   if (process.env.HTTPS_ENABLE) {
     const httpsServer = https.createServer({SNICallback}, app)
-    httpsServer.listen(443, () => console.log(`Worker https ${process.pid} started`))
+    httpsServer.listen(HTTPS_PORT, () => console.log(`Worker https ${process.pid} started`))
   }
 }

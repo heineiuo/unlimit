@@ -1,5 +1,6 @@
 import { Container, Functions } from '@jql/server'
 import isPlainObject from 'lodash/isPlainObject'
+import { match, when } from 'match-when'
 import * as auth from './auth'
 import * as version from './version'
 import * as functions from './functions'
@@ -7,9 +8,11 @@ import folder from '../response/folder'
 
 export const internalLocations = [
   {
+    pathname: "/jql",
+    type: 'JQL'
+  },
+  {
     "pathname": "*",
-    // "cors": true,
-    // "type": "FILE",
     "function": `async function(db){
       await db.actions.folder({rootDir: './'})
     }`
@@ -19,10 +22,10 @@ export const internalLocations = [
 export const internalActions = new Functions({
   internalFunctions: {
     session: auth.session,
+    login: auth.login,
     folder
   }
 })
-
 
 export const container = new Container({
   env: {
@@ -32,8 +35,27 @@ export const container = new Container({
 
 export const middleware = (req, res, host, location) => new Promise(async (resolve, reject) => {
   try {
-    const params = Object.assign({}, req.query, req.body)
-    const __fn = `(${location.function})`
+    const reqBody = Object.assign({}, req.query, req.body)
+    const { params, __fn} = match(location.type, {
+      [when('JQL')]: () => {
+        if (!reqBody.__fn) {
+          res.status(403)
+          const error = new Error('Params illegal')
+          error.name = 'ForbiddenError'
+          return reject(error)
+        }
+        return {
+          params: reqBody.params || {},
+          __fn: `(${reqBody.__fn})`
+        }
+      },
+      [when()]: () => {
+        return {
+          params: reqBody,
+          __fn: `(${location.function})`
+        }
+      }
+    })
     const result = await container.exec({__fn}, {
       reducers: {
         version: version.default,
@@ -44,7 +66,13 @@ export const middleware = (req, res, host, location) => new Promise(async (resol
       request: req, 
       response: res 
     })
-    if (isPlainObject(result)) res.json(result)
+    if (isPlainObject(result)) {
+      res.json(result)
+    } else if (typeof result === 'number') {
+      res.json(result)
+    } else if (typeof result === 'string') {
+      res.json(result)
+    }
     resolve()
   } catch(e){
     reject(e)
