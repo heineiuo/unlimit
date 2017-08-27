@@ -107,15 +107,15 @@ export const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  const res = await client.query(async (db) => {
-    return await db.actions.session(db.params.token)
-  }, {
+  const res = await client.query(`async (db) => {
+    return await db.session(db.getState().params)
+  }`, {
     token: userToken
   })
 
   const result = await res.json()
 
-  if (result.error || !result.hasOwnProperty('userId')) {
+  if (result.error) {
     return dispatch({
       type: '@@account/checkedLogin',
       payload: {
@@ -124,20 +124,25 @@ export const checkLogin = () => async (dispatch, getState) => {
     })
   }
 
-  dispatch({
-    type: '@@account/checkedLogin',
-    payload: {
-      logged: true,
-      email: result.email,
-      token: userToken,
-      profile: result
-    },
-  })
+  if (result.logged) {
+    dispatch({
+      type: '@@account/checkedLogin',
+      payload: {
+        logged: true,
+        email: result.email,
+        token: userToken,
+        profile: result
+      },
+    })
+  } else {
+    dispatch({
+      type: '@@account/checkedLogin',
+      payload: {
+        logged: false,
+      },
+    })
+  }
 }
-
-
-
-
 
 
 /**
@@ -160,19 +165,19 @@ export const getAuthCodeAndRedirect = () => async (dispatch, getState) => {
 
 
 export const login = (formData) => async (dispatch, getState) => {
-  const result = await api.mutateCreateToken({
-    email: formData.email,
-    code: formData.code
-  })
+  const res = await client.query(`
+  async (db) => {
+    return db.login(db.getState().params)
+  }`, formData)
+  const result = await res.json()
 
   if (result.error) {
-    console.log(result.error)
     return dispatch({
       type: "@@account/loginError",
       error: result.error
     })
   }
-  localStorage.userId = result.userId
+  console.log(result)
   localStorage.__SMILE_TOKEN = result.token
   dispatch({
     type: '@@account/loginSuccess',

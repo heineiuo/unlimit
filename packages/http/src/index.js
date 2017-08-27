@@ -15,16 +15,16 @@ import http from "http"
 import https from "https"
 import fs from 'mz/fs'
 import path from 'path'
-import tls from 'tls'
 import dotenv from 'dotenv'
 import cluster from 'cluster'
 import bodyParser from "body-parser"
 import { createRequestHandler } from 'express-unpkg'
 import { cpus } from 'os'
 import { match, when } from 'match-when'
-import { routerMiddleware, routerUpdate } from "./router"
-import { SNICallback, SNIMiddleware, SNIUpdate } from './sni'
+import createRouter from "./router"
+import createSNI from './sni'
 import { getDb } from './adapter'
+import { container, locations } from './internal'
 
 let { NODE_ENV = 'development', DATA_DIR = path.resolve(homedir(), './.unlimit') } = process.env
 
@@ -48,10 +48,29 @@ const {
   NPM_REGISTRY,
   DB_ADAPTER,
   MONGODB_URL,
+  API_DOMAIN,
   HTTP_PORT,
-  HTTPS_PORT
+  HTTPS_PORT,
+  HTTPS_EMAIL,
+  HTTPS_FORCE_DOMAINS,
+  HTTPS_APPROVED_DOMAINS
 } = process.env
 
+
+const sni = createSNI({
+  httpsEmail: HTTPS_EMAIL,
+  pemDir: `${DATA_DIR}/pem`,
+  approvedDomains: HTTPS_APPROVED_DOMAINS.split(',')
+})
+
+
+const router = createRouter({
+  apiDomain: API_DOMAIN,
+  forceHttpsDomains: HTTPS_FORCE_DOMAINS.split(',')
+})
+
+container.replaceActions(Object.assign({}, container.actions, {}))
+router.intergrate(API_DOMAIN, locations, container)
 
 const app = express()
 
@@ -62,10 +81,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.json({type: 'application/*+json'}))
 app.use(bodyParser.json({type: 'text/html'}))
 app.use(bodyParser.json({type: 'text/plain'}))
-app.use(SNIMiddleware())
-app.use(routerMiddleware({
-  getDb,
-}))
+app.use(sni.express)
+app.use(router.express)
 app.use(createRequestHandler({
   registryURL: NPM_REGISTRY
 }))
@@ -109,7 +126,9 @@ if (NODE_ENV === 'development') {
   const httpServer = http.createServer(app)
   httpServer.listen(HTTP_PORT, () => console.log(`Worker http ${process.pid} started`))
   if (process.env.HTTPS_ENABLE) {
-    const httpsServer = https.createServer({SNICallback}, app)
+    const httpsServer = https.createServer({SNICallback: sni.callback}, app)
     httpsServer.listen(HTTPS_PORT, () => console.log(`Worker https ${process.pid} started`))
   }
+
+
 }

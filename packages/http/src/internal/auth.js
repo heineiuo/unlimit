@@ -52,7 +52,7 @@ export const logout = ({token}) => (dispatch, getState) => new Promise((resolve,
 /**
  * @returns {Promise}
  */
-export const session = query => (dispatch, getState) => new Promise(async resolve => {
+export const session = query => (dispatch, getState) => new Promise(async (resolve, reject) => {
   if (getState().auth.checked) return resolve(getState().auth)
   const validate = query => Joi.validate(query, Joi.object().keys({
     token: Joi.string().required(),

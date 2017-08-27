@@ -66,10 +66,9 @@
           "__SMILE_API": "https://api.youkuohao.com"
         },
         "devGlobalConstants": {
-          "__SMILE_DEV": true,
-          "__SMILE_JQL": "http://api.youkuohao.dev/jql",
-          "__SMILE_API": "http://api.youkuohao.dev",
-          "API_HOST": "http://api.youkuohao.dev",
+          "__SMILE_JQL": "http://localhost:8080/jql",
+          "__SMILE_API": "http://localhost:8080",
+          "API_HOST": "http://localhost:8080",
           "__SMILE_OAUTH_UI_URL": "http://www.youkuohao.dev/#/oauth"
         },
         "styles": {
